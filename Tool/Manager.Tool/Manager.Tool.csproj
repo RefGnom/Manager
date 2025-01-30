@@ -19,4 +19,8 @@
         <PackageOutputPath>../.././nupkg</PackageOutputPath>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Service\ManagerService.Client\ManagerService.Client.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -5,17 +5,17 @@ public abstract class CommandExecutorBase<TCommand>(IToolCommandFactory toolComm
 {
     private readonly IToolCommandFactory _toolCommandFactory = toolCommandFactory;
 
-    public virtual bool CanExecute(CommandOptions commandOptions)
+    public virtual bool CanExecute(CommandContext context)
     {
         var command = _toolCommandFactory.CreateCommand<TCommand>();
 
         if (command.CommandSpace is null)
         {
-            return commandOptions[0] == command.Command;
+            return context.Options[0].Argument == command.Command;
         }
 
-        return commandOptions[0] == command.CommandSpace && commandOptions[1] == command.Command;
+        return context.Options[0].Argument == command.CommandSpace && context.Options[1].Argument == command.Command;
     }
 
-    public abstract Task ExecuteAsync(CommandOptions commandOptions);
+    public abstract Task ExecuteAsync(CommandContext context);
 }
