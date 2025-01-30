@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Core", "Manager.Cor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{67CC4B6F-CA92-409B-A1AF-9501B34435E5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{804F8B79-D68C-4673-A903-78923F42E3AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,5 +25,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C7920CD9-12A4-4072-9B9A-85C42FE3084A} = {67CC4B6F-CA92-409B-A1AF-9501B34435E5}
+		{AFD235AF-7DFA-437B-9B1B-21719EA99100} = {804F8B79-D68C-4673-A903-78923F42E3AD}
 	EndGlobalSection
 EndGlobal
