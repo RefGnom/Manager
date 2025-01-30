@@ -16,7 +16,7 @@
     <PropertyGroup>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>manager</ToolCommandName>
-        <PackageOutputPath>./nupkg</PackageOutputPath>
+        <PackageOutputPath>../.././nupkg</PackageOutputPath>
     </PropertyGroup>
 
 </Project>
