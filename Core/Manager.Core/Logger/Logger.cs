@@ -6,27 +6,29 @@ public class Logger<TContext>(IDateTimeProvider dateTimeProvider) : ILogger<TCon
 {
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
 
-    public void LogInfo(string text)
+
+    public void LogInfo(string text, params object?[] args)
     {
-        Log("Info", text, ConsoleColor.Gray);
+        Log("Info", text, args, ConsoleColor.Gray);
     }
 
-    public void LogWarn(string text)
+    public void LogWarn(string text, params object?[] args)
     {
-        Log("Warn", text, ConsoleColor.Yellow);
+        Log("Warn", text, args, ConsoleColor.Yellow);
     }
 
-    public void LogError(string text)
+    public void LogError(string text, params object?[] args)
     {
-        Log("Info", text, ConsoleColor.Red);
+        Log("Info", text, args, ConsoleColor.Red);
     }
 
-    private void Log(string logType, string text, ConsoleColor color)
+    private void Log(string logType, string text, object?[] args, ConsoleColor color)
     {
+        var textWithArgs = string.Format(text, args);
         var currentDateTime = _dateTimeProvider.GetCurrentDateTime();
 
         Console.ForegroundColor = color;
-        Console.WriteLine($"{currentDateTime} [{typeof(TContext).Name}] [{logType}] {text}");
+        Console.WriteLine($"{currentDateTime} [{typeof(TContext).Name}] [{logType}] {textWithArgs}");
         Console.ResetColor();
     }
 }
