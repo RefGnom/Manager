@@ -1,3 +1,4 @@
+using System;
 using Manager.Core.DateTimeProvider;
 
 namespace Manager.Core.Logger;
@@ -25,7 +26,7 @@ public class Logger<TContext>(IDateTimeProvider dateTimeProvider) : ILogger<TCon
     private void Log(string logType, string text, object?[] args, ConsoleColor color)
     {
         var textWithArgs = string.Format(text, args);
-        var currentDateTime = _dateTimeProvider.GetCurrentDateTime();
+        var currentDateTime = _dateTimeProvider.Now;
 
         Console.ForegroundColor = color;
         Console.WriteLine($"{currentDateTime} [{typeof(TContext).Name}] [{logType}] {textWithArgs}");

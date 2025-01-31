@@ -1,3 +1,5 @@
+using System;
+
 namespace ManagerService.Client.ServiceModels;
 
 public class User

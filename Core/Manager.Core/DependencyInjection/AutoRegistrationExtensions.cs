@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reflection;
 using Manager.Core.LinqExtensions;
 using Microsoft.Extensions.DependencyInjection;

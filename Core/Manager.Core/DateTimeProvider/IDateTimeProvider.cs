@@ -1,6 +1,9 @@
+using System;
+
 namespace Manager.Core.DateTimeProvider;
 
 public interface IDateTimeProvider
 {
-    DateTime GetCurrentDateTime();
+    DateTime Now { get; }
+    DateTime UtcNow { get; }
 }
