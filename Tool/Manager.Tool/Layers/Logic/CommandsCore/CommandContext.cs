@@ -1,3 +1,4 @@
+using System.Linq;
 using ManagerService.Client.ServiceModels;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;

@@ -1,3 +1,5 @@
+using System;
+using Manager.Core.DateTimeProvider;
 using Manager.Core.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +11,7 @@ public static class DependencyInjectionConfiguration
     {
         return new ServiceCollection()
             .UseAutoRegistrationForCurrentAssembly()
+            .UseAutoRegistrationForAssembly<IDateTimeProvider>()
             .BuildServiceProvider();
     }
 }
