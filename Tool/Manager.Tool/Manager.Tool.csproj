@@ -20,8 +20,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj" />
-      <ProjectReference Include="..\..\Service\ManagerService.Client\ManagerService.Client.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
+        <ProjectReference Include="..\..\Service\ManagerService.Client\ManagerService.Client.csproj"/>
     </ItemGroup>
 
 </Project>

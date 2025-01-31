@@ -1,6 +1,10 @@
 namespace Manager.Core.Results;
 
-public class Result<T>(T? value, bool isSuccess, string failureMessage)
+public class Result<T>(
+    T? value,
+    bool isSuccess,
+    string failureMessage
+)
 {
     public T? Value { get; } = value;
     public bool IsSuccess { get; } = isSuccess;

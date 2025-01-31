@@ -7,7 +7,8 @@ namespace Manager.Tool;
 public class ManagerTool(
     ICommandContextFactory commandContextFactory,
     ICommandExecutorProvider commandExecutorProvider,
-    IToolLogger<ManagerTool> logger) : IManagerTool
+    IToolLogger<ManagerTool> logger
+) : IManagerTool
 {
     private readonly ICommandContextFactory _commandContextFactory = commandContextFactory;
     private readonly ICommandExecutorProvider _commandExecutorProvider = commandExecutorProvider;

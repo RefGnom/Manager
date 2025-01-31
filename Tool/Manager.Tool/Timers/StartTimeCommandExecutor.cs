@@ -6,7 +6,8 @@ namespace Manager.Tool.Timers;
 
 public class StartTimeCommandExecutor(
     IToolCommandFactory toolCommandFactory,
-    IToolLogger<StartTimeCommandExecutor> logger)
+    IToolLogger<StartTimeCommandExecutor> logger
+)
     : CommandExecutorBase<StartTimerCommand>(toolCommandFactory)
 {
     private readonly IToolLogger<StartTimeCommandExecutor> _logger = logger;
