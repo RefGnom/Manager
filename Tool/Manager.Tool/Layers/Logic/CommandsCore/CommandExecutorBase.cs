@@ -1,4 +1,4 @@
-namespace Manager.Tool.CommandsCore;
+namespace Manager.Tool.Layers.Logic.CommandsCore;
 
 public abstract class CommandExecutorBase<TCommand>(IToolCommandFactory toolCommandFactory) : ICommandExecutor
     where TCommand : IToolCommand, new()

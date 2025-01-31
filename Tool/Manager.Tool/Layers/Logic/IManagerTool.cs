@@ -1,4 +1,4 @@
-namespace Manager.Tool;
+namespace Manager.Tool.Layers.Logic;
 
 public interface IManagerTool
 {

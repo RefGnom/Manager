@@ -1,6 +1,6 @@
 using ManagerService.Client.ServiceModels;
 
-namespace Manager.Tool.CommandsCore;
+namespace Manager.Tool.Layers.Logic.CommandsCore;
 
 public record CommandContext(
     User User,

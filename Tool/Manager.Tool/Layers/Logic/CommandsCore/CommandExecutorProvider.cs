@@ -1,4 +1,4 @@
-namespace Manager.Tool.CommandsCore;
+namespace Manager.Tool.Layers.Logic.CommandsCore;
 
 public class CommandExecutorProvider(IEnumerable<ICommandExecutor> executors) : ICommandExecutorProvider
 {

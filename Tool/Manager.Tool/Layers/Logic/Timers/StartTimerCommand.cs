@@ -1,6 +1,6 @@
-using Manager.Tool.CommandsCore;
+using Manager.Tool.Layers.Logic.CommandsCore;
 
-namespace Manager.Tool.Timers;
+namespace Manager.Tool.Layers.Logic.Timers;
 
 public class StartTimerCommand : IToolCommand
 {

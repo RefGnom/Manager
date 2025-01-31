@@ -1,6 +1,6 @@
 using Manager.Core.Logger;
 
-namespace Manager.Tool.ToolLogger;
+namespace Manager.Tool.Layers.Logic.ToolLogger;
 
 public class ToolLogger<TContext>(ILogger<TContext> logger) : IToolLogger<TContext>
 {

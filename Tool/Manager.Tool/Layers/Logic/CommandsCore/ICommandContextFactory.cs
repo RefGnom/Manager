@@ -1,4 +1,4 @@
-namespace Manager.Tool.CommandsCore;
+namespace Manager.Tool.Layers.Logic.CommandsCore;
 
 public interface ICommandContextFactory
 {

@@ -1,8 +1,8 @@
 using Manager.Core.LinqExtensions;
-using Manager.Tool.CommandsCore;
-using Manager.Tool.ToolLogger;
+using Manager.Tool.Layers.Logic.CommandsCore;
+using Manager.Tool.Layers.Logic.ToolLogger;
 
-namespace Manager.Tool.Timers;
+namespace Manager.Tool.Layers.Logic.Timers;
 
 public class StartTimeCommandExecutor(
     IToolCommandFactory toolCommandFactory,

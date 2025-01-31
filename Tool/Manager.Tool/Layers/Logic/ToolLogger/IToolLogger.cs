@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Manager.Tool.ToolLogger;
+namespace Manager.Tool.Layers.Logic.ToolLogger;
 
 public interface IToolLogger<TContext>
 {
