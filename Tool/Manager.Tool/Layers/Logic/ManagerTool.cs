@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
 using Manager.Core.LinqExtensions;
+using Manager.Tool.Layers.Logic.Authentication;
 using Manager.Tool.Layers.Logic.CommandsCore;
 using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
+using Newtonsoft.Json;
 
 namespace Manager.Tool.Layers.Logic;
 
@@ -30,9 +32,17 @@ public class ManagerTool(
         }
 
         var context = _commandContextFactory.Create(arguments);
+        var jsonContext = JsonConvert.SerializeObject(context);
+        _logger.LogInfo(context.IsDebugMode, "Собрали контекст команды\n{0}", jsonContext);
+
         var commandExecutor = _commandExecutorProvider.GetByContext(context);
         if (commandExecutor is not null)
         {
+            if (!context.IsAuthenticated && commandExecutor is not AuthenticateCommandExecutor)
+            {
+                _userLogger.LogUserMessage("Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\"");
+            }
+
             return commandExecutor.ExecuteAsync(context);
         }
 

@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using Manager.Tool.Layers.Logic.Authentication;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
-public class CommandContextFactory(IUserProvider userProvider) : ICommandContextFactory
+public class CommandContextFactory(IUserService userService) : ICommandContextFactory
 {
-    private readonly IUserProvider _userProvider = userProvider;
+    private readonly IUserService _userService = userService;
 
     public CommandContext Create(string[] arguments)
     {
@@ -26,7 +27,7 @@ public class CommandContextFactory(IUserProvider userProvider) : ICommandContext
             }
         }
 
-        var user = _userProvider.GetUser();
-        return new CommandContext(user, commandSpace, spacesAndCommand.Last(), flags.ToArray());
+        var isAuthenticated = _userService.TryGetUser(out var user);
+        return new CommandContext(user, isAuthenticated, commandSpace, spacesAndCommand.Last(), flags.ToArray());
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using FluentAssertions;
-using Manager.Tool.Layers.Logic;
+using Manager.Tool.Layers.Logic.Authentication;
 using Manager.Tool.Layers.Logic.CommandsCore;
 using ManagerService.Client.ServiceModels;
 using NSubstitute;
@@ -10,20 +10,20 @@ namespace Manager.Tool.UnitTests;
 
 public class CommandContextFactoryTest
 {
-    private IUserProvider _userProvider;
+    private IUserService _userService;
     private CommandContextFactory _commandContextFactory;
 
     [SetUp]
     public void SetUp()
     {
-        _userProvider = Substitute.For<IUserProvider>();
-        _commandContextFactory = new CommandContextFactory(_userProvider);
+        _userService = Substitute.For<IUserService>();
+        _commandContextFactory = new CommandContextFactory(_userService);
     }
 
     [TestCaseSource(nameof(GetTestCases))]
     public void Test(CreateContextTestCase createContextTestCase)
     {
-        _userProvider.GetUser().Returns(new User());
+        _userService.TryGetUser(out _).Returns(true);
 
         var commandContext = _commandContextFactory.Create(createContextTestCase.RawString.Split(' '));
         commandContext.Should().BeEquivalentTo(createContextTestCase.ExpectedContext);
@@ -35,6 +35,7 @@ public class CommandContextFactoryTest
             "command",
             new CommandContext(
                 new User(),
+                true,
                 CommandSpace.Empty,
                 "command",
                 []
@@ -44,6 +45,7 @@ public class CommandContextFactoryTest
             "command-space command-name",
             new CommandContext(
                 new User(),
+                true,
                 new CommandSpace("command-space"),
                 "command-name",
                 []
@@ -53,6 +55,7 @@ public class CommandContextFactoryTest
             "first-space second-space third_space viu0viu",
             new CommandContext(
                 new User(),
+                true,
                 new CommandSpace("first-space", "second-space", "third_space"),
                 "viu0viu",
                 []
@@ -62,6 +65,7 @@ public class CommandContextFactoryTest
             "space command -d",
             new CommandContext(
                 new User(),
+                true,
                 new CommandSpace("space"),
                 "command",
                 [Flag("-d")]
@@ -71,6 +75,7 @@ public class CommandContextFactoryTest
             "space command -d --name",
             new CommandContext(
                 new User(),
+                true,
                 new CommandSpace("space"),
                 "command",
                 [Flag("-d"), Flag("--name")]
@@ -81,6 +86,7 @@ public class CommandContextFactoryTest
         //     "space command --name \"my name is\" -d --ping 8:0:0",
         //     new CommandContext(
         //         new User(),
+        //         true,
         //         new CommandSpace("space"),
         //         "command",
         //         [Flag("--name", "my name is"), Flag("-d"), Flag("--ping", "8:0:0")]
@@ -90,6 +96,7 @@ public class CommandContextFactoryTest
             "space command --name my_name-is -d --ping 8:0:0",
             new CommandContext(
                 new User(),
+                true,
                 new CommandSpace("space"),
                 "command",
                 [Flag("--name", "my_name-is"), Flag("-d"), Flag("--ping", "8:0:0")]
