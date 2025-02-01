@@ -14,11 +14,11 @@ public class ManagerTool(
     IArgumentsValidator argumentsValidator
 ) : IManagerTool
 {
+    private readonly IArgumentsValidator _argumentsValidator = argumentsValidator;
     private readonly ICommandContextFactory _commandContextFactory = commandContextFactory;
     private readonly ICommandExecutorProvider _commandExecutorProvider = commandExecutorProvider;
     private readonly IToolLogger<ManagerTool> _logger = logger;
     private readonly IUserLogger _userLogger = userLogger;
-    private readonly IArgumentsValidator _argumentsValidator = argumentsValidator;
 
     public Task RunAsync(string[] arguments)
     {
@@ -39,6 +39,5 @@ public class ManagerTool(
         _userLogger.LogUserMessage("Неизвестная команда");
         _logger.LogWarn(context.IsDebugMode, "Не нашли исполнителя для аргументов {0}", arguments.JoinToString(", "));
         return Task.CompletedTask;
-
     }
 }

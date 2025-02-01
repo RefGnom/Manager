@@ -2,8 +2,8 @@ using Manager.Tool.Layers.Logic.CommandsCore;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 
-public class StartTimerCommand : IToolCommand
+public class StopTimerCommand : IToolCommand
 {
-    public string CommandName => "start";
+    public string CommandName => "stop";
     public CommandSpace CommandSpace => TimerCommandConstants.TimersCommandSpace;
 }
