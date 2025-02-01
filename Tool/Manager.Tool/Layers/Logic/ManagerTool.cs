@@ -36,7 +36,9 @@ public class ManagerTool(
             return commandExecutor.ExecuteAsync(context);
         }
 
+        _userLogger.LogUserMessage("Неизвестная команда");
         _logger.LogWarn(context.IsDebugMode, "Не нашли исполнителя для аргументов {0}", arguments.JoinToString(", "));
         return Task.CompletedTask;
+
     }
 }
