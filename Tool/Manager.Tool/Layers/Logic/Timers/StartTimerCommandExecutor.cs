@@ -5,13 +5,13 @@ using Manager.Tool.Layers.Logic.ToolLogger;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 
-public class StartTimeCommandExecutor(
+public class StartTimerCommandExecutor(
     IToolCommandFactory toolCommandFactory,
-    IToolLogger<StartTimeCommandExecutor> logger
+    IToolLogger<StartTimerCommandExecutor> logger
 )
     : CommandExecutorBase<StartTimerCommand>(toolCommandFactory)
 {
-    private readonly IToolLogger<StartTimeCommandExecutor> _logger = logger;
+    private readonly IToolLogger<StartTimerCommandExecutor> _logger = logger;
 
     public override Task ExecuteAsync(CommandContext context)
     {
