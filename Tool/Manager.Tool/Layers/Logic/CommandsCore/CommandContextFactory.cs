@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using ManagerService.Client.ServiceModels;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
-public class CommandContextFactory : ICommandContextFactory
+public class CommandContextFactory(IUserProvider userProvider) : ICommandContextFactory
 {
+    private readonly IUserProvider _userProvider = userProvider;
+
     public CommandContext Create(string[] arguments)
     {
         var flags = new List<CommandFlag>();
@@ -25,6 +26,7 @@ public class CommandContextFactory : ICommandContextFactory
             }
         }
 
-        return new CommandContext(new User(), commandSpace, spacesAndCommand.Last(), flags.ToArray());
+        var user = _userProvider.GetUser();
+        return new CommandContext(user, commandSpace, spacesAndCommand.Last(), flags.ToArray());
     }
 }
