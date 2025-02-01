@@ -5,6 +5,7 @@ namespace Manager.Tool.Layers.Logic.CommandsCore;
 
 public record CommandContext(
     User User,
+    bool IsAuthenticated,
     CommandSpace CommandSpace,
     string CommandName,
     CommandFlag[] Flags
