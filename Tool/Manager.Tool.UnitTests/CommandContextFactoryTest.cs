@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using FluentAssertions;
 using Manager.Tool.Layers.Logic;
 using Manager.Tool.Layers.Logic.CommandsCore;
 using ManagerService.Client.ServiceModels;
 using NSubstitute;
+using NUnit.Framework;
 
 namespace Manager.Tool.UnitTests;
 
