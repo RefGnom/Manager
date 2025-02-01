@@ -1,6 +1,6 @@
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
-public record CommandOption(
+public record CommandFlag(
     string Argument,
     string? Value = null
 );

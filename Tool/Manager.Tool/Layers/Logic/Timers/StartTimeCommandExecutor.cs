@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Manager.Core.LinqExtensions;
 using Manager.Tool.Layers.Logic.CommandsCore;
@@ -19,8 +18,8 @@ public class StartTimeCommandExecutor(
         _logger.LogInfo(
             context.IsDebugMode,
             "Выполняем команду {0} с аргументами {1}",
-            context.Options[1].Argument,
-            context.Options.Skip(2).JoinToString(", ")
+            context.CommandName,
+            context.Flags.JoinToString(", ")
         );
         return Task.CompletedTask;
     }

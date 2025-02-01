@@ -11,12 +11,12 @@ public abstract class CommandExecutorBase<TCommand>(IToolCommandFactory toolComm
     {
         var command = _toolCommandFactory.CreateCommand<TCommand>();
 
-        if (command.CommandSpace is null)
+        if (!context.CommandSpace.Equals(command.CommandSpace))
         {
-            return context.Options[0].Argument == command.Command;
+            return false;
         }
 
-        return context.Options[0].Argument == command.CommandSpace && context.Options[1].Argument == command.Command;
+        return context.CommandName == command.CommandName;
     }
 
     public abstract Task ExecuteAsync(CommandContext context);

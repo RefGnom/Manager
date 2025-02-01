@@ -4,6 +4,6 @@ namespace Manager.Tool.Layers.Logic.Timers;
 
 public class StartTimerCommand : IToolCommand
 {
-    public string Command => "start";
-    public string CommandSpace => "timers";
+    public string CommandName => "start";
+    public CommandSpace CommandSpace { get; } = new("timers");
 }
