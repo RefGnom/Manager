@@ -4,29 +4,29 @@ namespace Data.Repositories;
 
 public class TimerRepository : IRepository<TimerEntity>
 {
-    private readonly ManagerDbContext _context;
+    private readonly ManagerDbContext _dbContext;
 
-    public TimerRepository(ManagerDbContext context)
+    public TimerRepository(ManagerDbContext dbContext)
     {
-        _context = context;
+        _dbContext = dbContext;
     }
 
-    public async Task<List<TimerEntity>> GetAllAsync() => await _context.Timers.ToListAsync();
-
-    public async Task<TimerEntity> TryGetByIdAsync(Guid id)
-    {
-        return await _context.Timers.FindAsync(id);
-    }
+    public async Task<List<TimerEntity>> GetAllAsync() => await _dbContext.Timers
+        .ToListAsync();
+    public async Task<TimerEntity> TryGetByIdAsync(Guid id) => await _dbContext.Timers
+        .FindAsync(id);
 
     public async Task CreateAsync(TimerEntity item)
     {
-        await _context.Timers.AddAsync(item);
+        await _dbContext.Timers
+            .AddAsync(item);
         await SaveAsync();
     }
 
     public async Task UpdateAsync(Guid id, TimerEntity updateItem)
     {
-        await _context.Timers.Where(entity => entity.Id == id)
+        await _dbContext.Timers
+            .Where(entity => entity.Id == id)
             .ExecuteUpdateAsync(s => s
                 .SetProperty(entity => entity.Name, updateItem.Name)
                 .SetProperty(entity => entity.StartTime, updateItem.StartTime)
@@ -37,11 +37,12 @@ public class TimerRepository : IRepository<TimerEntity>
 
     public async Task DeleteAsync(Guid id)
     {
-        await _context.Timers
+        await _dbContext.Timers
             .Where(entity => entity.Id == id)
             .ExecuteDeleteAsync();
         await SaveAsync();
     }
 
-    public async Task SaveAsync() => await _context.SaveChangesAsync();
+    public async Task SaveAsync() => await _dbContext
+        .SaveChangesAsync();
 }
