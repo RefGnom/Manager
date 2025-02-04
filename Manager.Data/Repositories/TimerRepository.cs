@@ -2,7 +2,7 @@
 
 namespace Data.Repositories;
 
-public class TimerRepository : IRepository<TimerEntity>
+public class TimerRepository : ITimerRepository
 {
     private readonly ManagerDbContext _dbContext;
 
@@ -11,38 +11,37 @@ public class TimerRepository : IRepository<TimerEntity>
         _dbContext = dbContext;
     }
 
-    public async Task<List<TimerEntity>> GetAllAsync() => await _dbContext.Timers
-        .ToListAsync();
-    public async Task<TimerEntity> TryGetByIdAsync(Guid id) => await _dbContext.Timers
-        .FindAsync(id);
-
-    public async Task CreateAsync(TimerEntity item)
-    {
-        await _dbContext.Timers
-            .AddAsync(item);
-        await SaveAsync();
-    }
-
-    public async Task UpdateAsync(Guid id, TimerEntity updateItem)
-    {
-        await _dbContext.Timers
-            .Where(entity => entity.Id == id)
-            .ExecuteUpdateAsync(s => s
-                .SetProperty(entity => entity.Name, updateItem.Name)
-                .SetProperty(entity => entity.StartTime, updateItem.StartTime)
-                .SetProperty(entity => entity.PingTime, updateItem.PingTime)
-            );
-        await SaveAsync();
-    }
+    public async Task SaveAsync() => await _dbContext
+        .SaveChangesAsync();
 
     public async Task DeleteAsync(Guid id)
     {
         await _dbContext.Timers
-            .Where(entity => entity.Id == id)
+            .Where(item => item.Id == id)
             .ExecuteDeleteAsync();
         await SaveAsync();
     }
 
-    public async Task SaveAsync() => await _dbContext
-        .SaveChangesAsync();
+    public async Task<List<TimerEntity>> GetAllForUserAsync(Guid userId) =>
+        await _dbContext.Timers
+            .Where(t => t.UserId == userId)
+            .ToListAsync();
+
+    public async Task CreateAsync(TimerEntity timer) =>
+        await _dbContext.Timers
+            .AddAsync(timer);
+
+    public async Task<TimerEntity> FindAsync(Guid id) =>
+        await _dbContext.Timers
+            .FindAsync(id);
+
+    public async Task PingTimeAsync(Guid id, DateTime pingTime)
+    {
+        await _dbContext.Timers
+            .Where(entity => entity.Id == id)
+            .ExecuteUpdateAsync(s =>
+                s.SetProperty(entity => entity.PingTime, pingTime));
+
+        await SaveAsync();
+    }
 }
