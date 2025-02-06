@@ -1,4 +1,4 @@
-using Data;
+using ManagerService.Server.Layers.DbLayer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
