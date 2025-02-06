@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Manager.Data\Manager.Data.csproj" />
+      <ProjectReference Include="..\Service\ManagerService.Client\ManagerService.Client.csproj" />
     </ItemGroup>
 
 </Project>
