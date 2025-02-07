@@ -1,23 +1,19 @@
-﻿using ManagerService.Server.Layers.DbLayer;
+﻿using AutoMapper;
+using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.Layers.DbLayer.Dbos;
 using ManagerService.Server.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManagerService.Server.Layers.RepositoryLayer;
 
-public class TimerRepository(ManagerDbContext dbContext) : ITimerRepository
+public class TimerRepository(ManagerDbContext dbContext, IMapper mapper) : ITimerRepository
 {
     private readonly ManagerDbContext _dbContext = dbContext;
-
-    public async Task CreateAsync(TimerDbo dto)
-    {
-        await _dbContext.Timers.AddAsync(dto);
-        await _dbContext.SaveChangesAsync();
-    }
+    private readonly IMapper _mapper = mapper;
 
     public async Task CreateOrUpdateAsync(TimerDto timerDto)
     {
-        var timerDbo = (TimerDbo)null!; // todo: Подключить автомаппер и тут превращать dto -> dbo
+        var timerDbo = _mapper.Map<TimerDto, TimerDbo>(timerDto);
         _dbContext.Timers.AddOrUpdate(timerDbo, x => x.Id == timerDbo.Id);
         await _dbContext.SaveChangesAsync();
     }
