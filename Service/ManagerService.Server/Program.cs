@@ -19,6 +19,8 @@ builder.Services.AddDbContext<ManagerDbContext>(
 var app = builder.Build();
 
 app.UseRouting();
+app.MapControllers();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

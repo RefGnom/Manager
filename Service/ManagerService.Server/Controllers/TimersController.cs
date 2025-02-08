@@ -11,9 +11,9 @@ public class TimersController(ITimerService timerService) : ControllerBase
     private readonly ITimerService _timerService = timerService;
 
     [HttpPost]
-    public async Task<ActionResult> StartTimer([FromBody] User user, string name)
+    public async Task<ActionResult> StartTimer([FromBody] TimerRequest request)
     {
-        await _timerService.StartTimerAsync(user, name);
+        await _timerService.StartTimerAsync(request);
         return Ok();
     }
 

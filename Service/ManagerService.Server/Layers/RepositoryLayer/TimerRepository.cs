@@ -14,7 +14,7 @@ public class TimerRepository(ManagerDbContext dbContext, IMapper mapper) : ITime
     public async Task CreateOrUpdateAsync(TimerDto timerDto)
     {
         var timerDbo = _mapper.Map<TimerDto, TimerDbo>(timerDto);
-        _dbContext.Timers.AddOrUpdate(timerDbo, x => x.Id == timerDbo.Id);
+        _dbContext.Timers.Add(timerDbo);
         await _dbContext.SaveChangesAsync();
     }
 

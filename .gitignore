@@ -400,4 +400,4 @@ FodyWeavers.xsd
 *.sln.iml
 /.idea
 
-Manager.Web/appsettings.Development.json
+Service/ManagerService.Server/appsettings.Development.json

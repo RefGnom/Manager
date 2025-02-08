@@ -1,23 +1,17 @@
-﻿using ManagerService.Client.ServiceModels;
+﻿using AutoMapper;
+using ManagerService.Client.ServiceModels;
 using ManagerService.Server.Layers.RepositoryLayer;
 using ManagerService.Server.ServiceModels;
 
 namespace ManagerService.Server.Layers.ServiceLayer;
 
-public class TimerService(ITimerRepository repository): ITimerService
+public class TimerService(ITimerRepository repository, IMapper mapper) : ITimerService
 {
     private readonly ITimerRepository _repository = repository;
-    public async Task StartTimerAsync(User user, string name)
+    private readonly IMapper _mapper = mapper;
+
+    public async Task StartTimerAsync(TimerRequest request)
     {
-        await _repository.CreateOrUpdateAsync(
-            new TimerDto()
-        {
-            Id = Guid.NewGuid(),
-            Name = name,
-            UserId = user.Id,
-            StartTime = DateTime.Now,
-            PingTimeout = null,
-            Status = TimerStatus.Started
-        });
+        await _repository.CreateOrUpdateAsync(_mapper.Map<TimerDto>(request));
     }
 }
