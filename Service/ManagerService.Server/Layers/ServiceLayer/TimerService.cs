@@ -5,10 +5,13 @@ using ManagerService.Server.ServiceModels;
 
 namespace ManagerService.Server.Layers.ServiceLayer;
 
-public class TimerService(ITimerRepository repository, IMapper mapper) : ITimerService
+public class TimerService(
+    ITimerRepository repository,
+    IMapper mapper
+) : ITimerService
 {
-    private readonly ITimerRepository _repository = repository;
     private readonly IMapper _mapper = mapper;
+    private readonly ITimerRepository _repository = repository;
 
     public async Task StartTimerAsync(TimerRequest request)
     {

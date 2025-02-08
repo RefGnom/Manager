@@ -6,7 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManagerService.Server.Layers.RepositoryLayer;
 
-public class TimerRepository(ManagerDbContext dbContext, IMapper mapper) : ITimerRepository
+public class TimerRepository(
+    ManagerDbContext dbContext,
+    IMapper mapper
+) : ITimerRepository
 {
     private readonly ManagerDbContext _dbContext = dbContext;
     private readonly IMapper _mapper = mapper;
@@ -14,7 +17,17 @@ public class TimerRepository(ManagerDbContext dbContext, IMapper mapper) : ITime
     public async Task CreateOrUpdateAsync(TimerDto timerDto)
     {
         var timerDbo = _mapper.Map<TimerDto, TimerDbo>(timerDto);
-        _dbContext.Timers.AddOrUpdate(timerDbo, x => x.Id);
+
+        var existedTimer = await FindAsync(timerDto.UserId, timerDto.Name);
+        if (existedTimer is null)
+        {
+            _dbContext.Timers.Add(timerDbo);
+        }
+        else
+        {
+            _dbContext.Timers.Update(timerDbo);
+        }
+
         await _dbContext.SaveChangesAsync();
     }
 

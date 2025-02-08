@@ -4,10 +4,11 @@ namespace ManagerService.Server.Layers.DbLayer;
 
 public static class DbSetExtensions
 {
-    public static void AddOrUpdate<TDbo>(this DbSet<TDbo> dbSet, TDbo dbo, Func<TDbo, Guid> idPicker)
+    public static void AddOrUpdate<TDbo>(this DbSet<TDbo> dbSet, TDbo dbo, Func<TDbo, object> primaryKeyPicker)
         where TDbo : class
     {
-        if (dbSet.Any(x => idPicker(x) == idPicker(dbo)))
+        var primaryKey = primaryKeyPicker(dbo);
+        if (dbSet.Find(primaryKey) is not null)
         {
             dbSet.Update(dbo);
         }

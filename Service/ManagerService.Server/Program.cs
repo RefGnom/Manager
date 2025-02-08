@@ -1,8 +1,8 @@
-using ManagerService.Server.Layers.DbLayer;
-using Microsoft.EntityFrameworkCore;
 using ManagerService.Server;
+using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.Layers.RepositoryLayer;
 using ManagerService.Server.Layers.ServiceLayer;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

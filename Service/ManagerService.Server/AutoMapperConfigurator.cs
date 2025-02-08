@@ -14,17 +14,33 @@ public static class AutoMapperConfigurator
             {
                 configure.CreateMap<TimerDto, TimerDbo>();
                 configure.CreateMap<TimerRequest, TimerDto>()
-                    .ForMember(dest => dest.Id, opt =>
-                        opt.MapFrom(src => Guid.NewGuid()))
-                    .ForMember(dest => dest.UserId, opt =>
-                        opt.MapFrom(src => src.User.Id))
-                    .ForMember(dest => dest.StartTime, opt =>
-                        opt.MapFrom(src => DateTime.UtcNow))
-                    .ForMember(dest => dest.PingTimeout, opt =>
-                        opt.MapFrom(src => (TimeSpan?)null))
-                    .ForMember(dest => dest.Status, opt =>
-                        opt.MapFrom(src => TimerStatus.Started));
-            });
+                    .ForMember(
+                        dest => dest.Id,
+                        opt =>
+                            opt.MapFrom(src => Guid.NewGuid())
+                    )
+                    .ForMember(
+                        dest => dest.UserId,
+                        opt =>
+                            opt.MapFrom(src => src.User.Id)
+                    )
+                    .ForMember(
+                        dest => dest.StartTime,
+                        opt =>
+                            opt.MapFrom(src => DateTime.UtcNow)
+                    )
+                    .ForMember(
+                        dest => dest.PingTimeout,
+                        opt =>
+                            opt.MapFrom(src => (TimeSpan?)null)
+                    )
+                    .ForMember(
+                        dest => dest.Status,
+                        opt =>
+                            opt.MapFrom(src => TimerStatus.Started)
+                    );
+            }
+        );
         var mapper = configurator.CreateMapper();
         services.AddSingleton(mapper);
     }
