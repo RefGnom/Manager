@@ -7,4 +7,10 @@ public class ManagerDbContext(DbContextOptions<ManagerDbContext> options) : DbCo
 {
     public DbSet<TimerDbo> Timers { get; set; }
     public DbSet<TimerSessionDbo> TimerSessions { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<TimerDbo>()
+            .HasKey(t => new { t.UserId, t.Name });
+    }
 }
