@@ -17,4 +17,10 @@ public class TimerService(
     {
         await _repository.CreateOrUpdateAsync(_mapper.Map<TimerDto>(request));
     }
+
+    public async Task<TimerResponse[]> SelectByUserAsync(Guid userId)
+    {
+        var dtos = await _repository.SelectByUserAsync(userId);
+        return await Task.FromResult(_mapper.Map<TimerResponse[]>(dtos));
+    }
 }

@@ -7,11 +7,13 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMapper();
-builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<ITimerRepository, TimerRepository>();
 builder.Services.AddTransient<ITimerService, TimerService>();
 builder.Services.AddScoped<ManagerDbContext>();
+
 builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ManagerDbContext>(
     options => { options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")); }
 );

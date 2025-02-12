@@ -34,6 +34,16 @@ public static class AutoMapperConfigurator
                         opt =>
                             opt.MapFrom(src => TimerStatus.Started)
                     );
+                configure.CreateMap<TimerDto, TimerResponse>()
+                    .ForMember(
+                        dest => dest.ElapsedTime,
+                        opt =>
+                            opt.MapFrom(src => DateTime.UtcNow - src.StartTime))
+                    .ForMember(
+                        dest => dest.Sessions,
+                        opt =>
+                            opt.MapFrom(src => Array.Empty<TimerSessionResponse>())
+                    );
             }
         );
         var mapper = configurator.CreateMapper();

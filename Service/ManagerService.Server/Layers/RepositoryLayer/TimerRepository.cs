@@ -36,15 +36,15 @@ public class TimerRepository(
         var timerDbo = await _dbContext.Timers
             .Where(x => x.UserId == userId)
             .Where(x => x.Name == timerName)
-            .FirstAsync();
-        return null!; // todo: Подключить автомаппет и тут превращать dbo -> dto
+            .FirstOrDefaultAsync();
+        return mapper.Map<TimerDto>(timerDbo);
     }
 
     public async Task<TimerDto[]> SelectByUserAsync(Guid userId)
     {
-        var timerDbos = await _dbContext.Timers
+        return await _dbContext.Timers
             .Where(x => x.UserId == userId)
+            .Select(x => mapper.Map<TimerDto>(x))
             .ToArrayAsync();
-        return []; // todo: сконвертить в dto
     }
 }

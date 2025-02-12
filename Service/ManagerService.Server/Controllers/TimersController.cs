@@ -17,18 +17,10 @@ public class TimersController(ITimerService timerService) : ControllerBase
         return Ok();
     }
 
-    // [HttpGet]
-    // public async Task<ActionResult<UserTimersResponse>> SelectUserTimers([FromBody] UserTimersRequest userTimersRequest)
-    // {
-    //     var response = await _timerService.SelectUserTimers(
-    //         new UserTimersRequest
-    //         {
-    //             User = new User
-    //             {
-    //                 Id = userTimersRequest.User.Id,
-    //             },
-    //         }
-    //     );
-    //     return Ok(response.Timers.ToList());
-    // }
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<UserTimersResponse>> SelectUserTimers([FromRoute] Guid userId)
+    {
+        var responses = await _timerService.SelectByUserAsync(userId);
+        return Ok(responses);
+    }
 }
