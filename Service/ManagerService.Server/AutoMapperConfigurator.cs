@@ -15,6 +15,10 @@ public static class AutoMapperConfigurator
                 configure.CreateMap<TimerDto, TimerDbo>().ReverseMap();
                 configure.CreateMap<TimerRequest, TimerDto>()
                     .ForMember(
+                        dest => dest.Id,
+                        opt =>
+                            opt.MapFrom(src => Guid.NewGuid()))
+                    .ForMember(
                         dest => dest.UserId,
                         opt =>
                             opt.MapFrom(src => src.User.Id)
