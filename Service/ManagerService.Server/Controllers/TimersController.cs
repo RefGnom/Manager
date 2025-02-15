@@ -23,4 +23,13 @@ public class TimersController(ITimerService timerService) : ControllerBase
         var responses = await _timerService.SelectByUserAsync(userId);
         return Ok(responses);
     }
+
+    // [HttpPost]
+    // public async Task<ActionResult> StopTimer([FromBody] TimerRequest request)
+    // {
+    //     return Ok();
+    // }
+    //
+    //
+    // public async Task<ActionResult<TimerResponce>> FindTimer()
 }

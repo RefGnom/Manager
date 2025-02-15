@@ -4,6 +4,6 @@ namespace ManagerService.Server.Layers.RepositoryLayer;
 
 public interface ITimerSessionRepository
 {
-    Task CreateOrUpdate(TimerSessionDto timerSessionDto);
+    Task CreateOrUpdateAsync(TimerSessionDto timerSessionDto);
     Task<TimerSessionDto[]> SelectByTimer(Guid timerId);
 }

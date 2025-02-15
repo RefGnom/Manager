@@ -8,7 +8,8 @@ namespace ManagerService.Server.Layers.RepositoryLayer;
 
 public class TimerRepository(
     ManagerDbContext dbContext,
-    IMapper mapper
+    IMapper mapper,
+    ITimerSessionRepository sessionRepository
 ) : ITimerRepository
 {
     private readonly ManagerDbContext _dbContext = dbContext;
@@ -31,6 +32,15 @@ public class TimerRepository(
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<TimerDto[]> SelectByUserAsync(Guid userId)
+    {
+        var timers = _dbContext.Timers
+            .Where(x => x.UserId == userId)
+            .Select(x => mapper.Map<TimerDto>(x));
+        return await timers
+            .ToArrayAsync();
+    }
+
     public async Task<TimerDto?> FindAsync(Guid userId, string timerName)
     {
         var timerDbo = await _dbContext.Timers
@@ -38,13 +48,5 @@ public class TimerRepository(
             .Where(x => x.Name == timerName)
             .FirstOrDefaultAsync();
         return mapper.Map<TimerDto>(timerDbo);
-    }
-
-    public async Task<TimerDto[]> SelectByUserAsync(Guid userId)
-    {
-        return await _dbContext.Timers
-            .Where(x => x.UserId == userId)
-            .Select(x => mapper.Map<TimerDto>(x))
-            .ToArrayAsync();
     }
 }

@@ -9,8 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMapper();
 
 builder.Services.AddScoped<ITimerRepository, TimerRepository>();
+builder.Services.AddScoped<ITimerSessionRepository, TimerSessionRepository>();
+
 builder.Services.AddTransient<ITimerService, TimerService>();
+
 builder.Services.AddScoped<ManagerDbContext>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();

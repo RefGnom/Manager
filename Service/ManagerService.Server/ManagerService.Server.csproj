@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj" />
         <ProjectReference Include="..\ManagerService.Client\ManagerService.Client.csproj"/>
         <ProjectReference Include="..\ManagerService.Client\ManagerService.Client.csproj"/>
     </ItemGroup>

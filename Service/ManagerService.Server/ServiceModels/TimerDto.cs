@@ -9,5 +9,6 @@ public class TimerDto
     public required string Name { get; init; }
     public required DateTime StartTime { get; init; }
     public required TimeSpan? PingTimeout { get; init; }
+    public required TimerSessionDto[] Sessions { get; set; }
     public required TimerStatus Status { get; init; }
 }

@@ -13,7 +13,8 @@ public static class AutoMapperConfigurator
             configure =>
             {
                 configure.CreateMap<TimerDto, TimerDbo>().ReverseMap();
-                configure.CreateMap<TimerRequest, TimerDto>()
+                configure.CreateMap<TimerSessionDto, TimerSessionDbo>().ReverseMap();
+                configure.CreateMap<StartTimerRequest, TimerDto>()
                     .ForMember(
                         dest => dest.Id,
                         opt =>
@@ -22,16 +23,6 @@ public static class AutoMapperConfigurator
                         dest => dest.UserId,
                         opt =>
                             opt.MapFrom(src => src.User.Id)
-                    )
-                    .ForMember(
-                        dest => dest.StartTime,
-                        opt =>
-                            opt.MapFrom(src => DateTime.UtcNow)
-                    )
-                    .ForMember(
-                        dest => dest.PingTimeout,
-                        opt =>
-                            opt.MapFrom(src => (TimeSpan?)null)
                     )
                     .ForMember(
                         dest => dest.Status,
