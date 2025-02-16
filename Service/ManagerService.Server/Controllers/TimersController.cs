@@ -10,17 +10,24 @@ public class TimersController(ITimerService timerService) : ControllerBase
 {
     private readonly ITimerService _timerService = timerService;
 
-    [HttpPost]
-    public async Task<ActionResult> StartTimer([FromBody] TimerRequest request) // todo: StartTimerRequest
+    [HttpPost("start")]
+    public async Task<ActionResult> StartTimer([FromBody] StartTimerRequest request)
     {
-        await _timerService.StartTimerAsync(request);
-        return Ok();
+        try
+        {
+            await _timerService.StartTimerAsync(request);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
-    [HttpGet("{userId}")]
-    public async Task<ActionResult<UserTimersResponse>> SelectUserTimers([FromRoute] Guid userId)
+    [HttpGet("select")]
+    public async Task<ActionResult<UserTimersResponse>> SelectUserTimers([FromQuery] UserTimersRequest request)
     {
-        var responses = await _timerService.SelectByUserAsync(userId);
+        var responses = await _timerService.SelectByUserAsync(request);
         return Ok(responses);
     }
 

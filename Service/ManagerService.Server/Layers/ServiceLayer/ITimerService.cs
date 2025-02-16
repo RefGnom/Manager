@@ -4,6 +4,6 @@ namespace ManagerService.Server.Layers.ServiceLayer;
 
 public interface ITimerService
 {
-    Task StartTimerAsync(TimerRequest request);
-    Task<TimerResponse[]> SelectByUserAsync(Guid userId);
+    Task StartTimerAsync(StartTimerRequest request);
+    Task<TimerResponse[]> SelectByUserAsync(UserTimersRequest request);
 }
