@@ -41,4 +41,31 @@ public class TimersController(
         );
         return Ok(responses);
     }
+
+    [HttpPost("stop")]
+    public async Task<ActionResult> StopTimer([FromBody] StopTimerRequest request)
+    {
+        return Ok();
+    }
+
+    [HttpGet("find")]
+    public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
+    {
+        await _timerService.FindTimerAsync(request.User.Id, request.Name);
+        return Ok();
+    }
+
+    [HttpPost("reset")]
+    public async Task<ActionResult<HttpResponse>> ResetTimer([FromBody] ResetTimerRequest request)
+    {
+        await _timerService.ResetTimerAsync(request.User.Id, request.Name);
+        return Ok();
+    }
+
+    [HttpDelete("delete")]
+    public async Task<ActionResult<HttpResponse>> DeleteTimer([FromBody] DeleteTimerRequest request)
+    {
+        await _timerService.DeleteTimerAsync(request.User.Id, request.Name);
+        return Ok();
+    }
 }
