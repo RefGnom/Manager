@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.Layers.DbLayer.Dbos;
 using ManagerService.Server.ServiceModels;
@@ -32,13 +35,12 @@ public class TimerRepository(
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<TimerDto[]> SelectByUserAsync(Guid userId)
+    public Task<TimerDto[]> SelectByUserAsync(Guid userId)
     {
         var timers = _dbContext.Timers
             .Where(x => x.UserId == userId)
             .Select(x => mapper.Map<TimerDto>(x));
-        return await timers
-            .ToArrayAsync();
+        return Task.FromResult(timers.ToArray());
     }
 
     public async Task<TimerDto?> FindAsync(Guid userId, string timerName)

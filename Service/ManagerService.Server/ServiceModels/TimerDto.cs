@@ -1,3 +1,4 @@
+using System;
 using ManagerService.Client.ServiceModels;
 
 namespace ManagerService.Server.ServiceModels;

@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.ServiceModels;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +21,12 @@ public class TimerSessionRepository(
         throw new NotImplementedException();
     }
 
-    public async Task<TimerSessionDto[]> SelectByTimer(Guid timerId)
+    public Task<TimerSessionDto[]> SelectByTimer(Guid timerId)
     {
-        return await _dbContext.TimerSessions
+        return Task.FromResult(_dbContext.TimerSessions
             .Where(x => x.TimerId == timerId)
             .Select(x => _mapper.Map<TimerSessionDto>(x))
-            .ToArrayAsync();
+            .ToArrayAsync()
+            .Result);
     }
-} 
+}

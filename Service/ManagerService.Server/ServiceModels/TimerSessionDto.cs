@@ -1,3 +1,5 @@
+using System;
+
 namespace ManagerService.Server.ServiceModels;
 
 public class TimerSessionDto

@@ -1,58 +1,65 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using ManagerService.Client.ServiceModels;
 using ManagerService.Server.Layers.RepositoryLayer;
-using ManagerService.Server.ServiceModels;
 using Manager.Core.LinqExtensions;
+using ManagerService.Server.Convertors;
+using ManagerService.Server.ServiceModels;
 
 namespace ManagerService.Server.Layers.ServiceLayer;
 
 public class TimerService(
     ITimerRepository timerRepository,
     ITimerSessionRepository timerSessionRepository,
-    IMapper mapper
+    IMapper mapper,
+    ITimerDtoConverter timerDtoConverter
 ) : ITimerService
 {
-    private readonly IMapper _mapper = mapper;
     private readonly ITimerRepository _timerRepository = timerRepository;
     private readonly ITimerSessionRepository _timerSessionRepository = timerSessionRepository;
 
-    public async Task StartTimerAsync(StartTimerRequest request)
+    //TODO: Создание новой сессии при старте таймера
+    public async Task StartTimerAsync(TimerDto timerDto)
     {
-        var timer = await timerRepository.FindAsync(request.User.Id, request.Name);
+        var timer = await _timerRepository.FindAsync(timerDto.UserId, timerDto.Name);
         if (timer is null)
         {
-            await _timerRepository.CreateOrUpdateAsync(_mapper.Map<TimerDto>(request));
+            await _timerRepository.CreateOrUpdateAsync(timerDto);
         }
         else
         {
-            if (timer.Status is TimerStatus.Started or TimerStatus.Archived or TimerStatus.Deleted)
+            if (timer.Status is TimerStatus.Stopped or TimerStatus.Reset)
             {
-                throw new Exception($"Timer {timer.Status}");
+                timer.StartTime = timerDto.StartTime;
+                timer.PingTimeout = timerDto.PingTimeout;
+                await _timerRepository.CreateOrUpdateAsync(timer);
             }
-            timer.StartTime = request.StartTime;
-            timer.PingTimeout = request.PingTimeout;
-            await _timerRepository.CreateOrUpdateAsync(timer);
+
+            throw new InvalidOperationException($"Timer cannot started. Timer status: {timer.Status}");
         }
     }
 
-    public async Task<TimerResponse[]> SelectByUserAsync(UserTimersRequest request)
+    public async Task<TimerDto[]> SelectByUserAsync(Guid userId, bool withArchived, bool withDeleted)
     {
-        var dtos = await _timerRepository.SelectByUserAsync(request.User.Id);
-        if (!request.WithArchived)
+        var dtos = await _timerRepository.SelectByUserAsync(userId);
+        if (!withArchived)
         {
             dtos = dtos
                 .Where(x => x.Status != TimerStatus.Archived)
                 .ToArray();
         }
 
-        if (!request.WithDeleted)
+        if (!withDeleted)
         {
             dtos = dtos
                 .Where(x => x.Status != TimerStatus.Deleted)
                 .ToArray();
         }
 
+        //TODO: Подсчёт ElapsedTime на основе сессий.
         dtos.Foreach(x => x.Sessions = _timerSessionRepository.SelectByTimer(x.Id).Result);
-        return _mapper.Map<TimerResponse[]>(dtos);
+        return dtos;
     }
 }

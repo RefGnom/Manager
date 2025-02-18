@@ -1,4 +1,6 @@
-﻿namespace ManagerService.Server.Layers.DbLayer.Dbos;
+﻿using System;
+
+namespace ManagerService.Server.Layers.DbLayer.Dbos;
 
 public class TimerSessionDbo
 {

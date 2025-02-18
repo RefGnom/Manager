@@ -1,8 +1,13 @@
-using ManagerService.Server;
+using ManagerService.Server.Configurators;
+using ManagerService.Server.Convertors;
 using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.Layers.RepositoryLayer;
 using ManagerService.Server.Layers.ServiceLayer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +17,9 @@ builder.Services.AddScoped<ITimerRepository, TimerRepository>();
 builder.Services.AddScoped<ITimerSessionRepository, TimerSessionRepository>();
 
 builder.Services.AddTransient<ITimerService, TimerService>();
+builder.Services.AddTransient<ITimerDtoConverter, TimerDtoConverter>();
 
 builder.Services.AddScoped<ManagerDbContext>();
-
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
