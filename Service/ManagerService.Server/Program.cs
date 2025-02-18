@@ -2,7 +2,7 @@ using ManagerService.Server.Configurators;
 using ManagerService.Server.Convertors;
 using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.Layers.RepositoryLayer;
-using ManagerService.Server.Layers.ServiceLayer;
+using ManagerService.Server.Layers.ServiceLayer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

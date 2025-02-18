@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ManagerService.Client.ServiceModels;
 using ManagerService.Server.Convertors;
-using ManagerService.Server.Layers.ServiceLayer;
+using ManagerService.Server.Layers.ServiceLayer.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManagerService.Server.Controllers;
@@ -45,6 +45,7 @@ public class TimersController(
     [HttpPost("stop")]
     public async Task<ActionResult> StopTimer([FromBody] StopTimerRequest request)
     {
+        await _timerService.StopTimerAsync(request.User.Id, request.Name, request.StopTime);
         return Ok();
     }
 
