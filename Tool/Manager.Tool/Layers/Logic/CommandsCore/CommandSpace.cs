@@ -1,5 +1,5 @@
 using System.Linq;
-using Manager.Core.LinqExtensions;
+using Manager.Core.Extensions.LinqExtensions;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
