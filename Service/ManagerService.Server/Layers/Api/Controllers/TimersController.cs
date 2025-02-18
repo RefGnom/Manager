@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ManagerService.Client.ServiceModels;
 using ManagerService.Server.Layers.Api.Converters;
+using ManagerService.Server.Layers.ServiceLayer.Exceptions;
 using ManagerService.Server.Layers.ServiceLayer.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,7 +51,19 @@ public class TimersController(
     [HttpPost("stop")]
     public async Task<ActionResult> StopTimer([FromBody] StopTimerRequest request)
     {
-        await _timerService.StopTimerAsync(request.User.Id, request.Name, request.StopTime);
+        try
+        {
+            await _timerService.StopTimerAsync(request.User.Id, request.Name, request.StopTime);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (InvalidStatusException invalidStatusException)
+        {
+            return BadRequest(invalidStatusException.Message);
+        }
+
         return Ok();
     }
 

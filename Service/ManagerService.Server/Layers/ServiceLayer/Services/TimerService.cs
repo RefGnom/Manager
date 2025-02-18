@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Manager.Core.DateTimeProvider;
-using Manager.Core.LinqExtensions;
+using Manager.Core.Extensions;
+using Manager.Core.Extensions.LinqExtensions;
 using ManagerService.Client.ServiceModels;
 using ManagerService.Server.Layers.RepositoryLayer;
+using ManagerService.Server.Layers.ServiceLayer.Exceptions;
 using ManagerService.Server.ServiceModels;
 
 namespace ManagerService.Server.Layers.ServiceLayer.Services;
@@ -70,17 +72,20 @@ public class TimerService(
         var timer = await _timerRepository.FindAsync(userId, name);
         if (timer is null)
         {
-            throw new InvalidOperationException($"Timer with name: {name} does not exist.");
+            throw new NotFoundException($"Timer with name: {name} does not exist.");
         }
 
-        if (timer.Status is not TimerStatus.Stopped)
+        if (timer.Status is not TimerStatus.Started)
         {
-            throw new InvalidOperationException($"Timer with name: {name} has not stopped.");
+            throw new InvalidStatusException(
+                $"Остановить можно только таймер в статусе \"{TimerStatus.Started.GetDescription()}\"," +
+                $" но был получен в статусе {timer.Status.GetDescription()}"
+            );
         }
 
-        timer.Status = TimerStatus.Reset;
-        await _timerSessionService.StopTimerSessionAsync(timer.Id, stopTime);
+        timer.Status = TimerStatus.Stopped;
         await _timerRepository.CreateOrUpdateAsync(timer);
+        await _timerSessionService.StopTimerSessionAsync(timer.Id, stopTime);
     }
 
     public async Task ResetTimerAsync(Guid userId, string name)
