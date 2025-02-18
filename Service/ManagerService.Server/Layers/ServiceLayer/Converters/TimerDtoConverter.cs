@@ -16,17 +16,7 @@ public class TimerDtoConverter: ITimerDtoConverter
             Name = startTimerRequest.Name,
             StartTime = startTimerRequest.StartTime,
             PingTimeout = startTimerRequest.PingTimeout,
-            Sessions = new TimerSessionDto[]
-            {
-                new TimerSessionDto()
-                {
-                    Id = Guid.NewGuid(),
-                    TimerId = timerId,
-                    StartTime = startTimerRequest.StartTime,
-                    StopTime = null,
-                    IsOver = false
-                }
-            },
+            Sessions = [],
             Status = TimerStatus.Started
         };
     }

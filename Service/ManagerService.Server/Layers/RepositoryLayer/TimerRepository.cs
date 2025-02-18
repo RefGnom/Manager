@@ -37,10 +37,10 @@ public class TimerRepository(
 
     public Task<TimerDto[]> SelectByUserAsync(Guid userId)
     {
-        var timers = _dbContext.Timers
+        return _dbContext.Timers
             .Where(x => x.UserId == userId)
-            .Select(x => mapper.Map<TimerDto>(x));
-        return Task.FromResult(timers.ToArray());
+            .Select(x => mapper.Map<TimerDto>(x))
+            .ToArrayAsync();
     }
 
     public async Task<TimerDto?> FindAsync(Guid userId, string timerName)

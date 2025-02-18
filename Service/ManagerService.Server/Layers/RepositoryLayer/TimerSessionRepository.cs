@@ -23,10 +23,9 @@ public class TimerSessionRepository(
 
     public Task<TimerSessionDto[]> SelectByTimer(Guid timerId)
     {
-        return Task.FromResult(_dbContext.TimerSessions
+        return _dbContext.TimerSessions
             .Where(x => x.TimerId == timerId)
             .Select(x => _mapper.Map<TimerSessionDto>(x))
-            .ToArrayAsync()
-            .Result);
+            .ToArrayAsync();
     }
 }

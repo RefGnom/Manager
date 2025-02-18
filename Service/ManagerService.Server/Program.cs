@@ -17,7 +17,7 @@ builder.Services.AddScoped<ITimerRepository, TimerRepository>();
 builder.Services.AddScoped<ITimerSessionRepository, TimerSessionRepository>();
 
 builder.Services.AddTransient<ITimerService, TimerService>();
-builder.Services.AddTransient<ITimerDtoConverter, TimerDtoConverter>();
+builder.Services.AddSingleton<ITimerDtoConverter, TimerDtoConverter>();
 
 builder.Services.AddScoped<ManagerDbContext>();
 
