@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Reflection;
-using Manager.Core.LinqExtensions;
+using Manager.Core.Extensions.LinqExtensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Core.DependencyInjection;
