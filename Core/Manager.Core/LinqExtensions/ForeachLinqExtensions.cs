@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Manager.Core.LinqExtensions;
 
@@ -10,6 +11,14 @@ public static class ForeachLinqExtensions
         foreach (var item in source)
         {
             action(item);
+        }
+    }
+
+    public static async Task ForeachAsync<T>(this IEnumerable<T> source, Func<T, Task> action)
+    {
+        foreach (var item in source)
+        {
+            await action(item);
         }
     }
 }

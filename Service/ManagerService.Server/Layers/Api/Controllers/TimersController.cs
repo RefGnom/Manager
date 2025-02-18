@@ -1,28 +1,29 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ManagerService.Client.ServiceModels;
-using ManagerService.Server.Convertors;
+using ManagerService.Server.Layers.Api.Converters;
 using ManagerService.Server.Layers.ServiceLayer.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ManagerService.Server.Controllers;
+namespace ManagerService.Server.Layers.Api.Controllers;
 
 [ApiController]
 [Route("timers")]
 public class TimersController(
     ITimerService timerService,
-    ITimerDtoConverter timerDtoConverter
+    ITimerHttpModelsConverter timerHttpModelsConverter
 ) : ControllerBase
 {
     private readonly ITimerService _timerService = timerService;
-    private readonly ITimerDtoConverter _timerDtoConverter = timerDtoConverter;
+    private readonly ITimerHttpModelsConverter _timerHttpModelsConverter = timerHttpModelsConverter;
 
     [HttpPost("start")]
     public async Task<ActionResult> StartTimer([FromBody] StartTimerRequest request)
     {
         try
         {
-            await _timerService.StartTimerAsync(_timerDtoConverter.FromStartRequest(request));
+            await _timerService.StartTimerAsync(_timerHttpModelsConverter.FromStartRequest(request));
             return Ok();
         }
         catch (InvalidOperationException e)
@@ -34,12 +35,16 @@ public class TimersController(
     [HttpGet("selectForUser")]
     public async Task<ActionResult<UserTimersResponse>> SelectUserTimers([FromQuery] UserTimersRequest request)
     {
-        var responses = await _timerService.SelectByUserAsync(
+        var dtos = await _timerService.SelectByUserAsync(
             request.User.Id,
             request.WithArchived,
             request.WithDeleted
         );
-        return Ok(responses);
+        var timerResponses = dtos
+            .Select(x => _timerHttpModelsConverter.ConvertToTimerResponse(x, timerService.CalculateElapsedTime(x)))
+            .ToArray();
+
+        return Ok(timerResponses);
     }
 
     [HttpPost("stop")]
