@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Manager.Core.DateTimeProvider;
 using Manager.Core.LinqExtensions;
 using ManagerService.Client.ServiceModels;
 using ManagerService.Server.Layers.RepositoryLayer;
@@ -10,32 +11,35 @@ namespace ManagerService.Server.Layers.ServiceLayer.Services;
 
 public class TimerService(
     ITimerRepository timerRepository,
-    ITimerSessionService timerSessionService
+    ITimerSessionService timerSessionService,
+    IDateTimeProvider dateTimeProvider
 ) : ITimerService
 {
     private readonly ITimerRepository _timerRepository = timerRepository;
     private readonly ITimerSessionService _timerSessionService = timerSessionService;
+    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
 
-    //TODO: Создание новой сессии при старте таймера
     public async Task StartTimerAsync(TimerDto timerDto)
     {
         var timer = await _timerRepository.FindAsync(timerDto.UserId, timerDto.Name);
         if (timer is null)
         {
-            await _timerRepository.CreateOrUpdateAsync(timerDto);
-            await _timerSessionService.StartSessionAsync(timerDto.Id, timerDto.StartTime!.Value);
+            timer = timerDto;
         }
         else
         {
-            if (timer.Status is TimerStatus.Stopped or TimerStatus.Reset)
+            if (timer.Status is not (TimerStatus.Stopped or TimerStatus.Reset))
             {
-                timer.StartTime = timerDto.StartTime;
-                timer.PingTimeout = timerDto.PingTimeout;
-                await _timerRepository.CreateOrUpdateAsync(timer);
+                throw new InvalidOperationException($"Timer cannot started. Timer status: {timer.Status}");
             }
 
-            throw new InvalidOperationException($"Timer cannot started. Timer status: {timer.Status}");
+            timer.StartTime = timerDto.StartTime;
+            timer.PingTimeout = timerDto.PingTimeout;
         }
+
+        timer.Status = TimerStatus.Started;
+        await _timerRepository.CreateOrUpdateAsync(timer);
+        await _timerSessionService.StartSessionAsync(timer.Id, timer.StartTime!.Value);
     }
 
     public async Task<TimerDto[]> SelectByUserAsync(Guid userId, bool withArchived, bool withDeleted)
@@ -55,11 +59,9 @@ public class TimerService(
                 .ToArray();
         }
 
-        //TODO: Подсчёт ElapsedTime на основе сессий.
-        dtos.Foreach(x =>
-            x.Sessions = _timerSessionService
-                .SelectByTimerAsync(x.Id)
-                .Result.ToArray());
+        await dtos.ForeachAsync(
+            async x => x.Sessions = await _timerSessionService.SelectByTimerAsync(x.Id)
+        );
         return dtos;
     }
 
@@ -81,7 +83,8 @@ public class TimerService(
         await _timerSessionService.StopTimerSessionAsync(
             timerSessions
                 .OrderBy(x => x.StartTime)
-                .Last().Id
+                .Last()
+                .Id
         );
         await _timerRepository.CreateOrUpdateAsync(timer);
     }
@@ -122,6 +125,11 @@ public class TimerService(
     {
         throw new NotImplementedException();
     }
+
+    public TimeSpan CalculateElapsedTime(TimerDto timerDto) => timerDto.Sessions.Aggregate(
+        TimeSpan.Zero,
+        (current, session) => current + ((session.StopTime ?? _dateTimeProvider.Now) - session.StartTime)
+    );
 
     private async Task CreateAsync(Guid userId, string name, TimeSpan? pingTimeout)
     {

@@ -11,8 +11,7 @@ namespace ManagerService.Server.Layers.RepositoryLayer;
 
 public class TimerRepository(
     ManagerDbContext dbContext,
-    IMapper mapper,
-    ITimerSessionRepository sessionRepository
+    IMapper mapper
 ) : ITimerRepository
 {
     private readonly ManagerDbContext _dbContext = dbContext;
@@ -39,7 +38,7 @@ public class TimerRepository(
     {
         return _dbContext.Timers
             .Where(x => x.UserId == userId)
-            .Select(x => mapper.Map<TimerDto>(x))
+            .Select(x => _mapper.Map<TimerDto>(x))
             .ToArrayAsync();
     }
 
@@ -49,6 +48,6 @@ public class TimerRepository(
             .Where(x => x.UserId == userId)
             .Where(x => x.Name == timerName)
             .FirstOrDefaultAsync();
-        return mapper.Map<TimerDto>(timerDbo);
+        return _mapper.Map<TimerDto>(timerDbo);
     }
 }
