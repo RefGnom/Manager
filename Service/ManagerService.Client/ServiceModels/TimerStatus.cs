@@ -8,4 +8,6 @@ public enum TimerStatus
     [Description("Запущен")] Started,
     [Description("Остановлен")] Stopped,
     [Description("Сброшен")] Reset,
+    [Description("Архивный")] Archived,
+    [Description("Удалён")] Deleted,
 }
