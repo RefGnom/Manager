@@ -79,13 +79,7 @@ public class TimerService(
         }
 
         timer.Status = TimerStatus.Reset;
-        var timerSessions = await _timerSessionService.SelectByTimerAsync(timer.Id);
-        await _timerSessionService.StopTimerSessionAsync(
-            timerSessions
-                .OrderBy(x => x.StartTime)
-                .Last()
-                .Id
-        );
+        await _timerSessionService.StopTimerSessionAsync(timer.Id, stopTime);
         await _timerRepository.CreateOrUpdateAsync(timer);
     }
 

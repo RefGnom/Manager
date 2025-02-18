@@ -8,5 +8,5 @@ public interface ITimerSessionService
 {
     Task StartSessionAsync(Guid timerId, DateTime startTime);
     Task<TimerSessionDto[]> SelectByTimerAsync(Guid timerId);
-    Task StopTimerSessionAsync(Guid id);
+    Task StopTimerSessionAsync(Guid timerId, DateTime stopTimer);
 }
