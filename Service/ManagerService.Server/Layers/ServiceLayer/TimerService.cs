@@ -62,4 +62,24 @@ public class TimerService(
         dtos.Foreach(x => x.Sessions = _timerSessionRepository.SelectByTimer(x.Id).Result);
         return dtos;
     }
+
+    public async Task StopTimerAsync(Guid userId, string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<TimerDto?> FindTimerAsync(Guid userId, string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task ResetTimerAsync(Guid userId, string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task DeleteTimerAsync(Guid userId, string name)
+    {
+        throw new NotImplementedException();
+    }
 }
