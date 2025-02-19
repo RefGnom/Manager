@@ -13,4 +13,5 @@ public interface ITimerService
     Task ResetTimerAsync(Guid userId, string name);
     Task DeleteTimerAsync(Guid userId, string name);
     TimeSpan CalculateElapsedTime(TimerDto timerDto);
+    Task ArchiveTimerAsync(TimerDto timerToArchiving);
 }
