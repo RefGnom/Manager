@@ -70,21 +70,50 @@ public class TimersController(
     [HttpGet("find")]
     public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
     {
-        await _timerService.FindTimerAsync(request.User.Id, request.Name);
-        return Ok();
+        var timer = await _timerService.FindTimerAsync(request.User.Id, request.Name);
+        if (timer == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(_timerHttpModelsConverter.ConvertToTimerResponse(timer, timerService.CalculateElapsedTime(timer)));
     }
 
     [HttpPost("reset")]
-    public async Task<ActionResult<HttpResponse>> ResetTimer([FromBody] ResetTimerRequest request)
+    public async Task<ActionResult> ResetTimer([FromBody] ResetTimerRequest request)
     {
-        await _timerService.ResetTimerAsync(request.User.Id, request.Name);
+        try
+        {
+            await _timerService.ResetTimerAsync(request.User.Id, request.Name);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (InvalidStatusException e)
+        {
+            return BadRequest(e.Message);
+        }
+
         return Ok();
     }
 
     [HttpDelete("delete")]
-    public async Task<ActionResult<HttpResponse>> DeleteTimer([FromBody] DeleteTimerRequest request)
+    public async Task<ActionResult> DeleteTimer([FromBody] DeleteTimerRequest request)
     {
-        await _timerService.DeleteTimerAsync(request.User.Id, request.Name);
+        try
+        {
+            await _timerService.DeleteTimerAsync(request.User.Id, request.Name);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (InvalidStatusException e)
+        {
+            return BadRequest(e.Message);
+        }
+
         return Ok();
     }
 }
