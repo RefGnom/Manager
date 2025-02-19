@@ -7,6 +7,7 @@ using Manager.Core.Extensions.LinqExtensions;
 using ManagerService.Client.ServiceModels;
 using ManagerService.Server.Layers.RepositoryLayer;
 using ManagerService.Server.Layers.ServiceLayer.Exceptions;
+using ManagerService.Server.Layers.ServiceLayer.Factories;
 using ManagerService.Server.ServiceModels;
 
 namespace ManagerService.Server.Layers.ServiceLayer.Services;
@@ -14,12 +15,14 @@ namespace ManagerService.Server.Layers.ServiceLayer.Services;
 public class TimerService(
     ITimerRepository timerRepository,
     ITimerSessionService timerSessionService,
-    IDateTimeProvider dateTimeProvider
+    IDateTimeProvider dateTimeProvider,
+    ITimerDtoFactory timerDtoFactory
 ) : ITimerService
 {
     private readonly ITimerRepository _timerRepository = timerRepository;
     private readonly ITimerSessionService _timerSessionService = timerSessionService;
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
+    private readonly ITimerDtoFactory _timerDtoFactory = timerDtoFactory;
 
     public async Task StartTimerAsync(TimerDto timerDto)
     {
@@ -78,7 +81,7 @@ public class TimerService(
         if (timer.Status is not TimerStatus.Started)
         {
             throw new InvalidStatusException(
-                $"Остановить можно только таймер в статусе \"{TimerStatus.Started.GetDescription()}\"," +
+                $"Остановить таймер можно только в статусе \"{TimerStatus.Started.GetDescription()}\"," +
                 $" но был получен в статусе {timer.Status.GetDescription()}"
             );
         }
@@ -93,36 +96,45 @@ public class TimerService(
         var timer = await _timerRepository.FindAsync(userId, name);
         if (timer is null)
         {
-            throw new InvalidOperationException($"Timer with name: {name} does not exist.");
+            throw new NotFoundException($"Timer with name: {name} does not exist.");
         }
 
-        if (timer.Status is not TimerStatus.Started)
+        if (timer.Status is not TimerStatus.Stopped)
         {
-            throw new InvalidOperationException($"Timer with name: {name} has not started.");
+            throw new InvalidStatusException(
+                $"Сбросить таймер можно только в статусе \"{TimerStatus.Stopped.GetDescription()}\"," +
+                $" но был получен в статусе {timer.Status.GetDescription()}"
+            );
         }
 
-        var resetTimer = new TimerDto()
-        {
-            UserId = userId,
-            Name = $"{name}_archived",
-            StartTime = timer.StartTime,
-            PingTimeout = timer.PingTimeout,
-            Status = TimerStatus.Reset,
-            Sessions = timer.Sessions,
-            Id = timer.Id
-        };
-        await _timerRepository.CreateOrUpdateAsync(resetTimer);
-        await CreateAsync(userId, name, timer.PingTimeout);
+        await ArchiveTimerAsync(timer);
+        var newTimer = _timerDtoFactory.CreateResetTimer(timer);
+        await _timerRepository.CreateOrUpdateAsync(newTimer);
     }
 
-    public async Task<TimerDto?> FindTimerAsync(Guid userId, string name)
+    public Task<TimerDto?> FindTimerAsync(Guid userId, string name)
     {
-        throw new NotImplementedException();
+        return _timerRepository.FindAsync(userId, name);
     }
 
     public async Task DeleteTimerAsync(Guid userId, string name)
     {
-        throw new NotImplementedException();
+        var timer = await _timerRepository.FindAsync(userId, name);
+        if (timer is null)
+        {
+            throw new NotFoundException($"Timer with name: {name} does not exist.");
+        }
+
+        if (timer.Status is not TimerStatus.Stopped)
+        {
+            throw new InvalidStatusException(
+                $"Удалить таймер можно только в статусе \"{TimerStatus.Stopped.GetDescription()}\"," +
+                $" но был получен в статусе {timer.Status.GetDescription()}"
+            );
+        }
+
+        var newTimer = _timerDtoFactory.CreateDeletedTimer(timer);
+        await _timerRepository.CreateOrUpdateAsync(newTimer);
     }
 
     public TimeSpan CalculateElapsedTime(TimerDto timerDto) => timerDto.Sessions.Aggregate(
@@ -130,18 +142,9 @@ public class TimerService(
         (current, session) => current + ((session.StopTime ?? _dateTimeProvider.Now) - session.StartTime)
     );
 
-    private async Task CreateAsync(Guid userId, string name, TimeSpan? pingTimeout)
+    public Task ArchiveTimerAsync(TimerDto timerToArchiving)
     {
-        var timer = new TimerDto()
-        {
-            UserId = userId,
-            Name = $"{name}",
-            StartTime = null,
-            PingTimeout = pingTimeout,
-            Sessions = Array.Empty<TimerSessionDto>(),
-            Id = Guid.NewGuid(),
-            Status = TimerStatus.Created
-        };
-        await _timerRepository.CreateOrUpdateAsync(timer);
+        var archivedTimer = _timerDtoFactory.CreateArchived(timerToArchiving);
+        return _timerRepository.CreateOrUpdateAsync(archivedTimer);
     }
 }
