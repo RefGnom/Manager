@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 namespace ManagerService.Server.Layers.RepositoryLayer;
 
 public class TimerRepository(
-    ManagerDbContext dbContext,
+    IDbContextFactory<ManagerDbContext> dbContextFactory,
     IMapper mapper
 ) : ITimerRepository
 {
-    private readonly ManagerDbContext _dbContext = dbContext;
+    private readonly ManagerDbContext _dbContext = dbContextFactory.CreateDbContext();
     private readonly IMapper _mapper = mapper;
 
     public async Task CreateOrUpdateAsync(TimerDto timerDto)

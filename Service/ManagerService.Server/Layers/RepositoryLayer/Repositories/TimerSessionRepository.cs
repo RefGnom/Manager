@@ -6,14 +6,14 @@ using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace ManagerService.Server.Layers.RepositoryLayer;
+namespace ManagerService.Server.Layers.RepositoryLayer.Repositories;
 
 public class TimerSessionRepository(
-    ManagerDbContext dbContext,
+    IDbContextFactory<ManagerDbContext> dbContextFactory,
     IMapper mapper
 ) : ITimerSessionRepository
 {
-    private readonly ManagerDbContext _dbContext = dbContext;
+    private readonly ManagerDbContext _dbContext = dbContextFactory.CreateDbContext();
     private readonly IMapper _mapper = mapper;
 
     public async Task CreateOrUpdateAsync(TimerSessionDto timerSessionDto)

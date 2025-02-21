@@ -3,6 +3,8 @@ using ManagerService.Server.Configurators;
 using ManagerService.Server.Layers.Api.Converters;
 using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.Layers.RepositoryLayer;
+using ManagerService.Server.Layers.RepositoryLayer.Factories;
+using ManagerService.Server.Layers.RepositoryLayer.Repositories;
 using ManagerService.Server.Layers.ServiceLayer.Factories;
 using ManagerService.Server.Layers.ServiceLayer.Services;
 using Microsoft.AspNetCore.Builder;
@@ -24,15 +26,18 @@ builder.Services.AddScoped<ITimerService, TimerService>();
 builder.Services.AddScoped<ITimerDtoFactory, TimerDtoFactory>();
 builder.Services.AddScoped<ITimerSessionHttpModelConverter, TimerSessionHttpModelConverter>();
 
+builder.Services.AddSingleton(s =>
+    new DbContextOptionsBuilder<ManagerDbContext>()
+        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).Options
+);
+builder.Services.AddSingleton<IDbContextFactory<ManagerDbContext>, ManagerDbContextFactory>();
+
 builder.Services.AddScoped<ITimerHttpModelsConverter, TimerHttpModelsConverter>();
 
 builder.Services.AddScoped<ManagerDbContext>();
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ManagerDbContext>(
-    options => { options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")); }
-);
 
 var app = builder.Build();
 
