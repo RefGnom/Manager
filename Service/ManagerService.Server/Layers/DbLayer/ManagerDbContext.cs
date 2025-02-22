@@ -11,6 +11,7 @@ public class ManagerDbContext(DbContextOptions<ManagerDbContext> options) : DbCo
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TimerDbo>()
-            .HasKey(t => new { t.UserId, t.Name });
+            .HasIndex(x => new { x.UserId, x.Name })
+            .IsUnique();
     }
 }

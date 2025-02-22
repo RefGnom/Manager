@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Manager.Core.LinqExtensions;
+namespace Manager.Core.Extensions.LinqExtensions;
 
 public static class ToStringLinqExtensions
 {

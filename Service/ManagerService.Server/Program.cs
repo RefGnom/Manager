@@ -1,8 +1,10 @@
+using Manager.Core.DateTimeProvider;
 using ManagerService.Server.Configurators;
-using ManagerService.Server.Convertors;
+using ManagerService.Server.Layers.Api.Converters;
 using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.Layers.RepositoryLayer;
-using ManagerService.Server.Layers.ServiceLayer;
+using ManagerService.Server.Layers.ServiceLayer.Factories;
+using ManagerService.Server.Layers.ServiceLayer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,8 +18,13 @@ builder.Services.AddMapper();
 builder.Services.AddScoped<ITimerRepository, TimerRepository>();
 builder.Services.AddScoped<ITimerSessionRepository, TimerSessionRepository>();
 
-builder.Services.AddTransient<ITimerService, TimerService>();
-builder.Services.AddSingleton<ITimerDtoConverter, TimerDtoConverter>();
+builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+builder.Services.AddScoped<ITimerSessionService, TimerSessionService>();
+builder.Services.AddScoped<ITimerService, TimerService>();
+builder.Services.AddScoped<ITimerDtoFactory, TimerDtoFactory>();
+builder.Services.AddScoped<ITimerSessionHttpModelConverter, TimerSessionHttpModelConverter>();
+
+builder.Services.AddScoped<ITimerHttpModelsConverter, TimerHttpModelsConverter>();
 
 builder.Services.AddScoped<ManagerDbContext>();
 
