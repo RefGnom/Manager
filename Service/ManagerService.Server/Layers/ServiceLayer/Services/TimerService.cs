@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Manager.Core.DateTimeProvider;
+using Manager.Core.DependencyInjection.LifetimeAttributes;
 using Manager.Core.Extensions;
 using Manager.Core.Extensions.LinqExtensions;
 using ManagerService.Client.ServiceModels;
@@ -12,6 +13,7 @@ using ManagerService.Server.ServiceModels;
 
 namespace ManagerService.Server.Layers.ServiceLayer.Services;
 
+[Scoped]
 public class TimerService(
     ITimerRepository timerRepository,
     ITimerSessionService timerSessionService,
