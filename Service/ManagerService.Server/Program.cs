@@ -1,8 +1,7 @@
 using Manager.Core.DateTimeProvider;
-using Manager.Core.DependencyInjection;
+using Manager.Core.DependencyInjection.AutoRegistration;
 using ManagerService.Server.Configurators;
 using ManagerService.Server.Layers.DbLayer;
-using ManagerService.Server.Layers.RepositoryLayer.Factories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,13 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMapper();
 
-builder.Services.AddSingleton(s =>
-    new DbContextOptionsBuilder<ManagerDbContext>()
-        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).Options
+builder.Services.AddDbContext<ManagerDbContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
-builder.Services.AddSingleton<IDbContextFactory<ManagerDbContext>, ManagerDbContextFactory>();
-builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
+builder.Services.AddTransient<IDateTimeProvider, DateTimeProvider>();
 builder.Services.UseAutoRegistrationForCurrentAssembly();
 
 builder.Services.AddControllers();

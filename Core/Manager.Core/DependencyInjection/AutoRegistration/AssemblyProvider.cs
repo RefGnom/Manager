@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Manager.Core.DependencyInjection;
+namespace Manager.Core.DependencyInjection.AutoRegistration;
 
 public static class AssemblyProvider
 {
