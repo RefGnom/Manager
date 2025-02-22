@@ -5,5 +5,5 @@ namespace Manager.Core.DependencyInjection.LifetimeAttributes;
 
 public abstract class LifetimeAttribute(ServiceLifetime lifetime) : Attribute
 {
-    public ServiceLifetime Lifetime = lifetime;
+    public readonly ServiceLifetime Lifetime = lifetime;
 }
