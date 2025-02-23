@@ -1,10 +1,12 @@
 using System;
 using Manager.Core.DateTimeProvider;
+using Manager.Core.DependencyInjection.LifetimeAttributes;
 using ManagerService.Client.ServiceModels;
 using ManagerService.Server.ServiceModels;
 
 namespace ManagerService.Server.Layers.ServiceLayer.Factories;
 
+[Transient]
 public class TimerDtoFactory(IDateTimeProvider dateTimeProvider) : ITimerDtoFactory
 {
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;

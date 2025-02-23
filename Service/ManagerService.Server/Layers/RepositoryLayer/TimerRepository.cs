@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Manager.Core.DependencyInjection.LifetimeAttributes;
 using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.Layers.DbLayer.Dbos;
 using ManagerService.Server.ServiceModels;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ManagerService.Server.Layers.RepositoryLayer;
 
+[Scoped]
 public class TimerRepository(
     ManagerDbContext dbContext,
     IMapper mapper

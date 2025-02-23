@@ -2,15 +2,17 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Manager.Core.DependencyInjection.LifetimeAttributes;
 using ManagerService.Server.Layers.DbLayer;
 using ManagerService.Server.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManagerService.Server.Layers.RepositoryLayer;
 
+[Scoped]
 public class TimerSessionRepository(
-    ManagerDbContext dbContext,
-    IMapper mapper
+    IMapper mapper,
+    ManagerDbContext dbContext
 ) : ITimerSessionRepository
 {
     private readonly ManagerDbContext _dbContext = dbContext;
