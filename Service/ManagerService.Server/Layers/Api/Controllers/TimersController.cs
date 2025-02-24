@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using ManagerService.Client.ServiceModels;
 using ManagerService.Server.Layers.Api.Converters;
+using ManagerService.Server.Layers.Api.Models;
 using ManagerService.Server.Layers.ServiceLayer.Exceptions;
 using ManagerService.Server.Layers.ServiceLayer.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManagerService.Server.Layers.Api.Controllers;
 
+/// <summary>
+/// Контроллер для таймеров
+/// </summary>
+/// <param name="timerService"></param>
+/// <param name="timerHttpModelsConverter"></param>
 [ApiController]
 [Route("timers")]
 public class TimersController(
@@ -19,6 +24,11 @@ public class TimersController(
     private readonly ITimerService _timerService = timerService;
     private readonly ITimerHttpModelsConverter _timerHttpModelsConverter = timerHttpModelsConverter;
 
+    /// <summary>
+    /// Запускает таймер и создает для него сессию. Если таймера не существует - создает новый.
+    /// </summary>
+    /// <param name="request">Запрос для запуска таймера</param>
+    /// <returns></returns>
     [HttpPost("start")]
     public async Task<ActionResult> StartTimer([FromBody] StartTimerRequest request)
     {
@@ -33,6 +43,11 @@ public class TimersController(
         }
     }
 
+    /// <summary>
+    /// Получает все таймеры для конкретного пользователя
+    /// </summary>
+    /// <param name="request">Запрос для получения таймеров пользователя</param>
+    /// <returns></returns>
     [HttpGet("selectForUser")]
     public async Task<ActionResult<UserTimersResponse>> SelectUserTimers([FromQuery] UserTimersRequest request)
     {
@@ -42,12 +57,17 @@ public class TimersController(
             request.WithDeleted
         );
         var timerResponses = dtos
-            .Select(x => _timerHttpModelsConverter.ConvertToTimerResponse(x, timerService.CalculateElapsedTime(x)))
+            .Select(x => _timerHttpModelsConverter.ConvertToTimerResponse(x, _timerService.CalculateElapsedTime(x)))
             .ToArray();
 
         return Ok(timerResponses);
     }
 
+    /// <summary>
+    /// Останавливает сессию таймера и переводит таймер в статус остановлен
+    /// </summary>
+    /// <param name="request">Запрос для остановки таймера</param>
+    /// <returns></returns>
     [HttpPost("stop")]
     public async Task<ActionResult> StopTimer([FromBody] StopTimerRequest request)
     {
@@ -67,6 +87,11 @@ public class TimersController(
         return Ok();
     }
 
+    /// <summary>
+    /// Ищет таймер по его уникальному индексу
+    /// </summary>
+    /// <param name="request">Запрос для получения таймера</param>
+    /// <returns></returns>
     [HttpGet("find")]
     public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
     {
@@ -76,9 +101,14 @@ public class TimersController(
             return NotFound();
         }
 
-        return Ok(_timerHttpModelsConverter.ConvertToTimerResponse(timer, timerService.CalculateElapsedTime(timer)));
+        return Ok(_timerHttpModelsConverter.ConvertToTimerResponse(timer, _timerService.CalculateElapsedTime(timer)));
     }
 
+    /// <summary>
+    /// Сбрасывает время таймера и архивирует его
+    /// </summary>
+    /// <param name="request">Запрос для сброса таймера</param>
+    /// <returns></returns>
     [HttpPost("reset")]
     public async Task<ActionResult> ResetTimer([FromBody] ResetTimerRequest request)
     {
@@ -98,6 +128,11 @@ public class TimersController(
         return Ok();
     }
 
+    /// <summary>
+    /// Добавляет к таймеру Deleted и переводит статус в Deleted
+    /// </summary>
+    /// <param name="request">Запрос для удаления таймера</param>
+    /// <returns></returns>
     [HttpDelete("delete")]
     public async Task<ActionResult> DeleteTimer([FromBody] DeleteTimerRequest request)
     {
