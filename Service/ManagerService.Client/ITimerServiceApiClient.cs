@@ -3,7 +3,7 @@ using ManagerService.Client.ServiceModels;
 
 namespace ManagerService.Client;
 
-public interface IManagerServiceApiClient
+public interface ITimerServiceApiClient
 {
     Task<AuthenticationResponse> AuthenticateUserAsync(AuthenticationRequest authenticationRequest);
     Task<HttpResponse> StartTimerAsync(StartTimerRequest startTimerRequest);
