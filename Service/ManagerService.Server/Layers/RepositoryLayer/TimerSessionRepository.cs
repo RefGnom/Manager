@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Manager.Core.DependencyInjection.LifetimeAttributes;
 using ManagerService.Server.Layers.DbLayer;
+using ManagerService.Server.Layers.DbLayer.Dbos;
 using ManagerService.Server.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,14 +19,32 @@ public class TimerSessionRepository(
     private readonly ManagerDbContext _dbContext = dbContext;
     private readonly IMapper _mapper = mapper;
 
-    public async Task CreateOrUpdateAsync(TimerSessionDto timerSessionDto)
+    public async Task CreateAsync(TimerSessionDto timerSessionDto)
     {
-        throw new NotImplementedException();
+        var sessionDbo = _mapper.Map<TimerSessionDbo>(timerSessionDto);
+        _dbContext.TimerSessions.Add(sessionDbo);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task<TimerSessionDto[]> SelectByTimer(Guid timerId)
+    public async Task UpdateAsync(TimerSessionDto timerSessionDto)
     {
-        return _dbContext.TimerSessions
+        var sessionDbo = _mapper.Map<TimerSessionDbo>(timerSessionDto);
+        _dbContext.Update(sessionDbo);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<TimerDto?> LastOrDefaultForTimerAsync(Guid timerId)
+    {
+        var sessionDbo = await _dbContext.TimerSessions
+            .Where(x => x.TimerId == timerId)
+            .OrderBy(s => s.StartTime)
+            .LastOrDefaultAsync();
+        return _mapper.Map<TimerDto>(sessionDbo);
+    }
+
+    public async Task<TimerSessionDto[]> SelectByTimer(Guid timerId)
+    {
+        return await _dbContext.TimerSessions
             .Where(x => x.TimerId == timerId)
             .Select(x => _mapper.Map<TimerSessionDto>(x))
             .ToArrayAsync();
