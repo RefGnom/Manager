@@ -400,4 +400,8 @@ FodyWeavers.xsd
 *.sln.iml
 /.idea
 
+# Git conflicts
+*.orig
+*.cs.orig
+
 Service/ManagerService.Server/appsettings.Development.json
