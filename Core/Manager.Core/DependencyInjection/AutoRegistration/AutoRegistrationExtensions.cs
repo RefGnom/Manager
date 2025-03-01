@@ -1,9 +1,10 @@
 using System.Linq;
 using System.Reflection;
-using Manager.Core.LinqExtensions;
+using Manager.Core.DependencyInjection.LifetimeAttributes;
+using Manager.Core.Extensions.LinqExtensions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Manager.Core.DependencyInjection;
+namespace Manager.Core.DependencyInjection.AutoRegistration;
 
 public static class AutoRegistrationExtensions
 {
@@ -36,7 +37,12 @@ public static class AutoRegistrationExtensions
             .SelectMany(
                 x => x.GetInterfaces()
                     .Where(i => serviceAssemblies.Contains(i.Assembly))
-                    .Select(i => new ServiceDescriptor(i, x, LifestyleByDefault))
+                    .Select(i =>
+                    {
+                        var lifetimeAttribute = x.GetCustomAttributes<LifetimeAttribute>().FirstOrDefault();
+                        var lifetime = lifetimeAttribute?.Lifetime ?? LifestyleByDefault;
+                        return new ServiceDescriptor(i, x, lifetime);
+                    })
             )
             .Select(
                 x => x.TryConvertToGenericDefinition(out var descriptorWithGenericDefinition)

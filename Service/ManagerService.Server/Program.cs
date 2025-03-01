@@ -1,8 +1,10 @@
+using System;
+using System.IO;
+using System.Reflection;
+using Manager.Core.DateTimeProvider;
+using Manager.Core.DependencyInjection.AutoRegistration;
 using ManagerService.Server.Configurators;
-using ManagerService.Server.Convertors;
 using ManagerService.Server.Layers.DbLayer;
-using ManagerService.Server.Layers.RepositoryLayer;
-using ManagerService.Server.Layers.ServiceLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,19 +15,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMapper();
 
-builder.Services.AddScoped<ITimerRepository, TimerRepository>();
-builder.Services.AddScoped<ITimerSessionRepository, TimerSessionRepository>();
+builder.Services.AddDbContext<ManagerDbContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
-builder.Services.AddTransient<ITimerService, TimerService>();
-builder.Services.AddSingleton<ITimerDtoConverter, TimerDtoConverter>();
-
-builder.Services.AddScoped<ManagerDbContext>();
+builder.Services.AddTransient<IDateTimeProvider, DateTimeProvider>();
+builder.Services.UseAutoRegistrationForCurrentAssembly();
 
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ManagerDbContext>(
-    options => { options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")); }
-);
+builder.Services.AddSwaggerGen(c =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 
