@@ -11,7 +11,7 @@ public class TimerHttpModelsConverter(
 {
     private readonly ITimerSessionHttpModelConverter _timerSessionHttpModelConverter = timerSessionHttpModelConverter;
 
-    public TimerDto FromStartRequest(StartTimerRequest startTimerRequest)
+    public TimerDto FromStartRequest(Models.StartTimerRequest startTimerRequest)
     {
         var timerId = Guid.NewGuid();
         return new TimerDto()
