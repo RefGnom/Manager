@@ -8,11 +8,11 @@ namespace Manager.Tool.Layers.Logic.Authentication;
 
 public class AuthenticateCommandExecutor(
     IToolCommandFactory toolCommandFactory,
-    IUserLogger userLogger,
+    IToolWriter toolWriter,
     IUserService userService
 ) : CommandExecutorBase<AuthenticateCommand>(toolCommandFactory)
 {
-    private readonly IUserLogger _userLogger = userLogger;
+    private readonly IToolWriter _toolWriter = toolWriter;
     private readonly IUserService _userService = userService;
 
     protected async override Task ExecuteAsync(CommandContext context, AuthenticateCommand command)
@@ -20,19 +20,19 @@ public class AuthenticateCommandExecutor(
         var loginFlag = context.Options.FirstOrDefault(x => x.Argument == "--login");
         if (loginFlag is null)
         {
-            _userLogger.LogUserMessage("Для аутентификации необходим аргумент \"--login\"");
+            _toolWriter.WriteMessage("Для аутентификации необходим аргумент \"--login\"");
             return;
         }
 
         if (loginFlag.Value is null)
         {
-            _userLogger.LogUserMessage("У аргумента \"--login\" должно быть значение - ваш логин");
+            _toolWriter.WriteMessage("У аргумента \"--login\" должно быть значение - ваш логин");
             return;
         }
 
         // отправляем логин в сервер и получем идентификатор пользователя
 
         await _userService.SaveUserIdAsync(Guid.NewGuid());
-        _userLogger.LogUserMessage("Аутентификация прошла успешно");
+        _toolWriter.WriteMessage("Аутентификация прошла успешно");
     }
 }
