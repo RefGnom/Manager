@@ -15,7 +15,7 @@ public class AuthenticateCommandExecutor(
     private readonly IUserLogger _userLogger = userLogger;
     private readonly IUserService _userService = userService;
 
-    public async override Task ExecuteAsync(CommandContext context)
+    protected async override Task ExecuteAsync(CommandContext context, AuthenticateCommand command)
     {
         var loginFlag = context.Options.FirstOrDefault(x => x.Argument == "--login");
         if (loginFlag is null)

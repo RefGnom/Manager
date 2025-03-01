@@ -12,7 +12,7 @@ public class StopTimerCommandExecutor(
 {
     private readonly IToolLogger<StopTimerCommandExecutor> _logger = logger;
 
-    public override Task ExecuteAsync(CommandContext context)
+    protected override Task ExecuteAsync(CommandContext context, StopTimerCommand command)
     {
         _logger.LogInfo(
             context.IsDebugMode,
