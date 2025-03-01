@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Manager.Tool.Layers.Logic.CommandsCore;
@@ -20,11 +19,7 @@ public class DeleteTimerCommandExecutor(
 
     protected async override Task ExecuteAsync(CommandContext context, DeleteTimerCommand command)
     {
-        var timerName = context.Arguments.Last();
-        if (timerName == command.CommandName)
-        {
-            timerName = TimerCommandConstants.DefaultTimerName;
-        }
+        var timerName = context.GetCommandArgument(command.CommandName) ?? TimerCommandConstants.DefaultTimerName;
 
         var deleteTimerRequest = _timerRequestFactory.CreateDeleteTimerRequest(context.EnsureUser().Id, timerName);
         var httpResponse = await _timerServiceApiClient.DeleteTimerAsync(deleteTimerRequest);
