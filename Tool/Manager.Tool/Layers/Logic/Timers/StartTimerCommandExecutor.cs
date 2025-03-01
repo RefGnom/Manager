@@ -5,21 +5,20 @@ using Manager.Tool.Layers.Logic.ToolLogger;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 
-public class StartTimeCommandExecutor(
+public class StartTimerCommandExecutor(
     IToolCommandFactory toolCommandFactory,
-    IToolLogger<StartTimeCommandExecutor> logger
-)
-    : CommandExecutorBase<StartTimerCommand>(toolCommandFactory)
+    IToolLogger<StartTimerCommandExecutor> logger
+) : CommandExecutorBase<StartTimerCommand>(toolCommandFactory)
 {
-    private readonly IToolLogger<StartTimeCommandExecutor> _logger = logger;
+    private readonly IToolLogger<StartTimerCommandExecutor> _logger = logger;
 
     public override Task ExecuteAsync(CommandContext context)
     {
         _logger.LogInfo(
             context.IsDebugMode,
             "Выполняем команду {0} с аргументами {1}",
-            context.CommandName,
-            context.Flags.JoinToString(", ")
+            context.Arguments,
+            context.Options.JoinToString(", ")
         );
         return Task.CompletedTask;
     }

@@ -1,32 +1,31 @@
 using System.Collections.Generic;
 using System.Linq;
+using Manager.Tool.Layers.Logic.Authentication;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
-public class CommandContextFactory(IUserProvider userProvider) : ICommandContextFactory
+public class CommandContextFactory(IUserService userService) : ICommandContextFactory
 {
-    private readonly IUserProvider _userProvider = userProvider;
+    private readonly IUserService _userService = userService;
 
     public CommandContext Create(string[] arguments)
     {
-        var flags = new List<CommandFlag>();
-        var spacesAndCommand = arguments.TakeWhile(x => !x.StartsWith('-'))
-            .ToArray();
-        var commandSpace = new CommandSpace(spacesAndCommand.SkipLast(1).ToArray());
+        var options = new List<CommandOption>();
+        var commandArguments = arguments.TakeWhile(x => !x.StartsWith('-')).ToArray();
 
-        foreach (var flag in arguments.SkipWhile(x => !x.StartsWith('-')).ToArray())
+        foreach (var option in arguments.SkipWhile(x => !x.StartsWith('-')).ToArray())
         {
-            if (flag.StartsWith('-'))
+            if (option.StartsWith('-'))
             {
-                flags.Add(new CommandFlag(flag));
+                options.Add(new CommandOption(option));
             }
             else
             {
-                flags[^1] = new CommandFlag(flags[^1].Argument, flag);
+                options[^1] = new CommandOption(options[^1].Argument, option);
             }
         }
 
-        var user = _userProvider.GetUser();
-        return new CommandContext(user, commandSpace, spacesAndCommand.Last(), flags.ToArray());
+        var user = _userService.FindUser();
+        return new CommandContext(user, commandArguments, options.ToArray());
     }
 }

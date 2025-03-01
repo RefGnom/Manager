@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
@@ -11,12 +12,15 @@ public abstract class CommandExecutorBase<TCommand>(IToolCommandFactory toolComm
     {
         var command = _toolCommandFactory.CreateCommand<TCommand>();
 
-        if (!context.CommandSpace.Equals(command.CommandSpace))
+        var spaceLength = command.CommandSpace.Values.Length;
+        var argumentsSpace = (CommandSpace)context.Arguments.Take(spaceLength).ToArray();
+        if (!command.CommandSpace.Equals(argumentsSpace))
         {
             return false;
         }
 
-        return context.CommandName == command.CommandName;
+        var commandName = context.Arguments.Skip(spaceLength).FirstOrDefault();
+        return command.CommandName == commandName;
     }
 
     public abstract Task ExecuteAsync(CommandContext context);
