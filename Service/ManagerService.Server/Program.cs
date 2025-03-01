@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Manager.Core.DateTimeProvider;
 using Manager.Core.DependencyInjection.AutoRegistration;
 using ManagerService.Server.Configurators;
@@ -15,11 +18,17 @@ builder.Services.AddMapper();
 builder.Services.AddDbContext<ManagerDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
 builder.Services.AddTransient<IDateTimeProvider, DateTimeProvider>();
 builder.Services.UseAutoRegistrationForCurrentAssembly();
 
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 
