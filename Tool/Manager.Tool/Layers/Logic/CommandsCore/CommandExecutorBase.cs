@@ -22,5 +22,11 @@ public abstract class CommandExecutorBase<TCommand>(
         return command.CommandName == commandName;
     }
 
-    public abstract Task ExecuteAsync(CommandContext context);
+    public Task ExecuteAsync(CommandContext context)
+    {
+        var command = _toolCommandFactory.CreateCommand<TCommand>();
+        return ExecuteAsync(context, command);
+    }
+
+    protected abstract Task ExecuteAsync(CommandContext context, TCommand command);
 }

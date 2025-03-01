@@ -7,7 +7,7 @@ namespace Manager.Tool.Layers.Logic.Timers;
 public class DeleteTimerCommandExecutor(
     IToolCommandFactory toolCommandFactory) : CommandExecutorBase<DeleteTimerCommand>(toolCommandFactory)
 {
-    public override Task ExecuteAsync(CommandContext context)
+    protected override Task ExecuteAsync(CommandContext context, DeleteTimerCommand deleteTimerCommand)
     {
         throw new NotImplementedException();
     }

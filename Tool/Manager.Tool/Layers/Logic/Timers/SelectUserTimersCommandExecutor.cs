@@ -7,7 +7,7 @@ namespace Manager.Tool.Layers.Logic.Timers;
 public class SelectUserTimersCommandExecutor(
     IToolCommandFactory toolCommandFactory) : CommandExecutorBase<SelectUserTimersCommand>(toolCommandFactory)
 {
-    public override Task ExecuteAsync(CommandContext context)
+    protected override Task ExecuteAsync(CommandContext context, SelectUserTimersCommand command)
     {
         throw new NotImplementedException();
     }

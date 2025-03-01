@@ -7,7 +7,7 @@ namespace Manager.Tool.Layers.Logic.Timers;
 public class ResetTimerCommandExecutor(
     IToolCommandFactory toolCommandFactory) : CommandExecutorBase<ResetTimerCommand>(toolCommandFactory)
 {
-    public override Task ExecuteAsync(CommandContext context)
+    protected override Task ExecuteAsync(CommandContext context, ResetTimerCommand command)
     {
         throw new NotImplementedException();
     }
