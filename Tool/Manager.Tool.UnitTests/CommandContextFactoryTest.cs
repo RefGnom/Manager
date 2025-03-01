@@ -23,7 +23,7 @@ public class CommandContextFactoryTest
     [TestCaseSource(nameof(GetTestCases))]
     public void Test(CreateContextTestCase createContextTestCase)
     {
-        _userService.FindUser(out _).Returns(true);
+        _userService.FindUser().Returns((User?)null);
 
         var commandContext = _commandContextFactory.Create(createContextTestCase.RawString.Split(' '));
         commandContext.Should().BeEquivalentTo(createContextTestCase.ExpectedContext);
@@ -34,50 +34,40 @@ public class CommandContextFactoryTest
         yield return new CreateContextTestCase(
             "command",
             new CommandContext(
-                new User(),
-                true,
-                CommandSpace.Empty,
-                "command",
+                null,
+                ["command"],
                 []
             )
         );
         yield return new CreateContextTestCase(
             "command-space command-name",
             new CommandContext(
-                new User(),
-                true,
-                new CommandSpace("command-space"),
-                "command-name",
+                null,
+                ["command-space", "command-name"],
                 []
             )
         );
         yield return new CreateContextTestCase(
             "first-space second-space third_space viu0viu",
             new CommandContext(
-                new User(),
-                true,
-                new CommandSpace("first-space", "second-space", "third_space"),
-                "viu0viu",
+                null,
+                ["first-space", "second-space", "third_space", "viu0viu"],
                 []
             )
         );
         yield return new CreateContextTestCase(
             "space command -d",
             new CommandContext(
-                new User(),
-                true,
-                new CommandSpace("space"),
-                "command",
+                null,
+                ["space", "command"],
                 [Flag("-d")]
             )
         );
         yield return new CreateContextTestCase(
             "space command -d --name",
             new CommandContext(
-                new User(),
-                true,
-                new CommandSpace("space"),
-                "command",
+                null,
+                ["space", "command"],
                 [Flag("-d"), Flag("--name")]
             )
         );
@@ -95,10 +85,8 @@ public class CommandContextFactoryTest
         yield return new CreateContextTestCase(
             "space command --name my_name-is -d --ping 8:0:0",
             new CommandContext(
-                new User(),
-                true,
-                new CommandSpace("space"),
-                "command",
+                null,
+                ["space", "command"],
                 [Flag("--name", "my_name-is"), Flag("-d"), Flag("--ping", "8:0:0")]
             )
         );
