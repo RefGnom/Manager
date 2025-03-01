@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using ManagerService.Client.ServiceModels;
+using Manager.AuthenticationService.Client.ServiceModels;
 
 namespace Manager.Tool.Layers.Logic.Authentication;
 

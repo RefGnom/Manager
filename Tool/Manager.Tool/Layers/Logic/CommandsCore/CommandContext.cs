@@ -1,5 +1,5 @@
 using System.Linq;
-using ManagerService.Client.ServiceModels;
+using Manager.AuthenticationService.Client.ServiceModels;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
