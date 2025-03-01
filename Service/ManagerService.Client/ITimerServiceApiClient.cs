@@ -5,7 +5,6 @@ namespace ManagerService.Client;
 
 public interface ITimerServiceApiClient
 {
-    Task<AuthenticationResponse> AuthenticateUserAsync(AuthenticationRequest authenticationRequest);
     Task<HttpResponse> StartTimerAsync(StartTimerRequest startTimerRequest);
     Task<HttpResponse> StopTimerAsync(StopTimerRequest stopTimerRequest);
     Task<TimerResponse?> FindTimerAsync(TimerRequest timerRequest);

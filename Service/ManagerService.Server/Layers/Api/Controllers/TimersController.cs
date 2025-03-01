@@ -52,7 +52,7 @@ public class TimersController(
     public async Task<ActionResult<UserTimersResponse>> SelectUserTimers([FromQuery] UserTimersRequest request)
     {
         var dtos = await _timerService.SelectByUserAsync(
-            request.User.Id,
+            request.UserId,
             request.WithArchived,
             request.WithDeleted
         );
@@ -73,7 +73,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.StopTimerAsync(request.User.Id, request.Name, request.StopTime);
+            await _timerService.StopTimerAsync(request.UserId, request.Name, request.StopTime);
         }
         catch (NotFoundException)
         {
@@ -95,7 +95,7 @@ public class TimersController(
     [HttpGet("find")]
     public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
     {
-        var timer = await _timerService.FindTimerAsync(request.User.Id, request.Name);
+        var timer = await _timerService.FindTimerAsync(request.UserId, request.Name);
         if (timer == null)
         {
             return NotFound();
@@ -114,7 +114,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.ResetTimerAsync(request.User.Id, request.Name);
+            await _timerService.ResetTimerAsync(request.UserId, request.Name);
         }
         catch (NotFoundException)
         {
@@ -138,7 +138,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.DeleteTimerAsync(request.User.Id, request.Name);
+            await _timerService.DeleteTimerAsync(request.UserId, request.Name);
         }
         catch (NotFoundException)
         {

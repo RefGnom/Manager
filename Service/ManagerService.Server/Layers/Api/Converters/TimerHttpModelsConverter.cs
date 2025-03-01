@@ -14,10 +14,10 @@ public class TimerHttpModelsConverter(
     public TimerDto FromStartRequest(Models.StartTimerRequest startTimerRequest)
     {
         var timerId = Guid.NewGuid();
-        return new TimerDto()
+        return new TimerDto
         {
             Id = timerId,
-            UserId = startTimerRequest.User.Id,
+            UserId = startTimerRequest.UserId,
             Name = startTimerRequest.Name,
             StartTime = startTimerRequest.StartTime,
             PingTimeout = startTimerRequest.PingTimeout,
