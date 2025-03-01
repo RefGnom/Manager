@@ -11,12 +11,12 @@ public class DeleteTimerCommandExecutor(
     IToolCommandFactory toolCommandFactory,
     ITimerRequestFactory timerRequestFactory,
     ITimerServiceApiClient timerServiceApiClient,
-    IUserLogger userLogger
+    IToolWriter toolWriter
 ) : CommandExecutorBase<DeleteTimerCommand>(toolCommandFactory)
 {
     private readonly ITimerRequestFactory _timerRequestFactory = timerRequestFactory;
     private readonly ITimerServiceApiClient _timerServiceApiClient = timerServiceApiClient;
-    private readonly IUserLogger _userLogger = userLogger;
+    private readonly IToolWriter _toolWriter = toolWriter;
 
     protected async override Task ExecuteAsync(CommandContext context, DeleteTimerCommand command)
     {
@@ -31,16 +31,16 @@ public class DeleteTimerCommandExecutor(
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            _userLogger.LogUserMessage("Таймер успешно удалён");
+            _toolWriter.WriteMessage("Таймер успешно удалён");
             return;
         }
 
         if (httpResponse.StatusCode is HttpStatusCode.NotFound)
         {
-            _userLogger.LogUserMessage("Не нашли таймер с именем {0}", timerName);
+            _toolWriter.WriteMessage("Не нашли таймер с именем {0}", timerName);
             return;
         }
 
-        _userLogger.LogUserMessage("Ошибка при удалении таймера: {0}", httpResponse.ResponseMessage);
+        _toolWriter.WriteMessage("Ошибка при удалении таймера: {0}", httpResponse.ResponseMessage);
     }
 }

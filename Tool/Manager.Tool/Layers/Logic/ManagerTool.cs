@@ -12,7 +12,7 @@ public class ManagerTool(
     ICommandContextFactory commandContextFactory,
     ICommandExecutorProvider commandExecutorProvider,
     IToolLogger<ManagerTool> logger,
-    IUserLogger userLogger,
+    IToolWriter toolWriter,
     IArgumentsValidator argumentsValidator
 ) : IManagerTool
 {
@@ -20,14 +20,14 @@ public class ManagerTool(
     private readonly ICommandContextFactory _commandContextFactory = commandContextFactory;
     private readonly ICommandExecutorProvider _commandExecutorProvider = commandExecutorProvider;
     private readonly IToolLogger<ManagerTool> _logger = logger;
-    private readonly IUserLogger _userLogger = userLogger;
+    private readonly IToolWriter _toolWriter = toolWriter;
 
     public Task RunAsync(string[] arguments)
     {
         var validationResult = _argumentsValidator.Validate(arguments);
         if (!validationResult.IsSuccess)
         {
-            _userLogger.LogUserMessage(validationResult.FailureMessage);
+            _toolWriter.WriteMessage(validationResult.FailureMessage);
             return Task.CompletedTask;
         }
 
@@ -40,13 +40,13 @@ public class ManagerTool(
         {
             if (context.User is null && commandExecutor is not AuthenticateCommandExecutor)
             {
-                _userLogger.LogUserMessage("Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\"");
+                _toolWriter.WriteMessage("Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\"");
             }
 
             return commandExecutor.ExecuteAsync(context);
         }
 
-        _userLogger.LogUserMessage("Неизвестная команда");
+        _toolWriter.WriteMessage("Неизвестная команда");
         _logger.LogWarn(context.IsDebugMode, "Не нашли исполнителя для аргументов {0}", arguments.JoinToString(", "));
         return Task.CompletedTask;
     }
