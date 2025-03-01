@@ -17,7 +17,7 @@ public class AuthenticateCommandExecutor(
 
     public async override Task ExecuteAsync(CommandContext context)
     {
-        var loginFlag = context.Flags.FirstOrDefault(x => x.Argument == "--login");
+        var loginFlag = context.Options.FirstOrDefault(x => x.Argument == "--login");
         if (loginFlag is null)
         {
             _userLogger.LogUserMessage("Для аутентификации необходим аргумент \"--login\"");

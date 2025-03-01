@@ -6,6 +6,6 @@ namespace Manager.Tool.Layers.Logic.Authentication;
 
 public interface IUserService
 {
-    bool TryGetUser(out User user);
+    User? FindUser();
     Task SaveUserIdAsync(Guid userId);
 }

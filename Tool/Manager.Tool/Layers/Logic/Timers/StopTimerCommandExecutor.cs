@@ -17,8 +17,8 @@ public class StopTimerCommandExecutor(
         _logger.LogInfo(
             context.IsDebugMode,
             "Выполняем команду {0} с аргументами {1}",
-            context.CommandName,
-            context.Flags.JoinToString(", ")
+            context.Arguments,
+            context.Options.JoinToString(", ")
         );
         return Task.CompletedTask;
     }

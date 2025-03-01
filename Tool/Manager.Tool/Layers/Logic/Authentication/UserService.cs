@@ -9,12 +9,11 @@ public class UserService : IUserService
 {
     private readonly string _filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "manager.login");
 
-    public bool TryGetUser(out User user)
+    public User? FindUser()
     {
-        user = new User();
         if (!File.Exists(_filePath))
         {
-            return false;
+            return null;
         }
 
         var userIdString = File.ReadAllText(_filePath);
@@ -26,9 +25,10 @@ public class UserService : IUserService
             );
         }
 
-        user.Id = userId;
-        return true;
-
+        return new User
+        {
+            Id = userId,
+        };
     }
 
     public Task SaveUserIdAsync(Guid userId)

@@ -23,7 +23,7 @@ public class CommandContextFactoryTest
     [TestCaseSource(nameof(GetTestCases))]
     public void Test(CreateContextTestCase createContextTestCase)
     {
-        _userService.TryGetUser(out _).Returns(true);
+        _userService.FindUser(out _).Returns(true);
 
         var commandContext = _commandContextFactory.Create(createContextTestCase.RawString.Split(' '));
         commandContext.Should().BeEquivalentTo(createContextTestCase.ExpectedContext);
@@ -104,9 +104,9 @@ public class CommandContextFactoryTest
         );
     }
 
-    private static CommandFlag Flag(string arg, string? value = null)
+    private static CommandOption Flag(string arg, string? value = null)
     {
-        return new CommandFlag(arg, value);
+        return new CommandOption(arg, value);
     }
 
     public record CreateContextTestCase(
