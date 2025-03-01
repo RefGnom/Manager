@@ -38,7 +38,7 @@ public class ManagerTool(
         var commandExecutor = _commandExecutorProvider.GetByContext(context);
         if (commandExecutor is not null)
         {
-            if (!context.IsAuthenticated && commandExecutor is not AuthenticateCommandExecutor)
+            if (context.User is null && commandExecutor is not AuthenticateCommandExecutor)
             {
                 _userLogger.LogUserMessage("Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\"");
             }
