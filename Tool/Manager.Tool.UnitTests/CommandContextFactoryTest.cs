@@ -10,8 +10,8 @@ namespace Manager.Tool.UnitTests;
 
 public class CommandContextFactoryTest
 {
-    private IUserService _userService;
     private CommandContextFactory _commandContextFactory;
+    private IUserService _userService;
 
     [SetUp]
     public void SetUp()

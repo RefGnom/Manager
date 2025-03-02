@@ -9,7 +9,10 @@ public class CommandSpace(params string[] values)
 
     public static CommandSpace Empty => new();
 
-    public static implicit operator CommandSpace(string[] values) => new(values);
+    public static implicit operator CommandSpace(string[] values)
+    {
+        return new CommandSpace(values);
+    }
 
     private bool Equals(CommandSpace commandSpace)
     {

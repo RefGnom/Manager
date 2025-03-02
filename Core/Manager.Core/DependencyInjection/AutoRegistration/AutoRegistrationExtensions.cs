@@ -37,12 +37,14 @@ public static class AutoRegistrationExtensions
             .SelectMany(
                 x => x.GetInterfaces()
                     .Where(i => serviceAssemblies.Contains(i.Assembly))
-                    .Select(i =>
-                    {
-                        var lifetimeAttribute = x.GetCustomAttributes<LifetimeAttribute>().FirstOrDefault();
-                        var lifetime = lifetimeAttribute?.Lifetime ?? LifestyleByDefault;
-                        return new ServiceDescriptor(i, x, lifetime);
-                    })
+                    .Select(
+                        i =>
+                        {
+                            var lifetimeAttribute = x.GetCustomAttributes<LifetimeAttribute>().FirstOrDefault();
+                            var lifetime = lifetimeAttribute?.Lifetime ?? LifestyleByDefault;
+                            return new ServiceDescriptor(i, x, lifetime);
+                        }
+                    )
             )
             .Select(
                 x => x.TryConvertToGenericDefinition(out var descriptorWithGenericDefinition)

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Manager.Tool.Layers.Logic.CommandsCore;
 
@@ -7,6 +8,6 @@ public class DeleteTimerCommandExecutor(IToolCommandFactory toolCommandFactory) 
 {
     public override Task ExecuteAsync(CommandContext context)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }
