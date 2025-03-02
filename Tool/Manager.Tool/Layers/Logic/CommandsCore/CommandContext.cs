@@ -22,4 +22,19 @@ public record CommandContext(
         var commandArgument = Arguments.Last();
         return commandArgument == commandName ? null : commandArgument;
     }
+
+    public bool ContainsOption(string key)
+    {
+        return Options.Any(option => option.Argument == key);
+    }
+
+    public bool ContainsOption(params string[] keys)
+    {
+        return keys.Any(key => Options.Any(option => option.Argument == key));
+    }
+
+    public string? GetOptionValue(string key)
+    {
+        return Options.FirstOrDefault(x => x.Argument == key)?.Value;
+    }
 }
