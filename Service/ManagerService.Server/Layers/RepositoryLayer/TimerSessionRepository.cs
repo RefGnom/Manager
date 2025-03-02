@@ -29,20 +29,16 @@ public class TimerSessionRepository(
     public async Task UpdateAsync(TimerSessionDto timerSessionDto)
     {
         var sessionDbo = _mapper.Map<TimerSessionDbo>(timerSessionDto);
-        _dbContext.Update(sessionDbo);
+        await _dbContext.TimerSessions
+            .ExecuteUpdateAsync(
+                s =>
+                    s.SetProperty(entity => entity.StopTime, sessionDbo.StopTime)
+                        .SetProperty(entity => entity.IsOver, sessionDbo.IsOver)
+            );
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<TimerDto?> LastOrDefaultForTimerAsync(Guid timerId)
-    {
-        var sessionDbo = await _dbContext.TimerSessions
-            .Where(x => x.TimerId == timerId)
-            .OrderBy(s => s.StartTime)
-            .LastOrDefaultAsync();
-        return _mapper.Map<TimerDto>(sessionDbo);
-    }
-
-    public async Task<TimerSessionDto[]> SelectByTimer(Guid timerId)
+    public async Task<TimerSessionDto[]> SelectByTimerAsync(Guid timerId)
     {
         return await _dbContext.TimerSessions
             .Where(x => x.TimerId == timerId)

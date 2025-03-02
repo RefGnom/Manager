@@ -8,6 +8,5 @@ public interface ITimerSessionRepository
 {
     Task CreateAsync(TimerSessionDto timerSessionDto);
     Task UpdateAsync(TimerSessionDto timerSessionDto);
-    Task<TimerSessionDto[]> SelectByTimer(Guid timerId);
-    Task<TimerDto?> LastOrDefaultForTimerAsync(Guid timerId);
+    Task<TimerSessionDto[]> SelectByTimerAsync(Guid timerId);
 }
