@@ -33,8 +33,9 @@ public record CommandContext(
         return keys.Any(key => Options.Any(option => option.Argument == key));
     }
 
-    public string? GetOptionValue(string key)
+    public string? GetOptionValue(CommandOptionInfo commandOptionInfo)
     {
-        return Options.FirstOrDefault(x => x.Argument == key)?.Value;
+        return Options.FirstOrDefault(x => x.Argument == commandOptionInfo.ShortKey)?.Value
+            ?? Options.FirstOrDefault(x => x.Argument == commandOptionInfo.FullKey)?.Value;
     }
 }

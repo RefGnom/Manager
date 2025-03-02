@@ -4,4 +4,5 @@ public interface IToolCommand
 {
     string CommandName { get; }
     CommandSpace CommandSpace => CommandSpace.Empty;
+    CommandOptionInfo[] CommandOptions => [];
 }
