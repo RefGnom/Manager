@@ -21,16 +21,21 @@ public class TimerRepository(
 
     public async Task CreateOrUpdateAsync(TimerDto timerDto)
     {
-        var timerDbo = _mapper.Map<TimerDto, TimerDbo>(timerDto);
-
         var existedTimer = await FindAsync(timerDto.UserId, timerDto.Name);
         if (existedTimer is null)
         {
+            var timerDbo = _mapper.Map<TimerDto, TimerDbo>(timerDto);
             _dbContext.Timers.Add(timerDbo);
         }
         else
         {
-            _dbContext.Timers.Update(timerDbo);
+            await _dbContext.Timers
+                .Where(x => x.Id == existedTimer.Id)
+                .ExecuteUpdateAsync(s =>
+                    s.SetProperty(entity => entity.StartTime, timerDto.StartTime)
+                    .SetProperty(entity => entity.Status, timerDto.Status)
+                    .SetProperty(entity => entity.Name, timerDto.Name)
+                );
         }
 
         await _dbContext.SaveChangesAsync();

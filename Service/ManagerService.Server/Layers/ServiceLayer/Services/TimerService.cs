@@ -46,7 +46,7 @@ public class TimerService(
 
         timer.Status = TimerStatus.Started;
         await _timerRepository.CreateOrUpdateAsync(timer);
-        // await _timerSessionService.StartSessionAsync(timer.Id, timer.StartTime!.Value);
+        await _timerSessionService.StartSessionAsync(timer.Id, timer.StartTime!.Value);
     }
 
     public async Task<TimerDto[]> SelectByUserAsync(Guid userId, bool withArchived, bool withDeleted)
