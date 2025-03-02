@@ -2,10 +2,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Manager.Core.Extensions;
 using Manager.Core.Extensions.LinqExtensions;
+using Manager.TimerService.Client;
+using Manager.TimerService.Client.ServiceModels;
 using Manager.Tool.Layers.Logic.CommandsCore;
 using Manager.Tool.Layers.Presentation;
-using ManagerService.Client;
-using ManagerService.Client.ServiceModels;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 

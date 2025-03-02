@@ -1,8 +1,8 @@
 using System.Net;
 using System.Threading.Tasks;
+using Manager.TimerService.Client;
 using Manager.Tool.Layers.Logic.CommandsCore;
 using Manager.Tool.Layers.Presentation;
-using ManagerService.Client;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 
