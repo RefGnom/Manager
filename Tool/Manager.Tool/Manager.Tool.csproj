@@ -20,9 +20,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\AuthenticationService.Client\AuthenticationService.Client.csproj"/>
+        <ProjectReference Include="..\..\AuthenticationService\AuthenticationService.Client\AuthenticationService.Client.csproj" />
         <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
-        <ProjectReference Include="..\..\Service\TimerService.Client\TimerService.Client.csproj"/>
+        <ProjectReference Include="..\..\TimerService\TimerService.Client\TimerService.Client.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
