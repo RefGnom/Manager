@@ -8,13 +8,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Tool", "Tool\Manage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Core", "Core\Manager.Core\Manager.Core.csproj", "{A99F1569-C984-4839-899B-61F5C723E5F3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{78110398-B45D-45EF-BCA8-EF879BA6AC4F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TimerService", "TimerService", "{78110398-B45D-45EF-BCA8-EF879BA6AC4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerService.Client", "Service\ManagerService.Client\ManagerService.Client.csproj", "{057DFF88-34A9-40FA-99AD-C290DD58608E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerService.Client", "Service\TimerService.Client\TimerService.Client.csproj", "{057DFF88-34A9-40FA-99AD-C290DD58608E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Tool.UnitTests", "Tool\Manager.Tool.UnitTests\Manager.Tool.UnitTests.csproj", "{516FF58D-7A4E-4817-A2D0-B9517394CE7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerService.Server", "Service\ManagerService.Server\ManagerService.Server.csproj", "{5BBC1012-3123-44E0-A5AD-6A7639B1F5BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerService.Server", "Service\TimerService.Server\TimerService.Server.csproj", "{5BBC1012-3123-44E0-A5AD-6A7639B1F5BD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthenticationService", "AuthenticationService", "{160DC284-3E0C-4170-8FBA-5B35ADB6AE7D}"
 EndProject

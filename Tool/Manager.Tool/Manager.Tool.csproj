@@ -22,7 +22,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\AuthenticationService.Client\AuthenticationService.Client.csproj" />
         <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
-        <ProjectReference Include="..\..\Service\ManagerService.Client\ManagerService.Client.csproj"/>
+        <ProjectReference Include="..\..\Service\TimerService.Client\TimerService.Client.csproj" />
     </ItemGroup>
 
     <ItemGroup>
