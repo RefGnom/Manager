@@ -1,5 +1,5 @@
 using System;
-using ManagerService.Client.ServiceModels;
+using Manager.TimerService.Client.ServiceModels;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 
