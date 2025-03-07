@@ -2,6 +2,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Manager.TimerService.Client;
 using Manager.Tool.Layers.Logic.CommandsCore;
+using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
 
 namespace Manager.Tool.Layers.Logic.Timers;
@@ -10,8 +11,9 @@ public class ResetTimerCommandExecutor(
     IToolCommandFactory toolCommandFactory,
     ITimerRequestFactory timerRequestFactory,
     ITimerServiceApiClient timerServiceApiClient,
-    IToolWriter toolWriter
-) : CommandExecutorBase<ResetTimerCommand>(toolCommandFactory)
+    IToolWriter toolWriter,
+    IToolLogger<ResetTimerCommand> logger
+) : CommandExecutorBase<ResetTimerCommand>(toolCommandFactory, logger)
 {
     private readonly ITimerRequestFactory _timerRequestFactory = timerRequestFactory;
     private readonly ITimerServiceApiClient _timerServiceApiClient = timerServiceApiClient;

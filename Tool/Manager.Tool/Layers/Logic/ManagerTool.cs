@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Threading.Tasks;
-using Manager.Core.Common.Linq;
+using Manager.Core.Extensions.LinqExtensions;
 using Manager.Tool.Layers.Logic.Authentication;
 using Manager.Tool.Layers.Logic.CommandsCore;
-using Microsoft.Extensions.Logging;
+using Manager.Tool.Layers.Logic.ToolLogger;
+using Manager.Tool.Layers.Presentation;
 using Newtonsoft.Json;
 
 namespace Manager.Tool.Layers.Logic;
@@ -10,36 +12,46 @@ namespace Manager.Tool.Layers.Logic;
 public class ManagerTool(
     ICommandContextFactory commandContextFactory,
     ICommandExecutorProvider commandExecutorProvider,
-    ILogger<ManagerTool> logger,
+    IToolLogger<ManagerTool> logger,
+    IToolWriter toolWriter,
     IArgumentsValidator argumentsValidator
 ) : IManagerTool
 {
+    private readonly IArgumentsValidator _argumentsValidator = argumentsValidator;
+    private readonly ICommandContextFactory _commandContextFactory = commandContextFactory;
+    private readonly ICommandExecutorProvider _commandExecutorProvider = commandExecutorProvider;
+    private readonly IToolLogger<ManagerTool> _logger = logger;
+    private readonly IToolWriter _toolWriter = toolWriter;
+
     public Task RunAsync(string[] arguments)
     {
-        var validationResult = argumentsValidator.Validate(arguments);
+        var isDebugMode = arguments.Contains("-d");
+        _logger.LogInfo(isDebugMode, "Валидируем параметры");
+        var validationResult = _argumentsValidator.Validate(arguments);
         if (!validationResult.IsSuccess)
         {
-            logger.LogInformation("{message}", validationResult.FailureMessage);
+            _toolWriter.WriteMessage(validationResult.FailureMessage);
             return Task.CompletedTask;
         }
 
-        var context = commandContextFactory.Create(arguments);
+        _logger.LogInfo(isDebugMode, "Собираем контекст команды");
+        var context = _commandContextFactory.Create(arguments);
         var jsonContext = JsonConvert.SerializeObject(context);
-        logger.LogDebug("Собрали контекст команды\n{context}", jsonContext);
+        _logger.LogInfo(context.IsDebugMode, "Собрали контекст команды\n{0}", jsonContext);
 
-        var commandExecutor = commandExecutorProvider.GetByContext(context);
+        var commandExecutor = _commandExecutorProvider.GetByContext(context);
         if (commandExecutor is not null)
         {
             if (context.User is null && commandExecutor is not AuthenticateCommandExecutor)
             {
-                logger.LogInformation("Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\"");
+                _toolWriter.WriteMessage("Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\"");
             }
 
             return commandExecutor.ExecuteAsync(context);
         }
 
-        logger.LogInformation("Неизвестная команда");
-        logger.LogDebug("Не нашли исполнителя для аргументов {arguments}", arguments.JoinToString(", "));
+        _toolWriter.WriteMessage("Неизвестная команда");
+        _logger.LogWarn(context.IsDebugMode, "Не нашли исполнителя для аргументов {0}", arguments.JoinToString(", "));
         return Task.CompletedTask;
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Manager.Tool.Layers.Logic.CommandsCore;
+using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
 
 namespace Manager.Tool.Layers.Logic.Authentication;
@@ -9,8 +10,9 @@ namespace Manager.Tool.Layers.Logic.Authentication;
 public class AuthenticateCommandExecutor(
     IToolCommandFactory toolCommandFactory,
     IToolWriter toolWriter,
-    IUserService userService
-) : CommandExecutorBase<AuthenticateCommand>(toolCommandFactory)
+    IUserService userService,
+    IToolLogger<AuthenticateCommand> logger
+) : CommandExecutorBase<AuthenticateCommand>(toolCommandFactory, logger)
 {
     private readonly IToolWriter _toolWriter = toolWriter;
     private readonly IUserService _userService = userService;
