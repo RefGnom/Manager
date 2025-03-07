@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Manager.TimerService.Client;
 using Manager.Tool.Layers.Logic.CommandsCore;
+using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
 
 namespace Manager.Tool.Layers.Logic.Timers;
@@ -10,8 +11,9 @@ public class StopTimerCommandExecutor(
     ITimerRequestFactory timerRequestFactory,
     ITimerServiceApiClient timerServiceApiClient,
     IToolWriter toolWriter,
-    IUserTimeService userTimeService
-) : CommandExecutorBase<StopTimerCommand>(toolCommandFactory)
+    IUserTimeService userTimeService,
+    IToolLogger<StopTimerCommand> logger
+) : CommandExecutorBase<StopTimerCommand>(toolCommandFactory, logger)
 {
     private readonly ITimerRequestFactory _timerRequestFactory = timerRequestFactory;
     private readonly ITimerServiceApiClient _timerServiceApiClient = timerServiceApiClient;

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Manager.Core.Extensions.LinqExtensions;
 using Manager.Tool.Layers.Logic.Authentication;
@@ -24,6 +25,8 @@ public class ManagerTool(
 
     public Task RunAsync(string[] arguments)
     {
+        var isDebugMode = arguments.Contains("-d");
+        _logger.LogInfo(isDebugMode, "Валидируем параметры");
         var validationResult = _argumentsValidator.Validate(arguments);
         if (!validationResult.IsSuccess)
         {
@@ -31,6 +34,7 @@ public class ManagerTool(
             return Task.CompletedTask;
         }
 
+        _logger.LogInfo(isDebugMode, "Собираем контекст команды");
         var context = _commandContextFactory.Create(arguments);
         var jsonContext = JsonConvert.SerializeObject(context);
         _logger.LogInfo(context.IsDebugMode, "Собрали контекст команды\n{0}", jsonContext);

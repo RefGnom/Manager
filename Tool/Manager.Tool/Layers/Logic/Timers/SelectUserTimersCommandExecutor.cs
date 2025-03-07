@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Manager.Core.Extensions;
 using Manager.TimerService.Client;
 using Manager.Tool.Layers.Logic.CommandsCore;
+using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
 
 namespace Manager.Tool.Layers.Logic.Timers;
@@ -10,8 +11,9 @@ public class SelectUserTimersCommandExecutor(
     IToolCommandFactory toolCommandFactory,
     ITimerRequestFactory timerRequestFactory,
     ITimerServiceApiClient timerServiceApiClient,
-    IToolWriter toolWriter
-) : CommandExecutorBase<SelectUserTimersCommand>(toolCommandFactory)
+    IToolWriter toolWriter,
+    IToolLogger<SelectUserTimersCommand> logger
+) : CommandExecutorBase<SelectUserTimersCommand>(toolCommandFactory, logger)
 {
     private readonly ITimerRequestFactory _timerRequestFactory = timerRequestFactory;
     private readonly ITimerServiceApiClient _timerServiceApiClient = timerServiceApiClient;
