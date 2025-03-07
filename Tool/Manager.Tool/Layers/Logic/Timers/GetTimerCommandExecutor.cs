@@ -5,6 +5,7 @@ using Manager.Core.Extensions.LinqExtensions;
 using Manager.TimerService.Client;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.Tool.Layers.Logic.CommandsCore;
+using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
 
 namespace Manager.Tool.Layers.Logic.Timers;
@@ -13,8 +14,9 @@ public class GetTimerCommandExecutor(
     IToolCommandFactory toolCommandFactory,
     ITimerRequestFactory timerRequestFactory,
     ITimerServiceApiClient timerServiceApiClient,
-    IToolWriter toolWriter
-) : CommandExecutorBase<GetTimerCommand>(toolCommandFactory)
+    IToolWriter toolWriter,
+    IToolLogger<GetTimerCommand> logger
+) : CommandExecutorBase<GetTimerCommand>(toolCommandFactory, logger)
 {
     private readonly ITimerRequestFactory _timerRequestFactory = timerRequestFactory;
     private readonly ITimerServiceApiClient _timerServiceApiClient = timerServiceApiClient;
