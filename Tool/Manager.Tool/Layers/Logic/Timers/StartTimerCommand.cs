@@ -7,6 +7,6 @@ public class StartTimerCommand : IToolCommand
     public string CommandName => "start";
     public CommandSpace CommandSpace => TimerCommandConstants.TimersCommandSpace;
     public CommandOptionInfo[] CommandOptions => [StartTimeOption, PingTimeoutOption];
-    public CommandOptionInfo StartTimeOption { get; } = new("-s", "--start_time", "Time when need timer start");
-    public CommandOptionInfo PingTimeoutOption { get; } = new("-t", "--timeout", "After how long time notify about ending");
+    public CommandOptionInfo StartTimeOption { get; } = new("-t", "--start_time", "Time when need start timer");
+    public CommandOptionInfo PingTimeoutOption { get; } = new(null, "--timeout", "After how long time notify about ending");
 }
