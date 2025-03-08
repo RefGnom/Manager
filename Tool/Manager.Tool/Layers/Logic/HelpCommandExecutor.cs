@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Manager.Core.Extensions.LinqExtensions;
 using Manager.Tool.Layers.Logic.CommandsCore;
 using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
@@ -20,11 +19,22 @@ public class HelpCommandExecutor(
 
     protected override Task ExecuteAsync(CommandContext context, HelpCommand command)
     {
+        const bool isDetailed = true;
         var commandsGroupedBySpace = _toolCommands.GroupBy(x => x.CommandSpace, new CommandSpaceEqualityComparer());
         foreach (var spaceGroup in commandsGroupedBySpace)
         {
             _toolWriter.WriteMessage(spaceGroup.Key?.Description ?? "Common");
-            spaceGroup.ToArray().Foreach(c => _toolWriter.WriteToolCommand(c, true));
+            var spaceCommands = spaceGroup.ToArray();
+            for (var i = 0; i < spaceCommands.Length; i++)
+            {
+                _toolWriter.WriteToolCommand(spaceCommands[i], isDetailed);
+                if (isDetailed && spaceCommands[i].CommandOptions.Length > 0 && i + 1 < spaceCommands.Length)
+                {
+                    _toolWriter.MoveOnNextLine();
+                }
+            }
+
+            _toolWriter.MoveOnNextLine();
         }
 
         return Task.CompletedTask;
