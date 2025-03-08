@@ -17,9 +17,9 @@ public abstract class CommandExecutorBase<TCommand>(
     {
         var command = _toolCommandFactory.CreateCommand<TCommand>();
 
-        var spaceLength = command.CommandSpace.Values.Length;
-        var argumentsSpace = (CommandSpace)context.Arguments.Take(spaceLength).ToArray();
-        if (!command.CommandSpace.Equals(argumentsSpace))
+        var spaceLength = command.CommandSpace?.Values.Length ?? 0;
+        var argumentsSpace = context.Arguments.Take(spaceLength).ToArray();
+        if (command.CommandSpace is not null && !command.CommandSpace.Values.SequenceEqual(argumentsSpace))
         {
             return false;
         }
