@@ -16,7 +16,7 @@ public class ToolWriter : IToolWriter
         Console.WriteLine(text);
     }
 
-    public void WriteMessageWithIndent(int indentLevel, string message, params object?[] args)
+    public void WriteMessageWithIndent(int indentLevel, [StringSyntax(StringSyntaxAttribute.CompositeFormat)] string message, params object?[] args)
     {
         var indent = CreateIndent(indentLevel);
         var text = string.Format(message, args);
@@ -25,14 +25,15 @@ public class ToolWriter : IToolWriter
 
     public void WriteToolCommand(IToolCommand command, bool isDetailed = false)
     {
-        // todo: Добавить вывод описания команды
-        WriteMessageWithIndent(1, command.CommandName);
-        if (!isDetailed)
+        const int commandNameLength = 12;
+        const int optionKeysLength = 24;
+
+        WriteMessageWithIndent(1, "{0}{1}", command.CommandName.PadRight(commandNameLength), command.Description);
+        if (!isDetailed || command.CommandOptions.Length == 0)
         {
             return;
         }
 
-        const int optionKeysLength = 24;
         foreach (var option in command.CommandOptions)
         {
             var optionKeys = new[] { option.ShortKey, option.FullKey }
@@ -40,8 +41,13 @@ public class ToolWriter : IToolWriter
                 .JoinToString(", ")
                 .PadRight(optionKeysLength);
 
-            WriteMessageWithIndent(2, "{0}{1}", optionKeys.PadLeft(_indentSize * 2), option.Description);
+            WriteMessageWithIndent(2, "{0}{1}", optionKeys, option.Description);
         }
+    }
+
+    public void MoveOnNextLine()
+    {
+        Console.WriteLine();
     }
 
     private string CreateIndent(int indentLevel)

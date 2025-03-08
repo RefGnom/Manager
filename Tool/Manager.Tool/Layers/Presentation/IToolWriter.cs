@@ -8,4 +8,5 @@ public interface IToolWriter
     void WriteMessage([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string message, params object?[] args);
     void WriteMessageWithIndent(int indentLevel, [StringSyntax(StringSyntaxAttribute.CompositeFormat)] string message, params object?[] args);
     void WriteToolCommand(IToolCommand command, bool isDetailed = false);
+    void MoveOnNextLine();
 }
