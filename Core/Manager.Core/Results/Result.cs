@@ -11,6 +11,11 @@ public class Result<T>(
     public string FailureMessage { get; } = failureMessage;
 
     public T EnsuredValue => IsSuccess && Value is not null ? Value : throw new FailResultException(FailureMessage);
+
+    public static implicit operator Result<T>(T value)
+    {
+        return Result.CreateSuccess(value);
+    }
 }
 
 public static class Result
