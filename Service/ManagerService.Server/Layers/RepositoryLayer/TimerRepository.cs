@@ -57,4 +57,12 @@ public class TimerRepository(
             .FirstOrDefaultAsync();
         return _mapper.Map<TimerDto>(timerDbo);
     }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        await _dbContext.Timers.Where(
+            x => x.Id == id
+            ).ExecuteDeleteAsync();
+        await _dbContext.SaveChangesAsync();
+    }
 }

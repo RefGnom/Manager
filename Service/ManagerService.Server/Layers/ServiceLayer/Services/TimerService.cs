@@ -109,7 +109,9 @@ public class TimerService(
             );
         }
 
+        await _timerRepository.DeleteAsync(timer.Id);
         await ArchiveTimerAsync(timer);
+        timer.Id = new Guid();
         var newTimer = _timerDtoFactory.CreateResetTimer(timer);
         await _timerRepository.CreateOrUpdateAsync(newTimer);
     }
@@ -135,6 +137,8 @@ public class TimerService(
             );
         }
 
+        _timerRepository.DeleteAsync(timer.Id);
+        timer.Id = new Guid();
         var newTimer = _timerDtoFactory.CreateDeletedTimer(timer);
         await _timerRepository.CreateOrUpdateAsync(newTimer);
     }

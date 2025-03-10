@@ -15,7 +15,7 @@ public class TimerDtoFactory(IDateTimeProvider dateTimeProvider) : ITimerDtoFact
     {
         return new TimerDto
         {
-            Id = forArchiving.Id,
+            Id = new Guid(),
             UserId = forArchiving.UserId,
             Name = $"{forArchiving.Name}_archived_{_dateTimeProvider.Now}",
             StartTime = forArchiving.StartTime,
