@@ -42,15 +42,8 @@ public class TimerRepository(
         {
             throw new NotFoundException("Timer not found");
         }
-
-        await _dbContext.Timers
-            .Where(x => x.Id == existedTimer.Id)
-            .ExecuteUpdateAsync(s =>
-                s.SetProperty(entity => entity.Name, timerDto.Name)
-                    .SetProperty(entity => entity.StartTime, timerDto.StartTime)
-                    .SetProperty(entity => entity.PingTimeout, timerDto.PingTimeout)
-                    .SetProperty(entity => entity.Status, timerDto.Status)
-            );
+        _mapper.Map(timerDto, existedTimer);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<TimerDto?> FindAsync(Guid userId, string timerName)
@@ -62,10 +55,8 @@ public class TimerRepository(
         return _mapper.Map<TimerDto>(timerDbo);
     }
 
-    private async Task<TimerDbo> FindAsync(Guid id)
+    private async Task<TimerDbo?> FindAsync(Guid id)
     {
-        return _mapper.Map<TimerDbo>(
-            await _dbContext.Timers.FindAsync(id)
-        );
+        return await _dbContext.Timers.FirstOrDefaultAsync(x => x.Id == id);
     }
 }
