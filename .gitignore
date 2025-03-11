@@ -404,4 +404,4 @@ FodyWeavers.xsd
 *.orig
 *.cs.orig
 
-Service/ManagerService.Server/appsettings.Development.json
+TimerService/TimerService.Server/appsettings.Development.json
