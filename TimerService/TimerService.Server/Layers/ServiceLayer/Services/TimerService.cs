@@ -21,32 +21,30 @@ public class TimerService(
     ITimerDtoFactory timerDtoFactory
 ) : ITimerService
 {
-    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
-    private readonly ITimerDtoFactory _timerDtoFactory = timerDtoFactory;
     private readonly ITimerRepository _timerRepository = timerRepository;
     private readonly ITimerSessionService _timerSessionService = timerSessionService;
+    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
+    private readonly ITimerDtoFactory _timerDtoFactory = timerDtoFactory;
 
     public async Task StartTimerAsync(TimerDto timerDto)
     {
         var timer = await _timerRepository.FindAsync(timerDto.UserId, timerDto.Name);
         if (timer is null)
         {
-            timer = timerDto;
+            timerDto.Status = TimerStatus.Started;
+            await _timerRepository.CreateAsync(timerDto);
+            await _timerSessionService.StartSessionAsync(timerDto.Id, timerDto.StartTime!.Value);
+            return;
         }
-        else
-        {
-            if (timer.Status is not (TimerStatus.Stopped or TimerStatus.Reset))
-            {
-                throw new InvalidOperationException($"Timer cannot started. Timer status: {timer.Status}");
-            }
 
-            timer.StartTime = timerDto.StartTime;
-            timer.PingTimeout = timerDto.PingTimeout;
+        if (timer.Status is not (TimerStatus.Stopped or TimerStatus.Reset))
+        {
+            throw new InvalidOperationException($"Timer cannot started. Timer status: {timer.Status}");
         }
 
         timer.Status = TimerStatus.Started;
-        await _timerRepository.CreateOrUpdateAsync(timer);
-        await _timerSessionService.StartSessionAsync(timer.Id, timer.StartTime!.Value);
+        await _timerRepository.UpdateAsync(timer);
+        await _timerSessionService.StartSessionAsync(timer.Id, timerDto.StartTime!.Value);
     }
 
     public async Task<TimerDto[]> SelectByUserAsync(Guid userId, bool withArchived, bool withDeleted)
@@ -89,7 +87,7 @@ public class TimerService(
         }
 
         timer.Status = TimerStatus.Stopped;
-        await _timerRepository.CreateOrUpdateAsync(timer);
+        await _timerRepository.UpdateAsync(timer);
         await _timerSessionService.StopTimerSessionAsync(timer.Id, stopTime);
     }
 
@@ -111,7 +109,7 @@ public class TimerService(
 
         await ArchiveTimerAsync(timer);
         var newTimer = _timerDtoFactory.CreateResetTimer(timer);
-        await _timerRepository.CreateOrUpdateAsync(newTimer);
+        await _timerRepository.CreateAsync(newTimer);
     }
 
     public Task<TimerDto?> FindTimerAsync(Guid userId, string name)
@@ -135,21 +133,18 @@ public class TimerService(
             );
         }
 
-        var newTimer = _timerDtoFactory.CreateDeletedTimer(timer);
-        await _timerRepository.CreateOrUpdateAsync(newTimer);
+        var deletedTimer = _timerDtoFactory.CreateDeletedTimer(timer);
+        await _timerRepository.UpdateAsync(deletedTimer);
     }
 
-    public TimeSpan CalculateElapsedTime(TimerDto timerDto)
-    {
-        return timerDto.Sessions.Aggregate(
-            TimeSpan.Zero,
-            (current, session) => current + ((session.StopTime ?? _dateTimeProvider.Now) - session.StartTime)
-        );
-    }
+    public TimeSpan CalculateElapsedTime(TimerDto timerDto) => timerDto.Sessions.Aggregate(
+        TimeSpan.Zero,
+        (current, session) => current + ((session.StopTime ?? _dateTimeProvider.Now) - session.StartTime)
+    );
 
     public Task ArchiveTimerAsync(TimerDto timerToArchiving)
     {
         var archivedTimer = _timerDtoFactory.CreateArchived(timerToArchiving);
-        return _timerRepository.CreateOrUpdateAsync(archivedTimer);
+        return _timerRepository.UpdateAsync(archivedTimer);
     }
 }
