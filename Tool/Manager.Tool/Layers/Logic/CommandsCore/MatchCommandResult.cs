@@ -16,6 +16,6 @@ public class MatchCommandResult(
 
     public bool IsFullMath()
     {
-        return Math.Abs(Score - ScoreConstants.MaxScore) > ScoreConstants.CompareEpsilon;
+        return Math.Abs(Score - ScoreConstants.MaxScore) < ScoreConstants.CompareEpsilon;
     }
 }
