@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Manager.Tool.Layers.Logic.ToolLogger;
 
@@ -16,16 +15,7 @@ public abstract class CommandExecutorBase<TCommand>(
     public virtual bool CanExecute(CommandContext context)
     {
         var command = _toolCommandFactory.CreateCommand<TCommand>();
-
-        var spaceLength = command.CommandSpace?.Values.Length ?? 0;
-        var argumentsSpace = context.Arguments.Take(spaceLength).ToArray();
-        if (command.CommandSpace is not null && !command.CommandSpace.Values.SequenceEqual(argumentsSpace))
-        {
-            return false;
-        }
-
-        var commandName = context.Arguments.Skip(spaceLength).FirstOrDefault();
-        return command.CommandName == commandName;
+        return command.CanExecuteForContext(context);
     }
 
     public Task ExecuteAsync(CommandContext context)
