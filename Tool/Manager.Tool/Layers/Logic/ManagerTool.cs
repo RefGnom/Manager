@@ -13,7 +13,8 @@ public class ManagerTool(
     ICommandExecutorProvider commandExecutorProvider,
     IToolLogger<ManagerTool> logger,
     IToolWriter toolWriter,
-    IArgumentsValidator argumentsValidator
+    IArgumentsValidator argumentsValidator,
+    ICommandMatcher commandMatcher
 ) : IManagerTool
 {
     private readonly IArgumentsValidator _argumentsValidator = argumentsValidator;
@@ -21,6 +22,7 @@ public class ManagerTool(
     private readonly ICommandExecutorProvider _commandExecutorProvider = commandExecutorProvider;
     private readonly IToolLogger<ManagerTool> _logger = logger;
     private readonly IToolWriter _toolWriter = toolWriter;
+    private readonly ICommandMatcher _commandMatcher = commandMatcher;
 
     public Task RunAsync(string[] arguments)
     {
@@ -35,19 +37,21 @@ public class ManagerTool(
         var jsonContext = JsonConvert.SerializeObject(context);
         _logger.LogInfo(context.IsDebugMode, "Собрали контекст команды\n{0}", jsonContext);
 
-        var commandExecutor = _commandExecutorProvider.GetByContext(context);
-        if (commandExecutor is not null)
+        var mostSuitableCommandResult = _commandMatcher.GetMostSuitableForContext(context);
+        var mostSuitableCommand = mostSuitableCommandResult.ToolCommand;
+        if (!mostSuitableCommandResult.IsFullMath())
         {
-            if (context.User is null && commandExecutor is not AuthenticateCommandExecutor)
-            {
-                _toolWriter.WriteMessage("Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\"");
-            }
-
-            return commandExecutor.ExecuteAsync(context);
+            _logger.LogWarn(context.IsDebugMode, "Не нашли исполнителя для аргументов {0}", arguments.JoinToString(", "));
+            _toolWriter.WriteMessage("Возможно вы имели ввиду: {0}", mostSuitableCommand.Example);
+            return Task.CompletedTask;
         }
 
-        _toolWriter.WriteMessage("Неизвестная команда");
-        _logger.LogWarn(context.IsDebugMode, "Не нашли исполнителя для аргументов {0}", arguments.JoinToString(", "));
-        return Task.CompletedTask;
+        var commandExecutor = _commandExecutorProvider.GetForCommand(mostSuitableCommand);
+        if (context.User is null && commandExecutor is not AuthenticateCommandExecutor)
+        {
+            _toolWriter.WriteMessage("Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\"");
+        }
+
+        return commandExecutor.ExecuteAsync(context);
     }
 }

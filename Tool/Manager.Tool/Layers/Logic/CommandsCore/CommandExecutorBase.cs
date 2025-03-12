@@ -12,10 +12,9 @@ public abstract class CommandExecutorBase<TCommand>(
     private readonly IToolCommandFactory _toolCommandFactory = toolCommandFactory;
     private readonly IToolLogger<TCommand> _logger = logger;
 
-    public virtual bool CanExecute(CommandContext context)
+    public bool CanExecute(IToolCommand command)
     {
-        var command = _toolCommandFactory.CreateCommand<TCommand>();
-        return command.CanExecuteForContext(context);
+        return command is TCommand;
     }
 
     public Task ExecuteAsync(CommandContext context)
