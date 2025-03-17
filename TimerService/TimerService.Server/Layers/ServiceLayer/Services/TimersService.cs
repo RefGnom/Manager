@@ -14,7 +14,7 @@ using Manager.TimerService.Server.ServiceModels;
 namespace Manager.TimerService.Server.Layers.ServiceLayer.Services;
 
 [Scoped]
-public class TimerService(
+public class TimersService(
     ITimerRepository timerRepository,
     ITimerSessionService timerSessionService,
     IDateTimeProvider dateTimeProvider,
