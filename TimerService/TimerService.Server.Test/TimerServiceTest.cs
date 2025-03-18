@@ -1,4 +1,5 @@
-﻿using Manager.Core.DateTimeProvider;
+﻿using FluentAssertions;
+using Manager.Core.DateTimeProvider;
 using Manager.TimerService.Server.Layers.RepositoryLayer;
 using Manager.TimerService.Server.Layers.ServiceLayer.Factories;
 using Manager.TimerService.Server.Layers.ServiceLayer.Services;
@@ -80,7 +81,7 @@ public class TimerServicesTest()
     {
         var timer = _timerFactory.CreateFromSessions(sessions);
         var result = _timersService.CalculateElapsedTime(timer);
-        Assert.That(result, Is.EqualTo(expectedElapsedTime));
+        result.Should().Be(expectedElapsedTime);
     }
 
     [Test]
@@ -88,13 +89,17 @@ public class TimerServicesTest()
     public void CalculateElapsedTimeWithUnCompletedSessionsCorrect(TimerSessionDto[] sessions)
     {
         var timer = _timerFactory.CreateFromSessions(sessions);
-        Assert.Throws<ArgumentNullException>(() => _timersService.CalculateElapsedTime(timer));
+        _timersService
+            .Invoking(service => service.CalculateElapsedTime(timer))
+            .Should()
+            .Throw<ArgumentNullException>();
     }
 
     [Test]
     public void CalculateElapsedTimeWithEmptySessionsReturnsZero()
     {
         var timer = _timerFactory.CreateFromSessions(new TimerSessionDto[0]);
-        Assert.That(_timersService.CalculateElapsedTime(timer), Is.EqualTo(TimeSpan.Zero));
+        var result = _timersService.CalculateElapsedTime(timer);
+        result.Should().Be(TimeSpan.Zero);
     }
 }
