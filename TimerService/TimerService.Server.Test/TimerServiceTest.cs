@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using Manager.Core.DateTimeProvider;
+using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.Layers.RepositoryLayer;
+using Manager.TimerService.Server.Layers.ServiceLayer.Exceptions;
 using Manager.TimerService.Server.Layers.ServiceLayer.Factories;
 using Manager.TimerService.Server.Layers.ServiceLayer.Services;
 using Manager.TimerService.Server.ServiceModels;
@@ -26,7 +28,6 @@ public class TimerServicesTest()
     [SetUp]
     public void Setup()
     {
-
         _timerRepository = Substitute.For<ITimerRepository>();
         _timerSessionService = Substitute.For<ITimerSessionService>();
         _dateTimeProvider = Substitute.For<IDateTimeProvider>();
@@ -38,6 +39,58 @@ public class TimerServicesTest()
             _timerDtoFactory
         );
     }
+
+    #region StartTimer
+
+    [Test]
+    public async Task StartTimerCreateAndStartSessionCorrect()
+    {
+        var timer = _timerFactory.CreateEmptyTimer();
+        await _timersService.StartTimerAsync(timer);
+        await _timerRepository
+            .Received(1)
+            .CreateAsync(Arg.Is<TimerDto>(
+                x => x.Status == TimerStatus.Started
+            ));
+        await _timerSessionService
+            .Received(1)
+            .StartSessionAsync(timer.Id, timer.StartTime!.Value);
+    }
+
+    [Test]
+    public async Task StartTimerInvalidStatusThrowsException()
+    {
+        var timer = _timerFactory.CreateEmptyTimer();
+        timer.Status = TimerStatus.Started;
+        _timerRepository
+            .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
+            .Returns(timer);
+
+        await _timersService
+            .Invoking(x => x.StartTimerAsync(timer))
+            .Should()
+            .ThrowAsync<InvalidStatusException>();
+    }
+
+    [Test]
+    public async Task StartTimerExistingStoppedTimerUpdateCorrect()
+    {
+        var timer = _timerFactory.CreateEmptyTimer();
+        _timerRepository
+            .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
+            .Returns(timer);
+        timer.Status = TimerStatus.Stopped;
+        await _timerRepository
+            .Received(1)
+            .UpdateAsync(Arg.Is<TimerDto>(
+                x => x.Status == TimerStatus.Started)
+            );
+        await _timerSessionService
+            .Received(1)
+            .StartSessionAsync(timer.Id, timer.StartTime!.Value);
+    }
+
+    #endregion
 
     #region TestCases
 
@@ -81,7 +134,9 @@ public class TimerServicesTest()
     {
         var timer = _timerFactory.CreateFromSessions(sessions);
         var result = _timersService.CalculateElapsedTime(timer);
-        result.Should().Be(expectedElapsedTime);
+        result
+            .Should()
+            .Be(expectedElapsedTime);
     }
 
     [Test]
@@ -98,8 +153,10 @@ public class TimerServicesTest()
     [Test]
     public void CalculateElapsedTimeWithEmptySessionsReturnsZero()
     {
-        var timer = _timerFactory.CreateFromSessions(new TimerSessionDto[0]);
+        var timer = _timerFactory.CreateFromSessions([]);
         var result = _timersService.CalculateElapsedTime(timer);
-        result.Should().Be(TimeSpan.Zero);
+        result
+            .Should()
+            .Be(TimeSpan.Zero);
     }
 }
