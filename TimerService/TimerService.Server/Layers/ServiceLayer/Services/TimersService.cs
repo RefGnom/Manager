@@ -39,7 +39,7 @@ public class TimersService(
 
         if (timer.Status is not (TimerStatus.Stopped or TimerStatus.Reset))
         {
-            throw new InvalidOperationException($"Timer cannot started. Timer status: {timer.Status}");
+            throw new InvalidStatusException($"Timer cannot started. Timer status: {timer.Status}");
         }
 
         timer.Status = TimerStatus.Started;
