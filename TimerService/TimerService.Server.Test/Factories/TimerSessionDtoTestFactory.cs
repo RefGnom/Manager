@@ -15,4 +15,16 @@ public class TimerSessionDtoTestFactory: ITimerSessionDtoTestFactory
             IsOver = stopTime is not null
         };
     }
+
+    public TimerSessionDto CreateEmptySession()
+    {
+        return new TimerSessionDto()
+        {
+            Id = Guid.Empty,
+            TimerId = Guid.Empty,
+            StartTime = DateTime.MinValue,
+            StopTime = null,
+            IsOver = false
+        };
+    }
 }

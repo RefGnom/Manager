@@ -15,8 +15,8 @@ namespace TimerService.Server.Test;
 [TestFixture]
 public class TimerServicesTest()
 {
-    private static ITimerDtoTestFactory _timerFactory = new TimerDtoTestFactory();
-    private static ITimerSessionDtoTestFactory _sessionFactory = new TimerSessionDtoTestFactory();
+    private static readonly ITimerDtoTestFactory TimerFactory = new TimerDtoTestFactory();
+    private static readonly ITimerSessionDtoTestFactory SessionFactory = new TimerSessionDtoTestFactory();
 
     private ITimerRepository _timerRepository;
     private ITimerSessionService _timerSessionService;
@@ -40,12 +40,12 @@ public class TimerServicesTest()
         );
     }
 
-    #region StartTimer
+    #region Start
 
     [Test]
     public async Task StartCreatesAndStartsSessionCorrect()
     {
-        var timer = _timerFactory.CreateEmptyTimer();
+        var timer = TimerFactory.CreateEmptyTimer();
         await _timersService.StartAsync(timer);
 
         await _timerRepository
@@ -61,7 +61,7 @@ public class TimerServicesTest()
     [Test]
     public async Task StartTimerWithInvalidStatusThrowsException()
     {
-        var timer = _timerFactory.CreateEmptyTimer();
+        var timer = TimerFactory.CreateEmptyTimer();
         timer.Status = TimerStatus.Started;
         _timerRepository
             .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
@@ -76,7 +76,7 @@ public class TimerServicesTest()
     [Test]
     public async Task StartStoppedTimerCorrect()
     {
-        var timer = _timerFactory.CreateEmptyTimer();
+        var timer = TimerFactory.CreateEmptyTimer();
         _timerRepository
             .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
             .Returns(timer);
@@ -95,6 +95,63 @@ public class TimerServicesTest()
 
     #endregion
 
+    #region Stop
+
+    [Test]
+    public async Task StopValidTimerBeCorrect()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        timer.Status = TimerStatus.Started;
+        timer.Sessions = [SessionFactory.CreateEmptySession()];
+        _timerRepository
+            .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
+            .Returns(timer);
+
+        await _timersService.StopAsync(timer.UserId, timer.Name, DateTime.MinValue);
+
+        timer.Status
+            .Should()
+            .Be(TimerStatus.Stopped);
+
+        await _timerSessionService
+            .Received(1)
+            .StopTimerSessionAsync(timer.Id, DateTime.MinValue);
+
+        await _timerRepository
+            .Received()
+            .UpdateAsync(timer);
+    }
+
+    [Test]
+    public async Task StopTimerWithInvalidStatusThrowsException()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        _timerRepository
+            .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
+            .Returns(timer);
+
+        await _timersService.Invoking(x =>
+                x.StopAsync(timer.UserId, timer.Name, DateTime.MinValue)
+            ).Should()
+            .ThrowAsync<InvalidStatusException>();
+    }
+
+    [Test]
+    public async Task StopNotExistedTimerThrowsException()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        _timerRepository
+            .FindAsync(timer.Id, timer.Name)
+            .Returns((TimerDto)null);
+
+        await _timersService.Invoking(x =>
+                x.StopAsync(timer.UserId, timer.Name, DateTime.MinValue)
+            ).Should()
+            .ThrowAsync<NotFoundException>();
+    }
+
+    #endregion
+
     #region TestCases
 
     public static IEnumerable<TestCaseData> GetCalculateElapsedTimeWithCompletedSessionsCorrectTestCases()
@@ -102,14 +159,14 @@ public class TimerServicesTest()
         yield return new TestCaseData(
             new TimerSessionDto[]
             {
-                _sessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), DateTime.Parse("2023-10-01T11:00:00"))
+                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), DateTime.Parse("2023-10-01T11:00:00"))
             }, TimeSpan.FromHours(1));
 
         yield return new TestCaseData(
             new TimerSessionDto[]
             {
-                _sessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), DateTime.Parse("2023-10-01T11:00:00")),
-                _sessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T12:00:00"), DateTime.Parse("2023-10-01T13:00:00"))
+                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), DateTime.Parse("2023-10-01T11:00:00")),
+                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T12:00:00"), DateTime.Parse("2023-10-01T13:00:00"))
             }, TimeSpan.FromHours(2));
     }
 
@@ -118,14 +175,14 @@ public class TimerServicesTest()
         yield return new TestCaseData(
             new TimerSessionDto[]
             {
-                _sessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), null)
+                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), null)
             });
         yield return new TestCaseData(
             new TimerSessionDto[]
             {
-                _sessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), DateTime.Parse("2023-10-01T11:00:00")),
-                _sessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T12:00:00"), DateTime.Parse("2023-10-01T13:00:00")),
-                _sessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T14:00:00"), null)
+                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), DateTime.Parse("2023-10-01T11:00:00")),
+                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T12:00:00"), DateTime.Parse("2023-10-01T13:00:00")),
+                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T14:00:00"), null)
             });
     }
 
@@ -135,7 +192,7 @@ public class TimerServicesTest()
     [TestCaseSource(nameof(GetCalculateElapsedTimeWithCompletedSessionsCorrectTestCases))]
     public void CalculateElapsedTimeWithCompletedSessionsCorrect(TimerSessionDto[] sessions, TimeSpan expectedElapsedTime)
     {
-        var timer = _timerFactory.CreateFromSessions(sessions);
+        var timer = TimerFactory.CreateFromSessions(sessions);
         var result = _timersService.CalculateElapsedTime(timer);
         result
             .Should()
@@ -146,7 +203,7 @@ public class TimerServicesTest()
     [TestCaseSource(nameof(GetCalculateElapsedTimeWithUnCompletedSessionsCorrectTestCases))]
     public void CalculateElapsedTimeWithUnCompletedSessionsCorrect(TimerSessionDto[] sessions)
     {
-        var timer = _timerFactory.CreateFromSessions(sessions);
+        var timer = TimerFactory.CreateFromSessions(sessions);
         _timersService
             .Invoking(service => service.CalculateElapsedTime(timer))
             .Should()
@@ -156,7 +213,7 @@ public class TimerServicesTest()
     [Test]
     public void CalculateElapsedTimeWithEmptySessionsReturnsZero()
     {
-        var timer = _timerFactory.CreateFromSessions([]);
+        var timer = TimerFactory.CreateFromSessions([]);
         var result = _timersService.CalculateElapsedTime(timer);
         result
             .Should()
