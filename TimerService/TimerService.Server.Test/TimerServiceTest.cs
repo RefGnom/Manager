@@ -43,7 +43,7 @@ public class TimerServicesTest()
     #region StartTimer
 
     [Test]
-    public async Task StartTimerCreateAndStartSessionCorrect()
+    public async Task StartCreatesAndStartsSessionCorrect()
     {
         var timer = _timerFactory.CreateEmptyTimer();
         await _timersService.StartAsync(timer);
@@ -59,7 +59,7 @@ public class TimerServicesTest()
     }
 
     [Test]
-    public async Task StartTimerInvalidStatusThrowsException()
+    public async Task StartTimerWithInvalidStatusThrowsException()
     {
         var timer = _timerFactory.CreateEmptyTimer();
         timer.Status = TimerStatus.Started;
@@ -74,7 +74,7 @@ public class TimerServicesTest()
     }
 
     [Test]
-    public async Task StartTimerExistingStoppedTimerUpdateCorrect()
+    public async Task StartStoppedTimerCorrect()
     {
         var timer = _timerFactory.CreateEmptyTimer();
         _timerRepository
@@ -82,6 +82,7 @@ public class TimerServicesTest()
             .Returns(timer);
         timer.Status = TimerStatus.Stopped;
         await _timersService.StartAsync(timer);
+
         await _timerRepository
             .Received(1)
             .UpdateAsync(Arg.Is<TimerDto>(
