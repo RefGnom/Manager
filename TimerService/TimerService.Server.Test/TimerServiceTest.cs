@@ -46,7 +46,7 @@ public class TimerServicesTest()
     public async Task StartTimerCreateAndStartSessionCorrect()
     {
         var timer = _timerFactory.CreateEmptyTimer();
-        await _timersService.StartTimerAsync(timer);
+        await _timersService.StartAsync(timer);
 
         await _timerRepository
             .Received(1)
@@ -55,7 +55,7 @@ public class TimerServicesTest()
             ));
         await _timerSessionService
             .Received(1)
-            .StartSessionAsync(timer.Id, timer.StartTime!.Value);
+            .StartAsync(timer.Id, timer.StartTime!.Value);
     }
 
     [Test]
@@ -68,7 +68,7 @@ public class TimerServicesTest()
             .Returns(timer);
 
         await _timersService
-            .Invoking(x => x.StartTimerAsync(timer))
+            .Invoking(x => x.StartAsync(timer))
             .Should()
             .ThrowAsync<InvalidStatusException>();
     }
@@ -81,7 +81,7 @@ public class TimerServicesTest()
             .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
             .Returns(timer);
         timer.Status = TimerStatus.Stopped;
-        await _timersService.StartTimerAsync(timer);
+        await _timersService.StartAsync(timer);
         await _timerRepository
             .Received(1)
             .UpdateAsync(Arg.Is<TimerDto>(
@@ -89,7 +89,7 @@ public class TimerServicesTest()
             );
         await _timerSessionService
             .Received(1)
-            .StartSessionAsync(timer.Id, timer.StartTime!.Value);
+            .StartAsync(timer.Id, timer.StartTime!.Value);
     }
 
     #endregion

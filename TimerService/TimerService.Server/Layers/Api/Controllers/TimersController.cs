@@ -34,7 +34,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.StartTimerAsync(_timerHttpModelsConverter.FromStartRequest(request));
+            await _timerService.StartAsync(_timerHttpModelsConverter.FromStartRequest(request));
             return Ok();
         }
         catch (InvalidOperationException e)
@@ -73,7 +73,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.StopTimerAsync(request.UserId, request.Name, request.StopTime);
+            await _timerService.StopAsync(request.UserId, request.Name, request.StopTime);
         }
         catch (NotFoundException)
         {
@@ -95,7 +95,7 @@ public class TimersController(
     [HttpGet("find")]
     public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
     {
-        var timer = await _timerService.FindTimerAsync(request.UserId, request.Name);
+        var timer = await _timerService.FindAsync(request.UserId, request.Name);
         if (timer == null)
         {
             return NotFound();
@@ -114,7 +114,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.ResetTimerAsync(request.UserId, request.Name);
+            await _timerService.ResetAsync(request.UserId, request.Name);
         }
         catch (NotFoundException)
         {
@@ -138,7 +138,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.DeleteTimerAsync(request.UserId, request.Name);
+            await _timerService.DeleteAsync(request.UserId, request.Name);
         }
         catch (NotFoundException)
         {
