@@ -47,6 +47,7 @@ public class TimerServicesTest()
     {
         var timer = _timerFactory.CreateEmptyTimer();
         await _timersService.StartTimerAsync(timer);
+
         await _timerRepository
             .Received(1)
             .CreateAsync(Arg.Is<TimerDto>(
@@ -80,6 +81,7 @@ public class TimerServicesTest()
             .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
             .Returns(timer);
         timer.Status = TimerStatus.Stopped;
+        await _timersService.StartTimerAsync(timer);
         await _timerRepository
             .Received(1)
             .UpdateAsync(Arg.Is<TimerDto>(
