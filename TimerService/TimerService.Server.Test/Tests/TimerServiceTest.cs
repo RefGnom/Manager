@@ -6,14 +6,15 @@ using Manager.TimerService.Server.Layers.ServiceLayer.Exceptions;
 using Manager.TimerService.Server.Layers.ServiceLayer.Factories;
 using Manager.TimerService.Server.Layers.ServiceLayer.Services;
 using Manager.TimerService.Server.ServiceModels;
-using NUnit.Framework;
 using NSubstitute;
+using NUnit.Framework;
 using TimerService.Server.Test.Factories;
+using TimerService.Server.Test.MockSetupHelpers;
 
-namespace TimerService.Server.Test;
+namespace TimerService.Server.Test.Tests;
 
 [TestFixture]
-public class TimerServicesTest()
+public class TimerServicesTest
 {
     private static readonly ITimerDtoTestFactory TimerFactory = new TimerDtoTestFactory();
     private static readonly ITimerSessionDtoTestFactory SessionFactory = new TimerSessionDtoTestFactory();
@@ -23,7 +24,6 @@ public class TimerServicesTest()
     private IDateTimeProvider _dateTimeProvider;
     private ITimerDtoFactory _timerDtoFactory;
     private TimersService _timersService;
-
 
     [SetUp]
     public void Setup()
@@ -53,6 +53,7 @@ public class TimerServicesTest()
             .CreateAsync(Arg.Is<TimerDto>(
                 x => x.Status == TimerStatus.Started
             ));
+
         await _timerSessionService
             .Received(1)
             .StartAsync(timer.Id, timer.StartTime!.Value);
@@ -63,9 +64,7 @@ public class TimerServicesTest()
     {
         var timer = TimerFactory.CreateEmptyTimer();
         timer.Status = TimerStatus.Started;
-        _timerRepository
-            .FindAsync(timer.Id, timer.Name)
-            .Returns(timer);
+        _timerRepository.ConfigureFindMethod(timer);
 
         await _timersService
             .Invoking(x => x.StartAsync(timer))
@@ -77,9 +76,7 @@ public class TimerServicesTest()
     public async Task StartStoppedTimerCorrect()
     {
         var timer = TimerFactory.CreateEmptyTimer();
-        _timerRepository
-            .FindAsync(timer.Id, timer.Name)
-            .Returns(timer);
+        _timerRepository.ConfigureFindMethod(timer);
         timer.Status = TimerStatus.Stopped;
         await _timersService.StartAsync(timer);
 
@@ -103,10 +100,7 @@ public class TimerServicesTest()
         var timer = TimerFactory.CreateEmptyTimer();
         timer.Status = TimerStatus.Started;
         timer.Sessions = [SessionFactory.CreateEmptySession()];
-        _timerRepository
-            .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
-            .Returns(timer);
-
+        _timerRepository.ConfigureFindMethod(timer);
         await _timersService.StopAsync(timer.UserId, timer.Name, DateTime.MinValue);
 
         timer.Status
@@ -126,9 +120,7 @@ public class TimerServicesTest()
     public async Task StopTimerWithInvalidStatusThrowsException()
     {
         var timer = TimerFactory.CreateEmptyTimer();
-        _timerRepository
-            .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
-            .Returns(timer);
+        _timerRepository.ConfigureFindMethod(timer);
 
         await _timersService.Invoking(x =>
                 x.StopAsync(timer.UserId, timer.Name, DateTime.MinValue)
@@ -140,9 +132,7 @@ public class TimerServicesTest()
     public async Task StopNotExistedTimerThrowsException()
     {
         var timer = TimerFactory.CreateEmptyTimer();
-        _timerRepository
-            .FindAsync(timer.Id, timer.Name)
-            .Returns((TimerDto)null);
+        _timerRepository.ConfigureFindMethod(timer.UserId, timer.Name, null);
 
         await _timersService.Invoking(x =>
                 x.StopAsync(timer.UserId, timer.Name, DateTime.MinValue)
@@ -161,20 +151,14 @@ public class TimerServicesTest()
         timer.Status = TimerStatus.Stopped;
         timer.Sessions = [SessionFactory.CreateEmptySession()];
 
-        _timerRepository
-            .FindAsync(timer.Id, timer.Name)
-            .Returns(timer);
+        _timerRepository.ConfigureFindMethod(timer);
 
         var archivedTimer = TimerFactory.CreateEmptyTimer();
         archivedTimer.Name = "archived";
-        _timerDtoFactory
-            .CreateArchived(timer)
-            .Returns(archivedTimer);
+        _timerDtoFactory.ConfigureCreateArchivedTimer(timer, archivedTimer);
 
         var resetTimer = TimerFactory.CreateSameTimer(timer);
-        _timerDtoFactory
-            .CreateResetTimer(timer)
-            .Returns(timer);
+        _timerDtoFactory.ConfigureCreateResetTimer(timer);
 
         await _timersService.ResetAsync(timer.UserId, timer.Name);
 
@@ -195,11 +179,7 @@ public class TimerServicesTest()
     {
         var timer = TimerFactory.CreateEmptyTimer();
         timer.Status = TimerStatus.Started;
-
-        _timerRepository
-            .FindAsync(timer.Id, timer.Name)
-            .Returns(timer);
-
+        _timerRepository.ConfigureFindMethod(timer);
         await _timersService.Invoking(
                 x => x.ResetAsync(timer.UserId, timer.Name)
             ).Should()
@@ -210,23 +190,16 @@ public class TimerServicesTest()
 
     #region Delete
 
-    private void ConfigMockRepositoryForDelete(Guid userId, string timerName, TimerDto returnTimer) =>
-        _timerRepository
-            .FindAsync(userId, timerName)
-            .Returns(returnTimer);
-
     [Test]
     public async Task DeleteTimerCorrect()
     {
         var timer = TimerFactory.CreateEmptyTimer();
         timer.Status = TimerStatus.Stopped;
-        ConfigMockRepositoryForDelete(timer.UserId, timer.Name, timer);
+        _timerRepository.ConfigureFindMethod(timer);
 
         var deletedTimer = TimerFactory.CreateSameTimer(timer);
         deletedTimer.Name = "deleted";
-        _timerDtoFactory
-            .CreateDeletedTimer(timer)
-            .Returns(deletedTimer);
+        _timerDtoFactory.ConfigureCreateDeletedTimer(timer, deletedTimer);
 
         await _timersService.DeleteAsync(timer.Id, timer.Name);
 
@@ -242,7 +215,7 @@ public class TimerServicesTest()
     {
         var timer = TimerFactory.CreateEmptyTimer();
         timer.Status = TimerStatus.Started;
-        ConfigMockRepositoryForDelete(timer.UserId, timer.Name, timer);
+        _timerRepository.ConfigureFindMethod(timer);
 
         await _timersService.Invoking(x =>
                 x.DeleteAsync(timer.Id, timer.Name)
@@ -254,7 +227,7 @@ public class TimerServicesTest()
     public async Task DeleteNotExistedTimerThrowsException()
     {
         var timer = TimerFactory.CreateEmptyTimer();
-        ConfigMockRepositoryForDelete(timer.UserId, timer.Name, null);
+        _timerRepository.ConfigureFindMethod(timer);
 
         await _timersService.Invoking(x =>
                 x.DeleteAsync(timer.Id, timer.Name)
