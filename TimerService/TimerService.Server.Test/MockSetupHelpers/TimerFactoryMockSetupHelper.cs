@@ -14,7 +14,11 @@ public static class TimerFactoryMockSetupHelper
         factory.CreateArchived(timer)
             .Returns(archivedTimer);
 
-    public static void ConfigureCreateResetTimer(this ITimerDtoFactory factory, TimerDto timer) =>
+    public static void ConfigureCreateResetTimer(
+        this ITimerDtoFactory factory,
+        TimerDto timer,
+        TimerDto resetTimer
+    ) =>
         factory.CreateResetTimer(timer)
             .Returns(timer);
 

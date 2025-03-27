@@ -5,20 +5,6 @@ namespace TimerService.Server.Test.Factories;
 
 public class TimerDtoTestFactory : ITimerDtoTestFactory
 {
-    public TimerDto CreateFromSessions(TimerSessionDto[] sessions)
-    {
-        return new TimerDto()
-        {
-            Id = Guid.Empty,
-            UserId = Guid.Empty,
-            Name = string.Empty,
-            Sessions = sessions,
-            StartTime = DateTime.MinValue,
-            PingTimeout = null,
-            Status = TimerStatus.Created
-        };
-    }
-
     public TimerDto CreateEmptyTimer()
     {
         return new TimerDto()
@@ -37,7 +23,7 @@ public class TimerDtoTestFactory : ITimerDtoTestFactory
     {
         return new TimerDto()
         {
-            Id = Guid.NewGuid(),
+            Id = timer.Id,
             UserId = timer.UserId,
             Name = timer.Name,
             Sessions = timer.Sessions,
