@@ -208,6 +208,64 @@ public class TimerServicesTest()
 
     #endregion
 
+    #region Delete
+
+    private void ConfigMockRepositoryForDelete(Guid userId, string timerName, TimerDto returnTimer) =>
+        _timerRepository
+            .FindAsync(userId, timerName)
+            .Returns(returnTimer);
+
+    [Test]
+    public async Task DeleteTimerCorrect()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        timer.Status = TimerStatus.Stopped;
+        ConfigMockRepositoryForDelete(timer.UserId, timer.Name, timer);
+
+        var deletedTimer = TimerFactory.CreateSameTimer(timer);
+        deletedTimer.Name = "deleted";
+        _timerDtoFactory
+            .CreateDeletedTimer(timer)
+            .Returns(deletedTimer);
+
+        await _timersService.DeleteAsync(timer.Id, timer.Name);
+
+        await _timerRepository
+            .Received(1)
+            .UpdateAsync(Arg.Is<TimerDto>(x =>
+                x.Name.Contains("deleted"))
+            );
+    }
+
+    [Test]
+    public async Task DeleteTimerWithInvalidStatusThrowsException()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        timer.Status = TimerStatus.Started;
+        ConfigMockRepositoryForDelete(timer.UserId, timer.Name, timer);
+
+        await _timersService.Invoking(x =>
+                x.DeleteAsync(timer.Id, timer.Name)
+            ).Should()
+            .ThrowAsync<InvalidStatusException>();
+    }
+
+    [Test]
+    public async Task DeleteNotExistedTimerThrowsException()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        ConfigMockRepositoryForDelete(timer.UserId, timer.Name, null);
+
+        await _timersService.Invoking(x =>
+                x.DeleteAsync(timer.Id, timer.Name)
+            ).Should()
+            .ThrowAsync<NotFoundException>();
+    }
+
+    #endregion
+
+    #region CalculateElapsedTime
+
     #region TestCases
 
     public static IEnumerable<TestCaseData> GetCalculateElapsedTimeWithCompletedSessionsCorrectTestCases()
@@ -275,4 +333,6 @@ public class TimerServicesTest()
             .Should()
             .Be(TimeSpan.Zero);
     }
+
+    #endregion
 }
