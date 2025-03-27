@@ -6,4 +6,5 @@ public interface ITimerDtoTestFactory
 {
     public TimerDto CreateFromSessions(TimerSessionDto[] sessions);
     public TimerDto CreateEmptyTimer();
+    public TimerDto CreateSameTimer(TimerDto timer);
 }

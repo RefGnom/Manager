@@ -32,4 +32,18 @@ public class TimerDtoTestFactory : ITimerDtoTestFactory
             Status = TimerStatus.Created
         };
     }
+
+    public TimerDto CreateSameTimer(TimerDto timer)
+    {
+        return new TimerDto()
+        {
+            Id = Guid.NewGuid(),
+            UserId = timer.UserId,
+            Name = timer.Name,
+            Sessions = timer.Sessions,
+            StartTime = timer.StartTime,
+            PingTimeout = timer.PingTimeout,
+            Status = TimerStatus.Created
+        };
+    }
 }

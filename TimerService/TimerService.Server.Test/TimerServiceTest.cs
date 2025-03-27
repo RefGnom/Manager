@@ -64,7 +64,7 @@ public class TimerServicesTest()
         var timer = TimerFactory.CreateEmptyTimer();
         timer.Status = TimerStatus.Started;
         _timerRepository
-            .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
+            .FindAsync(timer.Id, timer.Name)
             .Returns(timer);
 
         await _timersService
@@ -78,7 +78,7 @@ public class TimerServicesTest()
     {
         var timer = TimerFactory.CreateEmptyTimer();
         _timerRepository
-            .FindAsync(Arg.Any<Guid>(), Arg.Any<string>())
+            .FindAsync(timer.Id, timer.Name)
             .Returns(timer);
         timer.Status = TimerStatus.Stopped;
         await _timersService.StartAsync(timer);
@@ -148,6 +148,62 @@ public class TimerServicesTest()
                 x.StopAsync(timer.UserId, timer.Name, DateTime.MinValue)
             ).Should()
             .ThrowAsync<NotFoundException>();
+    }
+
+    #endregion
+
+    #region Reset
+
+    [Test]
+    public async Task ResetTimerCorrect()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        timer.Status = TimerStatus.Stopped;
+        timer.Sessions = [SessionFactory.CreateEmptySession()];
+
+        _timerRepository
+            .FindAsync(timer.Id, timer.Name)
+            .Returns(timer);
+
+        var archivedTimer = TimerFactory.CreateEmptyTimer();
+        archivedTimer.Name = "archived";
+        _timerDtoFactory
+            .CreateArchived(timer)
+            .Returns(archivedTimer);
+
+        var resetTimer = TimerFactory.CreateSameTimer(timer);
+        _timerDtoFactory
+            .CreateResetTimer(timer)
+            .Returns(timer);
+
+        await _timersService.ResetAsync(timer.UserId, timer.Name);
+
+        await _timerRepository
+            .Received(1)
+            .UpdateAsync(Arg.Is<TimerDto>(x =>
+                x.Id == timer.Id && x.Name.Contains("archived"))
+            );
+
+        await _timerRepository
+            .Received(1)
+            .CreateAsync(Arg.Is<TimerDto>(
+                x => x.Name == timer.Name && x.UserId == timer.UserId));
+    }
+
+    [Test]
+    public async Task ResetTimerWithInvalidStatusThrowsException()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        timer.Status = TimerStatus.Started;
+
+        _timerRepository
+            .FindAsync(timer.Id, timer.Name)
+            .Returns(timer);
+
+        await _timersService.Invoking(
+                x => x.ResetAsync(timer.UserId, timer.Name)
+            ).Should()
+            .ThrowAsync<InvalidStatusException>();
     }
 
     #endregion
