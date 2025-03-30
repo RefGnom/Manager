@@ -5,6 +5,7 @@ using AutoMapper;
 using Manager.Core.DependencyInjection.LifetimeAttributes;
 using Manager.TimerService.Server.Layers.DbLayer;
 using Manager.TimerService.Server.Layers.DbLayer.Dbos;
+using Manager.TimerService.Server.Layers.ServiceLayer.Exceptions;
 using Manager.TimerService.Server.ServiceModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,35 +20,30 @@ public class TimerRepository(
     private readonly ManagerDbContext _dbContext = dbContext;
     private readonly IMapper _mapper = mapper;
 
-    public async Task CreateOrUpdateAsync(TimerDto timerDto)
+    public async Task<TimerDto[]> SelectByUserAsync(Guid userId)
     {
-        var existedTimer = await FindAsync(timerDto.UserId, timerDto.Name);
-        if (existedTimer is null)
-        {
-            var timerDbo = _mapper.Map<TimerDto, TimerDbo>(timerDto);
-            _dbContext.Timers.Add(timerDbo);
-        }
-        else
-        {
-            await _dbContext.Timers
-                .Where(x => x.Id == existedTimer.Id)
-                .ExecuteUpdateAsync(
-                    s =>
-                        s.SetProperty(entity => entity.StartTime, timerDto.StartTime)
-                            .SetProperty(entity => entity.Status, timerDto.Status)
-                            .SetProperty(entity => entity.Name, timerDto.Name)
-                );
-        }
-
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public Task<TimerDto[]> SelectByUserAsync(Guid userId)
-    {
-        return _dbContext.Timers
+        return await _dbContext.Timers
             .Where(x => x.UserId == userId)
             .Select(x => _mapper.Map<TimerDto>(x))
             .ToArrayAsync();
+    }
+
+    public async Task CreateAsync(TimerDto timerDto)
+    {
+        var timerDbo = _mapper.Map<TimerDto, TimerDbo>(timerDto);
+        _dbContext.Timers.Add(timerDbo);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(TimerDto timerDto)
+    {
+        var existedTimer = await FindAsync(timerDto.Id);
+        if (existedTimer is null)
+        {
+            throw new NotFoundException("Timer not found");
+        }
+        _mapper.Map(timerDto, existedTimer);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<TimerDto?> FindAsync(Guid userId, string timerName)
@@ -57,5 +53,10 @@ public class TimerRepository(
             .Where(x => x.Name == timerName)
             .FirstOrDefaultAsync();
         return _mapper.Map<TimerDto>(timerDbo);
+    }
+
+    private async Task<TimerDbo?> FindAsync(Guid id)
+    {
+        return await _dbContext.Timers.FirstOrDefaultAsync(x => x.Id == id);
     }
 }
