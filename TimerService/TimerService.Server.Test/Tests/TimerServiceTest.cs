@@ -15,7 +15,7 @@ using TimerService.Server.Test.MockSetupHelpers;
 namespace TimerService.Server.Test.Tests;
 
 [TestFixture]
-public class TimerServicesTest
+public class TimerServiceTest
 {
     private static readonly ITimerDtoTestFactory TimerFactory = new TimerDtoTestFactory();
     private static readonly ITimerSessionDtoTestFactory SessionFactory = new TimerSessionDtoTestFactory();
@@ -97,6 +97,73 @@ public class TimerServicesTest
 
     #endregion
 
+    #region SelectByUser
+
+    #region TestCases
+
+    public static IEnumerable<TestCaseData> GetSelectByUserFilterTestCases()
+    {
+        yield return new TestCaseData(new[]
+        {
+            TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Started),
+            TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Deleted),
+            TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Deleted),
+            TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Archived),
+            TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Stopped)
+        }, false, false);
+
+        yield return new TestCaseData(
+            new[]
+            {
+                TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Started),
+                TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Archived),
+                TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Deleted),
+                TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Archived),
+                TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Stopped)
+            },
+            true,
+            false
+        );
+
+        yield return new TestCaseData(
+            new[]
+            {
+                TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Started),
+                TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Archived),
+                TimerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Deleted)
+            },
+            true,
+            true
+        );
+    }
+
+    #endregion
+
+    [TestCaseSource(nameof(GetSelectByUserFilterTestCases))]
+    [Test]
+    public async Task SelectByUser_FiltersCorrect(TimerDto[] resultTimers, bool withArchived, bool withDeleted)
+    {
+        var userId = Guid.NewGuid();
+        _timerRepository.ConfigureSelectByUserMethod(userId, resultTimers);
+        var timers = await _timersService.SelectByUserAsync(userId, withArchived, withDeleted);
+
+        if (!withArchived)
+        {
+            timers
+                .Should()
+                .NotContain(x => x.Status == TimerStatus.Archived);
+        }
+
+        if (!withDeleted)
+        {
+            timers
+                .Should()
+                .NotContain(x => x.Status == TimerStatus.Deleted);
+        }
+    }
+
+    #endregion
+
     #region Stop
 
     [Test]
@@ -145,6 +212,10 @@ public class TimerServicesTest
             ).Should()
             .ThrowAsync<NotFoundException>();
     }
+
+    #endregion
+
+    #region Find
 
     #endregion
 

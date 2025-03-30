@@ -18,4 +18,12 @@ public static class TimerRepositoryMockSetupHelper
         repository
             .FindAsync(userId, timerName)
             .Returns(returnTimer);
+
+    public static void ConfigureSelectByUserMethod(
+        this ITimerRepository repository,
+        Guid userId,
+        TimerDto[] resultTimers
+    ) => repository
+        .SelectByUserAsync(userId)
+        .Returns(resultTimers);
 }
