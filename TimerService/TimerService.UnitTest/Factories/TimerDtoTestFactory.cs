@@ -1,4 +1,5 @@
 ﻿using System;
+using Manager.Core;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.ServiceModels;
 
@@ -20,17 +21,5 @@ public class TimerDtoTestFactory : ITimerDtoTestFactory
         };
     }
 
-    public TimerDto CreateSameTimer(TimerDto timer)
-    {
-        return new TimerDto()
-        {
-            Id = timer.Id,
-            UserId = timer.UserId,
-            Name = timer.Name,
-            Sessions = timer.Sessions,
-            StartTime = timer.StartTime,
-            PingTimeout = timer.PingTimeout,
-            Status = TimerStatus.Created
-        };
-    }
+    public TimerDto CreateSameTimer(TimerDto timer) => timer.DeepCopy();
 }
