@@ -1,8 +1,9 @@
-﻿using Manager.TimerService.Server.Layers.RepositoryLayer;
+﻿using System;
+using Manager.TimerService.Server.Layers.RepositoryLayer;
 using Manager.TimerService.Server.ServiceModels;
 using NSubstitute;
 
-namespace TimerService.Server.Test.MockSetupHelpers;
+namespace Manager.TimerService.UnitTest.MockSetupHelpers;
 
 public static class TimerRepositoryMockSetupHelper
 {

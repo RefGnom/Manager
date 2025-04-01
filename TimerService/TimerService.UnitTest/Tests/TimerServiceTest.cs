@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Manager.Core.DateTimeProvider;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.Layers.RepositoryLayer;
@@ -6,13 +9,13 @@ using Manager.TimerService.Server.Layers.ServiceLayer.Exceptions;
 using Manager.TimerService.Server.Layers.ServiceLayer.Factories;
 using Manager.TimerService.Server.Layers.ServiceLayer.Services;
 using Manager.TimerService.Server.ServiceModels;
+using Manager.TimerService.UnitTest.Factories;
+using Manager.TimerService.UnitTest.Factories.Extensions;
+using Manager.TimerService.UnitTest.MockSetupHelpers;
 using NSubstitute;
 using NUnit.Framework;
-using TimerService.Server.Test.Factories;
-using TimerService.Server.Test.Factories.Extensions;
-using TimerService.Server.Test.MockSetupHelpers;
 
-namespace TimerService.Server.Test.Tests;
+namespace Manager.TimerService.UnitTest.Tests;
 
 [TestFixture]
 public class TimerServiceTest
@@ -50,13 +53,13 @@ public class TimerServiceTest
         await _timersService.StartAsync(timer);
 
         await _timerRepository
-            .Received(1)
+            .Received()
             .CreateAsync(Arg.Is<TimerDto>(
                 x => x.Status == TimerStatus.Started
             ));
 
         await _timerSessionService
-            .Received(1)
+            .Received()
             .StartAsync(timer.Id, timer.StartTime!.Value);
     }
 
@@ -86,12 +89,12 @@ public class TimerServiceTest
         await _timersService.StartAsync(timer);
 
         await _timerRepository
-            .Received(1)
+            .Received()
             .UpdateAsync(Arg.Is<TimerDto>(
                 x => x.Status == TimerStatus.Started));
 
         await _timerSessionService
-            .Received(1)
+            .Received()
             .StartAsync(timer.Id, timer.StartTime!.Value);
     }
 
@@ -181,7 +184,7 @@ public class TimerServiceTest
             .Be(TimerStatus.Stopped);
 
         await _timerSessionService
-            .Received(1)
+            .Received()
             .StopTimerSessionAsync(timer.Id, DateTime.MinValue);
 
         await _timerRepository
@@ -242,13 +245,13 @@ public class TimerServiceTest
         await _timersService.ResetAsync(timer.UserId, timer.Name);
 
         await _timerRepository
-            .Received(1)
+            .Received()
             .UpdateAsync(Arg.Is<TimerDto>(x =>
                 x.Id == timer.Id && x.Name.Contains("archived"))
             );
 
         await _timerRepository
-            .Received(1)
+            .Received()
             .CreateAsync(Arg.Is<TimerDto>(
                 x => x.Name == timer.Name && x.UserId == timer.UserId));
     }
@@ -286,7 +289,7 @@ public class TimerServiceTest
         await _timersService.DeleteAsync(timer.UserId, timer.Name);
 
         await _timerRepository
-            .Received(1)
+            .Received()
             .UpdateAsync(Arg.Is<TimerDto>(x =>
                 x.Name.Contains("deleted"))
             );

@@ -1,6 +1,6 @@
 ﻿using Manager.TimerService.Server.ServiceModels;
 
-namespace TimerService.Server.Test.Factories;
+namespace Manager.TimerService.UnitTest.Factories;
 
 public interface ITimerDtoTestFactory
 {

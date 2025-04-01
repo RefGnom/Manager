@@ -1,6 +1,7 @@
-﻿using Manager.TimerService.Server.ServiceModels;
+﻿using System;
+using Manager.TimerService.Server.ServiceModels;
 
-namespace TimerService.Server.Test.Factories;
+namespace Manager.TimerService.UnitTest.Factories;
 
 public interface ITimerSessionDtoTestFactory
 {

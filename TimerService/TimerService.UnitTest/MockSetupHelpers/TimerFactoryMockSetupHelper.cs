@@ -2,7 +2,7 @@
 using Manager.TimerService.Server.ServiceModels;
 using NSubstitute;
 
-namespace TimerService.Server.Test.MockSetupHelpers;
+namespace Manager.TimerService.UnitTest.MockSetupHelpers;
 
 public static class TimerFactoryMockSetupHelper
 {

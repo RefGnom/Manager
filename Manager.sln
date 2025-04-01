@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerService.Client", "Time
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerService.Server", "TimerService\TimerService.Server\TimerService.Server.csproj", "{241C905C-B5F4-4F52-96E2-57004D5F3EA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerService.Server.Test", "TimerService\TimerService.Server.Test\TimerService.Server.Test.csproj", "{017100F8-C862-4D92-A9C8-4B2EA9E02976}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerService.UnitTest", "TimerService\TimerService.UnitTest\TimerService.UnitTest.csproj", "{017100F8-C862-4D92-A9C8-4B2EA9E02976}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

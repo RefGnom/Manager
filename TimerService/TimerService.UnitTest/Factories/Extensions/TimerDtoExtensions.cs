@@ -1,7 +1,8 @@
-﻿using Manager.TimerService.Client.ServiceModels;
+﻿using System;
+using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.ServiceModels;
 
-namespace TimerService.Server.Test.Factories.Extensions;
+namespace Manager.TimerService.UnitTest.Factories.Extensions;
 
 internal static class TimerDtoExtensions
 {
