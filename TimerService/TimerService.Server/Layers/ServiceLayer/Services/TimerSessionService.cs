@@ -15,7 +15,7 @@ public class TimerSessionService(
 {
     private readonly ITimerSessionRepository _repository = repository;
 
-    public async Task StartSessionAsync(Guid timerId, DateTime startTime)
+    public async Task StartAsync(Guid timerId, DateTime startTime)
     {
         await _repository.CreateAsync(
             new TimerSessionDto
