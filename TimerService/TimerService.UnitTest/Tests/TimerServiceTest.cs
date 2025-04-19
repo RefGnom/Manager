@@ -220,6 +220,30 @@ public class TimerServiceTest
 
     #region Find
 
+    [Test]
+    public async Task FindTimerCorrect()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        _timerRepository.ConfigureFindMethod(timer);
+
+        var result = await _timersService.FindAsync(timer.UserId, timer.Name);
+
+        result
+            .Should()
+            .BeEquivalentTo(timer);
+    }
+
+    public async Task FindNotExistedTimerThrowsException()
+    {
+        var timer = TimerFactory.CreateEmptyTimer();
+        _timerRepository.ConfigureFindMethod(timer.UserId, timer.Name, null);
+
+        await _timersService.Invoking(x =>
+                x.FindAsync(timer.UserId, timer.Name)
+            ).Should()
+            .ThrowAsync<NotFoundException>();
+    }
+
     #endregion
 
     #region Reset
