@@ -360,7 +360,8 @@ public class TimerServiceTest
         var timer = TimerFactory
             .CreateEmptyTimer()
             .WithSessions(sessions);
-
+        _dateTimeProvider.UtcNow
+            .Returns(DateTime.UtcNow);
         var result = _timersService.CalculateElapsedTime(timer);
         result
             .Should()

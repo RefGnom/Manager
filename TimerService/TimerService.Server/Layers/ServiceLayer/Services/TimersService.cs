@@ -139,7 +139,7 @@ public class TimersService(
 
     public TimeSpan CalculateElapsedTime(TimerDto timerDto) => timerDto.Sessions.Aggregate(
         TimeSpan.Zero,
-        (current, session) => current + ((session.StopTime ?? _dateTimeProvider.Now) - session.StartTime)
+        (current, session) => current + ((session.StopTime ?? _dateTimeProvider.UtcNow) - session.StartTime)
     );
 
     public Task ArchiveAsync(TimerDto timerToArchiving)
