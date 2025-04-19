@@ -40,7 +40,7 @@ public class TimerSessionService(
         var lastSession = timerSessions
             .Where(x => x.IsOver == false)
             !.FirstOrDefault();
-        if (lastSession is null || lastSession.IsOver)
+        if (lastSession is null)
         {
             throw new InvalidOperationException("Timer hasn't active sessions");
         }
