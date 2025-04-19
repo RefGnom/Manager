@@ -328,43 +328,34 @@ public class TimerServiceTest
 
     #region TestCases
 
-    public static IEnumerable<TestCaseData> GetCalculateElapsedTimeWithCompletedSessionsCorrectTestCases()
+    public static IEnumerable<TestCaseData> GetCalculateElapsedTimeCorrectTestCases()
     {
         yield return new TestCaseData(
             new TimerSessionDto[]
             {
-                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), DateTime.Parse("2023-10-01T11:00:00"))
-            }, TimeSpan.FromHours(1));
+                SessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(5), DateTime.UtcNow - TimeSpan.FromHours(1)),
+            }, TimeSpan.FromHours(4));
 
         yield return new TestCaseData(
             new TimerSessionDto[]
             {
-                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), DateTime.Parse("2023-10-01T11:00:00")),
-                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T12:00:00"), DateTime.Parse("2023-10-01T13:00:00"))
-            }, TimeSpan.FromHours(2));
-    }
+                SessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(18), DateTime.UtcNow - TimeSpan.FromHours(15)),
+                SessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(5), DateTime.UtcNow - TimeSpan.FromHours(1))
+            }, TimeSpan.FromHours(7));
 
-    public static IEnumerable<TestCaseData> GetCalculateElapsedTimeWithUnCompletedSessionsCorrectTestCases()
-    {
         yield return new TestCaseData(
             new TimerSessionDto[]
             {
-                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), null)
-            });
-        yield return new TestCaseData(
-            new TimerSessionDto[]
-            {
-                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T10:00:00"), DateTime.Parse("2023-10-01T11:00:00")),
-                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T12:00:00"), DateTime.Parse("2023-10-01T13:00:00")),
-                SessionFactory.CreateFromTimes(DateTime.Parse("2023-10-01T14:00:00"), null)
-            });
+                SessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(8), DateTime.UtcNow - TimeSpan.FromHours(5)),
+                SessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(2), null)
+            }, TimeSpan.FromHours(5));
     }
 
     #endregion
 
     [Test]
-    [TestCaseSource(nameof(GetCalculateElapsedTimeWithCompletedSessionsCorrectTestCases))]
-    public void CalculateElapsedTimeWithCompletedSessionsCorrect(TimerSessionDto[] sessions, TimeSpan expectedElapsedTime)
+    [TestCaseSource(nameof(GetCalculateElapsedTimeCorrectTestCases))]
+    public void CalculateElapsedTimeSessionsCorrect(TimerSessionDto[] sessions, TimeSpan expectedElapsedTime)
     {
         var timer = TimerFactory
             .CreateEmptyTimer()
@@ -373,21 +364,7 @@ public class TimerServiceTest
         var result = _timersService.CalculateElapsedTime(timer);
         result
             .Should()
-            .Be(expectedElapsedTime);
-    }
-
-    [Test]
-    [TestCaseSource(nameof(GetCalculateElapsedTimeWithUnCompletedSessionsCorrectTestCases))]
-    public void CalculateElapsedTimeWithUnCompletedSessionsCorrect(TimerSessionDto[] sessions)
-    {
-        var timer = TimerFactory
-            .CreateEmptyTimer()
-            .WithSessions(sessions);
-
-        _timersService
-            .Invoking(service => service.CalculateElapsedTime(timer))
-            .Should()
-            .Throw<ArgumentNullException>();
+            .BeCloseTo(expectedElapsedTime, TimeSpan.FromSeconds(1));
     }
 
     [Test]
