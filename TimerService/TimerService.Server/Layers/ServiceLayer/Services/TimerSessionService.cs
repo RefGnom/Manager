@@ -15,7 +15,7 @@ public class TimerSessionService(
 {
     private readonly ITimerSessionRepository _repository = repository;
 
-    public async Task StartSessionAsync(Guid timerId, DateTime startTime)
+    public async Task StartAsync(Guid timerId, DateTime startTime)
     {
         await _repository.CreateAsync(
             new TimerSessionDto
@@ -40,7 +40,7 @@ public class TimerSessionService(
         var lastSession = timerSessions
             .Where(x => x.IsOver == false)
             !.FirstOrDefault();
-        if (lastSession is null || lastSession.IsOver)
+        if (lastSession is null)
         {
             throw new InvalidOperationException("Timer hasn't active sessions");
         }
