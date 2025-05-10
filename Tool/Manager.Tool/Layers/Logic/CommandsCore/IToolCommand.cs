@@ -3,5 +3,8 @@ namespace Manager.Tool.Layers.Logic.CommandsCore;
 public interface IToolCommand
 {
     string CommandName { get; }
-    CommandSpace CommandSpace => CommandSpace.Empty;
+    string Description { get; }
+    string Example { get; }
+    CommandSpace? CommandSpace { get; }
+    CommandOptionInfo[] CommandOptions => [];
 }
