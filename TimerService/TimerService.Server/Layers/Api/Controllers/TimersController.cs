@@ -64,11 +64,28 @@ public class TimersController(
     }
 
     /// <summary>
+    ///     Ищет таймер по его уникальному индексу
+    /// </summary>
+    /// <param name="request">Запрос для получения таймера</param>
+    /// <returns></returns>
+    [HttpGet("find")]
+    public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
+    {
+        var timer = await _timerService.FindAsync(request.UserId, request.Name);
+        if (timer == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(_timerHttpModelsConverter.ConvertToTimerResponse(timer, _timerService.CalculateElapsedTime(timer)));
+    }
+
+    /// <summary>
     ///     Останавливает сессию таймера и переводит таймер в статус остановлен
     /// </summary>
     /// <param name="request">Запрос для остановки таймера</param>
     /// <returns></returns>
-    [HttpPost("stop")]
+    [HttpPatch("stop")]
     public async Task<ActionResult> StopTimer([FromBody] StopTimerRequest request)
     {
         try
@@ -88,28 +105,11 @@ public class TimersController(
     }
 
     /// <summary>
-    ///     Ищет таймер по его уникальному индексу
-    /// </summary>
-    /// <param name="request">Запрос для получения таймера</param>
-    /// <returns></returns>
-    [HttpGet("find")]
-    public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
-    {
-        var timer = await _timerService.FindAsync(request.UserId, request.Name);
-        if (timer == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(_timerHttpModelsConverter.ConvertToTimerResponse(timer, _timerService.CalculateElapsedTime(timer)));
-    }
-
-    /// <summary>
     ///     Сбрасывает время таймера и архивирует его
     /// </summary>
     /// <param name="request">Запрос для сброса таймера</param>
     /// <returns></returns>
-    [HttpPost("reset")]
+    [HttpPatch("reset")]
     public async Task<ActionResult> ResetTimer([FromBody] ResetTimerRequest request)
     {
         try
