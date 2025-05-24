@@ -64,23 +64,6 @@ public class TimersController(
     }
 
     /// <summary>
-    ///     Ищет таймер по его уникальному индексу
-    /// </summary>
-    /// <param name="request">Запрос для получения таймера</param>
-    /// <returns></returns>
-    [HttpGet("find")]
-    public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
-    {
-        var timer = await _timerService.FindAsync(request.UserId, request.Name);
-        if (timer == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(_timerHttpModelsConverter.ConvertToTimerResponse(timer, _timerService.CalculateElapsedTime(timer)));
-    }
-
-    /// <summary>
     ///     Останавливает сессию таймера и переводит таймер в статус остановлен
     /// </summary>
     /// <param name="request">Запрос для остановки таймера</param>
@@ -102,6 +85,23 @@ public class TimersController(
         }
 
         return Ok();
+    }
+
+    /// <summary>
+    ///     Ищет таймер по его уникальному индексу
+    /// </summary>
+    /// <param name="request">Запрос для получения таймера</param>
+    /// <returns></returns>
+    [HttpGet("find")]
+    public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
+    {
+        var timer = await _timerService.FindAsync(request.UserId, request.Name);
+        if (timer == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(_timerHttpModelsConverter.ConvertToTimerResponse(timer, _timerService.CalculateElapsedTime(timer)));
     }
 
     /// <summary>

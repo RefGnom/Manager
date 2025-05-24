@@ -405,3 +405,9 @@ FodyWeavers.xsd
 *.cs.orig
 
 TimerService/TimerService.Server/appsettings.Development.json
+manager_infra/terraform.tfvars
+manager_infra/terraform.tfstate.backup
+manager_infra/terraform.tfstate
+manager_infra/postgresql.tf.save.1
+manager_infra/postgresql.tf.save
+manager_infra/.terraform.lock.hcl
