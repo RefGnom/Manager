@@ -8,6 +8,8 @@ public class ManagerDbContext(DbContextOptions<ManagerDbContext> options) : DbCo
     public DbSet<TimerDbo> Timers { get; set; }
     public DbSet<TimerSessionDbo> TimerSessions { get; set; }
 
+    public DbSet<User> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TimerDbo>()
