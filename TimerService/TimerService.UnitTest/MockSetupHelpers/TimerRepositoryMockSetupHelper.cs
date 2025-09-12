@@ -14,7 +14,7 @@ public static class TimerRepositoryMockSetupHelper
         this ITimerRepository repository,
         Guid userId,
         string timerName,
-        TimerDto returnTimer
+        TimerDto? returnTimer
     ) =>
         repository
             .FindAsync(userId, timerName)

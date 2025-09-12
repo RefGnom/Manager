@@ -9,15 +9,15 @@ public class TimerDtoTestFactory : ITimerDtoTestFactory
 {
     public TimerDto CreateEmptyTimer()
     {
-        return new TimerDto()
+        return new TimerDto
         {
             Id = Guid.Empty,
             UserId = Guid.Empty,
             Name = string.Empty,
-            Sessions = null,
+            Sessions = [],
             StartTime = DateTime.MinValue,
             PingTimeout = null,
-            Status = TimerStatus.Created
+            Status = TimerStatus.Created,
         };
     }
 
