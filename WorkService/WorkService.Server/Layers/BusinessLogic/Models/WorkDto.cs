@@ -9,6 +9,6 @@ public record WorkDto(
     string Description,
     WorkStatus WorkStatus,
     DateTime CreatedUtc,
-    DateTime DeadLineUtc,
-    TimeSpan[] ReminderIntervals
+    DateTime? DeadLineUtc,
+    TimeSpan[]? ReminderIntervals
 );

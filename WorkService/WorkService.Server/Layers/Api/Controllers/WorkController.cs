@@ -11,14 +11,14 @@ namespace WorkService.Server.Layers.Api.Controllers;
 [Route("api/works")]
 public class WorkController(
     IWorkService workService,
-    IWorkConverter workConverter
+    IWorkApiConverter workApiConverter
 ) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<Guid>> CreateWork([FromBody] CreateWorkRequest request)
     {
         var workId = Guid.NewGuid();
-        var workDto = workConverter.ToDto(request, workId);
+        var workDto = workApiConverter.ToDto(request, workId);
         await workService.CreateWorkAsync(workDto);
         return workId;
     }
@@ -32,7 +32,7 @@ public class WorkController(
             return NotFound();
         }
 
-        return workConverter.ToResponse(workDto);
+        return workApiConverter.ToResponse(workDto);
     }
 
     [HttpPatch]
@@ -44,7 +44,7 @@ public class WorkController(
             return NotFound();
         }
 
-        var workDtoToUpdate = workConverter.ToDto(workDto, request);
+        var workDtoToUpdate = workApiConverter.ToDto(workDto, request);
         await workService.UpdateWorkAsync(workDtoToUpdate);
         return Ok();
     }
@@ -58,7 +58,7 @@ public class WorkController(
             return NotFound();
         }
 
-        await workService.DeleteWorkAsync(workId);
+        await workService.DeleteWorkAsync(workDto);
         return Ok();
     }
 }

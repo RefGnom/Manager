@@ -6,16 +6,16 @@ using WorkService.Server.Layers.BusinessLogic.Models;
 
 namespace WorkService.Server.Layers.Api.Converters;
 
-public interface IWorkConverter
+public interface IWorkApiConverter
 {
     WorkDto ToDto(CreateWorkRequest createWorkRequest, Guid workId);
     WorkDto ToDto(WorkDto workDto, PatchWorkRequest patchWorkRequest);
     GetWorkResponse ToResponse(WorkDto workDto);
 }
 
-public class WorkConverter(
+public class WorkApiConverter(
     IDateTimeProvider dateTimeProvider
-) : IWorkConverter
+) : IWorkApiConverter
 {
     public WorkDto ToDto(CreateWorkRequest createWorkRequest, Guid workId)
     {
@@ -23,7 +23,7 @@ public class WorkConverter(
             workId,
             createWorkRequest.RecipientId,
             createWorkRequest.Title,
-            createWorkRequest.Description,
+            createWorkRequest.Description ?? string.Empty,
             WorkStatus.Actual,
             dateTimeProvider.UtcNow,
             createWorkRequest.DeadLineUtc,
