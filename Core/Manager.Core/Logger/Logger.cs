@@ -3,11 +3,8 @@ using Manager.Core.DateTimeProvider;
 
 namespace Manager.Core.Logger;
 
-public class Logger<TContext>(IDateTimeProvider dateTimeProvider) : ILogger<TContext>
+public class ConsoleLogger<TContext>(IDateTimeProvider dateTimeProvider) : ILogger<TContext>
 {
-    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
-
-
     public void LogInfo(string text, params object?[] args)
     {
         Log("Info", text, args, ConsoleColor.Gray);
@@ -26,7 +23,7 @@ public class Logger<TContext>(IDateTimeProvider dateTimeProvider) : ILogger<TCon
     private void Log(string logType, string text, object?[] args, ConsoleColor color)
     {
         var textWithArgs = string.Format(text, args);
-        var currentDateTime = _dateTimeProvider.Now;
+        var currentDateTime = dateTimeProvider.Now;
 
         Console.ForegroundColor = color;
         Console.WriteLine($"{currentDateTime} [{typeof(TContext).Name}] [{logType}] {textWithArgs}");
