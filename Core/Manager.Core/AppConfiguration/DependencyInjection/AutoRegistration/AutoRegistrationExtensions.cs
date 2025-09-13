@@ -26,9 +26,18 @@ public static class AutoRegistrationExtensions
             : serviceCollection.UseAutoRegistrationForAssembly(assembly);
     }
 
-    public static IServiceCollection UseAutoRegistrationForAssembly(
+    public static IServiceCollection UseAutoRegistrationForCoreCommon(
+        this IServiceCollection serviceCollection
+    )
+    {
+        var assembly = Assembly.Load("Manager.Core");
+        return serviceCollection.UseAutoRegistrationForAssembly(assembly, "Manager.Core.Common");
+    }
+
+    private static IServiceCollection UseAutoRegistrationForAssembly(
         this IServiceCollection serviceCollection,
-        Assembly assembly
+        Assembly assembly,
+        string? namespacePrefix = null
     )
     {
         var serviceAssemblies = AssemblyProvider.GetServiceAssemblies();
@@ -38,6 +47,7 @@ public static class AutoRegistrationExtensions
             .Where(x => !x.IsAbstract)
             .SelectMany(x => x.GetInterfaces()
                 .Where(i => serviceAssemblies.Contains(i.Assembly))
+                .Where(i => namespacePrefix is null || i.Namespace!.StartsWith(namespacePrefix))
                 .Select(i =>
                     {
                         var lifetimeAttribute = x.GetCustomAttributes<LifetimeAttribute>().FirstOrDefault();
