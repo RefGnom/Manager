@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
-using Manager.Core.DateTimeProvider;
+using Manager.Core.Common;
 using Manager.Core.Extensions;
 using Manager.Core.Extensions.LinqExtensions;
 using Manager.TimerService.Client.ServiceModels;

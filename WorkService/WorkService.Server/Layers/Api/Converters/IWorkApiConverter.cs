@@ -1,5 +1,5 @@
 ﻿using System;
-using Manager.Core.DateTimeProvider;
+using Manager.Core.Common;
 using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 using WorkService.Server.Layers.Api.Requests;
 using WorkService.Server.Layers.Api.Responses;

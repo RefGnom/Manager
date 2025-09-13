@@ -1,6 +1,6 @@
 using System;
 using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
-using Manager.Core.DateTimeProvider;
+using Manager.Core.Common;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Tool.Configuration;

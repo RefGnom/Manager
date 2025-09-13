@@ -1,6 +1,6 @@
 using Manager.Core.AppConfiguration.DataBase;
 using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
-using Manager.Core.DateTimeProvider;
+using Manager.Core.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

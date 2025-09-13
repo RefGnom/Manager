@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Manager.Core.DateTimeProvider;
+using Manager.Core.Common;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.Layers.RepositoryLayer;
 using Manager.TimerService.Server.Layers.ServiceLayer.Exceptions;
