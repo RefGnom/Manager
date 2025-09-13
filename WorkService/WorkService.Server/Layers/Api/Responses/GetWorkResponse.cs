@@ -1,5 +1,5 @@
 ﻿using System;
-using WorkService.Server.Layers.BusinessLogic.Models;
+using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 
 namespace WorkService.Server.Layers.Api.Responses;
 

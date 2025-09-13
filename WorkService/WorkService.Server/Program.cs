@@ -1,9 +1,10 @@
-using Manager.Core.DependencyInjection.AutoRegistration;
+using Manager.Core.AppConfiguration.DataBase;
+using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace WorkService.Server;
+namespace Manager.WorkService.Server;
 
 public static class Program
 {
@@ -15,6 +16,7 @@ public static class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.UseAutoRegistrationForCurrentAssembly();
+        builder.UseNpg();
 
         var app = builder.Build();
 

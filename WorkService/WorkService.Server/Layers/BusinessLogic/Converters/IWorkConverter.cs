@@ -1,4 +1,4 @@
-﻿using WorkService.Server.Layers.BusinessLogic.Models;
+﻿using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 using WorkService.Server.Layers.Repository.Dbos;
 
 namespace WorkService.Server.Layers.BusinessLogic.Converters;

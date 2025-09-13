@@ -3,12 +3,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Manager.Core.DependencyInjection.AutoRegistration;
+namespace Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
 
 public static class AssemblyProvider
 {
     private const string ServiceName = "Manager";
-    private static readonly string[] ExtensionTemplates = [".exe", ".dll"];
+    private static readonly string[] extensionTemplates = [".exe", ".dll"];
 
     public static Assembly[] GetServiceAssemblies()
     {
@@ -23,7 +23,7 @@ public static class AssemblyProvider
 
     private static bool IsCorrectExtension(string fileName)
     {
-        return ExtensionTemplates.Any(s => fileName.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+        return extensionTemplates.Any(s => fileName.EndsWith(s, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool IsCorrectName(string? path)

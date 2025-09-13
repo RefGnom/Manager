@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Manager.Core.DataBase;
+namespace Manager.Core.AppConfiguration.DataBase;
 
-public class NpgOptions
+public class DataBaseOptions
 {
     public required string ConnectionString { get; set; }
     public required LogLevel LogLevel { get; set; } = LogLevel.Warning;

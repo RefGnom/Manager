@@ -1,12 +1,12 @@
 ﻿using System;
-using Manager.TimerService.Server.Layers.RepositoryLayer;
-using Manager.TimerService.UnitTest.Factories;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Manager.TimerService.Server.Layers.RepositoryLayer;
 using Manager.TimerService.Server.Layers.ServiceLayer.Services;
 using Manager.TimerService.Server.ServiceModels;
+using Manager.TimerService.UnitTest.Factories;
 using NSubstitute;
 using NUnit.Framework;
-using FluentAssertions;
 
 namespace Manager.TimerService.UnitTest.Tests;
 

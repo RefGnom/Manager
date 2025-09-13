@@ -1,8 +1,8 @@
 ﻿using System;
 using Manager.Core.DateTimeProvider;
+using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 using WorkService.Server.Layers.Api.Requests;
 using WorkService.Server.Layers.Api.Responses;
-using WorkService.Server.Layers.BusinessLogic.Models;
 
 namespace WorkService.Server.Layers.Api.Converters;
 

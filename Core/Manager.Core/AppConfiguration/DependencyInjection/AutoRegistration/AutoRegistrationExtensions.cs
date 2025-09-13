@@ -1,10 +1,10 @@
 using System.Linq;
 using System.Reflection;
-using Manager.Core.DependencyInjection.LifetimeAttributes;
+using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
 using Manager.Core.Extensions.LinqExtensions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Manager.Core.DependencyInjection.AutoRegistration;
+namespace Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
 
 public static class AutoRegistrationExtensions
 {
@@ -15,41 +15,40 @@ public static class AutoRegistrationExtensions
         return serviceCollection.UseAutoRegistrationForAssembly(Assembly.GetCallingAssembly());
     }
 
-    public static IServiceCollection UseAutoRegistrationForAssembly<TTypeFromAssembly>(this IServiceCollection serviceCollection)
+    public static IServiceCollection UseAutoRegistrationForAssembly<TTypeFromAssembly>(
+        this IServiceCollection serviceCollection
+    )
     {
         var type = typeof(TTypeFromAssembly);
         var assembly = Assembly.GetAssembly(type);
-        if (assembly is null)
-        {
-            throw new AutoRegistrationException($"Не смогли определить сборку по типу {type}");
-        }
-
-        return serviceCollection.UseAutoRegistrationForAssembly(assembly);
+        return assembly is null
+            ? throw new AutoRegistrationException($"Не смогли определить сборку по типу {type}")
+            : serviceCollection.UseAutoRegistrationForAssembly(assembly);
     }
 
-    public static IServiceCollection UseAutoRegistrationForAssembly(this IServiceCollection serviceCollection, Assembly assembly)
+    public static IServiceCollection UseAutoRegistrationForAssembly(
+        this IServiceCollection serviceCollection,
+        Assembly assembly
+    )
     {
         var serviceAssemblies = AssemblyProvider.GetServiceAssemblies();
 
         assembly.GetExportedTypes()
             .Where(x => !x.IsInterface)
             .Where(x => !x.IsAbstract)
-            .SelectMany(
-                x => x.GetInterfaces()
-                    .Where(i => serviceAssemblies.Contains(i.Assembly))
-                    .Select(
-                        i =>
-                        {
-                            var lifetimeAttribute = x.GetCustomAttributes<LifetimeAttribute>().FirstOrDefault();
-                            var lifetime = lifetimeAttribute?.Lifetime ?? LifestyleByDefault;
-                            return new ServiceDescriptor(i, x, lifetime);
-                        }
-                    )
+            .SelectMany(x => x.GetInterfaces()
+                .Where(i => serviceAssemblies.Contains(i.Assembly))
+                .Select(i =>
+                    {
+                        var lifetimeAttribute = x.GetCustomAttributes<LifetimeAttribute>().FirstOrDefault();
+                        var lifetime = lifetimeAttribute?.Lifetime ?? LifestyleByDefault;
+                        return new ServiceDescriptor(i, x, lifetime);
+                    }
+                )
             )
-            .Select(
-                x => x.TryConvertToGenericDefinition(out var descriptorWithGenericDefinition)
-                    ? descriptorWithGenericDefinition!
-                    : x
+            .Select(x => x.TryConvertToGenericDefinition(out var descriptorWithGenericDefinition)
+                ? descriptorWithGenericDefinition!
+                : x
             )
             .Foreach(serviceCollection.Add);
 

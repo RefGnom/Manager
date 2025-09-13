@@ -1,4 +1,4 @@
-﻿namespace WorkService.Server.Layers.BusinessLogic.Models;
+﻿namespace Manager.WorkService.Server.Layers.BusinessLogic.Models;
 
 public enum WorkStatus
 {

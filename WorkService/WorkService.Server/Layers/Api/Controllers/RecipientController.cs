@@ -6,7 +6,7 @@ using WorkService.Server.Layers.Api.Converters;
 using WorkService.Server.Layers.Api.Responses;
 using WorkService.Server.Layers.BusinessLogic;
 
-namespace WorkService.Server.Layers.Api.Controllers;
+namespace Manager.WorkService.Server.Layers.Api.Controllers;
 
 [Route("api/recipients/{recipientId:guid}/works")]
 public class RecipientController(

@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
-namespace Manager.Core.DataBase;
+namespace Manager.Core.AppConfiguration.DataBase;
 
-internal class DbContextWrapper(IDbContextConfigurator dbContextConfigurator, ILogger logger) : DbContext
+internal class DbContextWrapper(
+    IDbContextConfigurator dbContextConfigurator) : DbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        dbContextConfigurator.ConfigureDbContext(optionsBuilder, logger);
+        dbContextConfigurator.ConfigureDbContext(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

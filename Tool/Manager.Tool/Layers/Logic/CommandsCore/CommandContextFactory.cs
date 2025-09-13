@@ -6,8 +6,6 @@ namespace Manager.Tool.Layers.Logic.CommandsCore;
 
 public class CommandContextFactory(IUserService userService) : ICommandContextFactory
 {
-    private readonly IUserService _userService = userService;
-
     public CommandContext Create(string[] arguments)
     {
         var options = new List<CommandOption>();
@@ -25,7 +23,7 @@ public class CommandContextFactory(IUserService userService) : ICommandContextFa
             }
         }
 
-        var user = _userService.FindUser();
+        var user = userService.FindUser();
         return new CommandContext(user, commandArguments, options.ToArray());
     }
 }

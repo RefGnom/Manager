@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
 using Manager.Core.DateTimeProvider;
-using Manager.Core.DependencyInjection.AutoRegistration;
 using Manager.TimerService.Server.Configurators;
 using Manager.TimerService.Server.Layers.DbLayer;
 using Microsoft.AspNetCore.Builder;

@@ -10,23 +10,17 @@ public static class TimerFactoryMockSetupHelper
         this ITimerDtoFactory factory,
         TimerDto timer,
         TimerDto archivedTimer
-    ) =>
-        factory.CreateArchived(timer)
-            .Returns(archivedTimer);
+    ) => factory.CreateArchived(timer).Returns(archivedTimer);
 
     public static void ConfigureCreateResetTimer(
         this ITimerDtoFactory factory,
         TimerDto timer,
         TimerDto resetTimer
-    ) =>
-        factory.CreateResetTimer(timer)
-            .Returns(timer);
+    ) => factory.CreateResetTimer(timer).Returns(timer);
 
     public static void ConfigureCreateDeletedTimer(
         this ITimerDtoFactory factory,
         TimerDto timer,
         TimerDto archivedTimer
-    ) =>
-        factory.CreateDeletedTimer(timer)
-            .Returns(archivedTimer);
+    ) => factory.CreateDeletedTimer(timer).Returns(archivedTimer);
 }

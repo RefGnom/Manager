@@ -5,6 +5,11 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>false</ImplicitUsings>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <RootNamespace>Manager.WorkService.Server</RootNamespace>
+        <AssemblyName>Manager.WorkService.Server</AssemblyName>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />

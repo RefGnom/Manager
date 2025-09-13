@@ -3,7 +3,8 @@ using Manager.Core.DateTimeProvider;
 
 namespace Manager.Core.Logger;
 
-public class ConsoleLogger<TContext>(IDateTimeProvider dateTimeProvider) : ILogger<TContext>
+public class ConsoleLogger<TContext>(
+    IDateTimeProvider dateTimeProvider) : ILogger<TContext>
 {
     public void LogInfo(string text, params object?[] args)
     {

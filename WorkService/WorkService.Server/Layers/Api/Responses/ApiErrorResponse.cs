@@ -1,6 +1,6 @@
 ﻿using Manager.Core.Extensions;
 
-namespace WorkService.Server.Layers.Api.Responses;
+namespace Manager.WorkService.Server.Layers.Api.Responses;
 
 public class ApiErrorResponse
 {

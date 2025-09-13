@@ -2,7 +2,8 @@ using Manager.Core.Logger;
 
 namespace Manager.Tool.Layers.Logic.ToolLogger;
 
-public class ToolLogger<TContext>(ILogger<TContext> logger) : IToolLogger<TContext>
+public class ToolLogger<TContext>(
+    ILogger<TContext> logger) : IToolLogger<TContext>
 {
     private readonly ILogger<TContext> _logger = logger;
 

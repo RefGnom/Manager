@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace WorkService.Server.Layers.Api.Responses;
+namespace Manager.WorkService.Server.Layers.Api.Responses;
 
 public enum ApiErrorCode
 {

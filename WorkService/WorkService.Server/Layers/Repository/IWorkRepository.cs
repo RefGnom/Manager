@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Manager.Core.DataBase;
+using Manager.Core.AppConfiguration.DataBase;
+using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 using Microsoft.EntityFrameworkCore;
-using WorkService.Server.Layers.BusinessLogic.Models;
 using WorkService.Server.Layers.Repository.Dbos;
 
 namespace WorkService.Server.Layers.Repository;

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Manager.WorkService.Server.Layers.BusinessLogic.Models;
+using WorkService.Server.Layers.BusinessLogic;
 using WorkService.Server.Layers.BusinessLogic.Converters;
-using WorkService.Server.Layers.BusinessLogic.Models;
 using WorkService.Server.Layers.Repository;
 
-namespace WorkService.Server.Layers.BusinessLogic;
+namespace Manager.WorkService.Server.Layers.BusinessLogic;
 
 public class WorkService(
     IWorkRepository workRepository,

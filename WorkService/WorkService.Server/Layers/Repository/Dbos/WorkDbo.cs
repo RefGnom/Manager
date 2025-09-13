@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using WorkService.Server.Layers.BusinessLogic.Models;
+using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 
 namespace WorkService.Server.Layers.Repository.Dbos;
 

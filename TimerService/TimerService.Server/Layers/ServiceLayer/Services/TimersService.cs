@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
 using Manager.Core.DateTimeProvider;
-using Manager.Core.DependencyInjection.LifetimeAttributes;
 using Manager.Core.Extensions;
 using Manager.Core.Extensions.LinqExtensions;
 using Manager.TimerService.Client.ServiceModels;
@@ -21,19 +21,14 @@ public class TimersService(
     ITimerDtoFactory timerDtoFactory
 ) : ITimerService
 {
-    private readonly ITimerRepository _timerRepository = timerRepository;
-    private readonly ITimerSessionService _timerSessionService = timerSessionService;
-    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
-    private readonly ITimerDtoFactory _timerDtoFactory = timerDtoFactory;
-
     public async Task StartAsync(TimerDto timerDto)
     {
-        var timer = await _timerRepository.FindAsync(timerDto.UserId, timerDto.Name);
+        var timer = await timerRepository.FindAsync(timerDto.UserId, timerDto.Name);
         if (timer is null)
         {
             timerDto.Status = TimerStatus.Started;
-            await _timerRepository.CreateAsync(timerDto);
-            await _timerSessionService.StartAsync(timerDto.Id, timerDto.StartTime!.Value);
+            await timerRepository.CreateAsync(timerDto);
+            await timerSessionService.StartAsync(timerDto.Id, timerDto.StartTime!.Value);
             return;
         }
 
@@ -43,13 +38,13 @@ public class TimersService(
         }
 
         timer.Status = TimerStatus.Started;
-        await _timerRepository.UpdateAsync(timer);
-        await _timerSessionService.StartAsync(timer.Id, timerDto.StartTime!.Value);
+        await timerRepository.UpdateAsync(timer);
+        await timerSessionService.StartAsync(timer.Id, timerDto.StartTime!.Value);
     }
 
     public async Task<TimerDto[]> SelectByUserAsync(Guid userId, bool withArchived, bool withDeleted)
     {
-        var dtos = await _timerRepository.SelectByUserAsync(userId);
+        var dtos = await timerRepository.SelectByUserAsync(userId);
         if (!withArchived)
         {
             dtos = dtos
@@ -65,14 +60,14 @@ public class TimersService(
         }
 
         await dtos.ForeachAsync(
-            async x => x.Sessions = await _timerSessionService.SelectByTimerAsync(x.Id)
+            async x => x.Sessions = await timerSessionService.SelectByTimerAsync(x.Id)
         );
         return dtos;
     }
 
     public async Task StopAsync(Guid userId, string name, DateTime stopTime)
     {
-        var timer = await _timerRepository.FindAsync(userId, name);
+        var timer = await timerRepository.FindAsync(userId, name);
         if (timer is null)
         {
             throw new NotFoundException($"Timer with name: {name} does not exist.");
@@ -87,13 +82,13 @@ public class TimersService(
         }
 
         timer.Status = TimerStatus.Stopped;
-        await _timerRepository.UpdateAsync(timer);
-        await _timerSessionService.StopTimerSessionAsync(timer.Id, stopTime);
+        await timerRepository.UpdateAsync(timer);
+        await timerSessionService.StopTimerSessionAsync(timer.Id, stopTime);
     }
 
     public async Task ResetAsync(Guid userId, string name)
     {
-        var timer = await _timerRepository.FindAsync(userId, name);
+        var timer = await timerRepository.FindAsync(userId, name);
         if (timer is null)
         {
             throw new NotFoundException($"Timer with name: {name} does not exist.");
@@ -108,18 +103,18 @@ public class TimersService(
         }
 
         await ArchiveAsync(timer);
-        var newTimer = _timerDtoFactory.CreateResetTimer(timer);
-        await _timerRepository.CreateAsync(newTimer);
+        var newTimer = timerDtoFactory.CreateResetTimer(timer);
+        await timerRepository.CreateAsync(newTimer);
     }
 
     public Task<TimerDto?> FindAsync(Guid userId, string name)
     {
-        return _timerRepository.FindAsync(userId, name);
+        return timerRepository.FindAsync(userId, name);
     }
 
     public async Task DeleteAsync(Guid userId, string name)
     {
-        var timer = await _timerRepository.FindAsync(userId, name);
+        var timer = await timerRepository.FindAsync(userId, name);
         if (timer is null)
         {
             throw new NotFoundException($"Timer with name: {name} does not exist.");
@@ -133,18 +128,18 @@ public class TimersService(
             );
         }
 
-        var deletedTimer = _timerDtoFactory.CreateDeletedTimer(timer);
-        await _timerRepository.UpdateAsync(deletedTimer);
+        var deletedTimer = timerDtoFactory.CreateDeletedTimer(timer);
+        await timerRepository.UpdateAsync(deletedTimer);
     }
 
     public TimeSpan CalculateElapsedTime(TimerDto timerDto) => timerDto.Sessions.Aggregate(
         TimeSpan.Zero,
-        (current, session) => current + ((session.StopTime ?? _dateTimeProvider.UtcNow) - session.StartTime)
+        (current, session) => current + ((session.StopTime ?? dateTimeProvider.UtcNow) - session.StartTime)
     );
 
     public Task ArchiveAsync(TimerDto timerToArchiving)
     {
-        var archivedTimer = _timerDtoFactory.CreateArchived(timerToArchiving);
-        return _timerRepository.UpdateAsync(archivedTimer);
+        var archivedTimer = timerDtoFactory.CreateArchived(timerToArchiving);
+        return timerRepository.UpdateAsync(archivedTimer);
     }
 }

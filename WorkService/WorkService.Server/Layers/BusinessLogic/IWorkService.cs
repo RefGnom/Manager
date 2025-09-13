@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using WorkService.Server.Layers.BusinessLogic.Models;
+using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 
 namespace WorkService.Server.Layers.BusinessLogic;
 

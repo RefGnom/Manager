@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Manager.Core.DataBase;
+namespace Manager.Core.AppConfiguration.DataBase;
 
 public interface IDataContext
 {
