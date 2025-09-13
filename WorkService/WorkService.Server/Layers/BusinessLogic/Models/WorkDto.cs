@@ -6,7 +6,7 @@ public record WorkDto(
     Guid Id,
     Guid RecipientId,
     string Title,
-    string Description,
+    string? Description,
     WorkStatus WorkStatus,
     DateTime CreatedUtc,
     DateTime? DeadLineUtc,

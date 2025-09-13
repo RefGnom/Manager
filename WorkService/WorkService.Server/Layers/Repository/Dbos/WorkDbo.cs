@@ -18,7 +18,7 @@ public class WorkDbo
     public required string Title { get; set; }
 
     [Column("description")]
-    public required string Description { get; set; }
+    public string? Description { get; set; }
 
     [Column("status")]
     public required WorkStatus WorkStatus { get; set; }

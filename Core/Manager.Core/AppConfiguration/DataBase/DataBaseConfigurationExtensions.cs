@@ -1,17 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Manager.Core.AppConfiguration.DataBase;
 
 public static class DataBaseConfigurationExtensions
 {
-    public static IHostApplicationBuilder UseNpg(this IHostApplicationBuilder builder)
+    public static IServiceCollection UseNpg(this IServiceCollection serviceCollection)
     {
-        builder.Services.Configure<DataBaseOptions>(builder.Configuration.GetSection(nameof(DataBaseOptions)));
-        builder.Services.AddSingleton<IDbContextConfigurator, NpgDbContextConfigurator>();
-        builder.Services.AddSingleton<IDbContextWrapperFactory, DbContextWrapperFactory>();
-        builder.Services.AddSingleton<IDataContext, DataContext>();
+        serviceCollection.ConfigureOptionsWithValidation<DataBaseOptions>();
+        serviceCollection.AddSingleton<IDbContextConfigurator, NpgDbContextConfigurator>();
+        serviceCollection.AddSingleton<IDbContextWrapperFactory, DbContextWrapperFactory>();
+        serviceCollection.AddSingleton<IDataContext, DataContext>();
 
-        return builder;
+        return serviceCollection;
     }
 }

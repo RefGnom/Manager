@@ -3,7 +3,8 @@
 namespace Manager.Core.AppConfiguration.DataBase;
 
 internal class DbContextWrapper(
-    IDbContextConfigurator dbContextConfigurator) : DbContext
+    IDbContextConfigurator dbContextConfigurator
+) : DbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

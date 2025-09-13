@@ -23,7 +23,7 @@ public class WorkApiConverter(
             workId,
             createWorkRequest.RecipientId,
             createWorkRequest.Title,
-            createWorkRequest.Description ?? string.Empty,
+            createWorkRequest.Description,
             WorkStatus.Actual,
             dateTimeProvider.UtcNow,
             createWorkRequest.DeadLineUtc,
