@@ -9,6 +9,8 @@ public static class DataBaseConfigurationExtensions
     {
         builder.Services.Configure<DataBaseOptions>(builder.Configuration.GetSection(nameof(DataBaseOptions)));
         builder.Services.AddSingleton<IDbContextConfigurator, NpgDbContextConfigurator>();
+        builder.Services.AddSingleton<IDbContextWrapperFactory, DbContextWrapperFactory>();
+        builder.Services.AddSingleton<IDataContext, DataContext>();
 
         return builder;
     }

@@ -1,5 +1,6 @@
 using Manager.Core.AppConfiguration.DataBase;
 using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
+using Manager.Core.DateTimeProvider;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,6 +17,7 @@ public static class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.UseAutoRegistrationForCurrentAssembly();
+        builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         builder.UseNpg();
 
         var app = builder.Build();
