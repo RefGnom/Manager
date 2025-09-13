@@ -10,11 +10,9 @@ public class StopTimerCommandExecutor(
     IToolLogger<StopTimerCommandExecutor> logger
 ) : CommandExecutorBase<StopTimerCommand>(toolCommandFactory)
 {
-    private readonly IToolLogger<StopTimerCommandExecutor> _logger = logger;
-
     public override Task ExecuteAsync(CommandContext context)
     {
-        _logger.LogInfo(
+        logger.LogInfo(
             context.IsDebugMode,
             "Выполняем команду {0} с аргументами {1}",
             context.Arguments,

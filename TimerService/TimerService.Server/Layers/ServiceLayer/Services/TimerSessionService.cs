@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Manager.Core.DependencyInjection.LifetimeAttributes;
+using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
 using Manager.TimerService.Server.Layers.RepositoryLayer;
 using Manager.TimerService.Server.ServiceModels;
 
@@ -10,14 +10,11 @@ namespace Manager.TimerService.Server.Layers.ServiceLayer.Services;
 [Scoped]
 public class TimerSessionService(
     ITimerSessionRepository repository
-)
-    : ITimerSessionService
+) : ITimerSessionService
 {
-    private readonly ITimerSessionRepository _repository = repository;
-
     public async Task StartAsync(Guid timerId, DateTime startTime)
     {
-        await _repository.CreateAsync(
+        await repository.CreateAsync(
             new TimerSessionDto
             {
                 Id = Guid.NewGuid(),
@@ -31,14 +28,14 @@ public class TimerSessionService(
 
     public async Task<TimerSessionDto[]> SelectByTimerAsync(Guid timerId)
     {
-        return await _repository.SelectByTimerAsync(timerId);
+        return await repository.SelectByTimerAsync(timerId);
     }
 
     public async Task StopTimerSessionAsync(Guid timerId, DateTime stopTimer)
     {
         var timerSessions = await SelectByTimerAsync(timerId);
         var lastSession = timerSessions
-            .Where(x => x.IsOver == false)
+            .Where(x => !x.IsOver)
             !.FirstOrDefault();
         if (lastSession is null)
         {
@@ -47,6 +44,6 @@ public class TimerSessionService(
 
         lastSession.StopTime = stopTimer;
         lastSession.IsOver = true;
-        await _repository.UpdateAsync(lastSession);
+        await repository.UpdateAsync(lastSession);
     }
 }

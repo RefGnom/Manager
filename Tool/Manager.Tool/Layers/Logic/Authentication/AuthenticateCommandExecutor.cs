@@ -12,27 +12,24 @@ public class AuthenticateCommandExecutor(
     IUserService userService
 ) : CommandExecutorBase<AuthenticateCommand>(toolCommandFactory)
 {
-    private readonly IUserLogger _userLogger = userLogger;
-    private readonly IUserService _userService = userService;
-
-    public async override Task ExecuteAsync(CommandContext context)
+    public override async Task ExecuteAsync(CommandContext context)
     {
         var loginFlag = context.Options.FirstOrDefault(x => x.Argument == "--login");
         if (loginFlag is null)
         {
-            _userLogger.LogUserMessage("Для аутентификации необходим аргумент \"--login\"");
+            userLogger.LogUserMessage("Для аутентификации необходим аргумент \"--login\"");
             return;
         }
 
         if (loginFlag.Value is null)
         {
-            _userLogger.LogUserMessage("У аргумента \"--login\" должно быть значение - ваш логин");
+            userLogger.LogUserMessage("У аргумента \"--login\" должно быть значение - ваш логин");
             return;
         }
 
         // отправляем логин в сервер и получем идентификатор пользователя
 
-        await _userService.SaveUserIdAsync(Guid.NewGuid());
-        _userLogger.LogUserMessage("Аутентификация прошла успешно");
+        await userService.SaveUserIdAsync(Guid.NewGuid());
+        userLogger.LogUserMessage("Аутентификация прошла успешно");
     }
 }

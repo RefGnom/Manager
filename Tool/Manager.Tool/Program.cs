@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Tool;
 
-public class Program
+public static class Program
 {
     private static async Task Main(string[] args)
     {

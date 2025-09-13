@@ -1,6 +1,6 @@
 using System;
+using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
 using Manager.Core.DateTimeProvider;
-using Manager.Core.DependencyInjection.LifetimeAttributes;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.ServiceModels;
 

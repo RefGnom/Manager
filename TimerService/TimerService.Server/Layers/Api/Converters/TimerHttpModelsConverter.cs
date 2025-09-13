@@ -10,8 +10,6 @@ public class TimerHttpModelsConverter(
     ITimerSessionHttpModelConverter timerSessionHttpModelConverter
 ) : ITimerHttpModelsConverter
 {
-    private readonly ITimerSessionHttpModelConverter _timerSessionHttpModelConverter = timerSessionHttpModelConverter;
-
     public TimerDto FromStartRequest(StartTimerRequest startTimerRequest)
     {
         var timerId = Guid.NewGuid();
@@ -30,7 +28,7 @@ public class TimerHttpModelsConverter(
     public TimerResponse ConvertToTimerResponse(TimerDto timerDto, TimeSpan elapsedTime)
     {
         var sessions = timerDto.Sessions
-            .Select(x => _timerSessionHttpModelConverter.ConvertToTimerSessionResponse(x))
+            .Select(timerSessionHttpModelConverter.ConvertToTimerSessionResponse)
             .ToArray();
 
         return new TimerResponse

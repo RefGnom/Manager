@@ -1,5 +1,5 @@
 using System;
 
-namespace Manager.Core.DependencyInjection.AutoRegistration;
+namespace Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
 
 public class AutoRegistrationException(string message) : Exception(message);

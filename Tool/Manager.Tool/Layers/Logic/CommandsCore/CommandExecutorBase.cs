@@ -3,14 +3,13 @@ using System.Threading.Tasks;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
-public abstract class CommandExecutorBase<TCommand>(IToolCommandFactory toolCommandFactory) : ICommandExecutor
-    where TCommand : IToolCommand, new()
+public abstract class CommandExecutorBase<TCommand>(
+    IToolCommandFactory toolCommandFactory
+) : ICommandExecutor where TCommand : IToolCommand, new()
 {
-    private readonly IToolCommandFactory _toolCommandFactory = toolCommandFactory;
-
     public virtual bool CanExecute(CommandContext context)
     {
-        var command = _toolCommandFactory.CreateCommand<TCommand>();
+        var command = toolCommandFactory.CreateCommand<TCommand>();
 
         var spaceLength = command.CommandSpace.Values.Length;
         var argumentsSpace = (CommandSpace)context.Arguments.Take(spaceLength).ToArray();
