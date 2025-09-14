@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Manager.Core.AppConfiguration.DataBase;
 using Manager.WorkService.Server.Layers.BusinessLogic.Models;
+using Manager.WorkService.Server.Layers.Repository.Dbos;
 using Microsoft.EntityFrameworkCore;
-using WorkService.Server.Layers.Repository.Dbos;
 
-namespace WorkService.Server.Layers.Repository;
+namespace Manager.WorkService.Server.Layers.Repository;
 
 public interface IWorkRepository
 {

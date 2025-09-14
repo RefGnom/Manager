@@ -1,7 +1,7 @@
 ﻿using Manager.WorkService.Server.Layers.BusinessLogic.Models;
-using WorkService.Server.Layers.Repository.Dbos;
+using Manager.WorkService.Server.Layers.Repository.Dbos;
 
-namespace WorkService.Server.Layers.BusinessLogic.Converters;
+namespace Manager.WorkService.Server.Layers.BusinessLogic.Converters;
 
 public interface IWorkConverter
 {

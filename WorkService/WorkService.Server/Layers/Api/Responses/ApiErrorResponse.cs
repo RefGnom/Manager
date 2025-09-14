@@ -1,4 +1,4 @@
-﻿using Manager.Core.Extensions;
+﻿using Manager.Core.Common.Enum;
 
 namespace Manager.WorkService.Server.Layers.Api.Responses;
 

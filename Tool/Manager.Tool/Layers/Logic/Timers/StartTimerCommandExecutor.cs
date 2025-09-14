@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Manager.Core.Extensions.LinqExtensions;
+using Manager.Core.Common.Linq;
 using Manager.Tool.Layers.Logic.CommandsCore;
 using Manager.Tool.Layers.Logic.ToolLogger;
 

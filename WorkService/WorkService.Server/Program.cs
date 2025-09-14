@@ -13,10 +13,10 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer()
-            .AddSwaggerGen()
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
-            .UseNpg();
+            .UseNpg()
+            .AddSwaggerGen();
 
         var app = builder.Build();
 

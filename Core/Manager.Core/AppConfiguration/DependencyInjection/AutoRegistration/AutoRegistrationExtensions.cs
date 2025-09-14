@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Reflection;
 using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
-using Manager.Core.Extensions.LinqExtensions;
+using Manager.Core.Common.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
@@ -30,8 +30,8 @@ public static class AutoRegistrationExtensions
         this IServiceCollection serviceCollection
     )
     {
-        var assembly = Assembly.Load("Manager.Core");
-        return serviceCollection.UseAutoRegistrationForAssembly(assembly, "Manager.Core.Common");
+        var assembly = Assembly.Load("Manager.Core.Common");
+        return serviceCollection.UseAutoRegistrationForAssembly(assembly);
     }
 
     private static IServiceCollection UseAutoRegistrationForAssembly(

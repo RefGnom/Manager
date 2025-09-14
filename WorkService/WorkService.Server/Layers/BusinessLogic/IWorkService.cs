@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 
-namespace WorkService.Server.Layers.BusinessLogic;
+namespace Manager.WorkService.Server.Layers.BusinessLogic;
 
 public interface IWorkService
 {

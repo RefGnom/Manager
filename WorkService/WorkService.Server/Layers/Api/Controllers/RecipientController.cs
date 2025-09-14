@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Manager.WorkService.Server.Layers.Api.Converters;
+using Manager.WorkService.Server.Layers.Api.Responses;
+using Manager.WorkService.Server.Layers.BusinessLogic;
 using Microsoft.AspNetCore.Mvc;
-using WorkService.Server.Layers.Api.Converters;
-using WorkService.Server.Layers.Api.Responses;
-using WorkService.Server.Layers.BusinessLogic;
 
 namespace Manager.WorkService.Server.Layers.Api.Controllers;
 

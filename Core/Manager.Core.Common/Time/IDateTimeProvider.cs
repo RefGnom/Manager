@@ -1,6 +1,6 @@
 using System;
 
-namespace Manager.Core.Common;
+namespace Manager.Core.Common.Time;
 
 public interface IDateTimeProvider
 {

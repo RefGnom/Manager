@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Manager.WorkService.Server.Layers.BusinessLogic.Converters;
 using Manager.WorkService.Server.Layers.BusinessLogic.Models;
-using WorkService.Server.Layers.BusinessLogic;
-using WorkService.Server.Layers.BusinessLogic.Converters;
-using WorkService.Server.Layers.Repository;
+using Manager.WorkService.Server.Layers.Repository;
 
 namespace Manager.WorkService.Server.Layers.BusinessLogic;
 

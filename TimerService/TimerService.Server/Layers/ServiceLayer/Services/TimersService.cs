@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
-using Manager.Core.Common;
-using Manager.Core.Extensions;
-using Manager.Core.Extensions.LinqExtensions;
+using Manager.Core.Common.Enum;
+using Manager.Core.Common.Linq;
+using Manager.Core.Common.Time;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.Layers.RepositoryLayer;
 using Manager.TimerService.Server.Layers.ServiceLayer.Exceptions;
