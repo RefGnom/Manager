@@ -10,7 +10,7 @@ namespace Manager.Core.AppConfiguration.DataBase;
 
 public abstract class DbContextConfiguratorBase(
     IOptions<DataBaseOptions> dataBaseOptions,
-    ILogger logger
+    ILogger<DbContextConfiguratorBase> logger
 ) : IDbContextConfigurator
 {
     private readonly DataBaseOptions dataBaseOptionsValue = dataBaseOptions.Value;
@@ -20,7 +20,7 @@ public abstract class DbContextConfiguratorBase(
     public void ConfigureDbContext(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.LogTo(
-            (_, logLevel) => logLevel >= dataBaseOptionsValue.LogLevel,
+            (_, _) => true,
             x => logger.Log(x.LogLevel, "{dbLog}", x.ToString())
         );
         if (dataBaseOptionsValue.EnableSensitiveDataLogging)
