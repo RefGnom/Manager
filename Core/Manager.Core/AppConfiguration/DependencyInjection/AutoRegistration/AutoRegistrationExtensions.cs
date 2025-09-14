@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Reflection;
 using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
-using Manager.Core.Extensions.LinqExtensions;
+using Manager.Core.Common.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
@@ -26,9 +26,18 @@ public static class AutoRegistrationExtensions
             : serviceCollection.UseAutoRegistrationForAssembly(assembly);
     }
 
-    public static IServiceCollection UseAutoRegistrationForAssembly(
+    public static IServiceCollection UseAutoRegistrationForCoreCommon(
+        this IServiceCollection serviceCollection
+    )
+    {
+        var assembly = Assembly.Load("Manager.Core.Common");
+        return serviceCollection.UseAutoRegistrationForAssembly(assembly);
+    }
+
+    private static IServiceCollection UseAutoRegistrationForAssembly(
         this IServiceCollection serviceCollection,
-        Assembly assembly
+        Assembly assembly,
+        string? namespacePrefix = null
     )
     {
         var serviceAssemblies = AssemblyProvider.GetServiceAssemblies();
@@ -38,6 +47,7 @@ public static class AutoRegistrationExtensions
             .Where(x => !x.IsAbstract)
             .SelectMany(x => x.GetInterfaces()
                 .Where(i => serviceAssemblies.Contains(i.Assembly))
+                .Where(i => namespacePrefix is null || i.Namespace!.StartsWith(namespacePrefix))
                 .Select(i =>
                     {
                         var lifetimeAttribute = x.GetCustomAttributes<LifetimeAttribute>().FirstOrDefault();

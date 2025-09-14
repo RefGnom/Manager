@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Manager.Core;
+namespace Manager.Core.Common.Helpers;
 
 public static class DeepCopier
 {

@@ -1,10 +1,10 @@
 ﻿using System;
-using Manager.Core.DateTimeProvider;
+using Manager.Core.Common.Time;
+using Manager.WorkService.Server.Layers.Api.Requests;
+using Manager.WorkService.Server.Layers.Api.Responses;
 using Manager.WorkService.Server.Layers.BusinessLogic.Models;
-using WorkService.Server.Layers.Api.Requests;
-using WorkService.Server.Layers.Api.Responses;
 
-namespace WorkService.Server.Layers.Api.Converters;
+namespace Manager.WorkService.Server.Layers.Api.Converters;
 
 public interface IWorkApiConverter
 {

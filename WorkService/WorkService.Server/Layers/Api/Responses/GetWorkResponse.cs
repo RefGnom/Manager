@@ -1,7 +1,7 @@
 ﻿using System;
 using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 
-namespace WorkService.Server.Layers.Api.Responses;
+namespace Manager.WorkService.Server.Layers.Api.Responses;
 
 public class GetWorkResponse
 {

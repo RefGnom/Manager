@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 
-namespace WorkService.Server.Layers.Repository.Dbos;
+namespace Manager.WorkService.Server.Layers.Repository.Dbos;
 
 [Table("works")]
 public class WorkDbo

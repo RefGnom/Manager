@@ -1,5 +1,5 @@
 using System;
-using Manager.Core.DateTimeProvider;
+using Manager.Core.Common.Time;
 
 namespace Manager.Core.Logger;
 

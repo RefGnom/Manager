@@ -1,5 +1,5 @@
 ﻿using System;
-using Manager.Core;
+using Manager.Core.Common.Helpers;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.ServiceModels;
 

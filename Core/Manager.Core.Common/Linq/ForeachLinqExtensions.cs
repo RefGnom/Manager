@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Manager.Core.Extensions.LinqExtensions;
+namespace Manager.Core.Common.Linq;
 
 public static class ForeachLinqExtensions
 {

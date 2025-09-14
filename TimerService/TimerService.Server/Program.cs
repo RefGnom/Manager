@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
-using Manager.Core.DateTimeProvider;
 using Manager.TimerService.Server.Configurators;
 using Manager.TimerService.Server.Layers.DbLayer;
 using Microsoft.AspNetCore.Builder;
@@ -19,8 +18,8 @@ builder.Services.AddDbContext<ManagerDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-builder.Services.AddTransient<IDateTimeProvider, DateTimeProvider>();
-builder.Services.UseAutoRegistrationForCurrentAssembly();
+builder.Services.UseAutoRegistrationForCurrentAssembly()
+    .UseAutoRegistrationForCoreCommon();
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(

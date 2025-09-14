@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Manager.WorkService.Server.Layers.Api.Converters;
+using Manager.WorkService.Server.Layers.Api.Requests;
+using Manager.WorkService.Server.Layers.Api.Responses;
+using Manager.WorkService.Server.Layers.BusinessLogic;
 using Microsoft.AspNetCore.Mvc;
-using WorkService.Server.Layers.Api.Converters;
-using WorkService.Server.Layers.Api.Requests;
-using WorkService.Server.Layers.Api.Responses;
-using WorkService.Server.Layers.BusinessLogic;
 
-namespace WorkService.Server.Layers.Api.Controllers;
+namespace Manager.WorkService.Server.Layers.Api.Controllers;
 
 [Route("api/works")]
 public class WorkController(

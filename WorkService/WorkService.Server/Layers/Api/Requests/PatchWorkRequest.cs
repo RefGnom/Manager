@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkService.Server.Layers.Api.Requests;
+namespace Manager.WorkService.Server.Layers.Api.Requests;
 
 public class PatchWorkRequest
 {
