@@ -6,7 +6,7 @@ namespace Manager.Core.AppConfiguration.DataBase;
 
 public class NpgDbContextConfigurator(
     IOptions<DataBaseOptions> dataBaseOptions,
-    ILogger<NpgDbContextConfigurator> logger
+    ILogger<DbContextConfiguratorBase> logger
 ) : DbContextConfiguratorBase(dataBaseOptions, logger)
 {
     protected override void InnerConfigureDbContext(DbContextOptionsBuilder optionsBuilder, string connectionString)

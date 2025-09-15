@@ -13,11 +13,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+        <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
     </ItemGroup>
 
 </Project>
