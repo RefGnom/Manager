@@ -1,0 +1,9 @@
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Override": {
+        "Manager.Core.AppConfiguration.DataBase.DbContextConfiguratorBase": "Information"
+      }
+    }
+  }
+}

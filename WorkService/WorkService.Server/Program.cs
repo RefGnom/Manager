@@ -1,9 +1,10 @@
 using Manager.Core.AppConfiguration.DataBase;
 using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
+using Manager.Core.Logging.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Manager.WorkService.Server;
 
@@ -12,24 +13,18 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        using var loggerOnConfiguration = new LoggerConfiguration()
-            .ReadFrom.Configuration(builder.Configuration)
-            .CreateLogger();
-        Log.Logger = loggerOnConfiguration;
-        builder.Host.UseSerilog();
+        var startupLogger = builder.AddCustomLogger();
 
         builder.Services.AddControllers();
-        Log.Information("Start configuration service collection");
+        startupLogger.LogInformation("Start configuration service collection");
         builder.Services.AddEndpointsApiExplorer()
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
             .UseNpg()
             .AddSwaggerGen();
-        Log.Information("Service collection configured");
+        startupLogger.LogInformation("Service collection configured");
 
-
-        Log.Information("Build application");
+        startupLogger.LogInformation("Build application");
         var app = builder.Build();
 
         app.MapControllers();
@@ -39,7 +34,10 @@ public static class Program
             app.UseSwaggerUI();
         }
 
-        Log.Information("Application is started");
+        startupLogger.LogInformation("Application is started");
+        startupLogger.LogWarning("Application is started");
+        startupLogger.LogError("Application is started");
+        startupLogger.LogCritical("Application is started");
         app.Run();
     }
 }
