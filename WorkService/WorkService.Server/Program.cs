@@ -35,9 +35,6 @@ public static class Program
         }
 
         startupLogger.LogInformation("Application is started");
-        startupLogger.LogWarning("Application is started");
-        startupLogger.LogError("Application is started");
-        startupLogger.LogCritical("Application is started");
         app.Run();
     }
 }
