@@ -15,7 +15,7 @@
         "Args": {
           "formatter": {
             "type": "Serilog.Templates.ExpressionTemplate, Serilog.Expressions",
-            "template": "{@t:yyyy-MM-dd hh:mm:ss,fff} {#if @l = 'Information'}Info{#else if @l = 'Warning'}Warn{#else}{@l}{#end}{#if @tr is not null} [T-{@tr}]{#end}{#if SourceContext is not null} [{SourceContext}]{#end} {@m}\n{@x}",
+            "template": "{@t:yyyy-MM-dd hh:mm:ss,fff} {@l}{#if @tr is not null} [T-{@tr}]{#end}{#if SourceContext is not null} [{SourceContext}]{#end} {@m}\n{@x}",
             "theme": "Serilog.Templates.Themes.TemplateTheme::Literate, Serilog.Expressions"
           }
         }
