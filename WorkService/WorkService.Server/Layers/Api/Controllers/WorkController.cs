@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Manager.WorkService.Server.Layers.Api.Controllers;
 
+[ApiController]
 [Route("api/works")]
 public class WorkController(
     IWorkService workService,
