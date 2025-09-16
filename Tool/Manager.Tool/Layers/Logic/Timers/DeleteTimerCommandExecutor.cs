@@ -2,8 +2,8 @@ using System.Net;
 using System.Threading.Tasks;
 using Manager.TimerService.Client;
 using Manager.Tool.Layers.Logic.CommandsCore;
-using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
+using Microsoft.Extensions.Logging;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 
@@ -12,32 +12,28 @@ public class DeleteTimerCommandExecutor(
     ITimerRequestFactory timerRequestFactory,
     ITimerServiceApiClient timerServiceApiClient,
     IToolWriter toolWriter,
-    IToolLogger<DeleteTimerCommand> logger
+    ILogger<DeleteTimerCommand> logger
 ) : CommandExecutorBase<DeleteTimerCommand>(toolCommandFactory, logger)
 {
-    private readonly ITimerRequestFactory _timerRequestFactory = timerRequestFactory;
-    private readonly ITimerServiceApiClient _timerServiceApiClient = timerServiceApiClient;
-    private readonly IToolWriter _toolWriter = toolWriter;
-
-    protected async override Task ExecuteAsync(CommandContext context, DeleteTimerCommand command)
+    protected override async Task ExecuteAsync(CommandContext context, DeleteTimerCommand command)
     {
         var timerName = context.GetCommandArgument(command.CommandName) ?? TimerCommandConstants.DefaultTimerName;
 
-        var deleteTimerRequest = _timerRequestFactory.CreateDeleteTimerRequest(context.EnsureUser().Id, timerName);
-        var httpResponse = await _timerServiceApiClient.DeleteTimerAsync(deleteTimerRequest);
+        var deleteTimerRequest = timerRequestFactory.CreateDeleteTimerRequest(context.EnsureUser().Id, timerName);
+        var httpResponse = await timerServiceApiClient.DeleteTimerAsync(deleteTimerRequest);
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            _toolWriter.WriteMessage("Таймер успешно удалён");
+            toolWriter.WriteMessage("Таймер успешно удалён");
             return;
         }
 
         if (httpResponse.StatusCode is HttpStatusCode.NotFound)
         {
-            _toolWriter.WriteMessage("Не нашли таймер с именем {0}", timerName);
+            toolWriter.WriteMessage("Не нашли таймер с именем {0}", timerName);
             return;
         }
 
-        _toolWriter.WriteMessage("Ошибка при удалении таймера: {0}", httpResponse.ResponseMessage);
+        toolWriter.WriteMessage("Ошибка при удалении таймера: {0}", httpResponse.ResponseMessage);
     }
 }

@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Manager.TimerService.Client;
 using Manager.Tool.Layers.Logic.CommandsCore;
-using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
+using Microsoft.Extensions.Logging;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 
@@ -12,42 +12,37 @@ public class StartTimerCommandExecutor(
     ITimerServiceApiClient timerServiceApiClient,
     IToolWriter toolWriter,
     IUserTimeService userTimeService,
-    IToolLogger<StartTimerCommand> logger
+    ILogger<StartTimerCommand> logger
 ) : CommandExecutorBase<StartTimerCommand>(toolCommandFactory, logger)
 {
-    private readonly ITimerRequestFactory _timerRequestFactory = timerRequestFactory;
-    private readonly ITimerServiceApiClient _timerServiceApiClient = timerServiceApiClient;
-    private readonly IToolWriter _toolWriter = toolWriter;
-    private readonly IUserTimeService _userTimeService = userTimeService;
-
-    protected async override Task ExecuteAsync(CommandContext context, StartTimerCommand command)
+    protected override async Task ExecuteAsync(CommandContext context, StartTimerCommand command)
     {
         var user = context.EnsureUser();
         var timerName = context.GetCommandArgument(command.CommandName) ?? TimerCommandConstants.DefaultTimerName;
-        var startTimeResult = context.GetDateTimeOptionValue(command.StartTimeOption) ?? _userTimeService.GetUserTime(user);
+        var startTimeResult = context.GetDateTimeOptionValue(command.StartTimeOption) ?? userTimeService.GetUserTime(user);
         var pingTimeoutResult = context.GetTimeSpanOptionValue(command.PingTimeoutOption);
 
         if (!startTimeResult.IsSuccess)
         {
-            _toolWriter.WriteMessage(startTimeResult.FailureMessage);
+            toolWriter.WriteMessage(startTimeResult.Error);
             return;
         }
 
         if (pingTimeoutResult?.IsSuccess == false)
         {
-            _toolWriter.WriteMessage(pingTimeoutResult.FailureMessage);
+            toolWriter.WriteMessage(pingTimeoutResult.Error);
             return;
         }
 
-        var startTimerRequest = _timerRequestFactory.CreateStartTimerRequest(user.Id, timerName, startTimeResult.Value, pingTimeoutResult?.Value);
-        var startTimerResponse = await _timerServiceApiClient.StartTimerAsync(startTimerRequest);
+        var startTimerRequest = timerRequestFactory.CreateStartTimerRequest(user.Id, timerName, startTimeResult.Value, pingTimeoutResult?.Value);
+        var startTimerResponse = await timerServiceApiClient.StartTimerAsync(startTimerRequest);
 
         if (startTimerResponse.IsSuccessStatusCode)
         {
-            _toolWriter.WriteMessage("Таймер успешно запущен");
+            toolWriter.WriteMessage("Таймер успешно запущен");
             return;
         }
 
-        _toolWriter.WriteMessage(startTimerResponse.ResponseMessage ?? "Неизвестная ошибка");
+        toolWriter.WriteMessage(startTimerResponse.ResponseMessage ?? "Неизвестная ошибка");
     }
 }

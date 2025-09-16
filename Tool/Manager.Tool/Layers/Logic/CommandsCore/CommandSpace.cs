@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Manager.Core.Extensions.LinqExtensions;
+using Manager.Core.Common.Linq;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 

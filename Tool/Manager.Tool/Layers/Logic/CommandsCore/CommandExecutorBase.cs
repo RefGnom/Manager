@@ -1,16 +1,14 @@
 using System.Threading.Tasks;
-using Manager.Tool.Layers.Logic.ToolLogger;
+using Microsoft.Extensions.Logging;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
 public abstract class CommandExecutorBase<TCommand>(
     IToolCommandFactory toolCommandFactory,
-    IToolLogger<TCommand> logger
+    ILogger<TCommand> logger
 ) : ICommandExecutor
     where TCommand : IToolCommand, new()
 {
-    private readonly IToolCommandFactory _toolCommandFactory = toolCommandFactory;
-    private readonly IToolLogger<TCommand> _logger = logger;
 
     public bool CanExecute(IToolCommand command)
     {
@@ -19,8 +17,8 @@ public abstract class CommandExecutorBase<TCommand>(
 
     public Task ExecuteAsync(CommandContext context)
     {
-        _logger.LogInfo(context.IsDebugMode, "Начинаем выполнение команды");
-        var command = _toolCommandFactory.CreateCommand<TCommand>();
+        logger.LogDebug("Начинаем выполнение команды");
+        var command = toolCommandFactory.CreateCommand<TCommand>();
         return ExecuteAsync(context, command);
     }
 

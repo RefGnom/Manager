@@ -34,9 +34,8 @@ public class Result<TValue, TError>(
     TError? error
 ) : Result(isSuccess)
 {
-    public TValue? Value { get; } = value;
-    public TError? Error { get; } = error;
-    public TValue EnsuredValue => IsSuccess && Value is not null ? Value : throw new FailResultException<TError>(Error);
+    public TValue Value => IsSuccess && value is not null ? value : throw new FailResultException<TError>(error);
+    public TError Error => IsFailure && error is not null ? error : throw new SuccessResultException<TError>(error);
 
     public static implicit operator Result<TValue, TError>(TError error)
     {

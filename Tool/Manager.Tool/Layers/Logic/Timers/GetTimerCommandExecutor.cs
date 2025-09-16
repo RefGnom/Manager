@@ -1,12 +1,12 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Manager.Core.Extensions;
-using Manager.Core.Extensions.LinqExtensions;
+using Manager.Core.Common.Enum;
+using Manager.Core.Common.Linq;
 using Manager.TimerService.Client;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.Tool.Layers.Logic.CommandsCore;
-using Manager.Tool.Layers.Logic.ToolLogger;
 using Manager.Tool.Layers.Presentation;
+using Microsoft.Extensions.Logging;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 
@@ -15,27 +15,23 @@ public class GetTimerCommandExecutor(
     ITimerRequestFactory timerRequestFactory,
     ITimerServiceApiClient timerServiceApiClient,
     IToolWriter toolWriter,
-    IToolLogger<GetTimerCommand> logger
+    ILogger<GetTimerCommand> logger
 ) : CommandExecutorBase<GetTimerCommand>(toolCommandFactory, logger)
 {
-    private readonly ITimerRequestFactory _timerRequestFactory = timerRequestFactory;
-    private readonly ITimerServiceApiClient _timerServiceApiClient = timerServiceApiClient;
-    private readonly IToolWriter _toolWriter = toolWriter;
-
-    protected async override Task ExecuteAsync(CommandContext context, GetTimerCommand command)
+    protected override async Task ExecuteAsync(CommandContext context, GetTimerCommand command)
     {
         var timerName = context.GetCommandArgument(command.CommandName) ?? TimerCommandConstants.DefaultTimerName;
 
-        var getTimerRequest = _timerRequestFactory.CreateTimerRequest(context.EnsureUser().Id, timerName);
-        var timerResponse = await _timerServiceApiClient.FindTimerAsync(getTimerRequest);
+        var getTimerRequest = timerRequestFactory.CreateTimerRequest(context.EnsureUser().Id, timerName);
+        var timerResponse = await timerServiceApiClient.FindTimerAsync(getTimerRequest);
 
         if (timerResponse is null)
         {
-            _toolWriter.WriteMessage("Не нашли таймер с именем {0}", timerName);
+            toolWriter.WriteMessage("Не нашли таймер с именем {0}", timerName);
             return;
         }
 
-        _toolWriter.WriteMessage(
+        toolWriter.WriteMessage(
             """
             Имя таймера "{0}"
             Запущен в {1}
