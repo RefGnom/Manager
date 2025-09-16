@@ -1,3 +1,4 @@
+using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.AppConfiguration.DataBase;
 using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
 using Manager.Core.Logging.Configuration;
@@ -21,12 +22,14 @@ public static class Program
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
             .UseNpg()
-            .AddSwaggerGen();
+            .AddApiKeyRequirement()
+            .AddSwaggerGen(c => c.AddApiKeyRequirement());
         startupLogger.LogInformation("Service collection configured");
 
         startupLogger.LogInformation("Build application");
         var app = builder.Build();
 
+        app.UseAuthenticationMiddleware();
         app.MapControllers();
         if (app.Environment.IsDevelopment())
         {
