@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
+using Manager.Core.Common.DependencyInjection.LifetimeAttributes;
 using Manager.TimerService.Server.Layers.RepositoryLayer;
 using Manager.TimerService.Server.ServiceModels;
 

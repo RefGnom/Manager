@@ -1,10 +1,10 @@
 using System.Linq;
 using System.Reflection;
-using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
+using Manager.Core.Common.DependencyInjection.LifetimeAttributes;
 using Manager.Core.Common.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
+namespace Manager.Core.Common.DependencyInjection.AutoRegistration;
 
 public static class AutoRegistrationExtensions
 {

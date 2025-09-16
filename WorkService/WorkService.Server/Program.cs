@@ -1,6 +1,6 @@
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.AppConfiguration.DataBase;
-using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
+using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.Logging.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

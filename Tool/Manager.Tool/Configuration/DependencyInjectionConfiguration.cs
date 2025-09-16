@@ -1,5 +1,5 @@
 using System;
-using Manager.Core.AppConfiguration.DependencyInjection.AutoRegistration;
+using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Tool.Configuration;

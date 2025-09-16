@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
+using Manager.Core.Common.DependencyInjection.LifetimeAttributes;
 using Manager.TimerService.Server.Layers.DbLayer;
 using Manager.TimerService.Server.Layers.DbLayer.Dbos;
 using Manager.TimerService.Server.ServiceModels;

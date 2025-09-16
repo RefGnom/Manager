@@ -21,7 +21,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\AuthenticationService\AuthenticationService.Client\AuthenticationService.Client.csproj" />
-        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
+        <ProjectReference Include="..\..\Core\Manager.Core.Common\Manager.Core.Common.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj" />
         <ProjectReference Include="..\..\TimerService\TimerService.Client\TimerService.Client.csproj"/>
     </ItemGroup>
 
