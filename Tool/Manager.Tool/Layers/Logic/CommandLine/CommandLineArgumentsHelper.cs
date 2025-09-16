@@ -9,6 +9,6 @@ public static class CommandLineArgumentsHelper
 
     public static string GetEnvironment(string[] args)
     {
-        return debugPossibleArgs.Any(args.Contains) ? EnvironmentConstants.Debug : EnvironmentConstants.Information;
+        return debugPossibleArgs.Any(args.Contains) ? Environment.Debug : Environment.Information;
     }
 }
