@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 using Manager.Core.Common.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -19,23 +19,30 @@ public static class IncludeCustomLoggerExtensions
     private const string SettingsFileName = "loggingsettings";
 
     public static IMicrosoftLogger AddCustomLogger(this IHostApplicationBuilder builder)
+        => AddCustomLogger(builder.Services, builder.Configuration, builder.Environment.EnvironmentName);
+
+    public static IMicrosoftLogger AddCustomLogger(
+        this IServiceCollection services,
+        IConfigurationManager configuration,
+        string environmentName
+    )
     {
-        AddCustomLoggerConfiguration(builder.Configuration, builder.Environment.EnvironmentName);
+        AddCustomLoggerConfiguration(configuration, environmentName);
 
         var startupLogger = new LoggerConfiguration()
-            .ReadFrom.Configuration(builder.Configuration)
+            .ReadFrom.Configuration(configuration)
             .CreateLogger()
             .ForContext(Constants.SourceContextPropertyName, StartupLoggerContext);
         Log.Logger = startupLogger;
 
         startupLogger.Information("Configuration logging");
-        builder.Services.AddSerilog(dispose: Dispose);
+        services.AddSerilog(dispose: Dispose);
         return new SerilogLoggerFactory(startupLogger, Dispose).CreateLogger(StartupLoggerContext);
     }
 
     private static void AddCustomLoggerConfiguration(this IConfigurationBuilder configuration, string environment)
     {
-        var fileProvider = GetSettingsFileProvider();
+        var fileProvider = new PhysicalFileProvider(AppContext.BaseDirectory);
         // Порядок важен, приоритет определяется сверху вниз. Сначала настройки для окружения, потом общие
         AddJsonConfiguration(configuration, fileProvider, $"{SettingsFileName}.{environment}.json");
         AddJsonConfiguration(configuration, fileProvider, $"{SettingsFileName}.json", false);
@@ -58,21 +65,5 @@ public static class IncludeCustomLoggerExtensions
         };
 
         configuration.Sources.InsertBefore(x => x is JsonConfigurationSource, configurationSource);
-    }
-
-    private static PhysicalFileProvider GetSettingsFileProvider()
-    {
-        var relativeSettingsDirectoryPath = Path.Combine(
-            AppContext.BaseDirectory,
-            "..",
-            "..",
-            "..",
-            "..",
-            "..",
-            "Core",
-            "Manager.Core.Logging"
-        );
-        var absoluteSettingsDirectoryPath = Path.GetFullPath(relativeSettingsDirectoryPath);
-        return new PhysicalFileProvider(absoluteSettingsDirectoryPath);
     }
 }
