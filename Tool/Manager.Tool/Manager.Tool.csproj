@@ -32,9 +32,11 @@
 
     <ItemGroup>
       <None Update="Configuration\appsettings.json">
+          <Link>appsettings.json</Link>
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Configuration\appsettings.Debug.json">
+          <Link>appsettings.Debug.json</Link>
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
