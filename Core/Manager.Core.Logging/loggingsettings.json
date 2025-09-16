@@ -23,7 +23,7 @@
       {
         "Name": "File",
         "Args": {
-          "path": "bin\\Logs\\log.txt",
+          "path": "Logs\\log.txt",
           "rollingInterval": "Day",
           "retainedFileCountLimit": "30",
           "formatter": {

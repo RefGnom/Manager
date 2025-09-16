@@ -25,4 +25,13 @@
       <ProjectReference Include="..\Manager.Core.Common\Manager.Core.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="loggingsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="loggingsettings.Development.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

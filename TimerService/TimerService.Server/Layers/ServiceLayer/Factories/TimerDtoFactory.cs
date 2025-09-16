@@ -1,5 +1,5 @@
 using System;
-using Manager.Core.AppConfiguration.DependencyInjection.LifetimeAttributes;
+using Manager.Core.Common.DependencyInjection.LifetimeAttributes;
 using Manager.Core.Common.Time;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.ServiceModels;

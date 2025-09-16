@@ -1,20 +1,19 @@
 using System.Threading.Tasks;
 using Manager.Core.Common.Linq;
 using Manager.Tool.Layers.Logic.CommandsCore;
-using Manager.Tool.Layers.Logic.ToolLogger;
+using Microsoft.Extensions.Logging;
 
 namespace Manager.Tool.Layers.Logic.Timers;
 
 public class StartTimerCommandExecutor(
     IToolCommandFactory toolCommandFactory,
-    IToolLogger<StartTimerCommandExecutor> logger
+    ILogger<StartTimerCommandExecutor> logger
 ) : CommandExecutorBase<StartTimerCommand>(toolCommandFactory)
 {
     public override Task ExecuteAsync(CommandContext context)
     {
-        logger.LogInfo(
-            context.IsDebugMode,
-            "Выполняем команду {0} с аргументами {1}",
+        logger.LogDebug(
+            "Выполняем команду {command} с аргументами {options}",
             context.Arguments,
             context.Options.JoinToString(", ")
         );

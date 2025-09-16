@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Manager.Core.Common.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Core.AppConfiguration.DataBase;
 
