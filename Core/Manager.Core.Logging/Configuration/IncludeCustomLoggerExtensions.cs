@@ -7,21 +7,23 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Core;
-using Serilog.Extensions.Logging;
-using IMicrosoftLogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Manager.Core.Logging.Configuration;
 
 public static class IncludeCustomLoggerExtensions
 {
-    private const bool Dispose = true;
-    private const string StartupLoggerContext = "Startup";
+    public const bool Dispose = true;
+    public const string StartupLoggerContext = "Startup";
     private const string SettingsFileName = "loggingsettings";
 
-    public static IMicrosoftLogger AddCustomLogger(this IHostApplicationBuilder builder)
-        => AddCustomLogger(builder.Services, builder.Configuration, builder.Environment.EnvironmentName);
+    public static IHostApplicationBuilder AddCustomLogger(this IHostApplicationBuilder builder)
+    {
+        builder.Services.AddCustomLogger(builder.Configuration, builder.Environment.EnvironmentName);
 
-    public static IMicrosoftLogger AddCustomLogger(
+        return builder;
+    }
+
+    public static IServiceCollection AddCustomLogger(
         this IServiceCollection services,
         IConfigurationManager configuration,
         string environmentName
@@ -37,7 +39,8 @@ public static class IncludeCustomLoggerExtensions
 
         startupLogger.Information("Configuration logging");
         services.AddSerilog(dispose: Dispose);
-        return new SerilogLoggerFactory(startupLogger, Dispose).CreateLogger(StartupLoggerContext);
+
+        return services;
     }
 
     private static void AddCustomLoggerConfiguration(this IConfigurationBuilder configuration, string environment)

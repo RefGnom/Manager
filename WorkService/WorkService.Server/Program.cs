@@ -14,7 +14,8 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        var startupLogger = builder.AddCustomLogger();
+        builder.AddCustomLogger();
+        var startupLogger = StartupLoggerFactory.CreateStartupLogger();
 
         builder.Services.AddControllers();
         startupLogger.LogInformation("Start configuration service collection");

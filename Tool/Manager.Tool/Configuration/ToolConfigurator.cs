@@ -20,14 +20,12 @@ public static class ToolConfigurator
 
     public static IServiceProvider CreateServiceProvider(this IConfigurationManager configurationManager)
     {
-        var serviceCollection = new ServiceCollection()
+        var aspEnvironment = EnvironmentConverter.ConvertToAspEnvironment(Environment.CurrentEnvironment);
+        return new ServiceCollection()
             .AddLogging(x => x.AddConsole())
             .UseAutoRegistrationForCurrentAssembly()
-            .UseAutoRegistrationForCoreCommon();
-
-        var aspEnvironment = EnvironmentConverter.ConvertToAspEnvironment(Environment.CurrentEnvironment);
-        serviceCollection.AddCustomLogger(configurationManager, aspEnvironment);
-
-        return serviceCollection.BuildServiceProvider();
+            .UseAutoRegistrationForCoreCommon()
+            .AddCustomLogger(configurationManager, aspEnvironment)
+            .BuildServiceProvider();
     }
 }
