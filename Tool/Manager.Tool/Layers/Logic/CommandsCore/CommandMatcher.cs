@@ -8,18 +8,18 @@ public class CommandMatcher(
     IEnumerable<IConcreteCommandMatcher> concreteCommandMatchers
 ) : ICommandMatcher
 {
-    private readonly IToolCommand[] _commands = commands.ToArray();
-    private readonly IConcreteCommandMatcher[] _concreteCommandMatchers = concreteCommandMatchers.ToArray();
+    private readonly IToolCommand[] commands = commands.ToArray();
+    private readonly IConcreteCommandMatcher[] concreteCommandMatchers = concreteCommandMatchers.ToArray();
 
     public MatchCommandResult GetMostSuitableForContext(CommandContext context)
     {
-        return _commands.Select(x => MatchCommandForContext(x, context))
+        return commands.Select(x => MatchCommandForContext(x, context))
             .MaxBy(x => x.Score)!;
     }
 
     public MatchCommandResult MatchCommandForContext(IToolCommand command, CommandContext context)
     {
-        var concreteMatcher = _concreteCommandMatchers.FirstOrDefault(x => x.CanMatch(command));
+        var concreteMatcher = concreteCommandMatchers.FirstOrDefault(x => x.CanMatch(command));
         if (concreteMatcher is not null)
         {
             return concreteMatcher.MatchCommandForContext(command, context);

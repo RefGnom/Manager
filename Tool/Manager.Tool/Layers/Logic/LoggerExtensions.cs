@@ -1,5 +1,6 @@
 ﻿using Manager.Tool.Layers.Logic.CommandsCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Manager.Tool.Layers.Logic;
 
@@ -18,7 +19,10 @@ public static class LoggerExtensions
 
     public static void WriteToolCommand(this ILogger logger, IToolCommand command, bool isDetailed = false)
     {
-        logger.LogInformation("{tool}", command);
+        var commandDescription = isDetailed
+            ? JsonConvert.SerializeObject(command)
+            : $"{command.CommandName} {command.Description}";
+        logger.LogInformation("{command}", commandDescription);
     }
 
     public static void MoveOnNextLine(this ILogger logger)

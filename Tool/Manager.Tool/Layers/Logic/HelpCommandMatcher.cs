@@ -11,6 +11,7 @@ public class HelpCommandMatcher : IConcreteCommandMatcher
 
     public MatchCommandResult MatchCommandForContext(IToolCommand command, CommandContext context)
     {
-        throw new System.NotImplementedException();
+        var isHelpCommand = context.ContainsOption("-h") ||  context.ContainsOption("--help");
+        return new MatchCommandResult(command, isHelpCommand ? 1 : 0);
     }
 }
