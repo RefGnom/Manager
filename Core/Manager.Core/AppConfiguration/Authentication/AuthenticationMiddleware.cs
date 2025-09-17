@@ -42,7 +42,7 @@ public class AuthenticationMiddleware(
         }
 
         Console.WriteLine(apiKey[0]);
-        var authorizationModel = await authorizationService.FindAuthorizationModelAsync(apiKey[0]!, setting.Resource);
+        var authorizationModel = await authorizationService.FindAuthorizationModelAsync(apiKey[0]!, setting.Service);
         if (authorizationModel is null)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
