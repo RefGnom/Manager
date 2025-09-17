@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Core.Common", "Core
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Core.Logging", "Core\Manager.Core.Logging\Manager.Core.Logging.csproj", "{EAFEF05B-EAA9-4CEA-86D2-CF1CCB3B644D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationService.Server", "AuthenticationService\AuthenticationService.Server\AuthenticationService.Server.csproj", "{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{EAFEF05B-EAA9-4CEA-86D2-CF1CCB3B644D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAFEF05B-EAA9-4CEA-86D2-CF1CCB3B644D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAFEF05B-EAA9-4CEA-86D2-CF1CCB3B644D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3DC6C3D2-5AE4-4401-B403-AE1C7658E8D5} = {804F8B79-D68C-4673-A903-78923F42E3AD}
@@ -88,5 +94,6 @@ Global
 		{AB80C4FA-900C-44F0-B3EE-546A46663CC3} = {E203E533-4855-4C6A-8AEE-22B7F83DFE4B}
 		{833746FA-0634-451E-944F-8923BFF74C5A} = {67CC4B6F-CA92-409B-A1AF-9501B34435E5}
 		{EAFEF05B-EAA9-4CEA-86D2-CF1CCB3B644D} = {67CC4B6F-CA92-409B-A1AF-9501B34435E5}
+		{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5} = {160DC284-3E0C-4170-8FBA-5B35ADB6AE7D}
 	EndGlobalSection
 EndGlobal
