@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Manager.TimerService.Client;
 using Manager.Tool.Layers.Logic.CommandsCore;
-using Manager.Tool.Layers.Presentation;
 using Microsoft.Extensions.Logging;
 
 namespace Manager.Tool.Layers.Logic.Timers;
@@ -10,11 +9,12 @@ public class StartTimerCommandExecutor(
     IToolCommandFactory toolCommandFactory,
     ITimerRequestFactory timerRequestFactory,
     ITimerServiceApiClient timerServiceApiClient,
-    IToolWriter toolWriter,
     IUserTimeService userTimeService,
     ILogger<StartTimerCommand> logger
 ) : CommandExecutorBase<StartTimerCommand>(toolCommandFactory, logger)
 {
+    private readonly ILogger<StartTimerCommand> logger = logger;
+
     protected override async Task ExecuteAsync(CommandContext context, StartTimerCommand command)
     {
         var user = context.EnsureUser();
@@ -24,13 +24,13 @@ public class StartTimerCommandExecutor(
 
         if (!startTimeResult.IsSuccess)
         {
-            toolWriter.WriteMessage(startTimeResult.Error);
+            logger.WriteMessage(startTimeResult.Error);
             return;
         }
 
         if (pingTimeoutResult?.IsSuccess == false)
         {
-            toolWriter.WriteMessage(pingTimeoutResult.Error);
+            logger.WriteMessage(pingTimeoutResult.Error);
             return;
         }
 
@@ -39,10 +39,10 @@ public class StartTimerCommandExecutor(
 
         if (startTimerResponse.IsSuccessStatusCode)
         {
-            toolWriter.WriteMessage("Таймер успешно запущен");
+            logger.WriteMessage("Таймер успешно запущен");
             return;
         }
 
-        toolWriter.WriteMessage(startTimerResponse.ResponseMessage ?? "Неизвестная ошибка");
+        logger.WriteMessage(startTimerResponse.ResponseMessage ?? "Неизвестная ошибка");
     }
 }
