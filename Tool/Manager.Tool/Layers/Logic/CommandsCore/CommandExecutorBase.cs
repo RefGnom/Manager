@@ -1,26 +1,26 @@
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
 public abstract class CommandExecutorBase<TCommand>(
-    IToolCommandFactory toolCommandFactory
-) : ICommandExecutor where TCommand : IToolCommand, new()
+    IToolCommandFactory toolCommandFactory,
+    ILogger<TCommand> logger
+) : ICommandExecutor
+    where TCommand : IToolCommand, new()
 {
-    public virtual bool CanExecute(CommandContext context)
+
+    public bool CanExecute(IToolCommand command)
     {
-        var command = toolCommandFactory.CreateCommand<TCommand>();
-
-        var spaceLength = command.CommandSpace.Values.Length;
-        var argumentsSpace = (CommandSpace)context.Arguments.Take(spaceLength).ToArray();
-        if (!command.CommandSpace.Equals(argumentsSpace))
-        {
-            return false;
-        }
-
-        var commandName = context.Arguments.Skip(spaceLength).FirstOrDefault();
-        return command.CommandName == commandName;
+        return command is TCommand;
     }
 
-    public abstract Task ExecuteAsync(CommandContext context);
+    public Task ExecuteAsync(CommandContext context)
+    {
+        logger.LogDebug("Начинаем выполнение команды");
+        var command = toolCommandFactory.CreateCommand<TCommand>();
+        return ExecuteAsync(context, command);
+    }
+
+    protected abstract Task ExecuteAsync(CommandContext context, TCommand command);
 }

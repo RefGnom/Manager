@@ -7,8 +7,8 @@ public class CommandExecutorProvider(IEnumerable<ICommandExecutor> executors) : 
 {
     private readonly ICommandExecutor[] _executors = executors.ToArray();
 
-    public ICommandExecutor? GetByContext(CommandContext context)
+    public ICommandExecutor GetForCommand(IToolCommand command)
     {
-        return _executors.FirstOrDefault(x => x.CanExecute(context));
+        return _executors.First(x => x.CanExecute(command));
     }
 }

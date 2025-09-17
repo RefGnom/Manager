@@ -1,31 +1,44 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Manager.Core.Common.Linq;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
-public class CommandSpace(params string[] values)
+public record CommandSpace(
+    string Description,
+    params string[] Values
+);
+
+public class CommandSpaceEqualityComparer : IEqualityComparer<CommandSpace?>
 {
-    public string[] Values { get; } = values;
-
-    public static CommandSpace Empty => new();
-
-    public static implicit operator CommandSpace(string[] values)
+    public bool Equals(CommandSpace? first, CommandSpace? second)
     {
-        return new CommandSpace(values);
+        if (ReferenceEquals(first, second))
+        {
+            return true;
+        }
+
+        if (ReferenceEquals(first, null))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(second, null))
+        {
+            return false;
+        }
+
+        if (first.GetType() != second.GetType())
+        {
+            return false;
+        }
+
+        return first.Description == second.Description && first.Values.SequenceEqual(second.Values);
     }
 
-    private bool Equals(CommandSpace commandSpace)
+    public int GetHashCode(CommandSpace obj)
     {
-        return Values.SequenceEqual(commandSpace.Values);
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return obj is CommandSpace commandSpace && Equals(commandSpace);
-    }
-
-    public override int GetHashCode()
-    {
-        return Values.JoinToString("").GetHashCode();
+        return HashCode.Combine(obj.Description, obj.Values.JoinToString(' '));
     }
 }

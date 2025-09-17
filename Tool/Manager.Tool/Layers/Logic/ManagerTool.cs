@@ -3,7 +3,6 @@ using Manager.Core.Common.Linq;
 using Manager.Tool.Layers.Logic.Authentication;
 using Manager.Tool.Layers.Logic.CommandsCore;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Manager.Tool.Layers.Logic;
 
@@ -11,7 +10,8 @@ public class ManagerTool(
     ICommandContextFactory commandContextFactory,
     ICommandExecutorProvider commandExecutorProvider,
     ILogger<ManagerTool> logger,
-    IArgumentsValidator argumentsValidator
+    IArgumentsValidator argumentsValidator,
+    ICommandMatcher commandMatcher
 ) : IManagerTool
 {
     public Task RunAsync(string[] arguments)
@@ -19,27 +19,30 @@ public class ManagerTool(
         var validationResult = argumentsValidator.Validate(arguments);
         if (!validationResult.IsSuccess)
         {
-            logger.LogInformation("{message}", validationResult.FailureMessage);
+            logger.WriteMessage(validationResult.FailureMessage);
             return Task.CompletedTask;
         }
 
         var context = commandContextFactory.Create(arguments);
-        var jsonContext = JsonConvert.SerializeObject(context);
-        logger.LogDebug("Собрали контекст команды\n{context}", jsonContext);
+        logger.LogDebug("Собрали контекст команды\n{context}", context);
 
-        var commandExecutor = commandExecutorProvider.GetByContext(context);
-        if (commandExecutor is not null)
+        var mostSuitableCommandResult = commandMatcher.GetMostSuitableForContext(context);
+        var mostSuitableCommand = mostSuitableCommandResult.ToolCommand;
+        if (!mostSuitableCommandResult.IsFullMath())
         {
-            if (context.User is null && commandExecutor is not AuthenticateCommandExecutor)
-            {
-                logger.LogInformation("Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\"");
-            }
-
-            return commandExecutor.ExecuteAsync(context);
+            logger.LogDebug("Не нашли исполнителя для аргументов {arguments}", arguments.JoinToString(", "));
+            logger.WriteMessage($"Возможно вы имели ввиду: {mostSuitableCommand.Example}");
+            return Task.CompletedTask;
         }
 
-        logger.LogInformation("Неизвестная команда");
-        logger.LogDebug("Не нашли исполнителя для аргументов {arguments}", arguments.JoinToString(", "));
-        return Task.CompletedTask;
+        var commandExecutor = commandExecutorProvider.GetForCommand(mostSuitableCommand);
+        if (context.User is null && commandExecutor is not AuthenticateCommandExecutor)
+        {
+            logger.WriteMessage(
+                "Необходимо выполнить аутентификацию, используя команду \"manager auth --login 'your login'\""
+            );
+        }
+
+        return commandExecutor.ExecuteAsync(context);
     }
 }
