@@ -12,7 +12,8 @@ public static class LoggerExtensions
 
     public static void WriteMessageWithIndent(this ILogger logger, string message, int indentLevel)
     {
-        logger.LogInformation("{indent}{userMessage}", indentLevel, message);
+        var indent = new string(' ', indentLevel);
+        logger.LogInformation("{indent}{userMessage}", indent, message);
     }
 
     public static void WriteToolCommand(this ILogger logger, IToolCommand command, bool isDetailed = false)
