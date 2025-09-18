@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Manager.AuthenticationService.Server.Layers.Repository.Models;
+namespace Manager.AuthenticationService.Server.Layers.Repository.Dbos;
 
 [Table("authorizationModels")]
 public class AuthorizationModelDbo

@@ -1,5 +1,5 @@
 ﻿using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
-using Manager.AuthenticationService.Server.Layers.Repository.Models;
+using Manager.AuthenticationService.Server.Layers.Repository.Dbos;
 
 namespace Manager.AuthenticationService.Server.Layers.BusinessLogic.Converters;
 

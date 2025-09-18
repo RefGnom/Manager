@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Manager.AuthenticationService.Server.Layers.Repository.Models;
+using Manager.AuthenticationService.Server.Layers.Repository.Dbos;
 using Manager.Core.AppConfiguration.DataBase;
 using Microsoft.EntityFrameworkCore;
 
