@@ -3,6 +3,7 @@ using Manager.AuthenticationService.Server.Layers.BusinessLogic.Converters;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 using Manager.AuthenticationService.Server.Layers.Repository;
 using Manager.Core.Common.HelperObjects.Result;
+using Microsoft.Extensions.Logging;
 
 namespace Manager.AuthenticationService.Server.Layers.BusinessLogic;
 
@@ -16,13 +17,15 @@ public interface IAuthorizationModelService
 public class AuthorizationModelService(
     IAuthorizationModelRepository authorizationModelRepository,
     IAuthorizationModelConverter authorizationModelConverter,
-    IAuthorizationModelFactory authorizationModelFactory
+    IAuthorizationModelFactory authorizationModelFactory,
+    ILogger<AuthorizationModelService> logger
 ) : IAuthorizationModelService
 {
     public async Task<Result<AuthorizationModelDto, CreateAuthorizationModelErrorCode>> CreateAsync(
         CreateAuthorizationModelDto createAuthorizationModelDto
     )
     {
+        logger.LogInformation("Создаём модель авторизации для пользователя {owner}", createAuthorizationModelDto.Owner);
         var authorizationModelDto = authorizationModelFactory.Create(createAuthorizationModelDto);
         var authorizationModelDbo = authorizationModelConverter.ToDbo(authorizationModelDto);
 
