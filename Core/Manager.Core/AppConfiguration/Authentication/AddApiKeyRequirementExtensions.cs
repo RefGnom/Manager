@@ -1,6 +1,8 @@
-﻿using Manager.Core.Common.DependencyInjection;
+﻿using Manager.AuthenticationService.Client;
+using Manager.Core.Common.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -40,9 +42,16 @@ public static class AddApiKeyRequirementExtensions
         return options;
     }
 
-    public static IServiceCollection AddApiKeyRequirement(this IServiceCollection services)
+    public static IServiceCollection AddApiKeyRequirement(
+        this IServiceCollection services
+    )
     {
-        services.AddSingleton<IAuthorizationService, AuthorizationService>();
+        services.AddSingleton<IAuthenticationServiceApiClientFactory, AuthenticationServiceApiClientFactory>();
+        services.AddSingleton<IAuthenticationServiceApiClient>(x
+            => x.GetRequiredService<IAuthenticationServiceApiClientFactory>().Create(
+                x.GetRequiredService<IOptions<AuthenticationServiceSetting>>().Value.ApiKey
+            )
+        );
         services.ConfigureOptionsWithValidation<AuthenticationSetting>();
 
         return services;

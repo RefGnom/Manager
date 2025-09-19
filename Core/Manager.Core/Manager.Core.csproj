@@ -27,6 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\AuthenticationService\AuthenticationService.Client\AuthenticationService.Client.csproj" />
       <ProjectReference Include="..\Manager.Core.Common\Manager.Core.Common.csproj" />
     </ItemGroup>
 
