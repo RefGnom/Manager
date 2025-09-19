@@ -14,7 +14,7 @@ namespace Manager.AuthenticationService.Server.Layers.Api.Middleware;
 public class AuthenticationMiddlewareLocal(
     RequestDelegate next,
     IAuthenticationStatusService authenticationStatusService,
-    ILogger logger,
+    ILogger<AuthenticationMiddlewareLocal> logger,
     IOptions<AuthenticationSetting> options
 ) : AuthenticationMiddlewareBase(next, logger, options)
 {

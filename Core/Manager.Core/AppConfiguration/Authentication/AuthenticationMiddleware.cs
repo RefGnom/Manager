@@ -13,7 +13,7 @@ namespace Manager.Core.AppConfiguration.Authentication;
 public class AuthenticationMiddleware(
     RequestDelegate next,
     IAuthenticationServiceApiClient authenticationServiceApiClient,
-    ILogger logger,
+    ILogger<AuthenticationMiddleware> logger,
     IOptions<AuthenticationSetting> options
 ) : AuthenticationMiddlewareBase(next, logger, options)
 {
