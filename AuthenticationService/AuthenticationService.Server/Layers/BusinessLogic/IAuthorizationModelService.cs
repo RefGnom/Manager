@@ -8,26 +8,25 @@ namespace Manager.AuthenticationService.Server.Layers.BusinessLogic;
 
 public interface IAuthorizationModelService
 {
-    Task<Result<CreateAuthorizationModelErrorCode>> CreateAsync(AuthorizationModelDto authorizationModelDto);
+    Task<Result<AuthorizationModelDto, CreateAuthorizationModelErrorCode>> CreateAsync(
+        CreateAuthorizationModelDto createAuthorizationModelDto
+    );
 }
 
 public class AuthorizationModelService(
     IAuthorizationModelRepository authorizationModelRepository,
-    IAuthorizationModelConverter authorizationModelConverter
+    IAuthorizationModelConverter authorizationModelConverter,
+    IAuthorizationModelFactory authorizationModelFactory
 ) : IAuthorizationModelService
 {
-    public async Task<Result<CreateAuthorizationModelErrorCode>> CreateAsync(
-        AuthorizationModelDto authorizationModelDto
+    public async Task<Result<AuthorizationModelDto, CreateAuthorizationModelErrorCode>> CreateAsync(
+        CreateAuthorizationModelDto createAuthorizationModelDto
     )
     {
-        var existAuthorizationModel = await authorizationModelRepository.FindAsync(authorizationModelDto.ApiKeyHash);
-        if (existAuthorizationModel != null)
-        {
-            return CreateAuthorizationModelErrorCode.AuthorizationModelAlreadyExists;
-        }
-
+        var authorizationModelDto = authorizationModelFactory.Create(createAuthorizationModelDto);
         var authorizationModelDbo = authorizationModelConverter.ToDbo(authorizationModelDto);
+
         await authorizationModelRepository.CreateAsync(authorizationModelDbo);
-        return Result<CreateAuthorizationModelErrorCode>.Ok();
+        return authorizationModelDto;
     }
 }

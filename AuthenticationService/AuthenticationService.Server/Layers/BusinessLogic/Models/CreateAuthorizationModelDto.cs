@@ -2,12 +2,9 @@
 
 namespace Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 
-public record AuthorizationModelDto(
-    Guid Id,
-    string ApiKey,
+public record CreateAuthorizationModelDto(
     string Owner,
     string[] AvailableServices,
     string[] AvailableResources,
-    long CreatedUtcTicks,
-    long? ExpirationUtcTicks
+    DateTime? ExpirationDateUtc
 );

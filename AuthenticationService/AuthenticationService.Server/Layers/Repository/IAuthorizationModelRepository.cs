@@ -1,14 +1,13 @@
-﻿using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using Manager.AuthenticationService.Server.Layers.Repository.Dbos;
 using Manager.Core.AppConfiguration.DataBase;
-using Microsoft.EntityFrameworkCore;
 
 namespace Manager.AuthenticationService.Server.Layers.Repository;
 
 public interface IAuthorizationModelRepository
 {
-    Task<AuthorizationModelDbo?> FindAsync(string apiKeyHash);
+    Task<AuthorizationModelDbo?> FindAsync(Guid authorizationModelId);
     Task CreateAsync(AuthorizationModelDbo authorizationModelDbo);
 }
 
@@ -16,12 +15,9 @@ public class AuthorizationModelRepository(
     IDataContext dataContext
 ) : IAuthorizationModelRepository
 {
-    public Task<AuthorizationModelDbo?> FindAsync(string apiKeyHash)
+    public Task<AuthorizationModelDbo?> FindAsync(Guid authorizationModelId)
     {
-        return dataContext.ExecuteReadAsync<AuthorizationModelDbo, AuthorizationModelDbo?>(q => q
-            .Where(x => x.ApiKeyHash == apiKeyHash)
-            .FirstOrDefaultAsync()
-        );
+        return dataContext.FindAsync<AuthorizationModelDbo, Guid>(authorizationModelId);
     }
 
     public Task CreateAsync(AuthorizationModelDbo authorizationModelDbo)

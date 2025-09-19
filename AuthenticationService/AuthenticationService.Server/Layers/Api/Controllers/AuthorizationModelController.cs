@@ -3,15 +3,15 @@ using Manager.AuthenticationService.Server.Layers.Api.Converters;
 using Manager.AuthenticationService.Server.Layers.Api.Requests;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
+using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.Common.Enum;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Manager.AuthenticationService.Server.Layers.Api.Controllers;
 
 [ApiController]
-[Authorize]
+[AuthorizationResource("authorization-model-")]
 [Route("api/authorization-model")]
 public class AuthorizationModelController(
     IAuthorizationModelService authorizationModelService,
@@ -20,16 +20,15 @@ public class AuthorizationModelController(
 {
     [HttpPost]
     public async Task<IActionResult> CreateAuthorizationModel(
-        [FromBody] AuthorizationModelRequest model,
-        [FromHeader(Name = "X-Api-Key-Hash"), BindRequired]
-        string apiKeyHash
+        [FromBody] CreateAuthorizationModelRequest createAuthorizationModelRequest
     )
     {
-        var authorizationModelDto = authorizationConverter.ToDto(model, apiKeyHash);
+        var authorizationModelDto = authorizationConverter.ToDto(createAuthorizationModelRequest);
         var createResult = await authorizationModelService.CreateAsync(authorizationModelDto);
 
         if (createResult.IsSuccess)
         {
+            await HttpContext.Response.WriteAsJsonAsync(createResult.Value);
             return Created();
         }
 

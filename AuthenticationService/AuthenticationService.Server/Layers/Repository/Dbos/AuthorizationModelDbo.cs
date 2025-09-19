@@ -13,6 +13,9 @@ public class AuthorizationModelDbo
     [Column("apiKeyHash"), Required]
     public required string ApiKeyHash { get; set; }
 
+    [Column("owner"), Required]
+    public required string ApiKeyOwner { get; set; }
+
     [Column("availableServices"), Required]
     public required string[] AvailableServices { get; set; }
 

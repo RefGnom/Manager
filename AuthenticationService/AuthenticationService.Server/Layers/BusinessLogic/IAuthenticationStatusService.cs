@@ -7,23 +7,24 @@ namespace Manager.AuthenticationService.Server.Layers.BusinessLogic;
 
 public interface IAuthenticationStatusService
 {
-    Task<AuthenticationStatusDto> GetAsync(string apiKeyHash, string service, string resource);
+    Task<AuthenticationStatusDto> GetAsync(string apiKey, string service, string resource);
 }
 
 public class AuthenticationStatusService(
-    IAuthorizationModelRepository authorizationModelRepository
+    IAuthorizationModelRepository authorizationModelRepository,
+    IApiKeyService apiKeyService
 ) : IAuthenticationStatusService
 {
-    public async Task<AuthenticationStatusDto> GetAsync(string apiKeyHash, string service, string resource)
+    public async Task<AuthenticationStatusDto> GetAsync(string apiKey, string service, string resource)
     {
-        var authorizationModelDbo = await authorizationModelRepository.FindAsync(apiKeyHash);
-        if (authorizationModelDbo == null)
+        var authorizationModelId = apiKeyService.ExtractAuthorizationModelId(apiKey);
+        var authModelDbo = await authorizationModelRepository.FindAsync(authorizationModelId);
+        if (authModelDbo == null || !apiKeyService.VerifyHashedApiKey(authModelDbo.ApiKeyHash, apiKey))
         {
             return AuthenticationCode.ApiKeyNotFound;
         }
 
-        if (authorizationModelDbo.AvailableResources.Contains(resource) &&
-            authorizationModelDbo.AvailableServices.Contains(service))
+        if (authModelDbo.AvailableResources.Contains(resource) && authModelDbo.AvailableServices.Contains(service))
         {
             return AuthenticationCode.Authenticated;
         }

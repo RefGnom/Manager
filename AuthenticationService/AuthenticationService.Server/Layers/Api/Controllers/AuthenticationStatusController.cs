@@ -20,11 +20,11 @@ public class AuthenticationStatusController(
     public async Task<ActionResult<AuthenticationStatusResponse>> GetAuthenticationStatus(
         [FromRoute, BindRequired] string service,
         [FromRoute, BindRequired] string resource,
-        [FromHeader(Name = "X-Api-Key-Hash"), BindRequired]
-        string apiKeyHash
+        [FromHeader(Name = "X-Caller-Api-Key"), BindRequired]
+        string apiKey
     )
     {
-        var authenticationStatusDto = await authenticationStatusService.GetAsync(apiKeyHash, service, resource);
+        var authenticationStatusDto = await authenticationStatusService.GetAsync(apiKey, service, resource);
         return authenticationConverter.ToResponse(authenticationStatusDto);
     }
 }

@@ -1,28 +1,22 @@
-﻿using System;
-using Manager.AuthenticationService.Server.Layers.Api.Requests;
+﻿using Manager.AuthenticationService.Server.Layers.Api.Requests;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
-using Manager.Core.Common.Time;
 
 namespace Manager.AuthenticationService.Server.Layers.Api.Converters;
 
 public interface IAuthorizationConverter
 {
-    AuthorizationModelDto ToDto(AuthorizationModelRequest authorizationModelRequest, string apiKeyHash);
+    CreateAuthorizationModelDto ToDto(CreateAuthorizationModelRequest createAuthorizationModelRequest);
 }
 
-public class AuthorizationConverter(
-    IDateTimeProvider dateTimeProvider
-) : IAuthorizationConverter
+public class AuthorizationConverter : IAuthorizationConverter
 {
-    public AuthorizationModelDto ToDto(AuthorizationModelRequest authorizationModelRequest, string apiKeyHash)
+    public CreateAuthorizationModelDto ToDto(CreateAuthorizationModelRequest createAuthorizationModelRequest)
     {
-        return new AuthorizationModelDto(
-            Guid.NewGuid(),
-            apiKeyHash,
-            authorizationModelRequest.AvailableServices,
-            authorizationModelRequest.AvailableResources,
-            dateTimeProvider.UtcTicks,
-            authorizationModelRequest.ExpirationDateUtc?.Ticks
+        return new CreateAuthorizationModelDto(
+            createAuthorizationModelRequest.Owner,
+            createAuthorizationModelRequest.AvailableServices,
+            createAuthorizationModelRequest.AvailableResources,
+            createAuthorizationModelRequest.ExpirationDateUtc
         );
     }
 }
