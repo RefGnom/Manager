@@ -4,6 +4,7 @@ using Manager.AuthenticationService.Server.Layers.BusinessLogic;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.Common.Enum;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -38,5 +39,13 @@ public class AuthenticationMiddlewareLocal(
             ),
         };
         await context.Response.WriteAsync(authenticationStatusResponse.AuthenticationCode.GetDescription());
+    }
+}
+
+public static class AuthenticationMiddlewareLocalExtensions
+{
+    public static IApplicationBuilder UseAuthenticationMiddlewareLocal(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<AuthenticationMiddlewareLocal>();
     }
 }

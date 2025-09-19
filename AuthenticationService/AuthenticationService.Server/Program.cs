@@ -1,3 +1,4 @@
+using Manager.AuthenticationService.Server.Layers.Api.Middleware;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.AppConfiguration.DataBase;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
@@ -30,7 +31,7 @@ public static class Program
         startupLogger.LogInformation("Build application");
         var app = builder.Build();
 
-        app.UseAuthenticationMiddleware();
+        app.UseAuthenticationMiddlewareLocal();
         app.MapControllers();
         if (app.Environment.IsDevelopment())
         {
