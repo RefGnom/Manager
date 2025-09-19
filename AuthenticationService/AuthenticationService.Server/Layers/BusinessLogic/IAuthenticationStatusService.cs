@@ -17,8 +17,13 @@ public class AuthenticationStatusService(
 {
     public async Task<AuthenticationStatusDto> GetAsync(string apiKey, string service, string resource)
     {
-        var authorizationModelId = apiKeyService.ExtractAuthorizationModelId(apiKey);
-        var authModelDbo = await authorizationModelRepository.FindAsync(authorizationModelId);
+        var extractAuthorizationModelIdResult = apiKeyService.TryExtractAuthorizationModelId(apiKey);
+        if (extractAuthorizationModelIdResult.IsFailure)
+        {
+            return AuthenticationCode.ApiKeyNotFound;
+        }
+
+        var authModelDbo = await authorizationModelRepository.FindAsync(extractAuthorizationModelIdResult.Value);
         if (authModelDbo == null || !apiKeyService.VerifyHashedApiKey(authModelDbo.ApiKeyHash, apiKey))
         {
             return AuthenticationCode.ApiKeyNotFound;

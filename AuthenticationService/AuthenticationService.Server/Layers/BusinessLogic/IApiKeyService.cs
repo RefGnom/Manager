@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using Manager.Core.Common.HelperObjects.Result;
 using Microsoft.AspNetCore.Identity;
 
 namespace Manager.AuthenticationService.Server.Layers.BusinessLogic;
@@ -7,7 +8,7 @@ namespace Manager.AuthenticationService.Server.Layers.BusinessLogic;
 public interface IApiKeyService
 {
     string CreateApiKey(Guid authorizationModelId);
-    Guid ExtractAuthorizationModelId(string apiKey);
+    Result<Guid, string> TryExtractAuthorizationModelId(string apiKey);
     string HashApiKey(string apiKey);
     bool VerifyHashedApiKey(string hashedApiKey, string providedApiKey);
 }
@@ -27,27 +28,33 @@ public class ApiKeyService(
         return $"{authModelIdBase64}{ApiKeySeparator}{apiKeyBase64}";
     }
 
-    public Guid ExtractAuthorizationModelId(string apiKey)
+    public Result<Guid, string> TryExtractAuthorizationModelId(string apiKey)
     {
-        return new Guid(Convert.FromBase64String(SplitApiKey(apiKey).AuthorizationModelIdBase64));
+        var apiKeyParts = apiKey.Split(':');
+        if (apiKeyParts.Length != 2)
+        {
+            return "Invalid api key format";
+        }
+
+        var authorizationModelIdBytes = Convert.FromBase64String(apiKeyParts[0]);
+        if (authorizationModelIdBytes.Length != 16)
+        {
+            return "Invalid api key identifier format";
+        }
+
+        return new Guid(authorizationModelIdBytes);
     }
 
     public string HashApiKey(string apiKey)
     {
-        var apiKeyValue = SplitApiKey(apiKey).ApiKey;
+        var apiKeyValue = apiKey.Split(ApiKeySeparator)[1];
         return passwordHasher.HashPassword(this, apiKeyValue);
     }
 
     public bool VerifyHashedApiKey(string hashedApiKey, string providedApiKey)
     {
-        var apiKeyValue = SplitApiKey(providedApiKey).ApiKey;
+        var apiKeyValue = providedApiKey.Split(ApiKeySeparator)[1];
         var verificationResult = passwordHasher.VerifyHashedPassword(this, hashedApiKey, apiKeyValue);
         return verificationResult != PasswordVerificationResult.Failed;
-    }
-
-    private static (string AuthorizationModelIdBase64, string ApiKey) SplitApiKey(string apiKey)
-    {
-        var parts = apiKey.Split(ApiKeySeparator);
-        return (parts[0], parts[1]);
     }
 }

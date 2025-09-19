@@ -2,6 +2,7 @@
 (
     id                   uuid   NOT NULL,
     "apiKeyHash"         text   NOT NULL,
+    owner                text   NOT NULL,
     "availableServices"  text[] NOT NULL,
     "availableResources" text[] NOT NULL,
     "createdUtcTicks"    bigint NOT NULL,

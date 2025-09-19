@@ -1,9 +1,11 @@
 using Manager.AuthenticationService.Server.Layers.Api.Middleware;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.AppConfiguration.DataBase;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.Logging.Configuration;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -25,7 +27,8 @@ public static class Program
             .UseAutoRegistrationForCoreCommon()
             .UseNpg()
             .AddApiKeyRequirement()
-            .AddSwaggerGen(c => c.AddApiKeyRequirement());
+            .AddSwaggerGen(c => c.AddApiKeyRequirement())
+            .AddSingleton<IPasswordHasher<ApiKeyService>, PasswordHasher<ApiKeyService>>();
         startupLogger.LogInformation("Service collection configured");
 
         startupLogger.LogInformation("Build application");
