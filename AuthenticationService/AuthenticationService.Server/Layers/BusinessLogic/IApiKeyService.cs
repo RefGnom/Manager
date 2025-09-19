@@ -36,8 +36,9 @@ public class ApiKeyService(
             return "Invalid api key format";
         }
 
-        var authorizationModelIdBytes = Convert.FromBase64String(apiKeyParts[0]);
-        if (authorizationModelIdBytes.Length != 16)
+        var authorizationModelIdBytes = new byte[16];
+        if (!Convert.TryFromBase64String(apiKeyParts[0], authorizationModelIdBytes, out var bytesWritten) ||
+            bytesWritten != 16)
         {
             return "Invalid api key identifier format";
         }

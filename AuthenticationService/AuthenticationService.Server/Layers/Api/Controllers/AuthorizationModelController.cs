@@ -5,13 +5,12 @@ using Manager.AuthenticationService.Server.Layers.BusinessLogic;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.Common.Enum;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Manager.AuthenticationService.Server.Layers.Api.Controllers;
 
 [ApiController]
-[AuthorizationResource("authorization-model-")]
+[AuthorizationResource("AuthorizationModel")]
 [Route("api/authorization-model")]
 public class AuthorizationModelController(
     IAuthorizationModelService authorizationModelService,
@@ -28,8 +27,7 @@ public class AuthorizationModelController(
 
         if (createResult.IsSuccess)
         {
-            await HttpContext.Response.WriteAsJsonAsync(createResult.Value);
-            return Created();
+            return Created(string.Empty, createResult.Value);
         }
 
         if (createResult.Error is CreateAuthorizationModelErrorCode.AuthorizationModelAlreadyExists)
