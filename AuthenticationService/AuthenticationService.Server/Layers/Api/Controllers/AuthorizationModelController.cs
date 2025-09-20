@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Manager.AuthenticationService.Server.Layers.Api.Converters;
 using Manager.AuthenticationService.Server.Layers.Api.Requests;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic;
@@ -59,5 +60,18 @@ public class AuthorizationModelController(
         await authorizationModelService.UpdateAsync(authorizationModelDto);
 
         return Ok();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAuthorizationModel([FromRoute] Guid authorizationModelId)
+    {
+        var foundAuthorizationModelDto = await authorizationModelService.FindAsync(authorizationModelId);
+
+        if (foundAuthorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(foundAuthorizationModelDto);
     }
 }
