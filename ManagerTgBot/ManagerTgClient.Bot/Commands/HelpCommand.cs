@@ -11,18 +11,18 @@ public class HelpCommand(
     ITelegramBotClient botClient
 ) : IManagerBotCommand
 {
+    private readonly Type[] commands = Assembly.GetEntryAssembly()!.GetExportedTypes();
+
     public async Task ExecuteAsync(long chatId)
     {
-        StringBuilder result = new StringBuilder();
-        foreach (var command in Assembly.GetEntryAssembly()!.GetExportedTypes()
-                     .Where(x => x.GetInterface(nameof(IManagerBotCommand)) is not null
-                     ))
+        var result = new StringBuilder();
+        foreach (var command in commands)
         {
             var nameAttribute = command.GetCustomAttribute<CommandNameAttribute>();
             var descriptionAttribute = command.GetCustomAttribute<CommandDescriptionAttribute>();
             if (nameAttribute is not null && descriptionAttribute is not null)
             {
-                result.Append($"{nameAttribute.Value} -  {descriptionAttribute.Value}\n");
+                result.Append($"{nameAttribute.Value} - {descriptionAttribute.Value}\n");
             }
         }
 
