@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Manager.Core.Common.Validation.DataAnnotationsCustom;
 
 namespace Manager.AuthenticationService.Server.Layers.Api.Requests;
 
@@ -13,6 +12,6 @@ public class PatchAuthorizationModelRequest
     public string[]? AvailableServices { get; init; }
     public string[]? AvailableResources { get; init; }
 
-    [DateTimeFromUtcNow]
-    public DateTime? ExpirationDateUtc { get; init; }
+    [Range(1, 365)]
+    public int? DaysAlive { get; init; }
 }
