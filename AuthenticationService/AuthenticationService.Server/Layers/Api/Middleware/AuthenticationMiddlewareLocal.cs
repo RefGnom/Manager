@@ -4,6 +4,7 @@ using Manager.AuthenticationService.Server.Layers.BusinessLogic;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.Common.Enum;
+using Manager.Core.Common.HelperObjects.Result;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -18,19 +19,20 @@ public class AuthenticationMiddlewareLocal(
     IOptions<AuthenticationSetting> options
 ) : AuthenticationMiddlewareBase(next, logger, options)
 {
-    private readonly RequestDelegate next = next;
-
-    protected override async Task InnerInvokeAsync(HttpContext context, string service, string resource, string apiKey)
+    protected override async Task<Result<(int StatusCode, string Message)>> GetAuthenticationResultAsync(
+        string service,
+        string resource,
+        string apiKey
+    )
     {
         var authenticationStatusResponse = await authenticationStatusService.GetAsync(apiKey, service, resource);
 
         if (authenticationStatusResponse.AuthenticationCode is AuthenticationCode.Authenticated)
         {
-            await next.Invoke(context);
-            return;
+            return Result<(int StatusCode, string Message)>.Ok();
         }
 
-        context.Response.StatusCode = authenticationStatusResponse.AuthenticationCode switch
+        var statusCode = authenticationStatusResponse.AuthenticationCode switch
         {
             AuthenticationCode.ApiKeyNotFound or AuthenticationCode.Unknown => StatusCodes.Status401Unauthorized,
             AuthenticationCode.ResourceNotAvailable => StatusCodes.Status403Forbidden,
@@ -38,7 +40,7 @@ public class AuthenticationMiddlewareLocal(
                 $"Неизвестное значение кода аутентификации {authenticationStatusResponse.AuthenticationCode}"
             ),
         };
-        await context.Response.WriteAsync(authenticationStatusResponse.AuthenticationCode.GetDescription());
+        return (statusCode, authenticationStatusResponse.AuthenticationCode.GetDescription());
     }
 }
 
