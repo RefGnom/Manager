@@ -1,7 +1,7 @@
-﻿using Telegram.Bot;
+﻿using Manager.ManagerTgClient.Bot.Commands;
+using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
 namespace ManagerTgClient.Bot;
 
@@ -12,16 +12,15 @@ public class ManagerUpdateHandler: IUpdateHandler
         try
         {
             Console.WriteLine(update.Type.ToString());
-            switch (update.Type)
+            switch (update.Message.Text)
             {
-                case UpdateType.Message:
+                case "/help":
                 {
-                    var message = update.Message;
-                    Console.WriteLine($"{update.Type}: {message.Text}");
-                    await botClient.SendMessage(message.Chat.Id, "пошел нахуй");
+                    var command = new HelpCommand(botClient);
+                    await command.ExecuteAsync(update.Message.Chat.Id);
                     break;
                 }
-            }
+        }
         }
         catch (Exception e)
         {
