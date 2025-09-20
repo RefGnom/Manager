@@ -18,6 +18,7 @@ public interface IDataContext
 
     Task UpdateAsync<TEntity>(TEntity entity) where TEntity : class;
     Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class;
+    Task DeleteAsync<TEntity>(Action<TEntity> setPrimaryKey) where TEntity : class, new();
 }
 
 internal class DataContext(
@@ -61,6 +62,15 @@ internal class DataContext(
     public async Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class
     {
         await using var dbContext = dbContextWrapperFactory.Create();
+        dbContext.Remove(entity);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync<TEntity>(Action<TEntity> setPrimaryKey) where TEntity : class, new()
+    {
+        await using var dbContext = dbContextWrapperFactory.Create();
+        var entity = new TEntity();
+        setPrimaryKey(entity);
         dbContext.Remove(entity);
         await dbContext.SaveChangesAsync();
     }

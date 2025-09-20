@@ -62,7 +62,7 @@ public class AuthorizationModelController(
         return Ok();
     }
 
-    [HttpGet]
+    [HttpGet("{authorizationModelId:guid}")]
     public async Task<IActionResult> GetAuthorizationModel([FromRoute] Guid authorizationModelId)
     {
         var foundAuthorizationModelDto = await authorizationModelService.FindAsync(authorizationModelId);
@@ -73,5 +73,18 @@ public class AuthorizationModelController(
         }
 
         return Ok(foundAuthorizationModelDto);
+    }
+
+    [HttpDelete("{authorizationModelId:guid}")]
+    public async Task<IActionResult> DeleteAuthorizationModel([FromRoute] Guid authorizationModelId)
+    {
+        var foundAuthorizationModelDto = await authorizationModelService.FindAsync(authorizationModelId);
+        if (foundAuthorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        await authorizationModelService.DeleteAsync(foundAuthorizationModelDto);
+        return Ok();
     }
 }

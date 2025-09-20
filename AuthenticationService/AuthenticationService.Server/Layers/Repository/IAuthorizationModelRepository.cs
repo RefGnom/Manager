@@ -13,6 +13,7 @@ public interface IAuthorizationModelRepository
     Task UpdateAsync(AuthorizationModelDbo authorizationModelDbo);
     Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(Guid authorizationModelId);
     Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(string owner, string[] services, string[] resources);
+    Task DeleteAsync(AuthorizationModelDbo authorizationModelDbo);
 }
 
 public class AuthorizationModelRepository(
@@ -42,5 +43,10 @@ public class AuthorizationModelRepository(
                 .Where(x => x.AvailableResources.SequenceEqual(resources))
                 .FirstOrDefaultAsync()
         );
+    }
+
+    public Task DeleteAsync(AuthorizationModelDbo authorizationModelDbo)
+    {
+        return dataContext.DeleteAsync(authorizationModelDbo);
     }
 }

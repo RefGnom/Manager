@@ -16,6 +16,7 @@ public interface IAuthorizationModelService
 
     Task UpdateAsync(AuthorizationModelDto createAuthorizationModelDto);
     Task<AuthorizationModelDto?> FindAsync(Guid authorizationModelId);
+    Task DeleteAsync(AuthorizationModelDto authorizationModelDto);
 }
 
 public class AuthorizationModelService(
@@ -57,5 +58,11 @@ public class AuthorizationModelService(
     {
         var authorizationModelDbo = await authorizationModelRepository.FindAsync(authorizationModelId);
         return authorizationModelDbo is null ? null : authorizationModelConverter.ToDto(authorizationModelDbo);
+    }
+
+    public Task DeleteAsync(AuthorizationModelDto authorizationModelDto)
+    {
+        var authorizationModelDbo = authorizationModelConverter.ToDbo(authorizationModelDto);
+        return authorizationModelRepository.DeleteAsync(authorizationModelDbo);
     }
 }
