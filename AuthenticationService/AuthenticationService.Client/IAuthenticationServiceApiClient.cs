@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Manager.AuthenticationService.Client.BusinessObjects.Requests;
+using Manager.AuthenticationService.Client.BusinessObjects.Responses;
 using Manager.AuthenticationService.Client.ServiceModels;
 
 namespace Manager.AuthenticationService.Client;
@@ -34,4 +36,8 @@ public interface IAuthenticationServiceApiClient
     ///     404 - Не нашли пользователя для обновления данных <br />
     /// </returns>
     Task<HttpResponse> UpdateUserInfoAsync(UpdateUserInfoRequest updateUserInfoRequest);
+
+    Task<AuthenticationStatusResponse> GetAuthenticationStatusAsync(
+        AuthenticationStatusRequest authenticationStatusRequest
+    );
 }

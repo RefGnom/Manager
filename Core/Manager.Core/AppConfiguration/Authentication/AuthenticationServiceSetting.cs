@@ -2,9 +2,8 @@
 
 namespace Manager.Core.AppConfiguration.Authentication;
 
-public class AuthenticationSetting
+public class AuthenticationServiceSetting
 {
     [Required]
-    public required string Service { get; set; }
-    public bool Disabled { get; set; }
+    public required string ApiKey { get; set; }
 }

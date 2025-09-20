@@ -1,0 +1,48 @@
+using Manager.AuthenticationService.Server.Layers.Api.Middleware;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic;
+using Manager.Core.AppConfiguration.Authentication;
+using Manager.Core.AppConfiguration.DataBase;
+using Manager.Core.Common.DependencyInjection.AutoRegistration;
+using Manager.Core.Logging.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+namespace Manager.AuthenticationService.Server;
+
+public static class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        builder.AddCustomLogger();
+        var startupLogger = StartupLoggerFactory.CreateStartupLogger();
+
+        builder.Services.AddControllers();
+        startupLogger.LogInformation("Start configuration service collection");
+        builder.Services.AddEndpointsApiExplorer()
+            .UseAutoRegistrationForCurrentAssembly()
+            .UseAutoRegistrationForCoreCommon()
+            .UseNpg()
+            .AddApiKeyRequirement()
+            .AddSwaggerGen(c => c.AddApiKeyRequirement())
+            .AddSingleton<IPasswordHasher<ApiKeyService>, PasswordHasher<ApiKeyService>>();
+        startupLogger.LogInformation("Service collection configured");
+
+        startupLogger.LogInformation("Build application");
+        var app = builder.Build();
+
+        app.UseAuthenticationMiddlewareLocal();
+        app.MapControllers();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        startupLogger.LogInformation("Application is started");
+        app.Run();
+    }
+}

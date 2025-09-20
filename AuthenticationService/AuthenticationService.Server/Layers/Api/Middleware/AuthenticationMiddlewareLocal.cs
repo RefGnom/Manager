@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Manager.AuthenticationService.Client;
-using Manager.AuthenticationService.Client.BusinessObjects;
-using Manager.AuthenticationService.Client.BusinessObjects.Requests;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
+using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.Common.Enum;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Manager.Core.AppConfiguration.Authentication;
+namespace Manager.AuthenticationService.Server.Layers.Api.Middleware;
 
-public class AuthenticationMiddleware(
+public class AuthenticationMiddlewareLocal(
     RequestDelegate next,
-    IAuthenticationServiceApiClient authenticationServiceApiClient,
-    ILogger<AuthenticationMiddleware> logger,
+    IAuthenticationStatusService authenticationStatusService,
+    ILogger<AuthenticationMiddlewareLocal> logger,
     IOptions<AuthenticationSetting> options
 ) : AuthenticationMiddlewareBase(next, logger, options)
 {
@@ -21,9 +22,7 @@ public class AuthenticationMiddleware(
 
     protected override async Task InnerInvokeAsync(HttpContext context, string service, string resource, string apiKey)
     {
-        var authenticationStatusResponse = await authenticationServiceApiClient.GetAuthenticationStatusAsync(
-            new AuthenticationStatusRequest(service, resource, apiKey)
-        );
+        var authenticationStatusResponse = await authenticationStatusService.GetAsync(apiKey, service, resource);
 
         if (authenticationStatusResponse.AuthenticationCode is AuthenticationCode.Authenticated)
         {
@@ -40,5 +39,13 @@ public class AuthenticationMiddleware(
             ),
         };
         await context.Response.WriteAsync(authenticationStatusResponse.AuthenticationCode.GetDescription());
+    }
+}
+
+public static class AuthenticationMiddlewareLocalExtensions
+{
+    public static IApplicationBuilder UseAuthenticationMiddlewareLocal(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<AuthenticationMiddlewareLocal>();
     }
 }
