@@ -26,6 +26,16 @@ public class AuthorizationModelService(
     )
     {
         logger.LogInformation("Создаём модель авторизации для пользователя {owner}", createAuthorizationModelDto.Owner);
+        var storedAuthModel = await authorizationModelRepository.FindAsync(
+            createAuthorizationModelDto.Owner,
+            createAuthorizationModelDto.AvailableServices,
+            createAuthorizationModelDto.AvailableResources
+        );
+        if (storedAuthModel is not null)
+        {
+            return CreateAuthorizationModelErrorCode.AuthorizationModelAlreadyExists;
+        }
+
         var authorizationModelDto = authorizationModelFactory.Create(createAuthorizationModelDto);
         var authorizationModelDbo = authorizationModelConverter.ToDbo(authorizationModelDto);
 
