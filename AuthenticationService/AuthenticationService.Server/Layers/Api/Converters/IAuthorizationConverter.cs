@@ -6,6 +6,11 @@ namespace Manager.AuthenticationService.Server.Layers.Api.Converters;
 public interface IAuthorizationConverter
 {
     CreateAuthorizationModelDto ToDto(CreateAuthorizationModelRequest createAuthorizationModelRequest);
+
+    AuthorizationModelDto Map(
+        AuthorizationModelDto existAuthorizationModelDto,
+        PatchAuthorizationModelRequest createAuthorizationModelRequest
+    );
 }
 
 public class AuthorizationConverter : IAuthorizationConverter
@@ -17,6 +22,21 @@ public class AuthorizationConverter : IAuthorizationConverter
             createAuthorizationModelRequest.AvailableServices,
             createAuthorizationModelRequest.AvailableResources,
             createAuthorizationModelRequest.ExpirationDateUtc
+        );
+    }
+
+    public AuthorizationModelDto Map(
+        AuthorizationModelDto existAuthorizationModelDto,
+        PatchAuthorizationModelRequest createAuthorizationModelRequest
+    )
+    {
+        return new AuthorizationModelDto(
+            existAuthorizationModelDto.Id,
+            createAuthorizationModelRequest.Owner ?? existAuthorizationModelDto.Owner,
+            createAuthorizationModelRequest.AvailableServices ?? existAuthorizationModelDto.AvailableServices,
+            createAuthorizationModelRequest.AvailableResources ?? existAuthorizationModelDto.AvailableResources,
+            existAuthorizationModelDto.CreatedUtcTicks,
+            createAuthorizationModelRequest.ExpirationDateUtc?.Ticks ?? existAuthorizationModelDto.ExpirationUtcTicks
         );
     }
 }

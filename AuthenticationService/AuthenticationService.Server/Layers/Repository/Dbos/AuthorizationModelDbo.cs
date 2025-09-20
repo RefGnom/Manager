@@ -10,9 +10,6 @@ public class AuthorizationModelDbo
     [Column("id"), Required, Key]
     public required Guid Id { get; set; }
 
-    [Column("apiKeyHash"), Required]
-    public required string ApiKeyHash { get; set; }
-
     [Column("owner"), Required]
     public required string ApiKeyOwner { get; set; }
 

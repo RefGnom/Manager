@@ -37,4 +37,27 @@ public class AuthorizationModelController(
 
         return BadRequest(createResult.Error.GetDescription());
     }
+
+    [HttpPatch]
+    public async Task<IActionResult> UpdateAuthorizationModel(
+        [FromBody] PatchAuthorizationModelRequest patchAuthorizationModelRequest
+    )
+    {
+        var foundAuthorizationModelDto = await authorizationModelService.FindAsync(
+            patchAuthorizationModelRequest.AuthorizationModelId
+        );
+
+        if (foundAuthorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        var authorizationModelDto = authorizationConverter.Map(
+            foundAuthorizationModelDto,
+            patchAuthorizationModelRequest
+        );
+        await authorizationModelService.UpdateAsync(authorizationModelDto);
+
+        return Ok();
+    }
 }

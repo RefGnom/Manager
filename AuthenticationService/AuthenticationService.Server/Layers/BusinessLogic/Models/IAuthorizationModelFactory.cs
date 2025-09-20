@@ -5,7 +5,7 @@ namespace Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 
 public interface IAuthorizationModelFactory
 {
-    AuthorizationModelDto Create(CreateAuthorizationModelDto createAuthorizationModelDto);
+    AuthorizationModelWithApiKeyDto Create(CreateAuthorizationModelDto createAuthorizationModelDto);
 }
 
 public class AuthorizationModelFactory(
@@ -13,12 +13,12 @@ public class AuthorizationModelFactory(
     IDateTimeProvider dateTimeProvider
 ) : IAuthorizationModelFactory
 {
-    public AuthorizationModelDto Create(CreateAuthorizationModelDto createAuthorizationModelDto)
+    public AuthorizationModelWithApiKeyDto Create(CreateAuthorizationModelDto createAuthorizationModelDto)
     {
         var authorizationModelId = Guid.NewGuid();
         var apiKey = apiKeyService.CreateApiKey(authorizationModelId);
 
-        return new AuthorizationModelDto(
+        return new AuthorizationModelWithApiKeyDto(
             authorizationModelId,
             apiKey,
             createAuthorizationModelDto.Owner,

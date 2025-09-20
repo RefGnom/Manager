@@ -9,32 +9,38 @@ namespace Manager.AuthenticationService.Server.Layers.Repository;
 
 public interface IAuthorizationModelRepository
 {
-    Task CreateAsync(AuthorizationModelDbo authorizationModelDbo);
-    Task<AuthorizationModelDbo?> FindAsync(Guid authorizationModelId);
-    Task<AuthorizationModelDbo?> FindAsync(string owner, string[] services, string[] resources);
+    Task CreateAsync(AuthorizationModelWithApiKeyHashDbo authorizationModelWithApiKeyHashDbo);
+    Task UpdateAsync(AuthorizationModelDbo authorizationModelDbo);
+    Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(Guid authorizationModelId);
+    Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(string owner, string[] services, string[] resources);
 }
 
 public class AuthorizationModelRepository(
     IDataContext dataContext
 ) : IAuthorizationModelRepository
 {
-    public Task CreateAsync(AuthorizationModelDbo authorizationModelDbo)
+    public Task CreateAsync(AuthorizationModelWithApiKeyHashDbo authorizationModelWithApiKeyHashDbo)
     {
-        return dataContext.InsertAsync(authorizationModelDbo);
+        return dataContext.InsertAsync(authorizationModelWithApiKeyHashDbo);
     }
 
-    public Task<AuthorizationModelDbo?> FindAsync(Guid authorizationModelId)
+    public Task UpdateAsync(AuthorizationModelDbo authorizationModelDbo)
     {
-        return dataContext.FindAsync<AuthorizationModelDbo, Guid>(authorizationModelId);
+        return dataContext.UpdateAsync(authorizationModelDbo);
     }
 
-    public Task<AuthorizationModelDbo?> FindAsync(string owner, string[] services, string[] resources)
+    public Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(Guid authorizationModelId)
     {
-        return dataContext.ExecuteReadAsync<AuthorizationModelDbo, AuthorizationModelDbo?>(q => q
-            .Where(x => x.ApiKeyOwner == owner)
-            .Where(x => x.AvailableServices.SequenceEqual(services))
-            .Where(x => x.AvailableResources.SequenceEqual(resources))
-            .FirstOrDefaultAsync()
+        return dataContext.FindAsync<AuthorizationModelWithApiKeyHashDbo, Guid>(authorizationModelId);
+    }
+
+    public Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(string owner, string[] services, string[] resources)
+    {
+        return dataContext.ExecuteReadAsync<AuthorizationModelWithApiKeyHashDbo, AuthorizationModelWithApiKeyHashDbo?>(q
+            => q.Where(x => x.ApiKeyOwner == owner)
+                .Where(x => x.AvailableServices.SequenceEqual(services))
+                .Where(x => x.AvailableResources.SequenceEqual(resources))
+                .FirstOrDefaultAsync()
         );
     }
 }
