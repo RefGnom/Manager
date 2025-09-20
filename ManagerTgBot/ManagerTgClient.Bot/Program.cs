@@ -20,11 +20,10 @@ class Program
         Console.WriteLine(token);
 
         var bot = new TelegramBotClient(configuration["ManagerTgBotToken"], cancellationToken: cts.Token);
-        var receiverOptions = new ReceiverOptions()
+        var receiverOptions = new ReceiverOptions
         {
             AllowedUpdates = Array.Empty<UpdateType>()
         };
-
         var botHandler = new ManagerUpdateHandler();
         bot.StartReceiving(botHandler, receiverOptions, cancellationToken: cts.Token);
         await Task.Delay(-1);
