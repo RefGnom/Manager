@@ -5,5 +5,5 @@ public class CommandDescriptionAttribute(
     string value
 ) : Attribute
 {
-    public string Value = value;
+    public readonly string Value = value;
 }
