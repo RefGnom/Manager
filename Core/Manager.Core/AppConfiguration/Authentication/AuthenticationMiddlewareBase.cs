@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Manager.Core.Common.HelperObjects.Result;
@@ -37,7 +36,6 @@ public abstract class AuthenticationMiddlewareBase(
     public async Task InvokeAsync(HttpContext context)
     {
         logger.LogInformation("Start authentication");
-        var startTimestamp = Stopwatch.GetTimestamp();
         if (setting.Disabled)
         {
             logger.LogWarning("Authentication is disabled. Use only on development environment.");
@@ -67,13 +65,12 @@ public abstract class AuthenticationMiddlewareBase(
             throw new AuthenticationTagMismatchException("Для запроса не настроен ресурс");
         }
 
+        logger.LogDebug("Authentication start get result");
         var resource = authorizationResourceAttributes[^1].Resource;
-        var startGetAuthResultTimestamp = Stopwatch.GetTimestamp();
         var authenticationResult = await GetCachedAuthenticationResultAsync(setting.Service, resource, apiKey[0]!);
-        logger.LogInformation(
-            "Authentication got result in {elapsedMs}ms",
-            Stopwatch.GetElapsedTime(startGetAuthResultTimestamp).TotalMilliseconds
-        );
+        logger.LogDebug("Authentication got result");
+
+        logger.LogInformation("Authentication completed");
         if (authenticationResult.IsFailure)
         {
             context.Response.StatusCode = authenticationResult.Error.StatusCode;
@@ -81,10 +78,6 @@ public abstract class AuthenticationMiddlewareBase(
             return;
         }
 
-        logger.LogInformation(
-            "Authentication ended in {elapsedMs}ms",
-            Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds
-        );
         await next.Invoke(context);
     }
 
