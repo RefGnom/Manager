@@ -20,7 +20,7 @@ public interface IAuthorizationModelService
     Task<AuthorizationModelDto?> FindAsync(Guid authorizationModelId);
     Task DeleteAsync(AuthorizationModelDto authorizationModelDto);
     Task<AuthorizationModelDto[]> SelectExpiredAsync();
-    Task RevokeAsync(params Guid[] expiredAuthorizationModelIds);
+    Task RevokeAsync(params Guid[] authorizationModelIds);
 }
 
 public class AuthorizationModelService(
@@ -78,8 +78,8 @@ public class AuthorizationModelService(
         return authorizationModelDbos.Select(authorizationModelConverter.ToDto).ToArray();
     }
 
-    public Task RevokeAsync(params Guid[] expiredAuthorizationModelIds)
+    public Task RevokeAsync(params Guid[] authorizationModelIds)
     {
-        return authorizationModelRepository.RevokeAsync(expiredAuthorizationModelIds);
+        return authorizationModelRepository.RevokeAsync(authorizationModelIds);
     }
 }

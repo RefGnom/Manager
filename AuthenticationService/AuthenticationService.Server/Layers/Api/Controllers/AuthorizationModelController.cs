@@ -62,6 +62,24 @@ public class AuthorizationModelController(
         return Ok();
     }
 
+    [HttpPatch("{authorizationModelId:guid}/revoke")]
+    public async Task<IActionResult> RevokeAuthorizationModel(Guid authorizationModelId)
+    {
+        var authorizationModelDto = await authorizationModelService.FindAsync(authorizationModelId);
+        if (authorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        if (authorizationModelDto.IsRevoked)
+        {
+            return Conflict("AuthorizationModel is already revoked");
+        }
+
+        await authorizationModelService.RevokeAsync(authorizationModelId);
+        return Ok();
+    }
+
     [HttpGet("{authorizationModelId:guid}")]
     public async Task<IActionResult> GetAuthorizationModel([FromRoute] Guid authorizationModelId)
     {
