@@ -12,6 +12,6 @@ public enum AuthenticationCode
     ApiKeyNotFound = 2,
     [Description("Ресурс недоступен для данного апи ключа")]
     ResourceNotAvailable = 3,
-    [Description("Апи ключ отозван")]
-    ApiKeyRevoked = 4,
+    [Description("Апи ключ не действующий")]
+    ApiKeyInactive = 4,
 }

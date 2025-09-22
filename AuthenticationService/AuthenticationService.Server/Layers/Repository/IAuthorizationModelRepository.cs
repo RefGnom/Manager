@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 using Manager.AuthenticationService.Server.Layers.Repository.Dbos;
 using Manager.Core.AppConfiguration.DataBase;
 using Microsoft.EntityFrameworkCore;
@@ -64,7 +65,7 @@ public class AuthorizationModelRepository(
     public Task RevokeAsync(params Guid[] authorizationModelIds)
     {
         return dataContext.UpdatePropertiesAsync<AuthorizationModelDbo, Guid>(
-            x => x.SetProperty(a => a.IsRevoked, true),
+            x => x.SetProperty(a => a.State, AuthorizationModelState.Revoked),
             x => x.Id,
             authorizationModelIds
         );

@@ -8,7 +8,7 @@ public record AuthorizationModelWithApiKeyDto(
     string Owner,
     string[] AvailableServices,
     string[] AvailableResources,
-    bool IsRevoked,
+    AuthorizationModelState State,
     long CreatedUtcTicks,
     long? ExpirationUtcTicks
 ) : AuthorizationModelDto(
@@ -16,7 +16,7 @@ public record AuthorizationModelWithApiKeyDto(
     Owner,
     AvailableServices,
     AvailableResources,
-    IsRevoked,
+    State,
     CreatedUtcTicks,
     ExpirationUtcTicks
 );

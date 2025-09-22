@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 
 namespace Manager.AuthenticationService.Server.Layers.Repository.Dbos;
 
@@ -19,8 +20,8 @@ public class AuthorizationModelDbo
     [Column("availableResources"), Required]
     public required string[] AvailableResources { get; set; }
 
-    [Column("isRevoked"), Required]
-    public required bool IsRevoked { get; set; }
+    [Column("state"), Required]
+    public required AuthorizationModelState State { get; set; }
 
     [Column("createdUtcTicks"), Required]
 

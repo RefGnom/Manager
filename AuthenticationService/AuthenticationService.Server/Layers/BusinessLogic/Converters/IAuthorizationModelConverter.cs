@@ -23,7 +23,7 @@ public class AuthorizationModelConverter(
             ApiKeyOwner = authorizationModelWithApiKeyDto.Owner,
             AvailableServices = authorizationModelWithApiKeyDto.AvailableServices,
             AvailableResources = authorizationModelWithApiKeyDto.AvailableResources,
-            IsRevoked = authorizationModelWithApiKeyDto.IsRevoked,
+            State = authorizationModelWithApiKeyDto.State,
             CreatedUtcTicks = authorizationModelWithApiKeyDto.CreatedUtcTicks,
             ExpirationUtcTicks = authorizationModelWithApiKeyDto.ExpirationUtcTicks,
         };
@@ -37,7 +37,7 @@ public class AuthorizationModelConverter(
             ApiKeyOwner = authorizationModelDto.Owner,
             AvailableServices = authorizationModelDto.AvailableServices,
             AvailableResources = authorizationModelDto.AvailableResources,
-            IsRevoked = authorizationModelDto.IsRevoked,
+            State = authorizationModelDto.State,
             CreatedUtcTicks = authorizationModelDto.CreatedUtcTicks,
             ExpirationUtcTicks = authorizationModelDto.ExpirationUtcTicks,
         };
@@ -50,7 +50,7 @@ public class AuthorizationModelConverter(
             authorizationModelDbo.ApiKeyOwner,
             authorizationModelDbo.AvailableServices,
             authorizationModelDbo.AvailableResources,
-            authorizationModelDbo.IsRevoked,
+            authorizationModelDbo.State,
             authorizationModelDbo.CreatedUtcTicks,
             authorizationModelDbo.ExpirationUtcTicks
         );

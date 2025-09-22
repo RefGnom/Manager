@@ -24,7 +24,7 @@ public class AuthorizationModelFactory(
             createAuthorizationModelDto.Owner,
             createAuthorizationModelDto.AvailableServices,
             createAuthorizationModelDto.AvailableResources,
-            false,
+            AuthorizationModelState.Active,
             dateTimeProvider.UtcTicks,
             createAuthorizationModelDto.ExpirationDateUtc?.Ticks
         );

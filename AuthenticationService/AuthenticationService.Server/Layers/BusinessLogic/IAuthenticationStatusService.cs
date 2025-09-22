@@ -37,6 +37,8 @@ public class AuthenticationStatusService(
             return AuthenticationCode.ResourceNotAvailable;
         }
 
-        return authModelDbo.IsRevoked ? AuthenticationCode.ApiKeyRevoked : AuthenticationCode.Authenticated;
+        return authModelDbo.State == AuthorizationModelState.Active
+            ? AuthenticationCode.Authenticated
+            : AuthenticationCode.ApiKeyInactive;
     }
 }
