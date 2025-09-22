@@ -19,6 +19,9 @@ public class AuthorizationModelDbo
     [Column("availableResources"), Required]
     public required string[] AvailableResources { get; set; }
 
+    [Column("isRevoked"), Required]
+    public required bool IsRevoked { get; set; }
+
     [Column("createdUtcTicks"), Required]
 
     public required long CreatedUtcTicks { get; set; }

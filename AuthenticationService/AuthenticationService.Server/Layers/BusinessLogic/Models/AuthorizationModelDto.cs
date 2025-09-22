@@ -7,6 +7,7 @@ public record AuthorizationModelDto(
     string Owner,
     string[] AvailableServices,
     string[] AvailableResources,
+    bool IsRevoked,
     long CreatedUtcTicks,
     long? ExpirationUtcTicks
 );
