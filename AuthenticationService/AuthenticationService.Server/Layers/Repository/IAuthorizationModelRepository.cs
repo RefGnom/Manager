@@ -13,6 +13,7 @@ public interface IAuthorizationModelRepository
     Task CreateAsync(AuthorizationModelWithApiKeyHashDbo authorizationModelWithApiKeyHashDbo);
     Task UpdateAsync(AuthorizationModelDbo authorizationModelDbo);
     Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(Guid authorizationModelId);
+    Task<AuthorizationModelWithApiKeyHashDbo> ReadAsync(Guid authorizationModelId);
     Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(string owner, string[] services, string[] resources);
     Task DeleteAsync(AuthorizationModelDbo authorizationModelDbo);
     Task<AuthorizationModelDbo[]> SelectByExpirationTicksAsync(long exclusiveMaxExpirationTicks);
@@ -36,6 +37,14 @@ public class AuthorizationModelRepository(
     public Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(Guid authorizationModelId)
     {
         return dataContext.FindAsync<AuthorizationModelWithApiKeyHashDbo, Guid>(authorizationModelId);
+    }
+
+    public Task<AuthorizationModelWithApiKeyHashDbo> ReadAsync(Guid authorizationModelId)
+    {
+        return dataContext.ExecuteReadAsync<AuthorizationModelWithApiKeyHashDbo, AuthorizationModelWithApiKeyHashDbo>(q
+            => q.Where(x => x.Id == authorizationModelId)
+                .SingleAsync()
+        );
     }
 
     public Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(string owner, string[] services, string[] resources)

@@ -39,6 +39,24 @@ public class AuthorizationModelController(
         return BadRequest(createResult.Error.GetDescription());
     }
 
+    [HttpPost("{authorizationModelId:guid}/recreate")]
+    public async Task<IActionResult> ReissueAuthorizationModel(Guid authorizationModelId, [FromQuery] int? daysAlive)
+    {
+        var authorizationModelDto = await authorizationModelService.FindAsync(authorizationModelId);
+        if (authorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        if (authorizationModelDto.State == AuthorizationModelState.Active)
+        {
+            return BadRequest("Authorization is active");
+        }
+
+        var reissueAuthorizationModel = await authorizationModelService.RecreateAsync(authorizationModelId, daysAlive);
+        return Ok(reissueAuthorizationModel);
+    }
+
     [HttpPatch]
     public async Task<IActionResult> UpdateAuthorizationModel(
         [FromBody] PatchAuthorizationModelRequest patchAuthorizationModelRequest
@@ -71,9 +89,9 @@ public class AuthorizationModelController(
             return NotFound();
         }
 
-        if (authorizationModelDto.IsRevoked)
+        if (authorizationModelDto.State != AuthorizationModelState.Active)
         {
-            return Conflict("AuthorizationModel is already revoked");
+            return BadRequest("AuthorizationModel is not active");
         }
 
         await authorizationModelService.RevokeAsync(authorizationModelId);

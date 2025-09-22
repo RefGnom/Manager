@@ -1,6 +1,7 @@
 ﻿using System;
 using Manager.AuthenticationService.Server.Layers.Api.Requests;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
+using Manager.Core.Common.Time;
 
 namespace Manager.AuthenticationService.Server.Layers.Api.Converters;
 
@@ -14,7 +15,7 @@ public interface IAuthorizationConverter
     );
 }
 
-public class AuthorizationConverter : IAuthorizationConverter
+public class AuthorizationConverter(IDateTimeProvider dateTimeProvider) : IAuthorizationConverter
 {
     public CreateAuthorizationModelDto ToDto(CreateAuthorizationModelRequest createAuthorizationModelRequest)
     {
@@ -22,7 +23,7 @@ public class AuthorizationConverter : IAuthorizationConverter
             createAuthorizationModelRequest.Owner,
             createAuthorizationModelRequest.AvailableServices,
             createAuthorizationModelRequest.AvailableResources,
-            DateTime.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive ?? 0))
+            dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive ?? 0))
         );
     }
 
@@ -39,7 +40,7 @@ public class AuthorizationConverter : IAuthorizationConverter
             AuthorizationModelState.Active,
             existAuthorizationModelDto.CreatedUtcTicks,
             createAuthorizationModelRequest.DaysAlive.HasValue
-                ? DateTime.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive.Value)).Ticks
+                ? dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive.Value)).Ticks
                 : existAuthorizationModelDto.ExpirationUtcTicks
         );
     }

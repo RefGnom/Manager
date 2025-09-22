@@ -21,6 +21,7 @@ public interface IAuthorizationModelService
     Task DeleteAsync(AuthorizationModelDto authorizationModelDto);
     Task<AuthorizationModelDto[]> SelectExpiredAsync();
     Task RevokeAsync(params Guid[] authorizationModelIds);
+    Task<AuthorizationModelWithApiKeyDto> RecreateAsync(Guid oldAuthorizationModelId, int? daysAlive);
 }
 
 public class AuthorizationModelService(
@@ -31,6 +32,8 @@ public class AuthorizationModelService(
     ILogger<AuthorizationModelService> logger
 ) : IAuthorizationModelService
 {
+    private const int DaysAliveDefault = 365;
+
     public async Task<Result<AuthorizationModelWithApiKeyDto, CreateAuthorizationModelErrorCode>> CreateAsync(
         CreateAuthorizationModelDto createAuthorizationModelDto
     )
@@ -81,5 +84,20 @@ public class AuthorizationModelService(
     public Task RevokeAsync(params Guid[] authorizationModelIds)
     {
         return authorizationModelRepository.RevokeAsync(authorizationModelIds);
+    }
+
+    public async Task<AuthorizationModelWithApiKeyDto> RecreateAsync(Guid oldAuthorizationModelId, int? daysAlive)
+    {
+        var oldAuthorizationModelDbo = await authorizationModelRepository.ReadAsync(oldAuthorizationModelId);
+        var authorizationModelDtoWithApiKey = authorizationModelFactory.Create(
+            oldAuthorizationModelDbo.ApiKeyOwner,
+            oldAuthorizationModelDbo.AvailableServices,
+            oldAuthorizationModelDbo.AvailableResources,
+            dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(daysAlive ?? DaysAliveDefault)).Ticks
+        );
+        var authorizationModelDbo = authorizationModelConverter.ToDbo(authorizationModelDtoWithApiKey);
+
+        await authorizationModelRepository.CreateAsync(authorizationModelDbo);
+        return authorizationModelDtoWithApiKey;
     }
 }

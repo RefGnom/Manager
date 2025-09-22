@@ -6,6 +6,13 @@ namespace Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 public interface IAuthorizationModelFactory
 {
     AuthorizationModelWithApiKeyDto Create(CreateAuthorizationModelDto createAuthorizationModelDto);
+
+    AuthorizationModelWithApiKeyDto Create(
+        string owner,
+        string[] availableServices,
+        string[] availableResources,
+        long? expirationUtcTicks
+    );
 }
 
 public class AuthorizationModelFactory(
@@ -13,7 +20,19 @@ public class AuthorizationModelFactory(
     IDateTimeProvider dateTimeProvider
 ) : IAuthorizationModelFactory
 {
-    public AuthorizationModelWithApiKeyDto Create(CreateAuthorizationModelDto createAuthorizationModelDto)
+    public AuthorizationModelWithApiKeyDto Create(CreateAuthorizationModelDto createAuthorizationModelDto) => Create(
+        createAuthorizationModelDto.Owner,
+        createAuthorizationModelDto.AvailableServices,
+        createAuthorizationModelDto.AvailableResources,
+        createAuthorizationModelDto.ExpirationDateUtc?.Ticks
+    );
+
+    public AuthorizationModelWithApiKeyDto Create(
+        string owner,
+        string[] availableServices,
+        string[] availableResources,
+        long? expirationUtcTicks
+    )
     {
         var authorizationModelId = Guid.NewGuid();
         var apiKey = apiKeyService.CreateApiKey(authorizationModelId);
@@ -21,12 +40,12 @@ public class AuthorizationModelFactory(
         return new AuthorizationModelWithApiKeyDto(
             authorizationModelId,
             apiKey,
-            createAuthorizationModelDto.Owner,
-            createAuthorizationModelDto.AvailableServices,
-            createAuthorizationModelDto.AvailableResources,
+            owner,
+            availableServices,
+            availableResources,
             AuthorizationModelState.Active,
             dateTimeProvider.UtcTicks,
-            createAuthorizationModelDto.ExpirationDateUtc?.Ticks
+            expirationUtcTicks
         );
     }
 }
