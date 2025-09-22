@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manager.Core.AppConfiguration.DataBase;
 
@@ -17,11 +18,7 @@ public interface IDataContext<TEntity> where TEntity : class
     /// </summary>
     Task DeleteAsync(TEntity entity);
 
-    /// <summary>
-    /// Метод удаления по первичному ключу в дженерик дата контексте делает два запроса к БД.
-    /// Если есть возможность, то используй метод удаления принимающий сущность либо дата контекст без дженерика
-    /// </summary>
-    Task DeleteAsync<TKey>(TKey primaryKey);
+    Task DeleteAsync<TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys);
 }
 
 internal class DataContext<TEntity>(
@@ -59,16 +56,10 @@ internal class DataContext<TEntity>(
         return dataContext.DeleteAsync(entity);
     }
 
-    public async Task DeleteAsync<TKey>(TKey primaryKey)
+    public async Task DeleteAsync<TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys)
     {
         await using var dbContext = dbContextWrapperFactory.Create();
-        var entity = await dbContext.Set<TEntity>().FindAsync(primaryKey);
-        if (entity == null)
-        {
-            return;
-        }
-
-        dbContext.Remove(entity);
+        await dbContext.Set<TEntity>().Where(x => keys.Contains(primaryKeyPicker(x))).ExecuteDeleteAsync();
         await dbContext.SaveChangesAsync();
     }
 }
