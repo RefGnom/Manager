@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Manager.Core.AppConfiguration.DataBase;
 
@@ -13,6 +14,12 @@ public interface IDataContext<TEntity> where TEntity : class
     Task<TResult> ExecuteReadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> func);
     Task UpdateAsync(TEntity entity);
 
+    Task UpdatePropertiesAsync<TKey>(
+        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setProperties,
+        Func<TEntity, TKey> primaryKeyPicker,
+        params TKey[] keys
+    );
+
     /// <summary>
     /// Можно передавать сущность, где определён только первичный ключ, а все остальные значения default
     /// </summary>
@@ -22,44 +29,29 @@ public interface IDataContext<TEntity> where TEntity : class
 }
 
 internal class DataContext<TEntity>(
-    IDataContext dataContext,
-    IDbContextWrapperFactory dbContextWrapperFactory
+    IDataContext dataContext
 ) : IDataContext<TEntity> where TEntity : class
 {
-    public Task InsertAsync(TEntity entity)
-    {
-        return dataContext.InsertAsync(entity);
-    }
+    public Task InsertAsync(TEntity entity) => dataContext.InsertAsync(entity);
 
-    public Task<TEntity?> FindAsync<TKey>(TKey primaryKey)
-    {
-        return dataContext.FindAsync<TEntity, TKey>(primaryKey);
-    }
+    public Task<TEntity?> FindAsync<TKey>(TKey primaryKey) => dataContext.FindAsync<TEntity, TKey>(primaryKey);
 
     public Task<TEntity[]> SelectAsync<TKey>(Func<TEntity, TKey> getKey, params TKey[] primaryKeys)
-    {
-        return dataContext.SelectAsync(getKey, primaryKeys);
-    }
+        => dataContext.SelectAsync(getKey, primaryKeys);
 
     public Task<TResult> ExecuteReadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> func)
-    {
-        return dataContext.ExecuteReadAsync(func);
-    }
+        => dataContext.ExecuteReadAsync(func);
 
-    public Task UpdateAsync(TEntity entity)
-    {
-        return dataContext.UpdateAsync(entity);
-    }
+    public Task UpdateAsync(TEntity entity) => dataContext.UpdateAsync(entity);
 
-    public Task DeleteAsync(TEntity entity)
-    {
-        return dataContext.DeleteAsync(entity);
-    }
+    public Task UpdatePropertiesAsync<TKey>(
+        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setProperties,
+        Func<TEntity, TKey> primaryKeyPicker,
+        params TKey[] keys
+    ) => dataContext.UpdatePropertiesAsync(setProperties, primaryKeyPicker, keys);
 
-    public async Task DeleteAsync<TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys)
-    {
-        await using var dbContext = dbContextWrapperFactory.Create();
-        await dbContext.Set<TEntity>().Where(x => keys.Contains(primaryKeyPicker(x))).ExecuteDeleteAsync();
-        await dbContext.SaveChangesAsync();
-    }
+    public Task DeleteAsync(TEntity entity) => dataContext.DeleteAsync(entity);
+
+    public Task DeleteAsync<TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys)
+        => dataContext.DeleteAsync(primaryKeyPicker, keys);
 }
