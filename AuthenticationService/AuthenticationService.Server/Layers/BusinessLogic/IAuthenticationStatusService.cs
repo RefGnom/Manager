@@ -32,11 +32,11 @@ public class AuthenticationStatusService(
             return AuthenticationCode.ApiKeyNotFound;
         }
 
-        if (authModelDbo.AvailableResources.Contains(resource) && authModelDbo.AvailableServices.Contains(service))
+        if (!authModelDbo.AvailableResources.Contains(resource) || !authModelDbo.AvailableServices.Contains(service))
         {
-            return AuthenticationCode.Authenticated;
+            return AuthenticationCode.ResourceNotAvailable;
         }
 
-        return AuthenticationCode.ResourceNotAvailable;
+        return authModelDbo.IsRevoked ? AuthenticationCode.ApiKeyRevoked : AuthenticationCode.Authenticated;
     }
 }

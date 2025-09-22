@@ -37,6 +37,7 @@ public class AuthenticationMiddleware(
         {
             AuthenticationCode.ApiKeyNotFound or AuthenticationCode.Unknown => StatusCodes.Status401Unauthorized,
             AuthenticationCode.ResourceNotAvailable => StatusCodes.Status403Forbidden,
+            AuthenticationCode.ApiKeyRevoked => StatusCodes.Status403Forbidden,
             _ => throw new ArgumentOutOfRangeException(
                 $"Неизвестное значение кода аутентификации {authenticationStatusResponse.AuthenticationCode}"
             ),
