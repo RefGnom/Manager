@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 
 namespace Manager.AuthenticationService.Server.Layers.Repository.Dbos;
 
@@ -10,9 +11,6 @@ public class AuthorizationModelDbo
     [Column("id"), Required, Key]
     public required Guid Id { get; set; }
 
-    [Column("apiKeyHash"), Required]
-    public required string ApiKeyHash { get; set; }
-
     [Column("owner"), Required]
     public required string ApiKeyOwner { get; set; }
 
@@ -21,6 +19,9 @@ public class AuthorizationModelDbo
 
     [Column("availableResources"), Required]
     public required string[] AvailableResources { get; set; }
+
+    [Column("state"), Required]
+    public required AuthorizationModelState State { get; set; }
 
     [Column("createdUtcTicks"), Required]
 

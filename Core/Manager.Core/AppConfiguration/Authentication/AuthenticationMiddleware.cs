@@ -4,6 +4,7 @@ using Manager.AuthenticationService.Client;
 using Manager.AuthenticationService.Client.BusinessObjects;
 using Manager.AuthenticationService.Client.BusinessObjects.Requests;
 using Manager.Core.Common.Enum;
+using Manager.Core.Common.HelperObjects.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -17,9 +18,11 @@ public class AuthenticationMiddleware(
     IOptions<AuthenticationSetting> options
 ) : AuthenticationMiddlewareBase(next, logger, options)
 {
-    private readonly RequestDelegate next = next;
-
-    protected override async Task InnerInvokeAsync(HttpContext context, string service, string resource, string apiKey)
+    protected override async Task<Result<(int StatusCode, string Message)>> GetAuthenticationResultAsync(
+        string service,
+        string resource,
+        string apiKey
+    )
     {
         var authenticationStatusResponse = await authenticationServiceApiClient.GetAuthenticationStatusAsync(
             new AuthenticationStatusRequest(service, resource, apiKey)
@@ -27,18 +30,18 @@ public class AuthenticationMiddleware(
 
         if (authenticationStatusResponse.AuthenticationCode is AuthenticationCode.Authenticated)
         {
-            await next.Invoke(context);
-            return;
+            return Result<(int StatusCode, string Message)>.Ok();
         }
 
-        context.Response.StatusCode = authenticationStatusResponse.AuthenticationCode switch
+        var statusCode = authenticationStatusResponse.AuthenticationCode switch
         {
             AuthenticationCode.ApiKeyNotFound or AuthenticationCode.Unknown => StatusCodes.Status401Unauthorized,
             AuthenticationCode.ResourceNotAvailable => StatusCodes.Status403Forbidden,
+            AuthenticationCode.ApiKeyInactive => StatusCodes.Status403Forbidden,
             _ => throw new ArgumentOutOfRangeException(
                 $"Неизвестное значение кода аутентификации {authenticationStatusResponse.AuthenticationCode}"
             ),
         };
-        await context.Response.WriteAsync(authenticationStatusResponse.AuthenticationCode.GetDescription());
+        return (statusCode, authenticationStatusResponse.AuthenticationCode.GetDescription());
     }
 }

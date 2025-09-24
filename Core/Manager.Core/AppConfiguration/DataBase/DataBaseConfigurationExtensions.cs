@@ -11,6 +11,7 @@ public static class DataBaseConfigurationExtensions
         serviceCollection.AddSingleton<IDbContextConfigurator, NpgDbContextConfigurator>();
         serviceCollection.AddSingleton<IDbContextWrapperFactory, DbContextWrapperFactory>();
         serviceCollection.AddSingleton<IDataContext, DataContext>();
+        serviceCollection.AddSingleton(typeof(IDataContext<>), typeof(DataContext<>));
 
         return serviceCollection;
     }

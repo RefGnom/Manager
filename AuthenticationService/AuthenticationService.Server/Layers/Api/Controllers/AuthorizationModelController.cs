@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Manager.AuthenticationService.Server.Layers.Api.Converters;
 using Manager.AuthenticationService.Server.Layers.Api.Requests;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic;
@@ -36,5 +37,90 @@ public class AuthorizationModelController(
         }
 
         return BadRequest(createResult.Error.GetDescription());
+    }
+
+    [HttpPost("{authorizationModelId:guid}/recreate")]
+    public async Task<IActionResult> ReissueAuthorizationModel(Guid authorizationModelId, [FromQuery] int? daysAlive)
+    {
+        var authorizationModelDto = await authorizationModelService.FindAsync(authorizationModelId);
+        if (authorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        if (authorizationModelDto.State == AuthorizationModelState.Active)
+        {
+            return BadRequest("Authorization is active");
+        }
+
+        var reissueAuthorizationModel = await authorizationModelService.RecreateAsync(authorizationModelId, daysAlive);
+        return Ok(reissueAuthorizationModel);
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> UpdateAuthorizationModel(
+        [FromBody] PatchAuthorizationModelRequest patchAuthorizationModelRequest
+    )
+    {
+        var foundAuthorizationModelDto = await authorizationModelService.FindAsync(
+            patchAuthorizationModelRequest.AuthorizationModelId
+        );
+
+        if (foundAuthorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        var authorizationModelDto = authorizationConverter.Map(
+            foundAuthorizationModelDto,
+            patchAuthorizationModelRequest
+        );
+        await authorizationModelService.UpdateAsync(authorizationModelDto);
+
+        return Ok();
+    }
+
+    [HttpPatch("{authorizationModelId:guid}/revoke")]
+    public async Task<IActionResult> RevokeAuthorizationModel(Guid authorizationModelId)
+    {
+        var authorizationModelDto = await authorizationModelService.FindAsync(authorizationModelId);
+        if (authorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        if (authorizationModelDto.State != AuthorizationModelState.Active)
+        {
+            return BadRequest("AuthorizationModel is not active");
+        }
+
+        await authorizationModelService.RevokeAsync(authorizationModelId);
+        return Ok();
+    }
+
+    [HttpGet("{authorizationModelId:guid}")]
+    public async Task<IActionResult> GetAuthorizationModel([FromRoute] Guid authorizationModelId)
+    {
+        var foundAuthorizationModelDto = await authorizationModelService.FindAsync(authorizationModelId);
+
+        if (foundAuthorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(foundAuthorizationModelDto);
+    }
+
+    [HttpDelete("{authorizationModelId:guid}")]
+    public async Task<IActionResult> DeleteAuthorizationModel([FromRoute] Guid authorizationModelId)
+    {
+        var foundAuthorizationModelDto = await authorizationModelService.FindAsync(authorizationModelId);
+        if (foundAuthorizationModelDto == null)
+        {
+            return NotFound();
+        }
+
+        await authorizationModelService.DeleteAsync(foundAuthorizationModelDto);
+        return Ok();
     }
 }

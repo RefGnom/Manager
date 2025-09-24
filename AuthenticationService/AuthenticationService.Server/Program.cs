@@ -2,6 +2,7 @@ using Manager.AuthenticationService.Server.Layers.Api.Middleware;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.AppConfiguration.DataBase;
+using Manager.Core.BackgroundTasks;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.Logging.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -28,6 +29,7 @@ public static class Program
             .UseNpg()
             .AddApiKeyRequirement()
             .AddSwaggerGen(c => c.AddApiKeyRequirement())
+            .AddBackgroundTasks(startupLogger)
             .AddSingleton<IPasswordHasher<ApiKeyService>, PasswordHasher<ApiKeyService>>();
         startupLogger.LogInformation("Service collection configured");
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Manager.AuthenticationService.Server.Layers.Api.Requests;
 
@@ -14,5 +13,6 @@ public class CreateAuthorizationModelRequest
     [Required]
     public required string[] AvailableResources { get; init; }
 
-    public DateTime? ExpirationDateUtc { get; init; }
+    [Range(1, 365)]
+    public int? DaysAlive { get; init; }
 }

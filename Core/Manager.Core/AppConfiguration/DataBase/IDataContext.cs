@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Manager.Core.AppConfiguration.DataBase;
 
@@ -17,7 +19,15 @@ public interface IDataContext
         where TEntity : class;
 
     Task UpdateAsync<TEntity>(TEntity entity) where TEntity : class;
+
+    Task UpdatePropertiesAsync<TEntity, TKey>(
+        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setProperties,
+        Func<TEntity, TKey> primaryKeyPicker,
+        params TKey[] keys
+    ) where TEntity : class;
+
     Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class;
+    Task DeleteAsync<TEntity, TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys) where TEntity : class;
 }
 
 internal class DataContext(
@@ -58,10 +68,31 @@ internal class DataContext(
         await dbContext.SaveChangesAsync();
     }
 
+    public async Task UpdatePropertiesAsync<TEntity, TKey>(
+        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setProperties,
+        Func<TEntity, TKey> primaryKeyPicker,
+        params TKey[] keys
+    ) where TEntity : class
+    {
+        await using var dbContext = dbContextWrapperFactory.Create();
+        await dbContext.Set<TEntity>()
+            .Where(x => keys.Contains(primaryKeyPicker(x)))
+            .ExecuteUpdateAsync(setProperties);
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class
     {
         await using var dbContext = dbContextWrapperFactory.Create();
         dbContext.Remove(entity);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync<TEntity, TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys)
+        where TEntity : class
+    {
+        await using var dbContext = dbContextWrapperFactory.Create();
+        await dbContext.Set<TEntity>().Where(x => keys.Contains(primaryKeyPicker(x))).ExecuteDeleteAsync();
         await dbContext.SaveChangesAsync();
     }
 }
