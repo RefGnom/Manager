@@ -15,7 +15,9 @@ public interface IAuthorizationConverter
     );
 }
 
-public class AuthorizationConverter(IDateTimeProvider dateTimeProvider) : IAuthorizationConverter
+public class AuthorizationConverter(
+    IDateTimeProvider dateTimeProvider
+) : IAuthorizationConverter
 {
     public CreateAuthorizationModelDto ToDto(CreateAuthorizationModelRequest createAuthorizationModelRequest)
     {
@@ -23,7 +25,9 @@ public class AuthorizationConverter(IDateTimeProvider dateTimeProvider) : IAutho
             createAuthorizationModelRequest.Owner,
             createAuthorizationModelRequest.AvailableServices,
             createAuthorizationModelRequest.AvailableResources,
-            dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive ?? 0))
+            createAuthorizationModelRequest.DaysAlive.HasValue
+                ? dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive.Value))
+                : null
         );
     }
 
