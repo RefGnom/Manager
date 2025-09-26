@@ -2,25 +2,23 @@
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
-namespace ManagerTgClient.Bot;
+namespace Manager.ManagerTgClient.Bot;
 
 public class ManagerUpdateHandler: IUpdateHandler
 {
+    private readonly ICommandResolver commandResolver = new CommandResolver();
     public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         try
         {
-            Console.WriteLine(update.Type.ToString());
-            switch (update.Message.Text)
+            if (update.Type == UpdateType.Message)
             {
-                case "/help":
-                {
-                    var command = new HelpCommand(botClient);
-                    await command.ExecuteAsync(update.Message.Chat.Id);
-                    break;
-                }
-        }
+                var message = update.Message!.Text;
+                var command = commandResolver.Resolve(message);
+                await command.ExecuteAsync(botClient, update.Message.Chat.Id);
+            }
         }
         catch (Exception e)
         {

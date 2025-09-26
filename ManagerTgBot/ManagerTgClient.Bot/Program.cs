@@ -1,5 +1,4 @@
-﻿using ManagerTgClient.Bot;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
@@ -11,7 +10,6 @@ class Program
     public async static Task Main(string[] args)
     {
         using var cts = new CancellationTokenSource();
-
 
         var configuration = new ConfigurationManager();
         configuration.AddUserSecrets<Program>()
