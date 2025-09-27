@@ -35,7 +35,7 @@ public abstract class AuthenticationMiddlewareBase(
 
     public async Task InvokeAsync(HttpContext context)
     {
-        logger.LogInformation("Start authentication");
+        logger.LogDebug("Start authentication middleware");
         if (setting.Disabled)
         {
             logger.LogWarning("Authentication is disabled. Use only on development environment.");
@@ -57,6 +57,7 @@ public abstract class AuthenticationMiddlewareBase(
             return;
         }
 
+        logger.LogInformation("Start authentication");
         context.Request.Headers.TryGetValue(ApiKeyHeaderName, out var apiKey);
         if (apiKey.Count != 1 || apiKey[0].IsNullOrEmpty())
         {
