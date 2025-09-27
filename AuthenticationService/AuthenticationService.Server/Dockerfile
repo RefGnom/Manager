@@ -1,21 +1,16 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG DOTNET_VERSION=9.0
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS build
 WORKDIR /src
 
-COPY ["MyMicroservice.csproj", "."]
-RUN dotnet restore "AuthenticationService.Server.csproj"
-
 COPY . .
-RUN dotnet build "AuthenticationService.Server.csproj" -c Release -o /app/build
-RUN dotnet publish "AuthenticationService.Server.csproj" -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+RUN dotnet restore
+
+WORKDIR /src
+RUN dotnet publish "AuthenticationService/AuthenticationService.Server/AuthenticationService.Server.csproj" -c Release -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION} AS final
 WORKDIR /app
-
 COPY --from=build /app/publish .
 
-EXPOSE 8080
-
-ENV ASPNETCORE_URLS=http://+:8080
-ENV ASPNETCORE_ENVIRONMENT=Production
-
-ENTRYPOINT ["dotnet", "AuthenticationService.Server.dll"]
+ENTRYPOINT ["dotnet", "Manager.AuthenticationService.Server.dll"]

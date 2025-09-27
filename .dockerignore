@@ -1,0 +1,44 @@
+# Binaries and build artifacts
+bin/
+obj/
+
+# Rider-specific files
+.idea/
+.vs/
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.resharper
+*.bak
+*.cache
+*.dotSettings
+*.DotSettings.user
+
+# Git-related files
+.git/
+.gitignore
+
+# Package manager files
+packages/ # If using packages.config
+node_modules/ # If using client-side packages
+
+# Test results and coverage reports
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Log files
+*.log
+logs/
+
+# Sensitive information (e.g., local configuration)
+appsettings.Development.json
+appsettings.Local.json
+*.env
+.env
+
+# Other temporary files
+tmp/
+temp/
