@@ -50,6 +50,13 @@ public abstract class AuthenticationMiddlewareBase(
             return;
         }
 
+        var disableAuthenticationAttribute = endpoint.Metadata.GetMetadata<DisableAuthenticationAttribute>();
+        if (disableAuthenticationAttribute != null)
+        {
+            await next.Invoke(context);
+            return;
+        }
+
         context.Request.Headers.TryGetValue(ApiKeyHeaderName, out var apiKey);
         if (apiKey.Count != 1 || apiKey[0].IsNullOrEmpty())
         {
