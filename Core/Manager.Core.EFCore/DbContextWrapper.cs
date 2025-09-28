@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Manager.Core.AppConfiguration.DataBase;
+namespace Manager.Core.EFCore;
 
-internal class DbContextWrapper(
+public class DbContextWrapper(
     IDbContextConfigurator dbContextConfigurator
 ) : DbContext
 {

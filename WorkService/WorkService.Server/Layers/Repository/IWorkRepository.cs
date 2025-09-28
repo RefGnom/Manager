@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Manager.Core.AppConfiguration.DataBase;
+using Manager.Core.EFCore;
 using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 using Manager.WorkService.Server.Layers.Repository.Dbos;
 using Microsoft.EntityFrameworkCore;

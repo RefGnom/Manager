@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Manager.Core.AppConfiguration.DataBase;
+namespace Manager.Core.EFCore;
 
 public class NpgDbContextConfigurator(
     IOptions<DataBaseOptions> dataBaseOptions,

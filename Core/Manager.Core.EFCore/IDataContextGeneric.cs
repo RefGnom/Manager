@@ -4,13 +4,13 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace Manager.Core.AppConfiguration.DataBase;
+namespace Manager.Core.EFCore;
 
 public interface IDataContext<TEntity> where TEntity : class
 {
     Task InsertAsync(TEntity entity);
     Task<TEntity?> FindAsync<TKey>(TKey primaryKey);
-    Task<TEntity[]> SelectAsync<TKey>(Func<TEntity, TKey> getKey, params TKey[] primaryKeys);
+    Task<TEntity[]> SelectAsync<TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] primaryKeys);
     Task<TResult> ExecuteReadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> func);
     Task UpdateAsync(TEntity entity);
 
@@ -36,8 +36,8 @@ internal class DataContext<TEntity>(
 
     public Task<TEntity?> FindAsync<TKey>(TKey primaryKey) => dataContext.FindAsync<TEntity, TKey>(primaryKey);
 
-    public Task<TEntity[]> SelectAsync<TKey>(Func<TEntity, TKey> getKey, params TKey[] primaryKeys)
-        => dataContext.SelectAsync(getKey, primaryKeys);
+    public Task<TEntity[]> SelectAsync<TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] primaryKeys)
+        => dataContext.SelectAsync(primaryKeyPicker, primaryKeys);
 
     public Task<TResult> ExecuteReadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> func)
         => dataContext.ExecuteReadAsync(func);

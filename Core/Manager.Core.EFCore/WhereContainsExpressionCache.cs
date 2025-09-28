@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Manager.Core.AppConfiguration.DataBase;
+namespace Manager.Core.EFCore;
 
 public static class WhereContainsExpressionCache<TEntity, TKey>
 {

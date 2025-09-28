@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 using Manager.AuthenticationService.Server.Layers.Repository.Dbos;
-using Manager.Core.AppConfiguration.DataBase;
+using Manager.Core.EFCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Manager.AuthenticationService.Server.Layers.Repository;

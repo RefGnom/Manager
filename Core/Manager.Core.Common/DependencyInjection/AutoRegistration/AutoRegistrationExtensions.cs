@@ -34,7 +34,7 @@ public static class AutoRegistrationExtensions
         return serviceCollection.UseAutoRegistrationForAssembly(assembly);
     }
 
-    private static IServiceCollection UseAutoRegistrationForAssembly(
+    public static IServiceCollection UseAutoRegistrationForAssembly(
         this IServiceCollection serviceCollection,
         Assembly assembly,
         string? namespacePrefix = null

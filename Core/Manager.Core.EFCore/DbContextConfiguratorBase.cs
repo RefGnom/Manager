@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Manager.Core.AppConfiguration.DataBase;
+namespace Manager.Core.EFCore;
 
 public abstract class DbContextConfiguratorBase(
     IOptions<DataBaseOptions> dataBaseOptions,
@@ -37,7 +37,7 @@ public abstract class DbContextConfiguratorBase(
     {
         if (!initialized)
         {
-            entityTypes = Assembly.GetEntryAssembly()?.GetExportedTypes()
+            entityTypes = GetEntitiesAssembly()?.GetExportedTypes()
                 .Where(x => x.GetCustomAttribute<TableAttribute>() is not null)
                 .ToArray() ?? [];
             initialized = true;
@@ -48,4 +48,6 @@ public abstract class DbContextConfiguratorBase(
             modelBuilder.Entity(entityType);
         }
     }
+
+    protected virtual Assembly? GetEntitiesAssembly() => Assembly.GetEntryAssembly();
 }
