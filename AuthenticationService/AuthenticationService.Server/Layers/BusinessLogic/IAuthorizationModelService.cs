@@ -20,6 +20,7 @@ public interface IAuthorizationModelService
     Task<AuthorizationModelDto?> FindAsync(Guid authorizationModelId);
     Task DeleteAsync(AuthorizationModelDto authorizationModelDto);
     Task<AuthorizationModelDto[]> SelectExpiredAsync();
+    Task ExpireAsync(params Guid[] authorizationModelIds);
     Task RevokeAsync(params Guid[] authorizationModelIds);
     Task<AuthorizationModelWithApiKeyDto> RecreateAsync(Guid oldAuthorizationModelId, int? daysAlive);
 }
@@ -81,9 +82,14 @@ public class AuthorizationModelService(
         return authorizationModelDbos.Select(authorizationModelConverter.ToDto).ToArray();
     }
 
+    public Task ExpireAsync(params Guid[] authorizationModelIds)
+    {
+        return authorizationModelRepository.SetStatusAsync(AuthorizationModelState.Expired, authorizationModelIds);
+    }
+
     public Task RevokeAsync(params Guid[] authorizationModelIds)
     {
-        return authorizationModelRepository.RevokeAsync(authorizationModelIds);
+        return authorizationModelRepository.SetStatusAsync(AuthorizationModelState.Revoked, authorizationModelIds);
     }
 
     public async Task<AuthorizationModelWithApiKeyDto> RecreateAsync(Guid oldAuthorizationModelId, int? daysAlive)

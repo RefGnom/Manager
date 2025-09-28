@@ -17,7 +17,7 @@ public interface IAuthorizationModelRepository
     Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(string owner, string[] services, string[] resources);
     Task DeleteAsync(AuthorizationModelDbo authorizationModelDbo);
     Task<AuthorizationModelDbo[]> SelectByExpirationTicksAsync(long exclusiveMaxExpirationTicks);
-    Task RevokeAsync(params Guid[] authorizationModelIds);
+    Task SetStatusAsync(AuthorizationModelState state, params Guid[] authorizationModelIds);
 }
 
 public class AuthorizationModelRepository(
@@ -67,14 +67,15 @@ public class AuthorizationModelRepository(
         return dataContext.ExecuteReadAsync<AuthorizationModelDbo, AuthorizationModelDbo[]>(q
             => q.Where(x => x.ExpirationUtcTicks.HasValue)
                 .Where(x => x.ExpirationUtcTicks!.Value <= inclusiveMaxExpirationTicks)
+                .Where(x => x.State == AuthorizationModelState.Active)
                 .ToArrayAsync()
         );
     }
 
-    public Task RevokeAsync(params Guid[] authorizationModelIds)
+    public Task SetStatusAsync(AuthorizationModelState state, params Guid[] authorizationModelIds)
     {
         return dataContext.UpdatePropertiesAsync<AuthorizationModelDbo, Guid>(
-            x => x.SetProperty(a => a.State, AuthorizationModelState.Revoked),
+            x => x.SetProperty(a => a.State, state),
             x => x.Id,
             authorizationModelIds
         );
