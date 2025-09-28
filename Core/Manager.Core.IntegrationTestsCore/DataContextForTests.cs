@@ -20,12 +20,20 @@ public class DataContextForTests(
         Entities.Add(entity);
     }
 
+    public async Task InsertRangeAsync<TEntity>(params TEntity[] entities) where TEntity : class
+    {
+        await innerContext.InsertRangeAsync(entities);
+        Entities.AddRange(entities);
+    }
+
     public Task<TEntity?> FindAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class
         => innerContext.FindAsync<TEntity, TKey>(primaryKey);
 
-    public Task<TEntity[]> SelectAsync<TEntity, TKey>(Func<TEntity, TKey> getKey, params TKey[] primaryKeys)
-        where TEntity : class
-        => innerContext.SelectAsync(getKey, primaryKeys);
+    public Task<TEntity[]> SelectAsync<TEntity, TKey>(
+        Expression<Func<TEntity, TKey>> primaryKeyPicker,
+        params TKey[] primaryKeys
+    ) where TEntity : class
+        => innerContext.SelectAsync(primaryKeyPicker, primaryKeys);
 
     public Task<TResult> ExecuteReadAsync<TEntity, TResult>(Func<IQueryable<TEntity>, Task<TResult>> func)
         where TEntity : class

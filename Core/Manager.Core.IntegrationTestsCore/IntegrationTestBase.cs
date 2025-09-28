@@ -13,11 +13,13 @@ public abstract class IntegrationTestBase
 {
     protected readonly Fixture Fixture = new();
     protected IServiceProvider ServiceProvider = null!;
+    protected IDataContext DataContext = null!;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         ConfigureTests();
+        DataContext = ServiceProvider.GetRequiredService<IDataContext>();
     }
 
     [OneTimeTearDown]
@@ -30,9 +32,20 @@ public abstract class IntegrationTestBase
         }
 
         var dbContextWrapperFactory = ServiceProvider.GetRequiredService<IDbContextWrapperFactory>();
-        var dbContext = dbContextWrapperFactory.Create();
-        dbContext.RemoveRange(dataContextForTests.Entities);
-        dbContext.SaveChanges();
+        foreach (var entity in dataContextForTests.Entities)
+        {
+            try
+            {
+                var dbContext = dbContextWrapperFactory.Create();
+                dbContext.Remove(entity);
+                dbContext.SaveChanges();
+            }
+            catch
+            {
+                // ignored
+            }
+        }
+
         dataContextForTests.Entities.Clear();
     }
 

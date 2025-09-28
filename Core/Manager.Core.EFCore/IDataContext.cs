@@ -10,10 +10,13 @@ namespace Manager.Core.EFCore;
 public interface IDataContext
 {
     Task InsertAsync<TEntity>(TEntity entity) where TEntity : class;
+    Task InsertRangeAsync<TEntity>(params TEntity[] entities) where TEntity : class;
     Task<TEntity?> FindAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class;
 
-    Task<TEntity[]> SelectAsync<TEntity, TKey>(Func<TEntity, TKey> getKey, params TKey[] primaryKeys)
-        where TEntity : class;
+    Task<TEntity[]> SelectAsync<TEntity, TKey>(
+        Expression<Func<TEntity, TKey>> primaryKeyPicker,
+        params TKey[] primaryKeys
+    ) where TEntity : class;
 
     Task<TResult> ExecuteReadAsync<TEntity, TResult>(Func<IQueryable<TEntity>, Task<TResult>> func)
         where TEntity : class;
@@ -27,7 +30,9 @@ public interface IDataContext
     ) where TEntity : class;
 
     Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class;
-    Task DeleteAsync<TEntity, TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] keys) where TEntity : class;
+
+    Task DeleteAsync<TEntity, TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] keys)
+        where TEntity : class;
 }
 
 public class DataContext(
@@ -41,17 +46,27 @@ public class DataContext(
         await dbContext.SaveChangesAsync();
     }
 
+    public async Task InsertRangeAsync<TEntity>(params TEntity[] entities) where TEntity : class
+    {
+        await using var dbContext = dbContextWrapperFactory.Create();
+        // ReSharper disable once CoVariantArrayConversion
+        await dbContext.AddRangeAsync(entities);
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task<TEntity?> FindAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class
     {
         await using var dbContext = dbContextWrapperFactory.Create();
         return await dbContext.FindAsync<TEntity>(primaryKey);
     }
 
-    public async Task<TEntity[]> SelectAsync<TEntity, TKey>(Func<TEntity, TKey> getKey, params TKey[] primaryKeys)
-        where TEntity : class
+    public async Task<TEntity[]> SelectAsync<TEntity, TKey>(
+        Expression<Func<TEntity, TKey>> primaryKeyPicker,
+        params TKey[] primaryKeys
+    ) where TEntity : class
     {
         await using var dbContext = dbContextWrapperFactory.Create();
-        return await dbContext.Set<TEntity>().Where(x => primaryKeys.Contains(getKey(x))).ToArrayAsync();
+        return await dbContext.Set<TEntity>().WhereContains(primaryKeyPicker, primaryKeys).ToArrayAsync();
     }
 
     public async Task<TResult> ExecuteReadAsync<TEntity, TResult>(Func<IQueryable<TEntity>, Task<TResult>> func)
