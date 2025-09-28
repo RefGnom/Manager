@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Manager.ManagerTgClient.Bot.Handlers;
+using Microsoft.Extensions.Configuration;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
-using Telegram.Bot.Types.Enums;
 
 namespace Manager.ManagerTgClient.Bot;
 
-class Program
+public class Program
 {
-    public async static Task Main(string[] args)
+    public static async Task Main(string[] args)
     {
         using var cts = new CancellationTokenSource();
 
@@ -20,10 +20,10 @@ class Program
         var bot = new TelegramBotClient(configuration["ManagerTgBotToken"], cancellationToken: cts.Token);
         var receiverOptions = new ReceiverOptions
         {
-            AllowedUpdates = Array.Empty<UpdateType>(),
+            AllowedUpdates = [],
         };
         var botHandler = new ManagerUpdateHandler();
         bot.StartReceiving(botHandler, receiverOptions, cancellationToken: cts.Token);
-        await Task.Delay(-1);
+        await Task.Delay(-1, cts.Token);
     }
 }

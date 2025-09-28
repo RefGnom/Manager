@@ -4,12 +4,17 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace Manager.ManagerTgClient.Bot;
+namespace Manager.ManagerTgClient.Bot.Handlers;
 
-public class ManagerUpdateHandler: IUpdateHandler
+public class ManagerUpdateHandler : IUpdateHandler
 {
-    private readonly ICommandResolver commandResolver = new CommandResolver();
-    public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    private readonly CommandResolver commandResolver = new();
+
+    public async Task HandleUpdateAsync(
+        ITelegramBotClient botClient,
+        Update update,
+        CancellationToken cancellationToken
+    )
     {
         try
         {

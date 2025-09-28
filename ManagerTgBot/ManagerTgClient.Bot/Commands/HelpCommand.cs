@@ -10,13 +10,14 @@ namespace Manager.ManagerTgClient.Bot.Commands;
 public class HelpCommand : IManagerBotCommand
 {
     private readonly Type[] commands;
+
     public HelpCommand()
     {
         commands = Assembly.GetEntryAssembly()!.GetTypes()
             .Where(type => typeof(IManagerBotCommand).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
             .ToArray();
-
     }
+
     public async Task ExecuteAsync(ITelegramBotClient botClient, long chatId)
     {
         var result = new StringBuilder();
