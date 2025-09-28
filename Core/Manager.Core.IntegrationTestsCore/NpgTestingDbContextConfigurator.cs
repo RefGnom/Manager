@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Manager.Core.AppConfiguration.DataBase;
+using Manager.Core.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

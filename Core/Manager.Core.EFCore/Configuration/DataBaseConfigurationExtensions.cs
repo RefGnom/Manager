@@ -1,7 +1,7 @@
 ﻿using Manager.Core.Common.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Manager.Core.AppConfiguration.DataBase;
+namespace Manager.Core.EFCore.Configuration;
 
 public static class DataBaseConfigurationExtensions
 {

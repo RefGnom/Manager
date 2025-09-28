@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Manager.Core.AppConfiguration.DataBase;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
+using Manager.Core.EFCore;
+using Manager.Core.EFCore.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

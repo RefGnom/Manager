@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Manager.Core.Common\Manager.Core.Common.csproj" />
+      <ProjectReference Include="..\Manager.Core.EFCore\Manager.Core.EFCore.csproj" />
       <ProjectReference Include="..\Manager.Core.Logging\Manager.Core.Logging.csproj" />
       <ProjectReference Include="..\Manager.Core\Manager.Core.csproj" />
     </ItemGroup>

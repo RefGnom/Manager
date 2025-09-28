@@ -1,4 +1,4 @@
-﻿namespace Manager.Core.AppConfiguration.DataBase;
+﻿namespace Manager.Core.EFCore;
 
 internal interface IDbContextWrapperFactory
 {
