@@ -22,12 +22,12 @@ public interface IDataContext
 
     Task UpdatePropertiesAsync<TEntity, TKey>(
         Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setProperties,
-        Func<TEntity, TKey> primaryKeyPicker,
+        Expression<Func<TEntity, TKey>> primaryKeyPicker,
         params TKey[] keys
     ) where TEntity : class;
 
     Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class;
-    Task DeleteAsync<TEntity, TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys) where TEntity : class;
+    Task DeleteAsync<TEntity, TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] keys) where TEntity : class;
 }
 
 internal class DataContext(
@@ -70,15 +70,15 @@ internal class DataContext(
 
     public async Task UpdatePropertiesAsync<TEntity, TKey>(
         Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setProperties,
-        Func<TEntity, TKey> primaryKeyPicker,
+        Expression<Func<TEntity, TKey>> primaryKeyPicker,
         params TKey[] keys
     ) where TEntity : class
     {
         await using var dbContext = dbContextWrapperFactory.Create();
+
         await dbContext.Set<TEntity>()
-            .Where(x => keys.Contains(primaryKeyPicker(x)))
+            .WhereContains(primaryKeyPicker, keys)
             .ExecuteUpdateAsync(setProperties);
-        await dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class
@@ -88,11 +88,13 @@ internal class DataContext(
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync<TEntity, TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys)
+    public async Task DeleteAsync<TEntity, TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] keys)
         where TEntity : class
     {
         await using var dbContext = dbContextWrapperFactory.Create();
-        await dbContext.Set<TEntity>().Where(x => keys.Contains(primaryKeyPicker(x))).ExecuteDeleteAsync();
-        await dbContext.SaveChangesAsync();
+
+        await dbContext.Set<TEntity>()
+            .WhereContains(primaryKeyPicker, keys)
+            .ExecuteDeleteAsync();
     }
 }
