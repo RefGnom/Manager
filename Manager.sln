@@ -32,6 +32,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Core.Logging", "Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationService.Server", "AuthenticationService\AuthenticationService.Server\AuthenticationService.Server.csproj", "{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerTgClient.Bot", "ManagerTgBot\ManagerTgClient.Bot\ManagerTgClient.Bot.csproj", "{7A35D426-2200-4684-BAB6-511AFA54B442}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ManagerTgBot", "ManagerTgBot", "{2AC9025F-D89B-420C-BDBF-DBE2DF64FCC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +86,10 @@ Global
 		{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A35D426-2200-4684-BAB6-511AFA54B442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A35D426-2200-4684-BAB6-511AFA54B442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A35D426-2200-4684-BAB6-511AFA54B442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A35D426-2200-4684-BAB6-511AFA54B442}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3DC6C3D2-5AE4-4401-B403-AE1C7658E8D5} = {804F8B79-D68C-4673-A903-78923F42E3AD}
@@ -95,5 +103,6 @@ Global
 		{833746FA-0634-451E-944F-8923BFF74C5A} = {67CC4B6F-CA92-409B-A1AF-9501B34435E5}
 		{EAFEF05B-EAA9-4CEA-86D2-CF1CCB3B644D} = {67CC4B6F-CA92-409B-A1AF-9501B34435E5}
 		{6E783488-F6A9-4BD7-9F4E-8B9CED6B31C5} = {160DC284-3E0C-4170-8FBA-5B35ADB6AE7D}
+		{7A35D426-2200-4684-BAB6-511AFA54B442} = {2AC9025F-D89B-420C-BDBF-DBE2DF64FCC8}
 	EndGlobalSection
 EndGlobal
