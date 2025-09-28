@@ -10,13 +10,13 @@ namespace Manager.Core.AppConfiguration.Authentication;
 
 public static class AddApiKeyRequirementExtensions
 {
-    public static SwaggerGenOptions AddApiKeyRequirement(this SwaggerGenOptions options)
+    public static SwaggerGenOptions ConfigureAuthentication(this SwaggerGenOptions options)
     {
         options.AddSecurityDefinition(
             "ApiKey",
             new OpenApiSecurityScheme
             {
-                Name = AuthenticationMiddleware.ApiKeyHeaderName,
+                Name = AuthenticationMiddlewareBase.ApiKeyHeaderName,
                 Type = SecuritySchemeType.ApiKey,
                 In = ParameterLocation.Header,
                 Description = "Enter your API Key in the header.",
@@ -42,17 +42,24 @@ public static class AddApiKeyRequirementExtensions
         return options;
     }
 
-    public static IServiceCollection AddApiKeyRequirement(
-        this IServiceCollection services
+    public static IServiceCollection ConfigureAuthentication(
+        this IServiceCollection services,
+        bool addAuthenticationClient = true
     )
     {
+        services.ConfigureOptionsWithValidation<AuthenticationSetting>();
+        if (!addAuthenticationClient)
+        {
+            return services;
+        }
+
         services.AddSingleton<IAuthenticationServiceApiClientFactory, AuthenticationServiceApiClientFactory>();
         services.AddSingleton<IAuthenticationServiceApiClient>(x
             => x.GetRequiredService<IAuthenticationServiceApiClientFactory>().Create(
                 x.GetRequiredService<IOptions<AuthenticationServiceSetting>>().Value.ApiKey
             )
         );
-        services.ConfigureOptionsWithValidation<AuthenticationSetting>();
+        services.ConfigureOptionsWithValidation<AuthenticationServiceSetting>();
 
         return services;
     }

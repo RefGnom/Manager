@@ -23,8 +23,8 @@ public static class Program
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
             .UseNpg()
-            .AddApiKeyRequirement()
-            .AddSwaggerGen(c => c.AddApiKeyRequirement());
+            .ConfigureAuthentication()
+            .AddSwaggerGen(c => c.ConfigureAuthentication());
         startupLogger.LogInformation("Service collection configured");
 
         startupLogger.LogInformation("Build application");

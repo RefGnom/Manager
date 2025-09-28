@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Manager.Core.AppConfiguration.Authentication;
 using Manager.WorkService.Server.Layers.Api.Converters;
 using Manager.WorkService.Server.Layers.Api.Responses;
 using Manager.WorkService.Server.Layers.BusinessLogic;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Manager.WorkService.Server.Layers.Api.Controllers;
 
 [ApiController]
+[AuthorizationResource("RecipientWorks")]
 [Route("api/recipients/{recipientId:guid}/works")]
 public class RecipientController(
     IWorkService workService,

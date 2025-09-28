@@ -14,7 +14,7 @@ public class AuthenticationServiceApiClient(
 {
     private readonly HttpClient httpClient = new()
     {
-        BaseAddress = new Uri("http://localhost:5024/api"),
+        BaseAddress = new Uri("http://localhost:8081"),
         DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
     };
 
@@ -39,9 +39,9 @@ public class AuthenticationServiceApiClient(
     {
         var request = new HttpRequestMessage(
             HttpMethod.Get,
-            $"api/authentication/status/{authenticationStatusRequest.Service}/{authenticationStatusRequest.Resource}"
+            $"api/authentication-status/{authenticationStatusRequest.Service}/{authenticationStatusRequest.Resource}"
         );
-        request.Headers.Add("X-Api-Key-Hash", authenticationStatusRequest.ApiKey);
+        request.Headers.Add("X-Caller-Api-Key", authenticationStatusRequest.ApiKey);
         var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
         return await responseMessage.Content.ReadFromJsonAsync<AuthenticationStatusResponse>()

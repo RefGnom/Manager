@@ -27,8 +27,8 @@ public static class Program
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
             .UseNpg()
-            .AddApiKeyRequirement()
-            .AddSwaggerGen(c => c.AddApiKeyRequirement())
+            .ConfigureAuthentication(addAuthenticationClient: false)
+            .AddSwaggerGen(c => c.ConfigureAuthentication())
             .AddBackgroundTasks(startupLogger)
             .AddSingleton<IPasswordHasher<ApiKeyService>, PasswordHasher<ApiKeyService>>();
         startupLogger.LogInformation("Service collection configured");
