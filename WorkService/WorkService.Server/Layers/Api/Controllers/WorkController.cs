@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Manager.Core.AppConfiguration.Authentication;
 using Manager.WorkService.Server.Layers.Api.Converters;
 using Manager.WorkService.Server.Layers.Api.Requests;
 using Manager.WorkService.Server.Layers.Api.Responses;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Manager.WorkService.Server.Layers.Api.Controllers;
 
 [ApiController]
+[AuthorizationResource("WorksCrud")]
 [Route("api/works")]
 public class WorkController(
     IWorkService workService,
