@@ -9,7 +9,7 @@ public abstract class AuthenticationServiceTestBase : IntegrationTestBase
 {
     protected override Assembly TargetTestingAssembly { get; } = typeof(Program).Assembly;
 
-    protected override void CustomizeConfiguration(ConfigurationManager configurationManager)
+    protected override void CustomizeConfiguration(IConfigurationManager configurationManager)
     {
         configurationManager.AddJsonFile("appsettings.json");
         configurationManager.AddUserSecrets<AuthenticationServiceTestBase>();
