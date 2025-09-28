@@ -16,7 +16,7 @@ public interface IDataContext<TEntity> where TEntity : class
 
     Task UpdatePropertiesAsync<TKey>(
         Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setProperties,
-        Func<TEntity, TKey> primaryKeyPicker,
+        Expression<Func<TEntity, TKey>> primaryKeyPicker,
         params TKey[] keys
     );
 
@@ -25,7 +25,7 @@ public interface IDataContext<TEntity> where TEntity : class
     /// </summary>
     Task DeleteAsync(TEntity entity);
 
-    Task DeleteAsync<TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys);
+    Task DeleteAsync<TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] keys);
 }
 
 internal class DataContext<TEntity>(
@@ -46,12 +46,12 @@ internal class DataContext<TEntity>(
 
     public Task UpdatePropertiesAsync<TKey>(
         Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setProperties,
-        Func<TEntity, TKey> primaryKeyPicker,
+        Expression<Func<TEntity, TKey>> primaryKeyPicker,
         params TKey[] keys
     ) => dataContext.UpdatePropertiesAsync(setProperties, primaryKeyPicker, keys);
 
     public Task DeleteAsync(TEntity entity) => dataContext.DeleteAsync(entity);
 
-    public Task DeleteAsync<TKey>(Func<TEntity, TKey> primaryKeyPicker, params TKey[] keys)
+    public Task DeleteAsync<TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] keys)
         => dataContext.DeleteAsync(primaryKeyPicker, keys);
 }
