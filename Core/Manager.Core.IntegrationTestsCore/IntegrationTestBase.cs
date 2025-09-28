@@ -1,13 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 using AutoFixture;
-using Manager.Core.AppConfiguration.DataBase;
-using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
 namespace Manager.Core.IntegrationTestsCore;
@@ -24,30 +19,25 @@ public abstract class IntegrationTestBase
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
+        ConfigureTests();
+    }
+
+    private void ConfigureTests()
+    {
         var configuration = new ConfigurationManager();
         CustomizeConfiguration(configuration);
-        ServiceProvider = new ServiceCollection()
-            .AddSingleton<IConfiguration>(configuration)
-            .AddLogging(configuration, UseNullLogger)
-            .UseAutoRegistrationForAssembly(TargetTestingAssembly)
-            .UseAutoRegistrationForAssembly(GetTestsAssembly())
-            .UseAutoRegistrationForCoreCommon()
-            .ConfigureDb()
-            .AddSingleton<IDbContextConfigurator, NpgTestingDbContextConfigurator>(x
-                => new NpgTestingDbContextConfigurator(
-                    x.GetRequiredService<IOptions<DataBaseOptions>>(),
-                    x.GetRequiredService<ILogger<DbContextConfiguratorBase>>()
-                ) { EntitiesAssembly = TargetTestingAssembly }
-            )
-            .BuildServiceProvider();
+
+        var serviceCollection = new ServiceCollection()
+            .ConfigureForIntegrationTests(configuration, TargetTestingAssembly, UseNullLogger);
+        CustomizeServiceCollection(serviceCollection);
+
+        ServiceProvider = serviceCollection.BuildServiceProvider();
     }
 
     protected abstract void CustomizeConfiguration(IConfigurationManager configurationManager);
 
-    private static Assembly GetTestsAssembly()
+    protected virtual IServiceCollection CustomizeServiceCollection(IServiceCollection serviceCollection)
     {
-        var testAssemblyName = AppContext.BaseDirectory.Split(Path.DirectorySeparatorChar)[^5];
-        var testName = $"Manager.{testAssemblyName}";
-        return Assembly.Load(testName);
+        return serviceCollection;
     }
 }
