@@ -27,6 +27,8 @@ public static class IntegrationTestsConfigurator
             .UseAutoRegistrationForAssembly(GetTestsAssembly())
             .UseAutoRegistrationForCoreCommon()
             .ConfigureDb()
+            .AddSingleton<DataContext, DataContext>()
+            .AddSingleton<IDataContext, DataContextForTests>()
             .AddSingleton<IDbContextConfigurator, NpgTestingDbContextConfigurator>(x
                 => new NpgTestingDbContextConfigurator(
                     x.GetRequiredService<IOptions<DataBaseOptions>>(),

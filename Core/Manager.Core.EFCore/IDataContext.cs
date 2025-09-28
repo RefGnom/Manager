@@ -30,7 +30,7 @@ public interface IDataContext
     Task DeleteAsync<TEntity, TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] keys) where TEntity : class;
 }
 
-internal class DataContext(
+public class DataContext(
     IDbContextWrapperFactory dbContextWrapperFactory
 ) : IDataContext
 {

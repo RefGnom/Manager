@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using AutoFixture;
+using Manager.Core.EFCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -10,9 +11,6 @@ namespace Manager.Core.IntegrationTestsCore;
 [TestFixture]
 public abstract class IntegrationTestBase
 {
-    protected abstract Assembly TargetTestingAssembly { get; }
-    protected virtual bool UseNullLogger => true;
-
     protected readonly Fixture Fixture = new();
     protected IServiceProvider ServiceProvider = null!;
 
@@ -21,6 +19,27 @@ public abstract class IntegrationTestBase
     {
         ConfigureTests();
     }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        var dataContext = ServiceProvider.GetRequiredService<IDataContext>();
+        if (dataContext is not DataContextForTests dataContextForTests)
+        {
+            return;
+        }
+
+        var dbContextWrapperFactory = ServiceProvider.GetRequiredService<IDbContextWrapperFactory>();
+        var dbContext = dbContextWrapperFactory.Create();
+        dbContext.RemoveRange(dataContextForTests.Entities);
+        dbContext.SaveChanges();
+        dataContextForTests.Entities.Clear();
+    }
+
+    #region Configuration
+
+    protected abstract Assembly TargetTestingAssembly { get; }
+    protected virtual bool UseNullLogger => true;
 
     private void ConfigureTests()
     {
@@ -40,4 +59,6 @@ public abstract class IntegrationTestBase
     {
         return serviceCollection;
     }
+
+    #endregion
 }

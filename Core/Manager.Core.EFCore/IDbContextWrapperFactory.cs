@@ -1,11 +1,11 @@
 ﻿namespace Manager.Core.EFCore;
 
-internal interface IDbContextWrapperFactory
+public interface IDbContextWrapperFactory
 {
     DbContextWrapper Create();
 }
 
-internal class DbContextWrapperFactory(
+public class DbContextWrapperFactory(
     IDbContextConfigurator dbContextConfigurator
 ) : IDbContextWrapperFactory
 {

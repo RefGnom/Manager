@@ -2,7 +2,7 @@
 
 namespace Manager.Core.EFCore;
 
-internal class DbContextWrapper(
+public class DbContextWrapper(
     IDbContextConfigurator dbContextConfigurator
 ) : DbContext
 {
