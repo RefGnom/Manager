@@ -4,7 +4,7 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace Manager.ManagerTgClient.Bot.Handlers;
+namespace Manager.ManagerTgClient.Bot;
 
 public class ManagerUpdateHandler : IUpdateHandler
 {
