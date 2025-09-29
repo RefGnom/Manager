@@ -1,4 +1,4 @@
-﻿namespace Manager.ManagerTgClient.Bot.Configurator;
+﻿namespace Manager.ManagerTgClient.Bot.Configuration;
 
 public class ConfigurationMissingTokenException(
     string message

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Manager.ManagerTgClient.Bot.Configurator;
+namespace Manager.ManagerTgClient.Bot.Configuration;
 
 public static class ManagerBotConfigurator
 {

@@ -3,9 +3,9 @@ using Telegram.Bot.Polling;
 
 namespace Manager.ManagerTgClient.Bot;
 
-public static class ManagerBotRunner
+public class ManagerBotRunner : IBotRunner
 {
-    public static async Task RunAsync(string token)
+    public async Task RunAsync(string token)
     {
         using var cts = new CancellationTokenSource();
         var bot = new TelegramBotClient(token, cancellationToken: cts.Token);
