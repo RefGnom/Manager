@@ -1,20 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Manager.ManagerTgClient.Bot;
+namespace Manager.ManagerTgClient.Bot.Configurator;
 
 public static class ManagerBotConfigurator
 {
-    public static async Task<string> GetTokenAsync()
+    public static string GetToken()
     {
         var configuration = new ConfigurationManager();
         configuration.AddUserSecrets<Program>()
             .Build();
         var token = configuration["ManagerTgBotToken"];
-        if (token is null)
-        {
-            throw new InvalidOperationException("Bot token is missing");
-        }
-
-        return token;
+        return token ?? throw new InvalidOperationException("Bot token is missing");
     }
 }
