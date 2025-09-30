@@ -2,5 +2,8 @@
 
 namespace Manager.Core.AppConfiguration.Authentication;
 
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class DisableAuthenticationAttribute : Attribute;
+/// <summary>
+/// Не использовать. Нужен для служебных эндпоинтов
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+internal class DisableAuthenticationAttribute : Attribute;

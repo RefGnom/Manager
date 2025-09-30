@@ -10,6 +10,9 @@ namespace Manager.Core.AppConfiguration.Authentication;
 
 public static class AddApiKeyRequirementExtensions
 {
+    /// <summary>
+    /// Конфигурация свагера для передачи апи ключа в интерфейсе
+    /// </summary>
     public static SwaggerGenOptions ConfigureAuthentication(this SwaggerGenOptions options)
     {
         options.AddSecurityDefinition(
@@ -42,6 +45,13 @@ public static class AddApiKeyRequirementExtensions
         return options;
     }
 
+    /// <summary>
+    /// Конфигурация аутентификации приложения по апи ключу
+    /// </summary>
+    /// <param name="services">DI collection</param>
+    /// <param name="addAuthenticationClient">Регистрировать ли апи клиент для сервиса аутентификации.
+    /// Используй true</param>
+    /// <returns>Configured DI collection</returns>
     public static IServiceCollection ConfigureAuthentication(
         this IServiceCollection services,
         bool addAuthenticationClient = true
@@ -64,6 +74,9 @@ public static class AddApiKeyRequirementExtensions
         return services;
     }
 
+    /// <summary>
+    /// Добавляет мидлвару для аутентификации
+    /// </summary>
     public static IApplicationBuilder UseAuthenticationMiddleware(this IApplicationBuilder app)
     {
         return app.UseMiddleware<AuthenticationMiddleware>();

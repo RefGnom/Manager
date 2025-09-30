@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Manager.Core.AppConfiguration;
 
 [ApiController]
-[DisableAuthentication]
 [Route("[controller]")]
-public class HealthController(IDateTimeProvider dateTimeProvider) : ControllerBase
+public class HealthController(
+    IDateTimeProvider dateTimeProvider
+) : ControllerBase
 {
     [HttpGet]
+    [DisableAuthentication]
     public IActionResult Get()
     {
         return Ok(
