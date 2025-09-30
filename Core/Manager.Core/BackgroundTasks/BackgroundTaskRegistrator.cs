@@ -10,6 +10,9 @@ namespace Manager.Core.BackgroundTasks;
 
 public static class BackgroundTaskRegistrator
 {
+    /// <summary>
+    /// Регистрирует фоновые задачи, реализующие интерфейс IBackgroundTask
+    /// </summary>
     public static IServiceCollection AddBackgroundTasks(this IServiceCollection services, ILogger? logger = null)
     {
         var backgroundTasks = Assembly.GetEntryAssembly()!.GetExportedTypes()

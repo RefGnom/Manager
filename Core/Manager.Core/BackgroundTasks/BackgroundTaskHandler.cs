@@ -27,7 +27,7 @@ public class BackgroundTaskHandler<TTask>(
             try
             {
                 logger.LogInformation("Starting background task {name}", backgroundTask.Name);
-                await backgroundTask.Execute(cancellationToken);
+                await backgroundTask.ExecuteAsync(cancellationToken);
                 logger.LogInformation("Background task {name} completed", backgroundTask.Name);
             }
             catch (Exception ex)

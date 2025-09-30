@@ -15,7 +15,7 @@ public class ExpiringExpiredApiKeysBackgroundTask(
     public string Name { get; } = nameof(ExpiringExpiredApiKeysBackgroundTask);
     public TimeSpan ExecuteInterval { get; } = TimeSpan.FromHours(6);
 
-    public async Task Execute(CancellationToken cancellationToken)
+    public async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var expiredAuthorizationModels = await authorizationModelService.SelectExpiredAsync();
         var expiredAuthorizationModelIds = expiredAuthorizationModels.Select(x => x.Id).ToArray();
