@@ -11,8 +11,16 @@ namespace Manager.Core.IntegrationTestsCore;
 [TestFixture]
 public abstract class IntegrationTestBase
 {
+    /// <summary>
+    /// Fixture для создания полностью заполненных моделей случайными значениями
+    /// </summary>
     protected readonly Fixture Fixture = new();
+
     protected IServiceProvider ServiceProvider = null!;
+
+    /// <summary>
+    /// Контекст для тестов. Можно работать с ним не используя тестируемый сервис
+    /// </summary>
     protected IDataContext DataContext = null!;
 
     [OneTimeSetUp]
