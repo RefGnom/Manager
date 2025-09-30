@@ -2,6 +2,9 @@ using System;
 
 namespace Manager.Core.Common.Time;
 
+/// <summary>
+/// Старайся всегда использовать этот класс для упрощённого тестирования
+/// </summary>
 public interface IDateTimeProvider
 {
     DateTime Now { get; }

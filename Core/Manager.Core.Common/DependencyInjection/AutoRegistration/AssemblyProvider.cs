@@ -10,6 +10,10 @@ public static class AssemblyProvider
     private const string ServiceName = "Manager";
     private static readonly string[] extensionTemplates = [".exe", ".dll"];
 
+    /// <summary>
+    /// Предоставляет все сборки Manager. Возвращает сборки только с переопределённым параметром
+    /// AssemblyName в .csproj, должен быть префикс "Manager"
+    /// </summary>
     public static Assembly[] GetServiceAssemblies()
     {
         return Directory.GetFiles(AppContext.BaseDirectory)
