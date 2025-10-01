@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Manager.AuthenticationService.Client.ServiceModels;
+using Manager.Tool.BusinessObjects;
 
 namespace Manager.Tool.Layers.Logic.Authentication;
 
 public interface IUserService
 {
-    User? FindUser();
+    LocalRecipient? FindUser();
     Task SaveUserIdAsync(Guid userId);
 }

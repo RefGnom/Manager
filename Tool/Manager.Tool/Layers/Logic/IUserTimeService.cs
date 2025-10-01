@@ -1,9 +1,9 @@
 using System;
-using Manager.AuthenticationService.Client.ServiceModels;
+using Manager.Tool.BusinessObjects;
 
 namespace Manager.Tool.Layers.Logic;
 
 public interface IUserTimeService
 {
-    DateTime GetUserTime(User user);
+    DateTime GetUserTime(LocalRecipient localRecipient);
 }

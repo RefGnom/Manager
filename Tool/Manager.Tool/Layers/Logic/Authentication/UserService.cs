@@ -1,31 +1,31 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Manager.AuthenticationService.Client.ServiceModels;
+using Manager.Tool.BusinessObjects;
 
 namespace Manager.Tool.Layers.Logic.Authentication;
 
 public class UserService : IUserService
 {
-    private readonly string _filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "manager.login");
+    private readonly string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "manager.login");
 
-    public User? FindUser()
+    public LocalRecipient? FindUser()
     {
-        if (!File.Exists(_filePath))
+        if (!File.Exists(filePath))
         {
             return null;
         }
 
-        var userIdString = File.ReadAllText(_filePath);
+        var userIdString = File.ReadAllText(filePath);
         if (!Guid.TryParse(userIdString, out var userId))
         {
             throw new InvalidDataException(
-                $"Не смогли определить идентификатор пользователя из файла {_filePath}." +
+                $"Не смогли определить идентификатор пользователя из файла {filePath}." +
                 $" Содержимое файла \"{userIdString}\""
             );
         }
 
-        return new User
+        return new LocalRecipient
         {
             Id = userId,
         };
@@ -33,6 +33,6 @@ public class UserService : IUserService
 
     public Task SaveUserIdAsync(Guid userId)
     {
-        return File.WriteAllTextAsync(_filePath, userId.ToString());
+        return File.WriteAllTextAsync(filePath, userId.ToString());
     }
 }
