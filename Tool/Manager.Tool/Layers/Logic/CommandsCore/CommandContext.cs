@@ -1,18 +1,18 @@
 using System;
 using System.Linq;
-using Manager.AuthenticationService.Client.ServiceModels;
+using Manager.Tool.BusinessObjects;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
 public record CommandContext(
-    User? User,
+    LocalRecipient? User,
     string[] Arguments,
     CommandOption[] Options
 )
 {
     public bool IsDebugMode { get; } = Options.Any(x => x.Argument == "-d");
 
-    public User EnsureUser()
+    public LocalRecipient EnsureUser()
     {
         return User ?? throw new InvalidOperationException("User is null");
     }

@@ -4,7 +4,6 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Manager.AuthenticationService.Client.BusinessObjects.Requests;
 using Manager.AuthenticationService.Client.BusinessObjects.Responses;
-using Manager.AuthenticationService.Client.ServiceModels;
 
 namespace Manager.AuthenticationService.Client;
 
@@ -17,21 +16,6 @@ public class AuthenticationServiceApiClient(
         BaseAddress = new Uri("http://localhost:8081"),
         DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
     };
-
-    public Task<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest userAuthenticationRequest)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<HttpResponse> UpdateUserInfoAsync(UpdateUserInfoRequest updateUserInfoRequest)
-    {
-        throw new NotImplementedException();
-    }
 
     public async Task<AuthenticationStatusResponse> GetAuthenticationStatusAsync(
         AuthenticationStatusRequest authenticationStatusRequest

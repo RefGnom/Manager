@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using FluentAssertions;
-using Manager.AuthenticationService.Client.ServiceModels;
+using Manager.Tool.BusinessObjects;
 using Manager.Tool.Layers.Logic.Authentication;
 using Manager.Tool.Layers.Logic.CommandsCore;
 using NSubstitute;
@@ -10,22 +10,22 @@ namespace Manager.Tool.UnitTests;
 
 public class CommandContextFactoryTest
 {
-    private CommandContextFactory _commandContextFactory;
-    private IUserService _userService;
+    private CommandContextFactory commandContextFactory;
+    private IUserService userService;
 
     [SetUp]
     public void SetUp()
     {
-        _userService = Substitute.For<IUserService>();
-        _commandContextFactory = new CommandContextFactory(_userService);
+        userService = Substitute.For<IUserService>();
+        commandContextFactory = new CommandContextFactory(userService);
     }
 
     [TestCaseSource(nameof(GetTestCases))]
     public void Test(CreateContextTestCase createContextTestCase)
     {
-        _userService.FindUser().Returns((User?)null);
+        userService.FindUser().Returns((LocalRecipient?)null);
 
-        var commandContext = _commandContextFactory.Create(createContextTestCase.RawString.Split(' '));
+        var commandContext = commandContextFactory.Create(createContextTestCase.RawString.Split(' '));
         commandContext.Should().BeEquivalentTo(createContextTestCase.ExpectedContext);
     }
 
