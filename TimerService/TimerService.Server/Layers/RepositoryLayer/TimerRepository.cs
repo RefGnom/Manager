@@ -17,22 +17,19 @@ public class TimerRepository(
     IMapper mapper
 ) : ITimerRepository
 {
-    private readonly ManagerDbContext _dbContext = dbContext;
-    private readonly IMapper _mapper = mapper;
-
     public async Task<TimerDto[]> SelectByUserAsync(Guid userId)
     {
-        return await _dbContext.Timers
+        return await dbContext.Timers
             .Where(x => x.UserId == userId)
-            .Select(x => _mapper.Map<TimerDto>(x))
+            .Select(x => mapper.Map<TimerDto>(x))
             .ToArrayAsync();
     }
 
     public async Task CreateAsync(TimerDto timerDto)
     {
-        var timerDbo = _mapper.Map<TimerDto, TimerDbo>(timerDto);
-        _dbContext.Timers.Add(timerDbo);
-        await _dbContext.SaveChangesAsync();
+        var timerDbo = mapper.Map<TimerDto, TimerDbo>(timerDto);
+        dbContext.Timers.Add(timerDbo);
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(TimerDto timerDto)
@@ -42,21 +39,22 @@ public class TimerRepository(
         {
             throw new NotFoundException("Timer not found");
         }
-        _mapper.Map(timerDto, existedTimer);
-        await _dbContext.SaveChangesAsync();
+
+        mapper.Map(timerDto, existedTimer);
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<TimerDto?> FindAsync(Guid userId, string timerName)
     {
-        var timerDbo = await _dbContext.Timers
+        var timerDbo = await dbContext.Timers
             .Where(x => x.UserId == userId)
             .Where(x => x.Name == timerName)
             .FirstOrDefaultAsync();
-        return _mapper.Map<TimerDto>(timerDbo);
+        return mapper.Map<TimerDto>(timerDbo);
     }
 
     private async Task<TimerDbo?> FindAsync(Guid id)
     {
-        return await _dbContext.Timers.FirstOrDefaultAsync(x => x.Id == id);
+        return await dbContext.Timers.FirstOrDefaultAsync(x => x.Id == id);
     }
 }
