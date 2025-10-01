@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace Manager.Core.EFCore;
 
+/// <summary>
+/// Singleton зависимость для работы с БД через EFCore. В каждом методе создаёт свой скоуп
+/// Статически настроен на использовании одной конкретной сущности БД
+/// </summary>
 public interface IDataContext<TEntity> where TEntity : class
 {
     Task InsertAsync(TEntity entity);
@@ -36,7 +40,10 @@ internal class DataContext<TEntity>(
 
     public Task<TEntity?> FindAsync<TKey>(TKey primaryKey) => dataContext.FindAsync<TEntity, TKey>(primaryKey);
 
-    public Task<TEntity[]> SelectAsync<TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] primaryKeys)
+    public Task<TEntity[]> SelectAsync<TKey>(
+        Expression<Func<TEntity, TKey>> primaryKeyPicker,
+        params TKey[] primaryKeys
+    )
         => dataContext.SelectAsync(primaryKeyPicker, primaryKeys);
 
     public Task<TResult> ExecuteReadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> func)

@@ -16,6 +16,14 @@ public static class IncludeCustomLoggerExtensions
     public const string StartupLoggerContext = "Startup";
     private const string SettingsFileName = "loggingsettings";
 
+    /// <summary>
+    /// Регистрирует Serilog логгер.
+    /// Использует конфигурацию по умолчанию из файлов loggingsettings.json и loggingsettings.Development.json
+    /// Конфигурацию можно переопределять в настройках своего сервиса
+    /// <br /><br />
+    /// Важно. Если логгера в вашем сервисе вовсе нет, то его нужно зарегистрировать с помощью
+    /// serviceCollection.AddLogging(x => x.AddConsole())
+    /// </summary>
     public static IHostApplicationBuilder AddCustomLogger(this IHostApplicationBuilder builder)
     {
         builder.Services.AddCustomLogger(builder.Configuration, builder.Environment.EnvironmentName);
@@ -23,6 +31,14 @@ public static class IncludeCustomLoggerExtensions
         return builder;
     }
 
+    /// <summary>
+    /// Регистрирует Serilog логгер.
+    /// Использует конфигурацию по умолчанию из файлов loggingsettings.json и loggingsettings.Development.json
+    /// Конфигурацию можно переопределять в настройках своего сервиса
+    /// <br /><br />
+    /// Важно. Если логгера в вашем сервисе вовсе нет, то его нужно зарегистрировать с помощью
+    /// serviceCollection.AddLogging(x => x.AddConsole())
+    /// </summary>
     public static IServiceCollection AddCustomLogger(
         this IServiceCollection services,
         IConfigurationManager configuration,
