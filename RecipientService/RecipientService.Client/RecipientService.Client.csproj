@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <RootNamespace>Manager.RecipientService.Client</RootNamespace>
+        <AssemblyName>Manager.RecipientService.Client</AssemblyName>
+    </PropertyGroup>
+
+</Project>
