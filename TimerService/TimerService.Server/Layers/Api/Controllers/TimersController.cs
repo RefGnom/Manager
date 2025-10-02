@@ -21,9 +21,6 @@ public class TimersController(
     ITimerHttpModelsConverter timerHttpModelsConverter
 ) : ControllerBase
 {
-    private readonly ITimerHttpModelsConverter _timerHttpModelsConverter = timerHttpModelsConverter;
-    private readonly ITimerService _timerService = timerService;
-
     /// <summary>
     ///     Запускает таймер и создает для него сессию. Если таймера не существует - создает новый.
     /// </summary>
@@ -34,7 +31,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.StartAsync(_timerHttpModelsConverter.FromStartRequest(request));
+            await timerService.StartAsync(timerHttpModelsConverter.FromStartRequest(request));
             return Ok();
         }
         catch (InvalidOperationException e)
@@ -51,13 +48,13 @@ public class TimersController(
     [HttpGet("selectForUser")]
     public async Task<ActionResult<UserTimersResponse>> SelectUserTimers([FromQuery] UserTimersRequest request)
     {
-        var dtos = await _timerService.SelectByUserAsync(
+        var dtos = await timerService.SelectByUserAsync(
             request.UserId,
             request.WithArchived,
             request.WithDeleted
         );
         var timerResponses = dtos
-            .Select(x => _timerHttpModelsConverter.ConvertToTimerResponse(x, _timerService.CalculateElapsedTime(x)))
+            .Select(x => timerHttpModelsConverter.ConvertToTimerResponse(x, timerService.CalculateElapsedTime(x)))
             .ToArray();
 
         return Ok(timerResponses);
@@ -73,7 +70,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.StopAsync(request.UserId, request.Name, request.StopTime);
+            await timerService.StopAsync(request.UserId, request.Name, request.StopTime);
         }
         catch (NotFoundException)
         {
@@ -95,13 +92,13 @@ public class TimersController(
     [HttpGet("find")]
     public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
     {
-        var timer = await _timerService.FindAsync(request.UserId, request.Name);
+        var timer = await timerService.FindAsync(request.UserId, request.Name);
         if (timer == null)
         {
             return NotFound();
         }
 
-        return Ok(_timerHttpModelsConverter.ConvertToTimerResponse(timer, _timerService.CalculateElapsedTime(timer)));
+        return Ok(timerHttpModelsConverter.ConvertToTimerResponse(timer, timerService.CalculateElapsedTime(timer)));
     }
 
     /// <summary>
@@ -114,7 +111,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.ResetAsync(request.UserId, request.Name);
+            await timerService.ResetAsync(request.UserId, request.Name);
         }
         catch (NotFoundException)
         {
@@ -138,7 +135,7 @@ public class TimersController(
     {
         try
         {
-            await _timerService.DeleteAsync(request.UserId, request.Name);
+            await timerService.DeleteAsync(request.UserId, request.Name);
         }
         catch (NotFoundException)
         {
