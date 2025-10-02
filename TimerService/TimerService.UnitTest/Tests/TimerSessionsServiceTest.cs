@@ -13,71 +13,62 @@ namespace Manager.TimerService.UnitTest.Tests;
 [TestFixture]
 public class TimerSessionsServiceTest
 {
-    private static readonly ITimerSessionDtoTestFactory SessionFactory = new TimerSessionDtoTestFactory();
-
-    private ITimerSessionRepository _repository;
-    private TimerSessionService _service;
-
     [SetUp]
     public void Setup()
     {
-        _repository = Substitute.For<ITimerSessionRepository>();
-        _service = new TimerSessionService(_repository);
+        repository = Substitute.For<ITimerSessionRepository>();
+        service = new TimerSessionService(repository);
     }
 
-    #region Start
+    private static readonly TimerSessionDtoTestFactory sessionFactory = new();
+
+    private ITimerSessionRepository repository;
+    private TimerSessionService service;
 
     [Test]
     public async Task StartSessionCorrect()
     {
-        var session = SessionFactory.CreateEmptySession();
-        await _service.StartAsync(session.TimerId, session.StartTime);
-        await _repository
+        var session = sessionFactory.CreateEmptySession();
+        await service.StartAsync(session.TimerId, session.StartTime);
+        await repository
             .Received()
-            .CreateAsync(Arg
-                .Is<TimerSessionDto>(x =>
-                    x.TimerId == session.TimerId &&
-                    x.StartTime == session.StartTime &&
-                    x.StopTime == null &&
-                    x.IsOver == false
-                )
+            .CreateAsync(
+                Arg
+                    .Is<TimerSessionDto>(x =>
+                        x.TimerId == session.TimerId &&
+                        x.StartTime == session.StartTime &&
+                        x.StopTime == null &&
+                        x.IsOver == false
+                    )
             );
     }
-
-    #endregion
-
-    #region SelectByTimer
 
     [Test]
     public async Task SelectByTimerCorrect()
     {
         var timerId = Guid.NewGuid();
-        var session = SessionFactory.CreateEmptySession();
-        _repository
+        var session = sessionFactory.CreateEmptySession();
+        repository
             .SelectByTimerAsync(timerId)
-            .Returns(new[] { session });
+            .Returns([session]);
 
-        var result = await _service.SelectByTimerAsync(timerId);
+        var result = await service.SelectByTimerAsync(timerId);
         Assert.That(result, Is.Not.Null);
-        Assert.That(result.Length, Is.EqualTo(1));
+        Assert.That(result, Has.Length.EqualTo(1));
         Assert.That(result[0], Is.EqualTo(session));
     }
-
-    #endregion
-
-    #region Stop
 
     [Test]
     public async Task StopSessionCorrect()
     {
         var timerId = Guid.NewGuid();
-        var session = SessionFactory.CreateEmptySession();
-        _repository
+        var session = sessionFactory.CreateEmptySession();
+        repository
             .SelectByTimerAsync(timerId)
-            .Returns(new[] { session });
+            .Returns([session]);
 
-        await _service.StopTimerSessionAsync(timerId, DateTime.UtcNow);
-        await _repository
+        await service.StopTimerSessionAsync(timerId, DateTime.UtcNow);
+        await repository
             .Received()
             .UpdateAsync(
                 Arg.Is<TimerSessionDto>(x => x.IsOver)
@@ -88,17 +79,15 @@ public class TimerSessionsServiceTest
     public async Task StopTimerWithoutActiveSessionThrowsException()
     {
         var timerId = Guid.NewGuid();
-        var session = SessionFactory.CreateEmptySession();
+        var session = sessionFactory.CreateEmptySession();
         session.IsOver = true;
-        _repository
+        repository
             .SelectByTimerAsync(timerId)
-            .Returns(new[] { session });
+            .Returns([session]);
 
-        await _service.Invoking(x =>
+        await service.Invoking(x =>
                 x.StopTimerSessionAsync(timerId, DateTime.UtcNow)
             ).Should()
             .ThrowAsync<InvalidOperationException>();
     }
-
-    #endregion
 }

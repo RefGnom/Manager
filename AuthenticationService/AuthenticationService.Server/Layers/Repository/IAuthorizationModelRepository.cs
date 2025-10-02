@@ -24,20 +24,14 @@ public class AuthorizationModelRepository(
     IDataContext dataContext
 ) : IAuthorizationModelRepository
 {
-    public Task CreateAsync(AuthorizationModelWithApiKeyHashDbo authorizationModelWithApiKeyHashDbo)
-    {
-        return dataContext.InsertAsync(authorizationModelWithApiKeyHashDbo);
-    }
+    public Task CreateAsync(AuthorizationModelWithApiKeyHashDbo authorizationModelWithApiKeyHashDbo) =>
+        dataContext.InsertAsync(authorizationModelWithApiKeyHashDbo);
 
-    public Task UpdateAsync(AuthorizationModelDbo authorizationModelDbo)
-    {
-        return dataContext.UpdateAsync(authorizationModelDbo);
-    }
+    public Task UpdateAsync(AuthorizationModelDbo authorizationModelDbo) =>
+        dataContext.UpdateAsync(authorizationModelDbo);
 
-    public Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(Guid authorizationModelId)
-    {
-        return dataContext.FindAsync<AuthorizationModelWithApiKeyHashDbo, Guid>(authorizationModelId);
-    }
+    public Task<AuthorizationModelWithApiKeyHashDbo?> FindAsync(Guid authorizationModelId) =>
+        dataContext.FindAsync<AuthorizationModelWithApiKeyHashDbo, Guid>(authorizationModelId);
 
     public Task<AuthorizationModelWithApiKeyHashDbo> ReadAsync(Guid authorizationModelId)
     {
@@ -57,10 +51,8 @@ public class AuthorizationModelRepository(
         );
     }
 
-    public Task DeleteAsync(AuthorizationModelDbo authorizationModelDbo)
-    {
-        return dataContext.DeleteAsync(authorizationModelDbo);
-    }
+    public Task DeleteAsync(AuthorizationModelDbo authorizationModelDbo) =>
+        dataContext.DeleteAsync(authorizationModelDbo);
 
     public Task<AuthorizationModelDbo[]> SelectByExpirationTicksAsync(long inclusiveMaxExpirationTicks)
     {

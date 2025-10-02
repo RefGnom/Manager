@@ -27,7 +27,7 @@ public static class Program
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
             .UseNpg()
-            .ConfigureAuthentication(addAuthenticationClient: false)
+            .ConfigureAuthentication(false)
             .AddSwaggerGen(c => c.ConfigureAuthentication())
             .AddBackgroundTasks(startupLogger)
             .AddSingleton<IPasswordHasher<ApiKeyService>, PasswordHasher<ApiKeyService>>();

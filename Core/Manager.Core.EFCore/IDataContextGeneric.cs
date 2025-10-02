@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore.Query;
 namespace Manager.Core.EFCore;
 
 /// <summary>
-/// Singleton зависимость для работы с БД через EFCore. В каждом методе создаёт свой скоуп
-/// Статически настроен на использовании одной конкретной сущности БД
+///     Singleton зависимость для работы с БД через EFCore. В каждом методе создаёт свой скоуп
+///     Статически настроен на использовании одной конкретной сущности БД
 /// </summary>
 public interface IDataContext<TEntity> where TEntity : class
 {
@@ -25,7 +25,7 @@ public interface IDataContext<TEntity> where TEntity : class
     );
 
     /// <summary>
-    /// Можно передавать сущность, где определён только первичный ключ, а все остальные значения default
+    ///     Можно передавать сущность, где определён только первичный ключ, а все остальные значения default
     /// </summary>
     Task DeleteAsync(TEntity entity);
 

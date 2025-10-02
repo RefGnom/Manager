@@ -11,19 +11,16 @@ public static class AssemblyProvider
     private static readonly string[] extensionTemplates = [".exe", ".dll"];
 
     /// <summary>
-    /// Предоставляет все сборки Manager. Возвращает сборки только с переопределённым параметром
-    /// AssemblyName в .csproj, должен быть префикс "Manager"
+    ///     Предоставляет все сборки Manager. Возвращает сборки только с переопределённым параметром
+    ///     AssemblyName в .csproj, должен быть префикс "Manager"
     /// </summary>
-    public static Assembly[] GetServiceAssemblies()
-    {
-        return Directory.GetFiles(AppContext.BaseDirectory)
-            .Where(IsCorrectExtension)
-            .Select(Path.GetFileNameWithoutExtension)
-            .Distinct()
-            .Where(IsCorrectName)
-            .Select(Assembly.Load!)
-            .ToArray();
-    }
+    public static Assembly[] GetServiceAssemblies() => Directory.GetFiles(AppContext.BaseDirectory)
+        .Where(IsCorrectExtension)
+        .Select(Path.GetFileNameWithoutExtension)
+        .Distinct()
+        .Where(IsCorrectName)
+        .Select(Assembly.Load!)
+        .ToArray();
 
     private static bool IsCorrectExtension(string fileName)
     {

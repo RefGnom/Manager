@@ -9,8 +9,7 @@ public static class AutoMapperConfigurator
 {
     public static void AddMapper(this IServiceCollection services)
     {
-        var configurator = new MapperConfiguration(
-            configure =>
+        var configurator = new MapperConfiguration(configure =>
             {
                 configure.CreateMap<TimerDto, TimerDbo>().ReverseMap();
                 configure.CreateMap<TimerSessionDto, TimerSessionDbo>().ReverseMap();

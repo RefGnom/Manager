@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Manager.TimerService.Server.Layers.DbLayer;
 
-public class ManagerDbContext(DbContextOptions<ManagerDbContext> options) : DbContext(options)
+public class ManagerDbContext(
+    DbContextOptions<ManagerDbContext> options
+) : DbContext(options)
 {
     public DbSet<TimerDbo> Timers { get; set; }
     public DbSet<TimerSessionDbo> TimerSessions { get; set; }

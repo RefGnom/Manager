@@ -5,6 +5,7 @@ namespace Manager.AuthenticationService.Server.Layers.Repository.Dbos;
 
 public class AuthorizationModelWithApiKeyHashDbo : AuthorizationModelDbo
 {
-    [Column("apiKeyHash"), Required]
+    [Column("apiKeyHash")]
+    [Required]
     public required string ApiKeyHash { get; set; }
 }

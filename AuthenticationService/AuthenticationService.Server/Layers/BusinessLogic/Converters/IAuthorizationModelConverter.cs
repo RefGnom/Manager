@@ -14,9 +14,8 @@ public class AuthorizationModelConverter(
     IApiKeyService apiKeyService
 ) : IAuthorizationModelConverter
 {
-    public AuthorizationModelWithApiKeyHashDbo ToDbo(AuthorizationModelWithApiKeyDto authorizationModelWithApiKeyDto)
-    {
-        return new AuthorizationModelWithApiKeyHashDbo
+    public AuthorizationModelWithApiKeyHashDbo ToDbo(AuthorizationModelWithApiKeyDto authorizationModelWithApiKeyDto) =>
+        new()
         {
             Id = authorizationModelWithApiKeyDto.Id,
             ApiKeyHash = apiKeyService.HashApiKey(authorizationModelWithApiKeyDto.ApiKey),
@@ -27,32 +26,25 @@ public class AuthorizationModelConverter(
             CreatedUtcTicks = authorizationModelWithApiKeyDto.CreatedUtcTicks,
             ExpirationUtcTicks = authorizationModelWithApiKeyDto.ExpirationUtcTicks,
         };
-    }
 
-    public AuthorizationModelDbo ToDbo(AuthorizationModelDto authorizationModelDto)
+    public AuthorizationModelDbo ToDbo(AuthorizationModelDto authorizationModelDto) => new()
     {
-        return new AuthorizationModelDbo
-        {
-            Id = authorizationModelDto.Id,
-            ApiKeyOwner = authorizationModelDto.Owner,
-            AvailableServices = authorizationModelDto.AvailableServices,
-            AvailableResources = authorizationModelDto.AvailableResources,
-            State = authorizationModelDto.State,
-            CreatedUtcTicks = authorizationModelDto.CreatedUtcTicks,
-            ExpirationUtcTicks = authorizationModelDto.ExpirationUtcTicks,
-        };
-    }
+        Id = authorizationModelDto.Id,
+        ApiKeyOwner = authorizationModelDto.Owner,
+        AvailableServices = authorizationModelDto.AvailableServices,
+        AvailableResources = authorizationModelDto.AvailableResources,
+        State = authorizationModelDto.State,
+        CreatedUtcTicks = authorizationModelDto.CreatedUtcTicks,
+        ExpirationUtcTicks = authorizationModelDto.ExpirationUtcTicks,
+    };
 
-    public AuthorizationModelDto ToDto(AuthorizationModelDbo authorizationModelDbo)
-    {
-        return new AuthorizationModelDto(
-            authorizationModelDbo.Id,
-            authorizationModelDbo.ApiKeyOwner,
-            authorizationModelDbo.AvailableServices,
-            authorizationModelDbo.AvailableResources,
-            authorizationModelDbo.State,
-            authorizationModelDbo.CreatedUtcTicks,
-            authorizationModelDbo.ExpirationUtcTicks
-        );
-    }
+    public AuthorizationModelDto ToDto(AuthorizationModelDbo authorizationModelDbo) => new(
+        authorizationModelDbo.Id,
+        authorizationModelDbo.ApiKeyOwner,
+        authorizationModelDbo.AvailableServices,
+        authorizationModelDbo.AvailableResources,
+        authorizationModelDbo.State,
+        authorizationModelDbo.CreatedUtcTicks,
+        authorizationModelDbo.ExpirationUtcTicks
+    );
 }

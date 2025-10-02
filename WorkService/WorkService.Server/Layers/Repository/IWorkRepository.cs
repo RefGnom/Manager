@@ -21,20 +21,11 @@ public class WorkRepository(
     IDataContext dataContext
 ) : IWorkRepository
 {
-    public Task CreateAsync(WorkDbo workDto)
-    {
-        return dataContext.InsertAsync(workDto);
-    }
+    public Task CreateAsync(WorkDbo workDto) => dataContext.InsertAsync(workDto);
 
-    public Task UpdateAsync(WorkDbo workDto)
-    {
-        return dataContext.UpdateAsync(workDto);
-    }
+    public Task UpdateAsync(WorkDbo workDto) => dataContext.UpdateAsync(workDto);
 
-    public Task<WorkDbo?> FindAsync(Guid workId)
-    {
-        return dataContext.FindAsync<WorkDbo, Guid>(workId);
-    }
+    public Task<WorkDbo?> FindAsync(Guid workId) => dataContext.FindAsync<WorkDbo, Guid>(workId);
 
     public Task<WorkDbo[]> SelectAsync(Guid recipientId)
     {

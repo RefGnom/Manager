@@ -37,8 +37,5 @@ public class CommandSpaceEqualityComparer : IEqualityComparer<CommandSpace?>
         return first.Description == second.Description && first.Values.SequenceEqual(second.Values);
     }
 
-    public int GetHashCode(CommandSpace obj)
-    {
-        return HashCode.Combine(obj.Description, obj.Values.JoinToString(' '));
-    }
+    public int GetHashCode(CommandSpace obj) => HashCode.Combine(obj.Description, obj.Values.JoinToString(' '));
 }

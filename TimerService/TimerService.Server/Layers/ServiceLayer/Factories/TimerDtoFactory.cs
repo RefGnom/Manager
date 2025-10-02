@@ -7,47 +7,40 @@ using Manager.TimerService.Server.ServiceModels;
 namespace Manager.TimerService.Server.Layers.ServiceLayer.Factories;
 
 [Transient]
-public class TimerDtoFactory(IDateTimeProvider dateTimeProvider) : ITimerDtoFactory
+public class TimerDtoFactory(
+    IDateTimeProvider dateTimeProvider
+) : ITimerDtoFactory
 {
-    public TimerDto CreateArchived(TimerDto forArchiving)
+    public TimerDto CreateArchived(TimerDto forArchiving) => new()
     {
-        return new TimerDto
-        {
-            Id = forArchiving.Id,
-            UserId = forArchiving.UserId,
-            Name = $"{forArchiving.Name}_archived_{dateTimeProvider.Now}",
-            StartTime = forArchiving.StartTime,
-            PingTimeout = forArchiving.PingTimeout,
-            Sessions = forArchiving.Sessions,
-            Status = TimerStatus.Archived,
-        };
-    }
+        Id = forArchiving.Id,
+        UserId = forArchiving.UserId,
+        Name = $"{forArchiving.Name}_archived_{dateTimeProvider.Now}",
+        StartTime = forArchiving.StartTime,
+        PingTimeout = forArchiving.PingTimeout,
+        Sessions = forArchiving.Sessions,
+        Status = TimerStatus.Archived,
+    };
 
-    public TimerDto CreateResetTimer(TimerDto forResetting)
+    public TimerDto CreateResetTimer(TimerDto forResetting) => new()
     {
-        return new TimerDto
-        {
-            Id = Guid.NewGuid(),
-            UserId = forResetting.UserId,
-            Name = forResetting.Name,
-            StartTime = null,
-            PingTimeout = null,
-            Sessions = [],
-            Status = TimerStatus.Reset,
-        };
-    }
+        Id = Guid.NewGuid(),
+        UserId = forResetting.UserId,
+        Name = forResetting.Name,
+        StartTime = null,
+        PingTimeout = null,
+        Sessions = [],
+        Status = TimerStatus.Reset,
+    };
 
-    public TimerDto CreateDeletedTimer(TimerDto forDeleting)
+    public TimerDto CreateDeletedTimer(TimerDto forDeleting) => new()
     {
-        return new TimerDto
-        {
-            Id = forDeleting.Id,
-            UserId = forDeleting.UserId,
-            Name = $"{forDeleting.Name}_deleted_{dateTimeProvider.Now}",
-            StartTime = forDeleting.StartTime,
-            PingTimeout = forDeleting.PingTimeout,
-            Sessions = forDeleting.Sessions,
-            Status = TimerStatus.Deleted,
-        };
-    }
+        Id = forDeleting.Id,
+        UserId = forDeleting.UserId,
+        Name = $"{forDeleting.Name}_deleted_{dateTimeProvider.Now}",
+        StartTime = forDeleting.StartTime,
+        PingTimeout = forDeleting.PingTimeout,
+        Sessions = forDeleting.Sessions,
+        Status = TimerStatus.Deleted,
+    };
 }

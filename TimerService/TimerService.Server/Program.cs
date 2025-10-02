@@ -14,16 +14,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMapper();
 
-builder.Services.AddDbContext<ManagerDbContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+builder.Services.AddDbContext<ManagerDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 builder.Services.UseAutoRegistrationForCurrentAssembly()
     .UseAutoRegistrationForCoreCommon();
 
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen(
-    c =>
+builder.Services.AddSwaggerGen(c =>
     {
         var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

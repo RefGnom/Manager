@@ -7,7 +7,10 @@ namespace Manager.Tool.Layers.Logic.Authentication;
 
 public class UserService : IUserService
 {
-    private readonly string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "manager.login");
+    private readonly string filePath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "manager.login"
+    );
 
     public LocalRecipient? FindUser()
     {
@@ -31,8 +34,5 @@ public class UserService : IUserService
         };
     }
 
-    public Task SaveUserIdAsync(Guid userId)
-    {
-        return File.WriteAllTextAsync(filePath, userId.ToString());
-    }
+    public Task SaveUserIdAsync(Guid userId) => File.WriteAllTextAsync(filePath, userId.ToString());
 }

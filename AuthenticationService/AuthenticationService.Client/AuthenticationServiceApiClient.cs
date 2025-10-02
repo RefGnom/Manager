@@ -29,6 +29,6 @@ public class AuthenticationServiceApiClient(
         var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
         return await responseMessage.Content.ReadFromJsonAsync<AuthenticationStatusResponse>()
-               ?? throw new Exception("Не смогли десериализовать ответ от сервера");
+            ?? throw new Exception("Не смогли десериализовать ответ от сервера");
     }
 }

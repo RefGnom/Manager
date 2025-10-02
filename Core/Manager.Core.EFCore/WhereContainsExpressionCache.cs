@@ -25,10 +25,7 @@ public static class WhereContainsExpressionCache<TEntity, TKey>
     public static Expression<Func<TEntity, bool>> BuildWhereExpression(
         Expression<Func<TEntity, TKey>> primaryKeySelector,
         TKey[] keys
-    )
-    {
-        return expressionFactory(primaryKeySelector, keys);
-    }
+    ) => expressionFactory(primaryKeySelector, keys);
 
     private static Func<Expression<Func<TEntity, TKey>>, TKey[], Expression<Func<TEntity, bool>>>
         CompileExpressionFactory()

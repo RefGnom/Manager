@@ -12,10 +12,7 @@ public record CommandContext(
 {
     public bool IsDebugMode { get; } = Options.Any(x => x.Argument == "-d");
 
-    public LocalRecipient EnsureUser()
-    {
-        return User ?? throw new InvalidOperationException("User is null");
-    }
+    public LocalRecipient EnsureUser() => User ?? throw new InvalidOperationException("User is null");
 
     public string? GetCommandArgument(string commandName)
     {

@@ -9,11 +9,7 @@ public abstract class CommandExecutorBase<TCommand>(
 ) : ICommandExecutor
     where TCommand : IToolCommand, new()
 {
-
-    public bool CanExecute(IToolCommand command)
-    {
-        return command is TCommand;
-    }
+    public bool CanExecute(IToolCommand command) => command is TCommand;
 
     public Task ExecuteAsync(CommandContext context)
     {

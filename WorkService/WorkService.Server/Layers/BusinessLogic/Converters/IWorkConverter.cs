@@ -11,32 +11,26 @@ public interface IWorkConverter
 
 public class WorkConverter : IWorkConverter
 {
-    public WorkDbo ToDbo(WorkDto workDto)
+    public WorkDbo ToDbo(WorkDto workDto) => new()
     {
-        return new WorkDbo
-        {
-            Id = workDto.Id,
-            RecipientId = workDto.RecipientId,
-            Title = workDto.Title,
-            Description = workDto.Description,
-            WorkStatus = workDto.WorkStatus,
-            CreatedUtc = workDto.CreatedUtc,
-            DeadLineUtc = workDto.DeadLineUtc,
-            ReminderIntervals = workDto.ReminderIntervals,
-        };
-    }
+        Id = workDto.Id,
+        RecipientId = workDto.RecipientId,
+        Title = workDto.Title,
+        Description = workDto.Description,
+        WorkStatus = workDto.WorkStatus,
+        CreatedUtc = workDto.CreatedUtc,
+        DeadLineUtc = workDto.DeadLineUtc,
+        ReminderIntervals = workDto.ReminderIntervals,
+    };
 
-    public WorkDto ToDto(WorkDbo workDbo)
-    {
-        return new WorkDto(
-            workDbo.Id,
-            workDbo.RecipientId,
-            workDbo.Title,
-            workDbo.Description,
-            workDbo.WorkStatus,
-            workDbo.CreatedUtc,
-            workDbo.DeadLineUtc,
-            workDbo.ReminderIntervals
-        );
-    }
+    public WorkDto ToDto(WorkDbo workDbo) => new(
+        workDbo.Id,
+        workDbo.RecipientId,
+        workDbo.Title,
+        workDbo.Description,
+        workDbo.WorkStatus,
+        workDbo.CreatedUtc,
+        workDbo.DeadLineUtc,
+        workDbo.ReminderIntervals
+    );
 }

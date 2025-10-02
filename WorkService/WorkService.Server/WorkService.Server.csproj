@@ -5,20 +5,18 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>false</ImplicitUsings>
         <UserSecretsId>f7c7ce12-53f6-413c-ae9d-524378ac165f</UserSecretsId>
-    </PropertyGroup>
-    
-    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.WorkService.Server</RootNamespace>
         <AssemblyName>Manager.WorkService.Server</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Manager.Core.EFCore\Manager.Core.EFCore.csproj" />
-        <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core.EFCore\Manager.Core.EFCore.csproj"/>
+        <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj"/>
         <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
     </ItemGroup>
 

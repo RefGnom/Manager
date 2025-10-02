@@ -12,14 +12,11 @@ public class HealthController(
 {
     [HttpGet]
     [DisableAuthentication]
-    public IActionResult Get()
-    {
-        return Ok(
-            new
-            {
-                status = "Healthy",
-                timestamp = dateTimeProvider.UtcNow,
-            }
-        );
-    }
+    public IActionResult Get() => Ok(
+        new
+        {
+            status = "Healthy",
+            timestamp = dateTimeProvider.UtcNow,
+        }
+    );
 }

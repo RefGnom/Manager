@@ -16,8 +16,6 @@ public class DateTimeFromUtcNowAttribute : ValidationAttribute
         return dateTime >= DateTime.UtcNow;
     }
 
-    public override string FormatErrorMessage(string name)
-    {
-        return $"The field {name} must be after {DateTime.UtcNow:yyyy-MM-ddTHH:mm:ssZ}";
-    }
+    public override string FormatErrorMessage(string name) =>
+        $"The field {name} must be after {DateTime.UtcNow:yyyy-MM-ddTHH:mm:ssZ}";
 }

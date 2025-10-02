@@ -7,8 +7,5 @@ public interface IAuthenticationServiceApiClientFactory
 
 public class AuthenticationServiceApiClientFactory : IAuthenticationServiceApiClientFactory
 {
-    public IAuthenticationServiceApiClient Create(string apiKey)
-    {
-        return new AuthenticationServiceApiClient(apiKey);
-    }
+    public IAuthenticationServiceApiClient Create(string apiKey) => new AuthenticationServiceApiClient(apiKey);
 }

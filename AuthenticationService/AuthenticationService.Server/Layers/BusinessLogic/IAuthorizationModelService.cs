@@ -82,15 +82,11 @@ public class AuthorizationModelService(
         return authorizationModelDbos.Select(authorizationModelConverter.ToDto).ToArray();
     }
 
-    public Task ExpireAsync(params Guid[] authorizationModelIds)
-    {
-        return authorizationModelRepository.SetStatusAsync(AuthorizationModelState.Expired, authorizationModelIds);
-    }
+    public Task ExpireAsync(params Guid[] authorizationModelIds) =>
+        authorizationModelRepository.SetStatusAsync(AuthorizationModelState.Expired, authorizationModelIds);
 
-    public Task RevokeAsync(params Guid[] authorizationModelIds)
-    {
-        return authorizationModelRepository.SetStatusAsync(AuthorizationModelState.Revoked, authorizationModelIds);
-    }
+    public Task RevokeAsync(params Guid[] authorizationModelIds) =>
+        authorizationModelRepository.SetStatusAsync(AuthorizationModelState.Revoked, authorizationModelIds);
 
     public async Task<AuthorizationModelWithApiKeyDto> RecreateAsync(Guid oldAuthorizationModelId, int? daysAlive)
     {

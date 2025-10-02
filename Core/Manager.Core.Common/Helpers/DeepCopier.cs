@@ -9,4 +9,4 @@ public static class DeepCopier
         var json = JsonSerializer.Serialize(original);
         return JsonSerializer.Deserialize<T>(json)!;
     }
-} 
+}

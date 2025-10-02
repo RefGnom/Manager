@@ -5,61 +5,48 @@ namespace Manager.Tool.Layers.Logic.Timers;
 
 public class TimerRequestFactory : ITimerRequestFactory
 {
-    public DeleteTimerRequest CreateDeleteTimerRequest(Guid userId, string timerName)
+    public DeleteTimerRequest CreateDeleteTimerRequest(Guid userId, string timerName) => new()
     {
-        return new DeleteTimerRequest
-        {
-            UserId = userId,
-            Name = timerName,
-        };
-    }
+        UserId = userId,
+        Name = timerName,
+    };
 
-    public ResetTimerRequest CreateResetTimerRequest(Guid userId, string timerName)
+    public ResetTimerRequest CreateResetTimerRequest(Guid userId, string timerName) => new()
     {
-        return new ResetTimerRequest
-        {
-            UserId = userId,
-            Name = timerName,
-        };
-    }
+        UserId = userId,
+        Name = timerName,
+    };
 
-    public StartTimerRequest CreateStartTimerRequest(Guid userId, string timerName, DateTime startTime, TimeSpan? pingTimeout = null)
+    public StartTimerRequest CreateStartTimerRequest(
+        Guid userId,
+        string timerName,
+        DateTime startTime,
+        TimeSpan? pingTimeout = null
+    ) => new()
     {
-        return new StartTimerRequest
-        {
-            UserId = userId,
-            Name = timerName,
-            StartTime = startTime,
-            PingTimeout = pingTimeout,
-        };
-    }
+        UserId = userId,
+        Name = timerName,
+        StartTime = startTime,
+        PingTimeout = pingTimeout,
+    };
 
-    public StopTimerRequest CreateStopTimerRequest(Guid userId, string timerName, DateTime stopTime)
+    public StopTimerRequest CreateStopTimerRequest(Guid userId, string timerName, DateTime stopTime) => new()
     {
-        return new StopTimerRequest
-        {
-            UserId = userId,
-            Name = timerName,
-            StopTime = stopTime,
-        };
-    }
+        UserId = userId,
+        Name = timerName,
+        StopTime = stopTime,
+    };
 
-    public TimerRequest CreateTimerRequest(Guid userId, string timerName)
+    public TimerRequest CreateTimerRequest(Guid userId, string timerName) => new()
     {
-        return new TimerRequest
-        {
-            UserId = userId,
-            Name = timerName,
-        };
-    }
+        UserId = userId,
+        Name = timerName,
+    };
 
-    public UserTimersRequest CreateUserTimersRequest(Guid userId, bool withArchived, bool withDeleted)
+    public UserTimersRequest CreateUserTimersRequest(Guid userId, bool withArchived, bool withDeleted) => new()
     {
-        return new UserTimersRequest
-        {
-            UserId = userId,
-            WithArchived = withArchived,
-            WithDeleted = withDeleted,
-        };
-    }
+        UserId = userId,
+        WithArchived = withArchived,
+        WithDeleted = withDeleted,
+    };
 }

@@ -5,13 +5,7 @@ public record ValidationResult(
     string FailureMessage = ""
 )
 {
-    public static ValidationResult Success()
-    {
-        return new ValidationResult(true);
-    }
+    public static ValidationResult Success() => new(true);
 
-    public static ValidationResult Failure(string message)
-    {
-        return new ValidationResult(false, message);
-    }
+    public static ValidationResult Failure(string message) => new(false, message);
 }

@@ -59,8 +59,7 @@ public class TimersService(
                 .ToArray();
         }
 
-        await dtos.ForeachAsync(
-            async x => x.Sessions = await timerSessionService.SelectByTimerAsync(x.Id)
+        await dtos.ForeachAsync(async x => x.Sessions = await timerSessionService.SelectByTimerAsync(x.Id)
         );
         return dtos;
     }
@@ -107,10 +106,7 @@ public class TimersService(
         await timerRepository.CreateAsync(newTimer);
     }
 
-    public Task<TimerDto?> FindAsync(Guid userId, string name)
-    {
-        return timerRepository.FindAsync(userId, name);
-    }
+    public Task<TimerDto?> FindAsync(Guid userId, string name) => timerRepository.FindAsync(userId, name);
 
     public async Task DeleteAsync(Guid userId, string name)
     {

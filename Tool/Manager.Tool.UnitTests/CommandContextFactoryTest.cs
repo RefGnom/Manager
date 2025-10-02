@@ -92,10 +92,7 @@ public class CommandContextFactoryTest
         );
     }
 
-    private static CommandOption Flag(string arg, string? value = null)
-    {
-        return new CommandOption(arg, value);
-    }
+    private static CommandOption Flag(string arg, string? value = null) => new(arg, value);
 
     public record CreateContextTestCase(
         string RawString,

@@ -4,7 +4,9 @@ using Manager.Tool.Layers.Logic.Authentication;
 
 namespace Manager.Tool.Layers.Logic.CommandsCore;
 
-public class CommandContextFactory(IUserService userService) : ICommandContextFactory
+public class CommandContextFactory(
+    IUserService userService
+) : ICommandContextFactory
 {
     public CommandContext Create(string[] arguments)
     {

@@ -18,8 +18,5 @@ public class NpgTestingDbContextConfigurator(
         optionsBuilder.UseNpgsql(connectionString);
     }
 
-    protected override Assembly? GetEntitiesAssembly()
-    {
-        return EntitiesAssembly;
-    }
+    protected override Assembly? GetEntitiesAssembly() => EntitiesAssembly;
 }

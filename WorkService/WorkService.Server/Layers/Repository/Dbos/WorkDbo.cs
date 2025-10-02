@@ -8,7 +8,8 @@ namespace Manager.WorkService.Server.Layers.Repository.Dbos;
 [Table("works")]
 public class WorkDbo
 {
-    [Column("id"), Key]
+    [Column("id")]
+    [Key]
     public required Guid Id { get; set; }
 
     [Column("recipientId")]

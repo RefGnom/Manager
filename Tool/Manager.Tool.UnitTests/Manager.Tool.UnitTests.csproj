@@ -4,9 +4,11 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <RootNamespace>Manager.Tool.UnitTests</RootNamespace>
+        <AssemblyName>Manager.Tool.UnitTests</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\AuthenticationService\AuthenticationService.Client\AuthenticationService.Client.csproj" />
+        <ProjectReference Include="..\..\AuthenticationService\AuthenticationService.Client\AuthenticationService.Client.csproj"/>
         <ProjectReference Include="..\Manager.Tool\Manager.Tool.csproj"/>
     </ItemGroup>
 

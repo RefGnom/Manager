@@ -2,6 +2,4 @@
 
 namespace Manager.Core.Common.DependencyInjection.LifetimeAttributes;
 
-public class TransientAttribute() : LifetimeAttribute(ServiceLifetime.Transient)
-{
-}
+public class TransientAttribute() : LifetimeAttribute(ServiceLifetime.Transient) { }

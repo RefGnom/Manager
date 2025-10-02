@@ -4,7 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Manager.Core.Common.DependencyInjection.LifetimeAttributes;
 
 public abstract class LifetimeAttribute(
-    ServiceLifetime lifetime) : Attribute
+    ServiceLifetime lifetime
+) : Attribute
 {
     public readonly ServiceLifetime Lifetime = lifetime;
 }

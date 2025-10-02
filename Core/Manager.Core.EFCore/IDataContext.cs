@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Query;
 namespace Manager.Core.EFCore;
 
 /// <summary>
-/// Singleton зависимость для работы с БД через EFCore. В каждом методе создаёт свой скоуп
+///     Singleton зависимость для работы с БД через EFCore. В каждом методе создаёт свой скоуп
 /// </summary>
 public interface IDataContext
 {

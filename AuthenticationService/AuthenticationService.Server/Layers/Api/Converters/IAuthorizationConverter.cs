@@ -19,33 +19,27 @@ public class AuthorizationConverter(
     IDateTimeProvider dateTimeProvider
 ) : IAuthorizationConverter
 {
-    public CreateAuthorizationModelDto ToDto(CreateAuthorizationModelRequest createAuthorizationModelRequest)
-    {
-        return new CreateAuthorizationModelDto(
-            createAuthorizationModelRequest.Owner,
-            createAuthorizationModelRequest.AvailableServices,
-            createAuthorizationModelRequest.AvailableResources,
-            createAuthorizationModelRequest.DaysAlive.HasValue
-                ? dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive.Value))
-                : null
-        );
-    }
+    public CreateAuthorizationModelDto ToDto(CreateAuthorizationModelRequest createAuthorizationModelRequest) => new(
+        createAuthorizationModelRequest.Owner,
+        createAuthorizationModelRequest.AvailableServices,
+        createAuthorizationModelRequest.AvailableResources,
+        createAuthorizationModelRequest.DaysAlive.HasValue
+            ? dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive.Value))
+            : null
+    );
 
     public AuthorizationModelDto Map(
         AuthorizationModelDto existAuthorizationModelDto,
         PatchAuthorizationModelRequest createAuthorizationModelRequest
-    )
-    {
-        return new AuthorizationModelDto(
-            existAuthorizationModelDto.Id,
-            createAuthorizationModelRequest.Owner ?? existAuthorizationModelDto.Owner,
-            createAuthorizationModelRequest.AvailableServices ?? existAuthorizationModelDto.AvailableServices,
-            createAuthorizationModelRequest.AvailableResources ?? existAuthorizationModelDto.AvailableResources,
-            AuthorizationModelState.Active,
-            existAuthorizationModelDto.CreatedUtcTicks,
-            createAuthorizationModelRequest.DaysAlive.HasValue
-                ? dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive.Value)).Ticks
-                : existAuthorizationModelDto.ExpirationUtcTicks
-        );
-    }
+    ) => new(
+        existAuthorizationModelDto.Id,
+        createAuthorizationModelRequest.Owner ?? existAuthorizationModelDto.Owner,
+        createAuthorizationModelRequest.AvailableServices ?? existAuthorizationModelDto.AvailableServices,
+        createAuthorizationModelRequest.AvailableResources ?? existAuthorizationModelDto.AvailableResources,
+        AuthorizationModelState.Active,
+        existAuthorizationModelDto.CreatedUtcTicks,
+        createAuthorizationModelRequest.DaysAlive.HasValue
+            ? dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive.Value)).Ticks
+            : existAuthorizationModelDto.ExpirationUtcTicks
+    );
 }
