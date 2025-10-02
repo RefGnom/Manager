@@ -6,9 +6,7 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>TimerService.Client</PackageId>
-    </PropertyGroup>
-
-    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.TimerService.Client</RootNamespace>
         <AssemblyName>Manager.TimerService.Client</AssemblyName>
     </PropertyGroup>

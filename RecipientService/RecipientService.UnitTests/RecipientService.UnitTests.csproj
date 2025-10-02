@@ -6,9 +6,7 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-    </PropertyGroup>
-
-    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.RecipientService.UnitTests</RootNamespace>
         <AssemblyName>Manager.RecipientService.UnitTests</AssemblyName>
     </PropertyGroup>

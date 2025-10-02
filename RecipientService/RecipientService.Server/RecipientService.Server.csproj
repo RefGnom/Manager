@@ -4,9 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>false</ImplicitUsings>
-    </PropertyGroup>
-
-    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.RecipientService.Server</RootNamespace>
         <AssemblyName>Manager.RecipientService.Server</AssemblyName>
     </PropertyGroup>

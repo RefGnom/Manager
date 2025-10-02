@@ -7,9 +7,7 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <UserSecretsId>ef74364e-07ce-4cbd-a940-6bcc4a51124b</UserSecretsId>
-    </PropertyGroup>
-
-    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.AuthenticationService.IntegrationTests</RootNamespace>
         <AssemblyName>Manager.AuthenticationService.IntegrationTests</AssemblyName>
     </PropertyGroup>

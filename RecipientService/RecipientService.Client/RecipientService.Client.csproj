@@ -5,9 +5,7 @@
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.RecipientService.Client</RootNamespace>
         <AssemblyName>Manager.RecipientService.Client</AssemblyName>
     </PropertyGroup>

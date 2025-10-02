@@ -6,8 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <UserSecretsId>b740267d-4344-4ffc-968a-5c83397fbfdc</UserSecretsId>
-    </PropertyGroup>
-    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.ManagerTgClient.Bot</RootNamespace>
         <AssemblyName>Manager.ManagerTgClient.Bot</AssemblyName>
     </PropertyGroup>

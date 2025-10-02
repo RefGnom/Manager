@@ -6,9 +6,7 @@
         <LangVersion>default</LangVersion>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.Tool</RootNamespace>
         <AssemblyName>Manager.Tool</AssemblyName>
     </PropertyGroup>

@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <RootNamespace>Manager.TimerService.UnitTest</RootNamespace>
         <AssemblyName>Manager.TimerService.UnitTest</AssemblyName>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
