@@ -23,7 +23,7 @@ public class Program
             AllowedUpdates = [],
         };
         var botHandler = new ManagerUpdateHandler();
-        bot.StartReceiving(botHandler, receiverOptions, cancellationToken: cts.Token);
+        bot.StartReceiving(botHandler, receiverOptions, cts.Token);
         await Task.Delay(-1, cts.Token);
     }
 }

@@ -9,8 +9,5 @@ public class DbContextWrapperFactory(
     IDbContextConfigurator dbContextConfigurator
 ) : IDbContextWrapperFactory
 {
-    public DbContextWrapper Create()
-    {
-        return new DbContextWrapper(dbContextConfigurator);
-    }
+    public DbContextWrapper Create() => new(dbContextConfigurator);
 }

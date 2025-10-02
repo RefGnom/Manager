@@ -7,14 +7,14 @@ public static class Environment
     public const string Debug = "Debug";
     public const string Information = "Information";
 
-    public static string CurrentEnvironment
-    {
-        get => !initialized ? throw new  InvalidOperationException("Environment not initialized") : currentEnvironment;
-        private set => currentEnvironment = value;
-    }
-
     private static bool initialized;
     private static string currentEnvironment = null!;
+
+    public static string CurrentEnvironment
+    {
+        get => !initialized ? throw new InvalidOperationException("Environment not initialized") : currentEnvironment;
+        private set => currentEnvironment = value;
+    }
 
     public static void DefineEnvironment(string environment)
     {

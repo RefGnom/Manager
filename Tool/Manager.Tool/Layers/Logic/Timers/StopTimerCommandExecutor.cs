@@ -20,7 +20,7 @@ public class StopTimerCommandExecutor(
         var user = context.EnsureUser();
         var timerName = context.GetCommandArgument(command.CommandName) ?? TimerCommandConstants.DefaultTimerName;
         var stopTimeResult = context.GetDateTimeOptionValue(command.StopTimeOption)
-                             ?? userTimeService.GetUserTime(user);
+                          ?? userTimeService.GetUserTime(user);
 
         if (!stopTimeResult.IsSuccess)
         {

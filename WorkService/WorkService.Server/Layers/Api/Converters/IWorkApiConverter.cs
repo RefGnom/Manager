@@ -17,45 +17,36 @@ public class WorkApiConverter(
     IDateTimeProvider dateTimeProvider
 ) : IWorkApiConverter
 {
-    public WorkDto ToDto(CreateWorkRequest createWorkRequest, Guid workId)
-    {
-        return new WorkDto(
-            workId,
-            createWorkRequest.RecipientId,
-            createWorkRequest.Title,
-            createWorkRequest.Description,
-            WorkStatus.Actual,
-            dateTimeProvider.UtcNow,
-            createWorkRequest.DeadLineUtc,
-            createWorkRequest.ReminderIntervals
-        );
-    }
+    public WorkDto ToDto(CreateWorkRequest createWorkRequest, Guid workId) => new(
+        workId,
+        createWorkRequest.RecipientId,
+        createWorkRequest.Title,
+        createWorkRequest.Description,
+        WorkStatus.Actual,
+        dateTimeProvider.UtcNow,
+        createWorkRequest.DeadLineUtc,
+        createWorkRequest.ReminderIntervals
+    );
 
-    public WorkDto ToDto(WorkDto workDto, PatchWorkRequest patchWorkRequest)
-    {
-        return new WorkDto(
-            patchWorkRequest.Id,
-            workDto.RecipientId,
-            patchWorkRequest.Title ?? workDto.Title,
-            patchWorkRequest.Description ?? workDto.Description,
-            workDto.WorkStatus,
-            workDto.CreatedUtc,
-            patchWorkRequest.DeadLineUtc ?? workDto.DeadLineUtc,
-            patchWorkRequest.ReminderIntervals ?? workDto.ReminderIntervals
-        );
-    }
+    public WorkDto ToDto(WorkDto workDto, PatchWorkRequest patchWorkRequest) => new(
+        patchWorkRequest.Id,
+        workDto.RecipientId,
+        patchWorkRequest.Title ?? workDto.Title,
+        patchWorkRequest.Description ?? workDto.Description,
+        workDto.WorkStatus,
+        workDto.CreatedUtc,
+        patchWorkRequest.DeadLineUtc ?? workDto.DeadLineUtc,
+        patchWorkRequest.ReminderIntervals ?? workDto.ReminderIntervals
+    );
 
-    public GetWorkResponse ToResponse(WorkDto workDto)
+    public GetWorkResponse ToResponse(WorkDto workDto) => new()
     {
-        return new GetWorkResponse
-        {
-            Id = workDto.Id,
-            RecipientId = workDto.RecipientId,
-            Title = workDto.Title,
-            Description = workDto.Description,
-            WorkStatus = workDto.WorkStatus,
-            DeadLineUtc = workDto.DeadLineUtc,
-            ReminderIntervals = workDto.ReminderIntervals,
-        };
-    }
+        Id = workDto.Id,
+        RecipientId = workDto.RecipientId,
+        Title = workDto.Title,
+        Description = workDto.Description,
+        WorkStatus = workDto.WorkStatus,
+        DeadLineUtc = workDto.DeadLineUtc,
+        ReminderIntervals = workDto.ReminderIntervals,
+    };
 }

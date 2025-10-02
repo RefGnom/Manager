@@ -31,8 +31,6 @@ public abstract class DbContextConfiguratorBase(
         InnerConfigureDbContext(optionsBuilder, dataBaseOptionsValue.ConnectionString);
     }
 
-    protected abstract void InnerConfigureDbContext(DbContextOptionsBuilder optionsBuilder, string connectionString);
-
     public void ConfigureModel(ModelBuilder modelBuilder)
     {
         if (!initialized)
@@ -48,6 +46,8 @@ public abstract class DbContextConfiguratorBase(
             modelBuilder.Entity(entityType);
         }
     }
+
+    protected abstract void InnerConfigureDbContext(DbContextOptionsBuilder optionsBuilder, string connectionString);
 
     protected virtual Assembly? GetEntitiesAssembly() => Assembly.GetEntryAssembly();
 }

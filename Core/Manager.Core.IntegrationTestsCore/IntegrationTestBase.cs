@@ -11,18 +11,6 @@ namespace Manager.Core.IntegrationTestsCore;
 [TestFixture]
 public abstract class IntegrationTestBase
 {
-    /// <summary>
-    /// Fixture для создания полностью заполненных моделей случайными значениями
-    /// </summary>
-    protected readonly Fixture Fixture = new();
-
-    protected IServiceProvider ServiceProvider = null!;
-
-    /// <summary>
-    /// Контекст для тестов. Можно работать с ним не используя тестируемый сервис
-    /// </summary>
-    protected IDataContext DataContext = null!;
-
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
@@ -57,7 +45,17 @@ public abstract class IntegrationTestBase
         dataContextForTests.Entities.Clear();
     }
 
-    #region Configuration
+    /// <summary>
+    ///     Fixture для создания полностью заполненных моделей случайными значениями
+    /// </summary>
+    protected readonly Fixture Fixture = new();
+
+    protected IServiceProvider ServiceProvider = null!;
+
+    /// <summary>
+    ///     Контекст для тестов. Можно работать с ним не используя тестируемый сервис
+    /// </summary>
+    protected IDataContext DataContext = null!;
 
     protected abstract Assembly TargetTestingAssembly { get; }
     protected virtual bool UseNullLogger => true;
@@ -76,10 +74,6 @@ public abstract class IntegrationTestBase
 
     protected abstract void CustomizeConfiguration(IConfigurationManager configurationManager);
 
-    protected virtual IServiceCollection CustomizeServiceCollection(IServiceCollection serviceCollection)
-    {
-        return serviceCollection;
-    }
-
-    #endregion
+    protected virtual IServiceCollection CustomizeServiceCollection(IServiceCollection serviceCollection) =>
+        serviceCollection;
 }

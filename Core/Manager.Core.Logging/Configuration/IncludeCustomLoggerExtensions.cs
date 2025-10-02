@@ -17,12 +17,12 @@ public static class IncludeCustomLoggerExtensions
     private const string SettingsFileName = "loggingsettings";
 
     /// <summary>
-    /// Регистрирует Serilog логгер.
-    /// Использует конфигурацию по умолчанию из файлов loggingsettings.json и loggingsettings.Development.json
-    /// Конфигурацию можно переопределять в настройках своего сервиса
-    /// <br /><br />
-    /// Важно. Если логгера в вашем сервисе вовсе нет, то его нужно зарегистрировать с помощью
-    /// serviceCollection.AddLogging(x => x.AddConsole())
+    ///     Регистрирует Serilog логгер.
+    ///     Использует конфигурацию по умолчанию из файлов loggingsettings.json и loggingsettings.Development.json
+    ///     Конфигурацию можно переопределять в настройках своего сервиса
+    ///     <br /><br />
+    ///     Важно. Если логгера в вашем сервисе вовсе нет, то его нужно зарегистрировать с помощью
+    ///     serviceCollection.AddLogging(x => x.AddConsole())
     /// </summary>
     public static IHostApplicationBuilder AddCustomLogger(this IHostApplicationBuilder builder)
     {
@@ -32,12 +32,12 @@ public static class IncludeCustomLoggerExtensions
     }
 
     /// <summary>
-    /// Регистрирует Serilog логгер.
-    /// Использует конфигурацию по умолчанию из файлов loggingsettings.json и loggingsettings.Development.json
-    /// Конфигурацию можно переопределять в настройках своего сервиса
-    /// <br /><br />
-    /// Важно. Если логгера в вашем сервисе вовсе нет, то его нужно зарегистрировать с помощью
-    /// serviceCollection.AddLogging(x => x.AddConsole())
+    ///     Регистрирует Serilog логгер.
+    ///     Использует конфигурацию по умолчанию из файлов loggingsettings.json и loggingsettings.Development.json
+    ///     Конфигурацию можно переопределять в настройках своего сервиса
+    ///     <br /><br />
+    ///     Важно. Если логгера в вашем сервисе вовсе нет, то его нужно зарегистрировать с помощью
+    ///     serviceCollection.AddLogging(x => x.AddConsole())
     /// </summary>
     public static IServiceCollection AddCustomLogger(
         this IServiceCollection services,

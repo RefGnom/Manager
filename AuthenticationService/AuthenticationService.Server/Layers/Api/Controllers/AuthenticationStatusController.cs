@@ -18,9 +18,9 @@ public class AuthenticationStatusController(
 {
     [HttpGet]
     public async Task<ActionResult<AuthenticationStatusResponse>> GetAuthenticationStatus(
-        [FromRoute, BindRequired] string service,
-        [FromRoute, BindRequired] string resource,
-        [FromHeader(Name = "X-Caller-Api-Key"), BindRequired]
+        [FromRoute] [BindRequired] string service,
+        [FromRoute] [BindRequired] string resource,
+        [FromHeader(Name = "X-Caller-Api-Key")] [BindRequired]
         string apiKey
     )
     {

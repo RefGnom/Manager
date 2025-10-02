@@ -13,11 +13,6 @@ namespace Manager.TimerService.UnitTest.Tests;
 [TestFixture]
 public class TimerSessionsServiceTest
 {
-    private static readonly TimerSessionDtoTestFactory sessionFactory = new();
-
-    private ITimerSessionRepository repository;
-    private TimerSessionService service;
-
     [SetUp]
     public void Setup()
     {
@@ -25,7 +20,10 @@ public class TimerSessionsServiceTest
         service = new TimerSessionService(repository);
     }
 
-    #region Start
+    private static readonly TimerSessionDtoTestFactory sessionFactory = new();
+
+    private ITimerSessionRepository repository;
+    private TimerSessionService service;
 
     [Test]
     public async Task StartSessionCorrect()
@@ -34,19 +32,16 @@ public class TimerSessionsServiceTest
         await service.StartAsync(session.TimerId, session.StartTime);
         await repository
             .Received()
-            .CreateAsync(Arg
-                .Is<TimerSessionDto>(x =>
-                    x.TimerId == session.TimerId &&
-                    x.StartTime == session.StartTime &&
-                    x.StopTime == null &&
-                    x.IsOver == false
-                )
+            .CreateAsync(
+                Arg
+                    .Is<TimerSessionDto>(x =>
+                        x.TimerId == session.TimerId &&
+                        x.StartTime == session.StartTime &&
+                        x.StopTime == null &&
+                        x.IsOver == false
+                    )
             );
     }
-
-    #endregion
-
-    #region SelectByTimer
 
     [Test]
     public async Task SelectByTimerCorrect()
@@ -62,10 +57,6 @@ public class TimerSessionsServiceTest
         Assert.That(result, Has.Length.EqualTo(1));
         Assert.That(result[0], Is.EqualTo(session));
     }
-
-    #endregion
-
-    #region Stop
 
     [Test]
     public async Task StopSessionCorrect()
@@ -99,6 +90,4 @@ public class TimerSessionsServiceTest
             ).Should()
             .ThrowAsync<InvalidOperationException>();
     }
-
-    #endregion
 }

@@ -7,8 +7,6 @@ public static class CommandLineArgumentsHelper
 {
     private static readonly string[] debugPossibleArgs = ["-d", "--debug", "debug"];
 
-    public static string GetEnvironment(string[] args)
-    {
-        return debugPossibleArgs.Any(args.Contains) ? Environment.Debug : Environment.Information;
-    }
+    public static string GetEnvironment(string[] args) =>
+        debugPossibleArgs.Any(args.Contains) ? Environment.Debug : Environment.Information;
 }

@@ -19,7 +19,8 @@ public class StartTimerCommandExecutor(
     {
         var user = context.EnsureUser();
         var timerName = context.GetCommandArgument(command.CommandName) ?? TimerCommandConstants.DefaultTimerName;
-        var startTimeResult = context.GetDateTimeOptionValue(command.StartTimeOption) ?? userTimeService.GetUserTime(user);
+        var startTimeResult = context.GetDateTimeOptionValue(command.StartTimeOption) ??
+                              userTimeService.GetUserTime(user);
         var pingTimeoutResult = context.GetTimeSpanOptionValue(command.PingTimeoutOption);
 
         if (!startTimeResult.IsSuccess)
@@ -34,7 +35,12 @@ public class StartTimerCommandExecutor(
             return;
         }
 
-        var startTimerRequest = timerRequestFactory.CreateStartTimerRequest(user.Id, timerName, startTimeResult.Value, pingTimeoutResult?.Value);
+        var startTimerRequest = timerRequestFactory.CreateStartTimerRequest(
+            user.Id,
+            timerName,
+            startTimeResult.Value,
+            pingTimeoutResult?.Value
+        );
         var startTimerResponse = await timerServiceApiClient.StartTimerAsync(startTimerRequest);
 
         if (startTimerResponse.IsSuccessStatusCode)

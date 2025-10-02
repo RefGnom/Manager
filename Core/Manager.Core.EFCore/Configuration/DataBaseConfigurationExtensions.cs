@@ -6,17 +6,14 @@ namespace Manager.Core.EFCore.Configuration;
 public static class DataBaseConfigurationExtensions
 {
     /// <summary>
-    /// Добавляет работу с Postgresql
+    ///     Добавляет работу с Postgresql
     /// </summary>
-    public static IServiceCollection UseNpg(this IServiceCollection serviceCollection)
-    {
-        return serviceCollection
-            .ConfigureDb()
-            .AddSingleton<IDbContextConfigurator, NpgDbContextConfigurator>();
-    }
+    public static IServiceCollection UseNpg(this IServiceCollection serviceCollection) => serviceCollection
+        .ConfigureDb()
+        .AddSingleton<IDbContextConfigurator, NpgDbContextConfigurator>();
 
     /// <summary>
-    /// Регистрирует зависимости для работы с EFCore с помощью IDataContext
+    ///     Регистрирует зависимости для работы с EFCore с помощью IDataContext
     /// </summary>
     public static IServiceCollection ConfigureDb(this IServiceCollection serviceCollection)
     {

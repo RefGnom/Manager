@@ -47,8 +47,6 @@ public class AuthenticationMiddlewareLocal(
 
 public static class AuthenticationMiddlewareLocalExtensions
 {
-    public static IApplicationBuilder UseAuthenticationMiddlewareLocal(this IApplicationBuilder app)
-    {
-        return app.UseMiddleware<AuthenticationMiddlewareLocal>();
-    }
+    public static IApplicationBuilder UseAuthenticationMiddlewareLocal(this IApplicationBuilder app) =>
+        app.UseMiddleware<AuthenticationMiddlewareLocal>();
 }

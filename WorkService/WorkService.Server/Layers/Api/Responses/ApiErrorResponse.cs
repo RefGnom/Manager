@@ -15,8 +15,9 @@ public class ApiErrorResponse
     public string ErrorCodeDescription { get; init; }
     public string Message { get; init; }
 
-    public static ApiErrorResponse Create(ApiErrorCode errorCode, string message)
-    {
-        return new ApiErrorResponse(errorCode.ToString(), errorCode.GetDescription(), message);
-    }
+    public static ApiErrorResponse Create(ApiErrorCode errorCode, string message) => new(
+        errorCode.ToString(),
+        errorCode.GetDescription(),
+        message
+    );
 }

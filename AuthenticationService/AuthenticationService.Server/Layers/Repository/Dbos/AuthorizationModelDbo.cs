@@ -8,22 +8,29 @@ namespace Manager.AuthenticationService.Server.Layers.Repository.Dbos;
 [Table("authorizationModels")]
 public class AuthorizationModelDbo
 {
-    [Column("id"), Required, Key]
+    [Column("id")]
+    [Required]
+    [Key]
     public required Guid Id { get; set; }
 
-    [Column("owner"), Required]
+    [Column("owner")]
+    [Required]
     public required string ApiKeyOwner { get; set; }
 
-    [Column("availableServices"), Required]
+    [Column("availableServices")]
+    [Required]
     public required string[] AvailableServices { get; set; }
 
-    [Column("availableResources"), Required]
+    [Column("availableResources")]
+    [Required]
     public required string[] AvailableResources { get; set; }
 
-    [Column("state"), Required]
+    [Column("state")]
+    [Required]
     public required AuthorizationModelState State { get; set; }
 
-    [Column("createdUtcTicks"), Required]
+    [Column("createdUtcTicks")]
+    [Required]
 
     public required long CreatedUtcTicks { get; set; }
 

@@ -15,15 +15,9 @@ public class Result<TError>(
 {
     public TError? Error { get; } = error;
 
-    public static implicit operator Result<TError>(TError error)
-    {
-        return new Result<TError>(isSuccess: false, error);
-    }
+    public static implicit operator Result<TError>(TError error) => new(false, error);
 
-    public static Result<TError> Ok()
-    {
-        return new Result<TError>(isSuccess: true, default);
-    }
+    public static Result<TError> Ok() => new(true, default);
 
     public static Result<TError> Failure(TError error) => error;
 }
@@ -37,15 +31,9 @@ public class Result<TValue, TError>(
     public TValue Value => IsSuccess && value is not null ? value : throw new FailResultException<TError>(error);
     public TError Error => IsFailure && error is not null ? error : throw new SuccessResultException<TError>(error);
 
-    public static implicit operator Result<TValue, TError>(TError error)
-    {
-        return new Result<TValue, TError>(isSuccess: false, default, error);
-    }
+    public static implicit operator Result<TValue, TError>(TError error) => new(false, default, error);
 
-    public static implicit operator Result<TValue, TError>(TValue value)
-    {
-        return new Result<TValue, TError>(isSuccess: true, value, default);
-    }
+    public static implicit operator Result<TValue, TError>(TValue value) => new(true, value, default);
 
     public static Result<TValue, TError> Ok(TValue value) => value;
 

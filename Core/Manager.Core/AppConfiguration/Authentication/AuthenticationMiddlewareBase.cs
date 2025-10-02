@@ -20,18 +20,18 @@ public abstract class AuthenticationMiddlewareBase(
     private const int CacheSizeLimit = 1024;
     private const byte CachedValue = 0;
 
-    private readonly MemoryCacheEntryOptions memoryCacheEntryOptions = new MemoryCacheEntryOptions()
-        .SetSize(1)
-        .SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
-
-    private readonly AuthenticationSetting setting = options.Value;
-
     private readonly MemoryCache authenticationCache = new(
         new MemoryCacheOptions
         {
             SizeLimit = CacheSizeLimit,
         }
     );
+
+    private readonly MemoryCacheEntryOptions memoryCacheEntryOptions = new MemoryCacheEntryOptions()
+        .SetSize(1)
+        .SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
+
+    private readonly AuthenticationSetting setting = options.Value;
 
     public async Task InvokeAsync(HttpContext context)
     {

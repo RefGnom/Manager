@@ -11,12 +11,9 @@ public interface IAuthenticationConverter
 
 public class AuthenticationConverter : IAuthenticationConverter
 {
-    public AuthenticationStatusResponse ToResponse(AuthenticationStatusDto authenticationStatusDto)
+    public AuthenticationStatusResponse ToResponse(AuthenticationStatusDto authenticationStatusDto) => new()
     {
-        return new AuthenticationStatusResponse
-        {
-            AuthenticationCode = authenticationStatusDto.AuthenticationCode,
-            AuthenticationCodeMessage = authenticationStatusDto.AuthenticationCode.GetDescription(),
-        };
-    }
+        AuthenticationCode = authenticationStatusDto.AuthenticationCode,
+        AuthenticationCodeMessage = authenticationStatusDto.AuthenticationCode.GetDescription(),
+    };
 }

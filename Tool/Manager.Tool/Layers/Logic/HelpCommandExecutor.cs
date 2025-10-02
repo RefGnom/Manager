@@ -12,8 +12,8 @@ public class HelpCommandExecutor(
     IEnumerable<IToolCommand> toolCommands
 ) : CommandExecutorBase<HelpCommand>(toolCommandFactory, logger)
 {
-    private readonly IToolCommand[] toolCommands = toolCommands.ToArray();
     private readonly ILogger<HelpCommand> logger = logger;
+    private readonly IToolCommand[] toolCommands = toolCommands.ToArray();
 
     protected override Task ExecuteAsync(CommandContext context, HelpCommand command)
     {

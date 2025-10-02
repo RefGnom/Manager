@@ -13,7 +13,7 @@ public static class ToolConfigurator
     {
         var configuration = new ConfigurationManager();
         configuration.AddJsonFile("appsettings.json");
-        configuration.AddJsonFile($"appsettings.{Environment.CurrentEnvironment}.json", optional: true);
+        configuration.AddJsonFile($"appsettings.{Environment.CurrentEnvironment}.json", true);
 
         return configuration;
     }

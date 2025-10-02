@@ -4,10 +4,9 @@ using Manager.Tool.BusinessObjects;
 
 namespace Manager.Tool.Layers.Logic;
 
-public class FakeUserTimeService(IDateTimeProvider dateTimeProvider) : IUserTimeService
+public class FakeUserTimeService(
+    IDateTimeProvider dateTimeProvider
+) : IUserTimeService
 {
-    public DateTime GetUserTime(LocalRecipient localRecipient)
-    {
-        return dateTimeProvider.Now;
-    }
+    public DateTime GetUserTime(LocalRecipient localRecipient) => dateTimeProvider.Now;
 }

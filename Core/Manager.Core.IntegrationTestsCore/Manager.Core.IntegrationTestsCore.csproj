@@ -12,7 +12,7 @@
         <RootNamespace>Manager.Core.IntegrationTestsCore</RootNamespace>
         <AssemblyName>Manager.Core.IntegrationTestsCore</AssemblyName>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="AutoFixture" Version="4.18.1"/>
         <PackageReference Include="FluentAssertions" Version="8.7.0"/>
@@ -20,10 +20,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Manager.Core.Common\Manager.Core.Common.csproj" />
-      <ProjectReference Include="..\Manager.Core.EFCore\Manager.Core.EFCore.csproj" />
-      <ProjectReference Include="..\Manager.Core.Logging\Manager.Core.Logging.csproj" />
-      <ProjectReference Include="..\Manager.Core\Manager.Core.csproj" />
+        <ProjectReference Include="..\Manager.Core.Common\Manager.Core.Common.csproj"/>
+        <ProjectReference Include="..\Manager.Core.EFCore\Manager.Core.EFCore.csproj"/>
+        <ProjectReference Include="..\Manager.Core.Logging\Manager.Core.Logging.csproj"/>
+        <ProjectReference Include="..\Manager.Core\Manager.Core.csproj"/>
     </ItemGroup>
 
 </Project>

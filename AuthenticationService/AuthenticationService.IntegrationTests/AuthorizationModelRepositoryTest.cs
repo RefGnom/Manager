@@ -15,6 +15,8 @@ public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
 {
     private IAuthorizationModelRepository authorizationModelRepository = null!;
 
+    protected override bool UseNullLogger => false;
+
     [SetUp]
     public void Setup()
     {
@@ -76,8 +78,6 @@ public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
 
         deletedAuthorizationModel.Should().BeNull();
     }
-
-    protected override bool UseNullLogger => false;
 
     [Test]
     public async Task TestSelectByExpirationTicks()

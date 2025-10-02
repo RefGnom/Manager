@@ -18,6 +18,8 @@ public class BackgroundTaskHandler<TTask>(
         return Task.CompletedTask;
     }
 
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
     private async Task HandleAsync(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
@@ -42,10 +44,5 @@ public class BackgroundTaskHandler<TTask>(
 
             await Task.Delay(backgroundTask.ExecuteInterval, cancellationToken);
         }
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
     }
 }

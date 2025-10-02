@@ -12,15 +12,9 @@ public class WorkService(
     IWorkConverter workConverter
 ) : IWorkService
 {
-    public Task CreateWorkAsync(WorkDto workDto)
-    {
-        return workRepository.CreateAsync(workConverter.ToDbo(workDto));
-    }
+    public Task CreateWorkAsync(WorkDto workDto) => workRepository.CreateAsync(workConverter.ToDbo(workDto));
 
-    public Task UpdateWorkAsync(WorkDto workDto)
-    {
-        return workRepository.UpdateAsync(workConverter.ToDbo(workDto));
-    }
+    public Task UpdateWorkAsync(WorkDto workDto) => workRepository.UpdateAsync(workConverter.ToDbo(workDto));
 
     public async Task<WorkDto?> FindWorkAsync(Guid workId)
     {
@@ -46,10 +40,7 @@ public class WorkService(
         return workDbos.Select(workConverter.ToDto).ToArray();
     }
 
-    public Task<WorkDto[]> SelectWorksForReminderAsync(Guid recipientId)
-    {
-        return Task.FromResult(Array.Empty<WorkDto>());
-    }
+    public Task<WorkDto[]> SelectWorksForReminderAsync(Guid recipientId) => Task.FromResult(Array.Empty<WorkDto>());
 
     public Task<WorkDto[]> SelectExpiredWorksAsync(Guid recipientId)
         => SelectWorksAsync(recipientId, WorkStatus.Expired);

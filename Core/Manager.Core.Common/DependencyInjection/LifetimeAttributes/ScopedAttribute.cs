@@ -2,6 +2,4 @@
 
 namespace Manager.Core.Common.DependencyInjection.LifetimeAttributes;
 
-public class ScopedAttribute() : LifetimeAttribute(ServiceLifetime.Scoped)
-{
-}
+public class ScopedAttribute() : LifetimeAttribute(ServiceLifetime.Scoped) { }

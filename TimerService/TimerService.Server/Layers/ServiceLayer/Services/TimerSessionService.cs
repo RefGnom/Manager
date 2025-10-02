@@ -26,10 +26,8 @@ public class TimerSessionService(
         );
     }
 
-    public async Task<TimerSessionDto[]> SelectByTimerAsync(Guid timerId)
-    {
-        return await repository.SelectByTimerAsync(timerId);
-    }
+    public async Task<TimerSessionDto[]> SelectByTimerAsync(Guid timerId) =>
+        await repository.SelectByTimerAsync(timerId);
 
     public async Task StopTimerSessionAsync(Guid timerId, DateTime stopTimer)
     {

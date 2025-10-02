@@ -4,8 +4,5 @@ public record AuthenticationStatusDto(
     AuthenticationCode AuthenticationCode
 )
 {
-    public static implicit operator AuthenticationStatusDto(AuthenticationCode code)
-    {
-        return new AuthenticationStatusDto(code);
-    }
+    public static implicit operator AuthenticationStatusDto(AuthenticationCode code) => new(code);
 }

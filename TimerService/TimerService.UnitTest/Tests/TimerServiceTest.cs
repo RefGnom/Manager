@@ -20,15 +20,6 @@ namespace Manager.TimerService.UnitTest.Tests;
 [TestFixture]
 public class TimerServiceTest
 {
-    private static readonly TimerDtoTestFactory timerFactory = new();
-    private static readonly TimerSessionDtoTestFactory sessionFactory = new();
-
-    private ITimerRepository timerRepository = null!;
-    private ITimerSessionService timerSessionService = null!;
-    private IDateTimeProvider dateTimeProvider = null!;
-    private ITimerDtoFactory timerDtoFactory = null!;
-    private TimersService timersService = null!;
-
     [SetUp]
     public void Setup()
     {
@@ -44,7 +35,14 @@ public class TimerServiceTest
         );
     }
 
-    #region Start
+    private static readonly TimerDtoTestFactory timerFactory = new();
+    private static readonly TimerSessionDtoTestFactory sessionFactory = new();
+
+    private ITimerRepository timerRepository = null!;
+    private ITimerSessionService timerSessionService = null!;
+    private IDateTimeProvider dateTimeProvider = null!;
+    private ITimerDtoFactory timerDtoFactory = null!;
+    private TimersService timersService = null!;
 
     [Test]
     public async Task StartCreatesAndStartsSessionCorrect()
@@ -54,9 +52,10 @@ public class TimerServiceTest
 
         await timerRepository
             .Received()
-            .CreateAsync(Arg.Is<TimerDto>(
-                x => x.Status == TimerStatus.Started
-            ));
+            .CreateAsync(
+                Arg.Is<TimerDto>(x => x.Status == TimerStatus.Started
+                )
+            );
 
         await timerSessionService
             .Received()
@@ -90,30 +89,27 @@ public class TimerServiceTest
 
         await timerRepository
             .Received()
-            .UpdateAsync(Arg.Is<TimerDto>(
-                x => x.Status == TimerStatus.Started));
+            .UpdateAsync(Arg.Is<TimerDto>(x => x.Status == TimerStatus.Started));
 
         await timerSessionService
             .Received()
             .StartAsync(timer.Id, timer.StartTime!.Value);
     }
 
-    #endregion
-
-    #region SelectByUser
-
-    #region TestCases
-
     public static IEnumerable<TestCaseData> GetSelectByUserFilterTestCases()
     {
-        yield return new TestCaseData(new[]
-        {
-            timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Started),
-            timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Deleted),
-            timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Deleted),
-            timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Archived),
-            timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Stopped),
-        }, false, false);
+        yield return new TestCaseData(
+            new[]
+            {
+                timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Started),
+                timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Deleted),
+                timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Deleted),
+                timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Archived),
+                timerFactory.CreateEmptyTimer().WithStatus(TimerStatus.Stopped),
+            },
+            false,
+            false
+        );
 
         yield return new TestCaseData(
             new[]
@@ -140,8 +136,6 @@ public class TimerServiceTest
         );
     }
 
-    #endregion
-
     [TestCaseSource(nameof(GetSelectByUserFilterTestCases))]
     [Test]
     public async Task SelectByUser_FiltersCorrect(TimerDto[] resultTimers, bool withArchived, bool withDeleted)
@@ -164,10 +158,6 @@ public class TimerServiceTest
                 .NotContain(x => x.Status == TimerStatus.Deleted);
         }
     }
-
-    #endregion
-
-    #region Stop
 
     [Test]
     public async Task StopValidTimerBeCorrect()
@@ -216,10 +206,6 @@ public class TimerServiceTest
             .ThrowAsync<NotFoundException>();
     }
 
-    #endregion
-
-    #region Find
-
     [Test]
     public async Task FindTimerCorrect()
     {
@@ -244,10 +230,6 @@ public class TimerServiceTest
             .ThrowAsync<NotFoundException>();
     }
 
-    #endregion
-
-    #region Reset
-
     [Test]
     public async Task ResetTimerCorrect()
     {
@@ -270,14 +252,15 @@ public class TimerServiceTest
 
         await timerRepository
             .Received()
-            .UpdateAsync(Arg.Is<TimerDto>(x =>
-                x.Id == timer.Id && x.Name.Contains("archived"))
+            .UpdateAsync(
+                Arg.Is<TimerDto>(x =>
+                    x.Id == timer.Id && x.Name.Contains("archived")
+                )
             );
 
         await timerRepository
             .Received()
-            .CreateAsync(Arg.Is<TimerDto>(
-                x => x.Name == timer.Name && x.UserId == timer.UserId));
+            .CreateAsync(Arg.Is<TimerDto>(x => x.Name == timer.Name && x.UserId == timer.UserId));
     }
 
     [Test]
@@ -288,15 +271,10 @@ public class TimerServiceTest
             .WithStatus(TimerStatus.Started);
 
         timerRepository.ConfigureFindMethod(timer);
-        await timersService.Invoking(
-                x => x.ResetAsync(timer.UserId, timer.Name)
+        await timersService.Invoking(x => x.ResetAsync(timer.UserId, timer.Name)
             ).Should()
             .ThrowAsync<InvalidStatusException>();
     }
-
-    #endregion
-
-    #region Delete
 
     [Test]
     public async Task DeleteTimerCorrect()
@@ -314,8 +292,10 @@ public class TimerServiceTest
 
         await timerRepository
             .Received()
-            .UpdateAsync(Arg.Is<TimerDto>(x =>
-                x.Name.Contains("deleted"))
+            .UpdateAsync(
+                Arg.Is<TimerDto>(x =>
+                    x.Name.Contains("deleted")
+                )
             );
     }
 
@@ -346,36 +326,46 @@ public class TimerServiceTest
             .ThrowAsync<NotFoundException>();
     }
 
-    #endregion
-
-    #region CalculateElapsedTime
-
-    #region TestCases
-
     public static IEnumerable<TestCaseData> GetCalculateElapsedTimeCorrectTestCases()
     {
         yield return new TestCaseData(
             new[]
             {
-                sessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(5), DateTime.UtcNow - TimeSpan.FromHours(1)),
-            }, TimeSpan.FromHours(4));
+                sessionFactory.CreateFromTimes(
+                    DateTime.UtcNow - TimeSpan.FromHours(5),
+                    DateTime.UtcNow - TimeSpan.FromHours(1)
+                ),
+            },
+            TimeSpan.FromHours(4)
+        );
 
         yield return new TestCaseData(
             new[]
             {
-                sessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(18), DateTime.UtcNow - TimeSpan.FromHours(15)),
-                sessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(5), DateTime.UtcNow - TimeSpan.FromHours(1)),
-            }, TimeSpan.FromHours(7));
+                sessionFactory.CreateFromTimes(
+                    DateTime.UtcNow - TimeSpan.FromHours(18),
+                    DateTime.UtcNow - TimeSpan.FromHours(15)
+                ),
+                sessionFactory.CreateFromTimes(
+                    DateTime.UtcNow - TimeSpan.FromHours(5),
+                    DateTime.UtcNow - TimeSpan.FromHours(1)
+                ),
+            },
+            TimeSpan.FromHours(7)
+        );
 
         yield return new TestCaseData(
             new[]
             {
-                sessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(8), DateTime.UtcNow - TimeSpan.FromHours(5)),
+                sessionFactory.CreateFromTimes(
+                    DateTime.UtcNow - TimeSpan.FromHours(8),
+                    DateTime.UtcNow - TimeSpan.FromHours(5)
+                ),
                 sessionFactory.CreateFromTimes(DateTime.UtcNow - TimeSpan.FromHours(2), null),
-            }, TimeSpan.FromHours(5));
+            },
+            TimeSpan.FromHours(5)
+        );
     }
-
-    #endregion
 
     [Test]
     [TestCaseSource(nameof(GetCalculateElapsedTimeCorrectTestCases))]
@@ -404,6 +394,4 @@ public class TimerServiceTest
             .Should()
             .Be(TimeSpan.Zero);
     }
-
-    #endregion
 }

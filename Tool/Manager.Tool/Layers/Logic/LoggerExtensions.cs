@@ -48,6 +48,7 @@ public static class LoggerExtensions
         {
             sb.AppendLine($"{Environment.NewLine}Options:");
         }
+
         foreach (var option in command.CommandOptions)
         {
             var shortKey = option.ShortKey ?? "";

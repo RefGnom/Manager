@@ -5,13 +5,10 @@ namespace Manager.TimerService.Server.Layers.Api.Converters;
 
 public class TimerSessionHttpModelConverter : ITimerSessionHttpModelConverter
 {
-    public TimerSessionResponse ConvertToTimerSessionResponse(TimerSessionDto sessionDto)
+    public TimerSessionResponse ConvertToTimerSessionResponse(TimerSessionDto sessionDto) => new()
     {
-        return new TimerSessionResponse
-        {
-            StartTime = sessionDto.StartTime,
-            StopTime = sessionDto.StopTime,
-            IsOver = sessionDto.IsOver,
-        };
-    }
+        StartTime = sessionDto.StartTime,
+        StopTime = sessionDto.StopTime,
+        IsOver = sessionDto.IsOver,
+    };
 }

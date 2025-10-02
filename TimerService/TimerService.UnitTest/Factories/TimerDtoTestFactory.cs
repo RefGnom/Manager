@@ -7,19 +7,16 @@ namespace Manager.TimerService.UnitTest.Factories;
 
 public class TimerDtoTestFactory : ITimerDtoTestFactory
 {
-    public TimerDto CreateEmptyTimer()
+    public TimerDto CreateEmptyTimer() => new()
     {
-        return new TimerDto
-        {
-            Id = Guid.Empty,
-            UserId = Guid.Empty,
-            Name = string.Empty,
-            Sessions = [],
-            StartTime = DateTime.MinValue,
-            PingTimeout = null,
-            Status = TimerStatus.Created,
-        };
-    }
+        Id = Guid.Empty,
+        UserId = Guid.Empty,
+        Name = string.Empty,
+        Sessions = [],
+        StartTime = DateTime.MinValue,
+        PingTimeout = null,
+        Status = TimerStatus.Created,
+    };
 
     public TimerDto CreateSameTimer(TimerDto timer) => timer.DeepCopy();
 }

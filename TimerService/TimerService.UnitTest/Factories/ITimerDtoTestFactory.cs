@@ -4,6 +4,6 @@ namespace Manager.TimerService.UnitTest.Factories;
 
 public interface ITimerDtoTestFactory
 {
-    public TimerDto CreateEmptyTimer();
-    public TimerDto CreateSameTimer(TimerDto timer);
+    TimerDto CreateEmptyTimer();
+    TimerDto CreateSameTimer(TimerDto timer);
 }

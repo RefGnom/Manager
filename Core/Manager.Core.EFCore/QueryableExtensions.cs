@@ -10,8 +10,5 @@ public static class QueryableExtensions
         this IQueryable<TEntity> queryable,
         Expression<Func<TEntity, TKey>> primaryKeyPicker,
         TKey[] keys
-    )
-    {
-        return queryable.Where(WhereContainsExpressionCache<TEntity, TKey>.BuildWhereExpression(primaryKeyPicker, keys));
-    }
+    ) => queryable.Where(WhereContainsExpressionCache<TEntity, TKey>.BuildWhereExpression(primaryKeyPicker, keys));
 }

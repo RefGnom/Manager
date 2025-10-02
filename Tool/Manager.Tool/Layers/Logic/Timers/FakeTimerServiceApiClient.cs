@@ -8,79 +8,58 @@ namespace Manager.Tool.Layers.Logic.Timers;
 
 public class FakeTimerServiceApiClient : ITimerServiceApiClient
 {
-    public Task<HttpResponse> StartTimerAsync(StartTimerRequest startTimerRequest)
-    {
-        return Task.FromResult(
-            new HttpResponse
-            {
-                StatusCode = HttpStatusCode.OK,
-            }
-        );
-    }
-
-    public Task<HttpResponse> StopTimerAsync(StopTimerRequest stopTimerRequest)
-    {
-        return Task.FromResult(
-            new HttpResponse
-            {
-                StatusCode = HttpStatusCode.OK,
-            }
-        );
-    }
-
-    public Task<TimerResponse?> FindTimerAsync(TimerRequest timerRequest)
-    {
-        return Task.FromResult(CreateTimerResponse())!;
-    }
-
-    public Task<UserTimersResponse> SelectUserTimersAsync(UserTimersRequest userTimersRequest)
-    {
-        return Task.FromResult(
-            new UserTimersResponse
-            {
-                Timers = [CreateTimerResponse(), CreateTimerResponse(), CreateTimerResponse()],
-            }
-        );
-    }
-
-    public Task<HttpResponse> ResetTimerAsync(ResetTimerRequest resetTimerRequest)
-    {
-        return Task.FromResult(
-            new HttpResponse
-            {
-                StatusCode = HttpStatusCode.OK,
-            }
-        );
-    }
-
-    public Task<HttpResponse> DeleteTimerAsync(DeleteTimerRequest deleteTimerRequest)
-    {
-        return Task.FromResult(
-            new HttpResponse
-            {
-                StatusCode = HttpStatusCode.OK,
-            }
-        );
-    }
-
-    private TimerResponse CreateTimerResponse()
-    {
-        return new TimerResponse
+    public Task<HttpResponse> StartTimerAsync(StartTimerRequest startTimerRequest) => Task.FromResult(
+        new HttpResponse
         {
-            Name = "default",
-            StartTime = DateTime.Today,
-            ElapsedTime = TimeSpan.FromMinutes(400),
-            PingTimeout = null,
-            Sessions =
-            [
-                new TimerSessionResponse
-                {
-                    StartTime = DateTime.Today,
-                    StopTime = null,
-                    IsOver = false,
-                },
-            ],
-            TimerStatus = TimerStatus.Started,
-        };
-    }
+            StatusCode = HttpStatusCode.OK,
+        }
+    );
+
+    public Task<HttpResponse> StopTimerAsync(StopTimerRequest stopTimerRequest) => Task.FromResult(
+        new HttpResponse
+        {
+            StatusCode = HttpStatusCode.OK,
+        }
+    );
+
+    public Task<TimerResponse?> FindTimerAsync(TimerRequest timerRequest) => Task.FromResult(CreateTimerResponse())!;
+
+    public Task<UserTimersResponse> SelectUserTimersAsync(UserTimersRequest userTimersRequest) => Task.FromResult(
+        new UserTimersResponse
+        {
+            Timers = [CreateTimerResponse(), CreateTimerResponse(), CreateTimerResponse()],
+        }
+    );
+
+    public Task<HttpResponse> ResetTimerAsync(ResetTimerRequest resetTimerRequest) => Task.FromResult(
+        new HttpResponse
+        {
+            StatusCode = HttpStatusCode.OK,
+        }
+    );
+
+    public Task<HttpResponse> DeleteTimerAsync(DeleteTimerRequest deleteTimerRequest) => Task.FromResult(
+        new HttpResponse
+        {
+            StatusCode = HttpStatusCode.OK,
+        }
+    );
+
+    private TimerResponse CreateTimerResponse() => new()
+    {
+        Name = "default",
+        StartTime = DateTime.Today,
+        ElapsedTime = TimeSpan.FromMinutes(400),
+        PingTimeout = null,
+        Sessions =
+        [
+            new TimerSessionResponse
+            {
+                StartTime = DateTime.Today,
+                StopTime = null,
+                IsOver = false,
+            },
+        ],
+        TimerStatus = TimerStatus.Started,
+    };
 }
