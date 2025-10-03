@@ -9,13 +9,18 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        using var cts = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource
+        (
+        );
 
         var configuration = new ConfigurationManager();
         configuration.AddUserSecrets<Program>()
+
             .Build();
         var token = configuration["ManagerTgBotToken"];
-        Console.WriteLine(token);
+        Console.WriteLine(
+            token
+        );
 
         var bot = new TelegramBotClient(configuration["ManagerTgBotToken"]!, cancellationToken: cts.Token);
         var receiverOptions = new ReceiverOptions
