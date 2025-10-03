@@ -21,7 +21,7 @@ public class ManagerUpdateHandler : IUpdateHandler
             if (update.Type == UpdateType.Message)
             {
                 var message = update.Message!.Text;
-                var command = commandResolver.Resolve(message);
+                var command = commandResolver.Resolve(message ?? throw new InvalidOperationException());
                 await command.ExecuteAsync(botClient, update.Message.Chat.Id);
             }
         }
@@ -32,7 +32,7 @@ public class ManagerUpdateHandler : IUpdateHandler
         }
     }
 
-    public async Task HandleErrorAsync(
+    public Task HandleErrorAsync(
         ITelegramBotClient botClient,
         Exception exception,
         HandleErrorSource source,

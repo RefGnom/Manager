@@ -17,7 +17,7 @@ public class Program
         var token = configuration["ManagerTgBotToken"];
         Console.WriteLine(token);
 
-        var bot = new TelegramBotClient(configuration["ManagerTgBotToken"], cancellationToken: cts.Token);
+        var bot = new TelegramBotClient(configuration["ManagerTgBotToken"]!, cancellationToken: cts.Token);
         var receiverOptions = new ReceiverOptions
         {
             AllowedUpdates = [],

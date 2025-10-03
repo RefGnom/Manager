@@ -1,0 +1,49 @@
+name: Rider Cleanup with Dotnet Tool
+
+on: 
+  push:
+    branches: [ main ]
+
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.x
+        
+    - name: Install JetBrains ReSharper Global Tools
+      run: |
+        dotnet tool install -g JetBrains.ReSharper.GlobalTools
+        echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+        
+    - name: Run Cleanup with custom settings
+      run: |
+        jb cleanupcode Manager.sln
+          
+    - name: Commit and push changes
+      run: |
+        if git diff --quiet; then
+          echo "No changes to commit"
+          exit 0
+        fi
+        
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add .
+        git commit -m "style: Apply automated code cleanup"
+        git push
