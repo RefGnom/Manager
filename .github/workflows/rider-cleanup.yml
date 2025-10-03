@@ -29,10 +29,7 @@ jobs:
         
     - name: Run Cleanup with custom settings
       run: |
-        jb cleanupcode Manager.sln \
-          --profile="Full Cleanup" \
-          --settings=".editorconfig" \
-          --verbosity=INFO
+        jb cleanupcode Manager.sln
           
     - name: Commit and push changes
       run: |
