@@ -15,7 +15,6 @@ public class Program
 
         var configuration = new ConfigurationManager();
         configuration.AddUserSecrets<Program>()
-
             .Build();
         var token = configuration["ManagerTgBotToken"];
         Console.WriteLine(
