@@ -3,12 +3,19 @@ name: Rider Cleanup with Dotnet Tool
 on:
   pull_request:
     branches: [ main ]
+    
   push:
-    branches: [ main ] 
+    branches: [ main ]
+
+  schedule:
+    - cron: '0 2 * * *'
 
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     
     steps:
     - name: Checkout code
@@ -38,8 +45,8 @@ jobs:
           exit 0
         fi
         
-        git config --local user.email "actions@github.com"
-        git config --local user.name "GitHub Actions"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add .
         git commit -m "style: Apply automated code cleanup"
         git push
