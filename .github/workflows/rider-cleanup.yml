@@ -1,9 +1,6 @@
 name: Rider Cleanup with Dotnet Tool
 
-on:
-  pull_request:
-    branches: [ main ]
-    
+on: 
   push:
     branches: [ main ]
 
