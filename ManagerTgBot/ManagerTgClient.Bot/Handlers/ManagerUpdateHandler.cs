@@ -6,10 +6,10 @@ using Telegram.Bot.Types.Enums;
 
 namespace Manager.ManagerTgClient.Bot;
 
-public class ManagerUpdateHandler : IUpdateHandler
+public class ManagerUpdateHandler(
+    ICommandResolver commandResolver
+) : IManagerUpdateHandler
 {
-    private readonly CommandResolver commandResolver = new();
-
     public async Task HandleUpdateAsync(
         ITelegramBotClient botClient,
         Update update,
@@ -21,7 +21,7 @@ public class ManagerUpdateHandler : IUpdateHandler
             if (update.Type == UpdateType.Message)
             {
                 var message = update.Message!.Text;
-                var command = commandResolver.Resolve(message ?? throw new InvalidOperationException());
+                var command = commandResolver.Resolve(message!);
                 await command.ExecuteAsync(botClient, update.Message.Chat.Id);
             }
         }
@@ -32,10 +32,13 @@ public class ManagerUpdateHandler : IUpdateHandler
         }
     }
 
-    public Task HandleErrorAsync(
+    public async Task HandleErrorAsync(
         ITelegramBotClient botClient,
         Exception exception,
         HandleErrorSource source,
         CancellationToken cancellationToken
-    ) => throw new NotImplementedException();
+    )
+    {
+        throw new NotImplementedException();
+    }
 }

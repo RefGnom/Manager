@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Manager.Core.Common.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +9,10 @@ public static class ApplicationConfigurator
 {
     public static IConfigurationManager CreateConfiguration()
     {
-        return new ConfigurationManager();
+        var configuration = new ConfigurationManager();
+        configuration.AddUserSecrets<Program>()
+            .Build();
+        return configuration;
     }
 
     public static IServiceProvider CreateServiceProvider(this IConfigurationManager configurationManager)
@@ -16,6 +20,8 @@ public static class ApplicationConfigurator
         return new ServiceCollection()
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
+            .ConfigureOptionsWithValidation<ManagerBotOptions>()
+            .AddSingleton<IConfiguration>(configurationManager)
             .BuildServiceProvider();
     }
 }

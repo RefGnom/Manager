@@ -2,5 +2,5 @@
 
 public interface IBotRunner
 {
-    Task RunAsync(string botToken);
+    Task RunAsync();
 }

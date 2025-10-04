@@ -1,20 +1,20 @@
-﻿using Telegram.Bot;
-using Telegram.Bot.Polling;
+﻿using Manager.ManagerTgClient.Bot.Configuration;
+using Microsoft.Extensions.Options;
+using Telegram.Bot;
 
 namespace Manager.ManagerTgClient.Bot;
 
-public class ManagerBotRunner : IBotRunner
+public class ManagerBotRunner(
+    IManagerUpdateHandler botHandler,
+    IOptions<ManagerBotOptions> managerBotOptions
+) : IBotRunner
 {
-    public async Task RunAsync(string token)
+    public async Task RunAsync()
     {
         using var cts = new CancellationTokenSource();
-        var bot = new TelegramBotClient(token, cancellationToken: cts.Token);
-        var receiverOptions = new ReceiverOptions
-        {
-            AllowedUpdates = [],
-        };
-        var botHandler = new ManagerUpdateHandler();
-        bot.StartReceiving(botHandler, receiverOptions, cancellationToken: cts.Token);
+
+        var botClient = new TelegramBotClient(managerBotOptions.Value.ManagerTgBotToken, cancellationToken: cts.Token);
+        botClient.StartReceiving(botHandler, cancellationToken: cts.Token);
         await Task.Delay(-1, cts.Token);
     }
 }
