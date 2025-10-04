@@ -2,6 +2,4 @@
 
 namespace Manager.ManagerTgClient.Bot;
 
-public interface IManagerUpdateHandler: IUpdateHandler
-{
-}
+public interface IManagerUpdateHandler : IUpdateHandler { }

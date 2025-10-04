@@ -1,6 +1,6 @@
 ﻿using Manager.Core.Common.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.ManagerTgClient.Bot.Configuration;
@@ -15,13 +15,11 @@ public static class ApplicationConfigurator
         return configuration;
     }
 
-    public static IServiceProvider CreateServiceProvider(this IConfigurationManager configurationManager)
-    {
-        return new ServiceCollection()
+    public static IServiceProvider CreateServiceProvider(this IConfigurationManager configurationManager) =>
+        new ServiceCollection()
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
             .ConfigureOptionsWithValidation<ManagerBotOptions>()
             .AddSingleton<IConfiguration>(configurationManager)
             .BuildServiceProvider();
-    }
 }

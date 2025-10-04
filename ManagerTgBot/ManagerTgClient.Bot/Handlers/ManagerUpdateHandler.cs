@@ -37,8 +37,5 @@ public class ManagerUpdateHandler(
         Exception exception,
         HandleErrorSource source,
         CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
-    }
+    ) => throw new NotImplementedException();
 }
