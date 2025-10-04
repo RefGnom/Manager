@@ -11,7 +11,7 @@ public class Program
             .CreateConfiguration()
             .CreateServiceProvider();
 
-        var botRunner = serviceProvider.GetService<IBotRunner>();
+        var botRunner = serviceProvider.GetRequiredService<IBotRunner>();
         await botRunner.RunAsync();
     }
 }

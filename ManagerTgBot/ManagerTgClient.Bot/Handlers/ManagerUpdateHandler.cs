@@ -32,7 +32,7 @@ public class ManagerUpdateHandler(
         }
     }
 
-    public async Task HandleErrorAsync(
+    public Task HandleErrorAsync(
         ITelegramBotClient botClient,
         Exception exception,
         HandleErrorSource source,
