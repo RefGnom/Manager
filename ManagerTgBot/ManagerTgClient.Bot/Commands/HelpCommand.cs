@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
+using Manager.ManagerTgClient.Bot.Commands.CommandResults;
 using Manager.ManagerTgClient.Bot.Commands.CommandsAttributes;
 using Telegram.Bot;
 
@@ -18,7 +19,7 @@ public class HelpCommand : IManagerBotCommand
             .ToArray();
     }
 
-    public async Task ExecuteAsync(ITelegramBotClient botClient, long chatId)
+    public async Task<ICommandResult> ExecuteAsync(ITelegramBotClient botClient, long chatId)
     {
         var result = new StringBuilder();
         foreach (var command in commands)
@@ -30,7 +31,6 @@ public class HelpCommand : IManagerBotCommand
                 result.Append($"{nameAttribute.Value} - {descriptionAttribute.Value}\n");
             }
         }
-
-        await botClient.SendMessage(chatId, result.ToString());
+        return await Task.FromResult(new CommandResult(result.ToString()));
     }
 }
