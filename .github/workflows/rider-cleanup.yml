@@ -34,18 +34,6 @@ jobs:
     - name: Run solution cleanup
       run: |
         jb cleanupcode Manager.sln
-
-    - name: Run custom cleanup
-      run: |
-        echo "Starting Rider cleanup for all projects"
-        find . -name "*.csproj" -not -path "*/bin/*" -not -path "*/obj/*" | while read cleanup_file; do
-            if [ -f "$cleanup_file" ]; then
-                file_name=$(basename "$cleanup_file" .csproj)
-                echo "Cleaning: $file_name ($cleanup_file)"
-                jb cleanupcode "$cleanup_file"
-            fi
-        done
-        echo "Cleanup completed!"
           
     - name: Commit and push changes
       run: |
