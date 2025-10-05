@@ -1,7 +1,7 @@
-﻿namespace Manager.ManagerTgClient.Bot.Commands.CommandsAttributes;
+﻿namespace Manager.ManagerTgClient.Bot.Commands.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
-public class CommandDescriptionAttribute(
+public class CommandNameAttribute(
     string value
 ) : Attribute
 {

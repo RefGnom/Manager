@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
-using Manager.ManagerTgClient.Bot.Commands.CommandResults;
-using Manager.ManagerTgClient.Bot.Commands.CommandsAttributes;
+using Manager.ManagerTgClient.Bot.Commands.Attributes;
+using Manager.ManagerTgClient.Bot.Commands.Results;
 using Telegram.Bot;
 
 namespace Manager.ManagerTgClient.Bot.Commands;

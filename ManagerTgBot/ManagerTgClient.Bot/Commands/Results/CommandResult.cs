@@ -1,4 +1,4 @@
-﻿namespace Manager.ManagerTgClient.Bot.Commands.CommandResults;
+﻿namespace Manager.ManagerTgClient.Bot.Commands.Results;
 
 public class CommandResult(
     string value

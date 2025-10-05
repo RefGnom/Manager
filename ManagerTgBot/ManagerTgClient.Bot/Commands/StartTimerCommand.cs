@@ -1,4 +1,4 @@
-﻿using Manager.ManagerTgClient.Bot.Commands.CommandResults;
+﻿using Manager.ManagerTgClient.Bot.Commands.Results;
 using Telegram.Bot;
 
 namespace Manager.ManagerTgClient.Bot.Commands;

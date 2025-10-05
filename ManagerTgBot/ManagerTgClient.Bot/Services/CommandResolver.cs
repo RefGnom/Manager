@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
-using Manager.ManagerTgClient.Bot.Commands.CommandsAttributes;
+using Manager.ManagerTgClient.Bot.Commands;
+using Manager.ManagerTgClient.Bot.Commands.Attributes;
 
-namespace Manager.ManagerTgClient.Bot.Commands;
+namespace Manager.ManagerTgClient.Bot.Services;
 
 public class CommandResolver : ICommandResolver
 {
