@@ -31,9 +31,19 @@ jobs:
         dotnet tool install -g JetBrains.ReSharper.GlobalTools
         echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
         
-    - name: Run Cleanup with custom settings
+    - name: Run solution cleanup
       run: |
         jb cleanupcode Manager.sln
+
+    - name: Run custom cleanup
+      run: |
+        PROJECTS=$(find . -name "*.csproj" -not -path "*/bin/*" -not -path "*/obj/*" -exec basename {} .csproj \;)
+        for project in $PROJECTS; do
+          if [ -d "$project" ]; then
+            echo "Force cleaning: $project"
+            jb cleanupcode "$project/$project.csproj" --profile="Full Cleanup" --verbosity=WARN
+          fi
+        done
           
     - name: Commit and push changes
       run: |
