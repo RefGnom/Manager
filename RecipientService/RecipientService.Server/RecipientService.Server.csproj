@@ -10,13 +10,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Manager.Core.EFCore\Manager.Core.EFCore.csproj" />
-        <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj" />
-        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core.EFCore\Manager.Core.EFCore.csproj"/>
+        <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj"/>
+        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -13,13 +13,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference
-            Include="..\..\Core\Manager.Core.IntegrationTestsCore\Manager.Core.IntegrationTestsCore.csproj" />
-        <ProjectReference Include="..\AuthenticationService.Server\AuthenticationService.Server.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core.IntegrationTestsCore\Manager.Core.IntegrationTestsCore.csproj"/>
+        <ProjectReference Include="..\AuthenticationService.Server\AuthenticationService.Server.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
     </ItemGroup>
 
     <ItemGroup>
