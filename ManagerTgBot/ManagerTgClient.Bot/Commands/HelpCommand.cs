@@ -31,6 +31,7 @@ public class HelpCommand : IManagerBotCommand
                 result.Append($"{nameAttribute.Value} - {descriptionAttribute.Value}\n");
             }
         }
+
         return await Task.FromResult(new CommandResult(result.ToString()));
     }
 }

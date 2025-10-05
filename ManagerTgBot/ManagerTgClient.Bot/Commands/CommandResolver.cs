@@ -6,7 +6,7 @@ namespace Manager.ManagerTgClient.Bot.Commands;
 public class CommandResolver : ICommandResolver
 {
     private readonly Type[] commands = Assembly.GetEntryAssembly()!.GetTypes()
-        .Where(type => typeof(IManagerBotCommand).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
+        .Where(type => typeof(IManagerBotCommand).IsAssignableFrom(type) && type is { IsClass: true, IsAbstract: false })
         .ToArray();
 
     public IManagerBotCommand Resolve(string userCommand)
