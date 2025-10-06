@@ -6,20 +6,22 @@ namespace Manager.ManagerTgClient.Bot.Services;
 
 public class CommandResolver : ICommandResolver
 {
-    private readonly Type[] commands = Assembly.GetEntryAssembly()!.GetTypes()
-        .Where(type => typeof(IManagerBotCommand).IsAssignableFrom(type) && type is { IsClass: true, IsAbstract: false })
+    private readonly ResolverData[] commands = Assembly.GetEntryAssembly()!.GetTypes()
+        .Where(type =>
+            typeof(IManagerBotCommand<>).IsAssignableFrom(type) && type is { IsClass: true, IsAbstract: false }
+        ).Select(commandType => new ResolverData(commandType, commandType.GetGenericArguments().First()))
         .ToArray();
 
-    public IManagerBotCommand Resolve(string userCommand)
+    public ResolverData Resolve(string userCommand)
     {
-        var resultType =
-            commands.FirstOrDefault(x => $"{x.GetCustomAttribute<CommandNameAttribute>()!.Value}".Equals(userCommand));
-        if (resultType is null)
+        var result =
+            commands.First(x => $"{x.CommandType.GetCustomAttribute<CommandNameAttribute>()!.Value}".Equals(userCommand)
+            );
+        if (result is null)
         {
             throw new ArgumentException($"{userCommand} is not a valid command");
         }
 
-        var command = (IManagerBotCommand)Activator.CreateInstance(resultType)!;
-        return command;
+        return result;
     }
 }
