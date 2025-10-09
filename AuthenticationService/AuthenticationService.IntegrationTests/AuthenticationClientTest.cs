@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Manager.AuthenticationService.Client;
 using Manager.AuthenticationService.Client.BusinessObjects.Requests;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.IntegrationTestsCore.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -18,7 +20,9 @@ public class AuthenticationClientTest : AuthenticationServiceTestBase
         serviceCollection.AddSingleton<IAuthenticationServiceApiClientFactory, AuthenticationServiceApiClientFactory>();
         serviceCollection.AddSingleton<IAuthenticationServiceApiClient>(x
             => x.GetRequiredService<IAuthenticationServiceApiClientFactory>().Create(
-                x.GetRequiredService<IOptions<AuthenticationServiceSetting>>().Value.ApiKey
+                x.GetRequiredService<IOptions<AuthenticationServiceSetting>>().Value.ApiKey,
+                x.GetRequiredService<IConfiguration>().GetValue<string>("AUTHENTICATION_SERVICE_PORT") ??
+                throw new Exception("Authentication service port not configured")
             )
         );
     }

@@ -1,3 +1,4 @@
+using Manager.Core.AppConfiguration;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.BackgroundTasks;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
@@ -14,6 +15,8 @@ public static class Program
 {
     public static void Main(string[] args)
     {
+        SolutionRootEnvironmentVariablesLoader.Load();
+
         var builder = WebApplication.CreateBuilder(args);
         builder.AddCustomLogger();
         var startupLogger = StartupLoggerFactory.CreateStartupLogger();

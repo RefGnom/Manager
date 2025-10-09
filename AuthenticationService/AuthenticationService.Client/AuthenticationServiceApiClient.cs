@@ -8,12 +8,13 @@ using Manager.AuthenticationService.Client.BusinessObjects.Responses;
 namespace Manager.AuthenticationService.Client;
 
 public class AuthenticationServiceApiClient(
+    string url,
     string apiKey
 ) : IAuthenticationServiceApiClient
 {
     private readonly HttpClient httpClient = new()
     {
-        BaseAddress = new Uri("http://localhost:8081"),
+        BaseAddress = new Uri(url),
         DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
     };
 
