@@ -2,6 +2,7 @@
 using System.Reflection;
 using AutoFixture;
 using Manager.Core.EFCore;
+using Manager.Core.IntegrationTestsCore.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -15,7 +16,7 @@ public abstract class IntegrationTestBase
     public void OneTimeSetUp()
     {
         ConfigureTests();
-        DataContext = ServiceProvider.GetRequiredService<IDataContext>();
+        DataContext = ServiceProvider.GetService<IDataContext>()!;
     }
 
     [OneTimeTearDown]
@@ -50,30 +51,38 @@ public abstract class IntegrationTestBase
     /// </summary>
     protected readonly Fixture Fixture = new();
 
+
+    /// <summary>
+    ///     Сконфигурированный ServiceProvider, по умолчанию предоставляет все реализации и тестируемой сборки и тестовой
+    ///     сборки
+    /// </summary>
     protected IServiceProvider ServiceProvider = null!;
 
     /// <summary>
-    ///     Контекст для тестов. Можно работать с ним не используя тестируемый сервис
+    ///     Контекст для тестов. Можно работать с ним не используя тестируемый сервис.
+    ///     Null если база данных не сконфигурирована
     /// </summary>
     protected IDataContext DataContext = null!;
 
     protected abstract Assembly TargetTestingAssembly { get; }
-    protected virtual bool UseNullLogger => true;
 
     private void ConfigureTests()
     {
-        var configuration = new ConfigurationManager();
-        CustomizeConfiguration(configuration);
+        var integrationTestConfigurationBuilder = IntegrationTestConfigurationBuilderFactory.Create()
+            .CustomizeConfigurationManager(CustomizeConfiguration)
+            .CustomizeServiceCollection(CustomizeServiceCollection)
+            .UseTargetTestingAssembly(TargetTestingAssembly)
+            .UseAutoRegistration()
+            .UseNullLogger()
+            .UseNpgDataBase();
+        CustomizeConfigurationBuilder(integrationTestConfigurationBuilder);
 
-        var serviceCollection = new ServiceCollection()
-            .ConfigureForIntegrationTests(configuration, TargetTestingAssembly, UseNullLogger);
-        CustomizeServiceCollection(serviceCollection);
-
-        ServiceProvider = serviceCollection.BuildServiceProvider();
+        var integrationTestConfiguration = integrationTestConfigurationBuilder.Build();
+        ServiceProvider = integrationTestConfiguration.ServiceProvider;
     }
 
-    protected abstract void CustomizeConfiguration(IConfigurationManager configurationManager);
+    protected virtual void CustomizeConfiguration(IConfigurationManager configurationManager) { }
 
-    protected virtual IServiceCollection CustomizeServiceCollection(IServiceCollection serviceCollection) =>
-        serviceCollection;
+    protected virtual void CustomizeServiceCollection(IServiceCollection serviceCollection) { }
+    protected virtual void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder) { }
 }
