@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using DotNet.Testcontainers.Builders;
 using Manager.Core.Common.DependencyInjection.Attributes;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore;
@@ -32,10 +33,13 @@ public interface IIntegrationTestConfigurationBuilder
 
 public class IntegrationTestConfigurationBuilder : IIntegrationTestConfigurationBuilder
 {
+    private const int ContainerPort = 8080;
+
     private readonly IConfigurationManager configurationManager = new ConfigurationManager();
     private readonly IServiceCollection serviceCollection = new ServiceCollection();
     private Assembly? targetAssembly;
     private bool useAutoRegistration;
+    private bool useLocalServer;
     private bool useNpgDataBase;
     private bool useNullLogger;
 
@@ -87,7 +91,11 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder UseLocalServer() => throw new NotImplementedException();
+    public IIntegrationTestConfigurationBuilder UseLocalServer()
+    {
+        useLocalServer = true;
+        return this;
+    }
 
     public IntegrationTestConfiguration Build()
     {
@@ -132,7 +140,20 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
                 );
         }
 
-        return new IntegrationTestConfiguration(serviceCollection.BuildServiceProvider());
+        var container = useLocalServer
+            ? new ContainerBuilder()
+                .WithImage("manager-authentication-service:latest")
+                .WithPortBinding(8081, ContainerPort)
+                .WithWaitStrategy(
+                    Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPort(ContainerPort).ForPath("health"))
+                )
+                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+                .WithEnvironment("DataBaseOptions:Username", "")
+                .WithEnvironment("DataBaseOptions:Password", "")
+                .Build()
+            : null;
+
+        return new IntegrationTestConfiguration(serviceCollection.BuildServiceProvider(), container);
     }
 
     private static Assembly GetTestsAssembly()

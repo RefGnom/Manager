@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using AutoFixture;
 using Manager.Core.EFCore;
 using Manager.Core.IntegrationTestsCore.Configuration;
@@ -13,15 +14,25 @@ namespace Manager.Core.IntegrationTestsCore;
 public abstract class IntegrationTestBase
 {
     [OneTimeSetUp]
-    public void OneTimeSetUp()
+    public async Task OneTimeSetUp()
     {
         ConfigureTests();
         DataContext = ServiceProvider.GetService<IDataContext>()!;
+        if (integrationTestConfiguration.ServerContainer != null)
+        {
+            await integrationTestConfiguration.ServerContainer.StartAsync();
+        }
     }
 
     [OneTimeTearDown]
-    public void OneTimeTearDown()
+    public async Task OneTimeTearDown()
     {
+        if (integrationTestConfiguration.ServerContainer != null)
+        {
+            await integrationTestConfiguration.ServerContainer.StopAsync();
+            await integrationTestConfiguration.ServerContainer.DisposeAsync();
+        }
+
         var dataContext = ServiceProvider.GetRequiredService<IDataContext>();
         if (dataContext is not DataContextForTests dataContextForTests)
         {
@@ -64,6 +75,8 @@ public abstract class IntegrationTestBase
     /// </summary>
     protected IDataContext DataContext = null!;
 
+    private IntegrationTestConfiguration integrationTestConfiguration = null!;
+
     protected abstract Assembly TargetTestingAssembly { get; }
 
     private void ConfigureTests()
@@ -77,7 +90,7 @@ public abstract class IntegrationTestBase
             .UseNpgDataBase();
         CustomizeConfigurationBuilder(integrationTestConfigurationBuilder);
 
-        var integrationTestConfiguration = integrationTestConfigurationBuilder.Build();
+        integrationTestConfiguration = integrationTestConfigurationBuilder.Build();
         ServiceProvider = integrationTestConfiguration.ServiceProvider;
     }
 
