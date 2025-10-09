@@ -6,6 +6,7 @@ using FluentAssertions;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 using Manager.AuthenticationService.Server.Layers.Repository;
 using Manager.AuthenticationService.Server.Layers.Repository.Dbos;
+using Manager.Core.IntegrationTestsCore.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
@@ -15,7 +16,10 @@ public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
 {
     private IAuthorizationModelRepository authorizationModelRepository = null!;
 
-    protected override bool UseNullLogger => false;
+    protected override void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder)
+    {
+        builder.UseRealLogger();
+    }
 
     [SetUp]
     public void Setup()
