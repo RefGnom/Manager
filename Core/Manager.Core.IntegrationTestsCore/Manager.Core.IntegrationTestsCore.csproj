@@ -16,6 +16,7 @@
         <PackageReference Include="FluentAssertions" Version="8.7.0"/>
         <PackageReference Include="NUnit" Version="4.4.0"/>
         <PackageReference Include="Testcontainers" Version="4.7.0"/>
+        <PackageReference Include="Testcontainers.PostgreSql" Version="4.7.0" />
     </ItemGroup>
 
     <ItemGroup>

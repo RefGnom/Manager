@@ -18,20 +18,13 @@ public abstract class IntegrationTestBase
     {
         ConfigureTests();
         DataContext = ServiceProvider.GetService<IDataContext>()!;
-        if (integrationTestConfiguration.ServerContainer != null)
-        {
-            await integrationTestConfiguration.ServerContainer.StartAsync();
-        }
+        await integrationTestConfiguration.ContainerConfiguration.StartAsync();
     }
 
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {
-        if (integrationTestConfiguration.ServerContainer != null)
-        {
-            await integrationTestConfiguration.ServerContainer.StopAsync();
-            await integrationTestConfiguration.ServerContainer.DisposeAsync();
-        }
+        await integrationTestConfiguration.ContainerConfiguration.DisposeAsync();
 
         var dataContext = ServiceProvider.GetRequiredService<IDataContext>();
         if (dataContext is not DataContextForTests dataContextForTests)
@@ -46,7 +39,7 @@ public abstract class IntegrationTestBase
             {
                 var dbContext = dbContextWrapperFactory.Create();
                 dbContext.Remove(entity);
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
             catch
             {

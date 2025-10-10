@@ -1,13 +1,12 @@
 ﻿using System;
-using DotNet.Testcontainers.Containers;
 
 namespace Manager.Core.IntegrationTestsCore.Configuration;
 
 public class IntegrationTestConfiguration(
     IServiceProvider serviceProvider,
-    IContainer? serverContainer
+    ContainerConfiguration containerConfiguration
 )
 {
     public IServiceProvider ServiceProvider { get; set; } = serviceProvider;
-    public IContainer? ServerContainer { get; } = serverContainer;
+    public ContainerConfiguration ContainerConfiguration { get; } = containerConfiguration;
 }

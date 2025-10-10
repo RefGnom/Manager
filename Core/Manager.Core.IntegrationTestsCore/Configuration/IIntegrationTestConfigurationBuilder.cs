@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using DotNet.Testcontainers.Builders;
 using Manager.Core.AppConfiguration;
 using Manager.Core.Common.DependencyInjection.Attributes;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
@@ -32,10 +32,10 @@ public interface IIntegrationTestConfigurationBuilder
     IntegrationTestConfiguration Build();
 }
 
-public class IntegrationTestConfigurationBuilder : IIntegrationTestConfigurationBuilder
+public class IntegrationTestConfigurationBuilder(
+    ITestContainerBuilder testContainerBuilder
+) : IIntegrationTestConfigurationBuilder
 {
-    private const int ContainerPort = 8080;
-
     private readonly IConfigurationManager configurationManager = new ConfigurationManager();
     private readonly IServiceCollection serviceCollection = new ServiceCollection();
     private Assembly? targetAssembly;
@@ -100,18 +100,39 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
 
     public IntegrationTestConfiguration Build()
     {
-        if (useLocalServer)
-        {
-            SolutionRootEnvironmentVariablesLoader.Load();
-            configurationManager.AddEnvironmentVariables();
-        }
-
         if (targetAssembly == null)
         {
             throw new ArgumentNullException($"{nameof(targetAssembly)} should be initialized before building.");
         }
 
-        serviceCollection.AddSingleton<IConfiguration>(configurationManager.Build());
+        if (useLocalServer)
+        {
+            SolutionRootEnvironmentVariablesLoader.Load();
+            configurationManager.AddEnvironmentVariables();
+            testContainerBuilder.WithServer(targetAssembly, configurationManager);
+        }
+
+        if (useNpgDataBase)
+        {
+            testContainerBuilder.WithPostgres(out var username, out var password);
+            var configuration = new Dictionary<string, string?>
+            {
+                ["DataBaseOptions:ConnectionStringTemplate"] = testContainerBuilder.ConnectionStringTemplate,
+                ["DataBaseOptions:Username"] = username,
+                ["DataBaseOptions:Password"] = password,
+            };
+            configurationManager.AddInMemoryCollection(configuration);
+            serviceCollection
+                .ConfigureDb()
+                .AddSingleton<DataContext, DataContext>()
+                .AddSingleton<IDataContext, DataContextForTests>()
+                .AddSingleton<IDbContextConfigurator, NpgTestingDbContextConfigurator>(x
+                    => new NpgTestingDbContextConfigurator(
+                        x.GetRequiredService<IOptions<DataBaseOptions>>(),
+                        x.GetRequiredService<ILogger<DbContextConfiguratorBase>>()
+                    ) { EntitiesAssembly = targetAssembly }
+                );
+        }
 
         if (useAutoRegistration)
         {
@@ -133,44 +154,8 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
                 .AddCustomLogger(configurationManager, Environments.Development);
         }
 
-        if (useNpgDataBase)
-        {
-            serviceCollection
-                .ConfigureDb()
-                .AddSingleton<DataContext, DataContext>()
-                .AddSingleton<IDataContext, DataContextForTests>()
-                .AddSingleton<IDbContextConfigurator, NpgTestingDbContextConfigurator>(x
-                    => new NpgTestingDbContextConfigurator(
-                        x.GetRequiredService<IOptions<DataBaseOptions>>(),
-                        x.GetRequiredService<ILogger<DbContextConfiguratorBase>>()
-                    ) { EntitiesAssembly = targetAssembly }
-                );
-        }
-
-        if (!useLocalServer)
-        {
-            return new IntegrationTestConfiguration(serviceCollection.BuildServiceProvider(), null);
-        }
-
-        var serverPropertiesAttribute = targetAssembly.GetCustomAttribute<ServerPropertiesAttribute>();
-        if (serverPropertiesAttribute == null)
-        {
-            throw new Exception($"У тестируемого сервера должен быть атрибут {nameof(ServerPropertiesAttribute)}");
-        }
-
-        var port = configurationManager.GetValue<int>(serverPropertiesAttribute.PortKey);
-        var secrets = TargetAssemblySecretsLoader.LoadAsDictionary(targetAssembly);
-        var container = new ContainerBuilder()
-            .WithImage($"{serverPropertiesAttribute.DockerContainerName}:latest")
-            .WithPortBinding(port, ContainerPort)
-            .WithWaitStrategy(
-                Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPort(ContainerPort).ForPath("health"))
-            )
-            .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Testing")
-            .WithEnvironment(secrets)
-            .Build();
-
-        return new IntegrationTestConfiguration(serviceCollection.BuildServiceProvider(), container);
+        serviceCollection.AddSingleton<IConfiguration>(configurationManager.Build());
+        return new IntegrationTestConfiguration(serviceCollection.BuildServiceProvider(), testContainerBuilder.Build());
     }
 
     private static Assembly GetTestsAssembly()
