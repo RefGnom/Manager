@@ -3,7 +3,7 @@
             BeforeTargets="CoreCompile"
             Condition="
                 Exists('$(MSBuildThisFileDirectory)generate-launchsettings.ps1') AND
-                '$(DOTNET_RUNNING_IN_CONTAINER)' == 'false' AND
+                '$(DOTNET_RUNNING_IN_CONTAINER)' != 'true' AND
                 '$(GITHUB_ACTIONS)' != 'true' AND
                 '$(CI)' != 'true'
             ">
