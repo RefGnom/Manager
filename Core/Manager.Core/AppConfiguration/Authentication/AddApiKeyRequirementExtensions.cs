@@ -70,9 +70,9 @@ public static class AddApiKeyRequirementExtensions
         services.AddSingleton<IAuthenticationServiceApiClientFactory, AuthenticationServiceApiClientFactory>();
         services.AddSingleton<IAuthenticationServiceApiClient>(x
             => x.GetRequiredService<IAuthenticationServiceApiClientFactory>().Create(
-                x.GetRequiredService<IOptions<AuthenticationServiceSetting>>().Value.ApiKey,
                 x.GetRequiredService<IConfiguration>().GetValue<string>("AUTHENTICATION_SERVICE_PORT") ??
-                throw new Exception("Authentication service port not configured")
+                throw new Exception("Authentication service port not configured"),
+                x.GetRequiredService<IOptions<AuthenticationServiceSetting>>().Value.ApiKey
             )
         );
         services.ConfigureOptionsWithValidation<AuthenticationServiceSetting>();

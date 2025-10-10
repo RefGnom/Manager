@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using DotNet.Testcontainers.Builders;
+using Manager.Core.AppConfiguration;
 using Manager.Core.Common.DependencyInjection.Attributes;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore;
@@ -99,6 +100,12 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
 
     public IntegrationTestConfiguration Build()
     {
+        if (useLocalServer)
+        {
+            SolutionRootEnvironmentVariablesLoader.Load();
+            configurationManager.AddEnvironmentVariables();
+        }
+
         if (targetAssembly == null)
         {
             throw new ArgumentNullException($"{nameof(targetAssembly)} should be initialized before building.");
@@ -140,18 +147,29 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
                 );
         }
 
-        var container = useLocalServer
-            ? new ContainerBuilder()
-                .WithImage("manager-authentication-service:latest")
-                .WithPortBinding(8081, ContainerPort)
-                .WithWaitStrategy(
-                    Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPort(ContainerPort).ForPath("health"))
-                )
-                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
-                .WithEnvironment("DataBaseOptions:Username", "")
-                .WithEnvironment("DataBaseOptions:Password", "")
-                .Build()
-            : null;
+
+        if (!useLocalServer)
+        {
+            return new IntegrationTestConfiguration(serviceCollection.BuildServiceProvider(), null);
+        }
+
+        var serverPropertiesAttribute = targetAssembly.GetCustomAttribute<ServerPropertiesAttribute>();
+        if (serverPropertiesAttribute == null)
+        {
+            throw new Exception($"У тестируемого сервера должен быть атрибут {nameof(ServerPropertiesAttribute)}");
+        }
+
+        var port = configurationManager.GetValue<int>(serverPropertiesAttribute.PortKey);
+        var secrets = TargetAssemblySecretsLoader.LoadAsDictionary(targetAssembly);
+        var container = new ContainerBuilder()
+            .WithImage($"{serverPropertiesAttribute.DockerContainerName}:latest")
+            .WithPortBinding(port, ContainerPort)
+            .WithWaitStrategy(
+                Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPort(ContainerPort).ForPath("health"))
+            )
+            .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Tests")
+            .WithEnvironment(secrets)
+            .Build();
 
         return new IntegrationTestConfiguration(serviceCollection.BuildServiceProvider(), container);
     }
