@@ -147,7 +147,6 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
                 );
         }
 
-
         if (!useLocalServer)
         {
             return new IntegrationTestConfiguration(serviceCollection.BuildServiceProvider(), null);
