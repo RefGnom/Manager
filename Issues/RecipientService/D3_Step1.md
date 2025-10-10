@@ -1,0 +1,1 @@
+﻿Выполнить шаг 1 из описания RecipientService в Readme.md
