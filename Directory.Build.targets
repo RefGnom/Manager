@@ -1,14 +1,18 @@
 <Project>
-  <Target Name="GenerateLaunchSettingsFromTemplate"
-          BeforeTargets="CoreCompile"
-          Condition="Exists('$(MSBuildThisFileDirectory)generate-launchsettings.ps1')">
-    
-    <!-- Запускаем скрипт только если есть шаблон в текущем проекте -->
-    <PropertyGroup>
-      <_LaunchSettingsTemplate>$(MSBuildProjectDirectory)\Properties\launchSettings.Template.json</_LaunchSettingsTemplate>
-    </PropertyGroup>
+    <Target Name="GenerateLaunchSettingsFromTemplate"
+            BeforeTargets="CoreCompile"
+            Condition="
+                Exists('$(MSBuildThisFileDirectory)generate-launchsettings.ps1') AND
+                '$(DOTNET_RUNNING_IN_CONTAINER)' == 'false' AND
+                '$(GITHUB_ACTIONS)' != 'true' AND
+                '$(CI)' != 'true'
+            ">
 
-    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)generate-launchsettings.ps1&quot;"
-          Condition="Exists('$(_LaunchSettingsTemplate)')" />
-  </Target>
+        <PropertyGroup>
+            <_LaunchSettingsTemplate>$(MSBuildProjectDirectory)\Properties\launchSettings.Template.json</_LaunchSettingsTemplate>
+        </PropertyGroup>
+
+        <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)generate-launchsettings.ps1&quot;"
+              Condition="Exists('$(_LaunchSettingsTemplate)')"/>
+    </Target>
 </Project>
