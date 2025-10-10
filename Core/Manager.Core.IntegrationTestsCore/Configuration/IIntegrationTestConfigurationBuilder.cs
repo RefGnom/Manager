@@ -167,7 +167,7 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
             .WithWaitStrategy(
                 Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPort(ContainerPort).ForPath("health"))
             )
-            .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Tests")
+            .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Testing")
             .WithEnvironment(secrets)
             .Build();
 
