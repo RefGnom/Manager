@@ -124,8 +124,7 @@ public class IntegrationTestConfigurationBuilder(
             configurationManager.AddInMemoryCollection(configuration);
             serviceCollection
                 .ConfigureDb()
-                .AddSingleton<DataContext, DataContext>()
-                .AddSingleton<IDataContext, DataContextForTests>()
+                .AddSingleton<IDataContext, DataContext>()
                 .AddSingleton<IDbContextConfigurator, NpgTestingDbContextConfigurator>(x
                     => new NpgTestingDbContextConfigurator(
                         x.GetRequiredService<IOptions<DataBaseOptions>>(),

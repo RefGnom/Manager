@@ -19,35 +19,18 @@ public abstract class IntegrationTestBase
         ConfigureTests();
         DataContext = ServiceProvider.GetService<IDataContext>()!;
         await integrationTestConfiguration.ContainerConfiguration.StartAsync();
+        var dbContextWrapperFactory = ServiceProvider.GetService<IDbContextWrapperFactory>();
+        if (dbContextWrapperFactory != null)
+        {
+            var dbContextWrapper = dbContextWrapperFactory.Create();
+            await dbContextWrapper.Database.EnsureCreatedAsync();
+        }
     }
 
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {
         await integrationTestConfiguration.ContainerConfiguration.DisposeAsync();
-
-        var dataContext = ServiceProvider.GetRequiredService<IDataContext>();
-        if (dataContext is not DataContextForTests dataContextForTests)
-        {
-            return;
-        }
-
-        var dbContextWrapperFactory = ServiceProvider.GetRequiredService<IDbContextWrapperFactory>();
-        foreach (var entity in dataContextForTests.Entities)
-        {
-            try
-            {
-                var dbContext = dbContextWrapperFactory.Create();
-                dbContext.Remove(entity);
-                await dbContext.SaveChangesAsync();
-            }
-            catch
-            {
-                // ignored
-            }
-        }
-
-        dataContextForTests.Entities.Clear();
     }
 
     /// <summary>

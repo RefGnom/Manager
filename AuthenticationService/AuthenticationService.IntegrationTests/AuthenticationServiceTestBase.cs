@@ -11,7 +11,6 @@ public abstract class AuthenticationServiceTestBase : IntegrationTestBase
 
     protected override void CustomizeConfiguration(IConfigurationManager configurationManager)
     {
-        configurationManager.AddJsonFile("appsettings.json");
-        configurationManager.AddUserSecrets<AuthenticationServiceTestBase>();
+        configurationManager.AddJsonFile("testsettings.json");
     }
 }
