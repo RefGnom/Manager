@@ -29,7 +29,7 @@ public class AuthenticationClientTest : AuthenticationServiceTestBase
 
     protected override void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder)
     {
-        builder.UseLocalServer();
+        builder.WithLocalServer();
     }
 
     [SetUp]

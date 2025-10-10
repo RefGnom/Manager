@@ -84,10 +84,10 @@ public abstract class IntegrationTestBase
         var integrationTestConfigurationBuilder = IntegrationTestConfigurationBuilderFactory.Create()
             .CustomizeConfigurationManager(CustomizeConfiguration)
             .CustomizeServiceCollection(CustomizeServiceCollection)
-            .UseTargetTestingAssembly(TargetTestingAssembly)
-            .UseAutoRegistration()
-            .UseNullLogger()
-            .UseNpgDataBase();
+            .WithTargetTestingAssembly(TargetTestingAssembly)
+            .WithAutoRegistration()
+            .WithNullLogger()
+            .WithNpgDataBase();
         CustomizeConfigurationBuilder(integrationTestConfigurationBuilder);
 
         integrationTestConfiguration = integrationTestConfigurationBuilder.Build();

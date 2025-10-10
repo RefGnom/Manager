@@ -20,15 +20,15 @@ namespace Manager.Core.IntegrationTestsCore.Configuration;
 [IgnoreAutoRegistration]
 public interface IIntegrationTestConfigurationBuilder
 {
-    IIntegrationTestConfigurationBuilder UseTargetTestingAssembly(Assembly targetTestingAssembly);
-    IIntegrationTestConfigurationBuilder UseAutoRegistration();
-    IIntegrationTestConfigurationBuilder NotUseAutoRegistration();
-    IIntegrationTestConfigurationBuilder UseNullLogger();
-    IIntegrationTestConfigurationBuilder UseRealLogger();
+    IIntegrationTestConfigurationBuilder WithTargetTestingAssembly(Assembly targetTestingAssembly);
+    IIntegrationTestConfigurationBuilder WithAutoRegistration();
+    IIntegrationTestConfigurationBuilder WithoutAutoRegistration();
+    IIntegrationTestConfigurationBuilder WithNullLogger();
+    IIntegrationTestConfigurationBuilder WithRealLogger();
     IIntegrationTestConfigurationBuilder CustomizeServiceCollection(Action<IServiceCollection> customizer);
     IIntegrationTestConfigurationBuilder CustomizeConfigurationManager(Action<IConfigurationManager> customizer);
-    IIntegrationTestConfigurationBuilder UseNpgDataBase();
-    IIntegrationTestConfigurationBuilder UseLocalServer();
+    IIntegrationTestConfigurationBuilder WithNpgDataBase();
+    IIntegrationTestConfigurationBuilder WithLocalServer();
     IntegrationTestConfiguration Build();
 }
 
@@ -44,31 +44,31 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
     private bool useNpgDataBase;
     private bool useNullLogger;
 
-    public IIntegrationTestConfigurationBuilder UseTargetTestingAssembly(Assembly targetTestingAssembly)
+    public IIntegrationTestConfigurationBuilder WithTargetTestingAssembly(Assembly targetTestingAssembly)
     {
         targetAssembly = targetTestingAssembly;
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder UseAutoRegistration()
+    public IIntegrationTestConfigurationBuilder WithAutoRegistration()
     {
         useAutoRegistration = true;
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder NotUseAutoRegistration()
+    public IIntegrationTestConfigurationBuilder WithoutAutoRegistration()
     {
         useAutoRegistration = false;
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder UseNullLogger()
+    public IIntegrationTestConfigurationBuilder WithNullLogger()
     {
         useNullLogger = true;
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder UseRealLogger()
+    public IIntegrationTestConfigurationBuilder WithRealLogger()
     {
         useNullLogger = false;
         return this;
@@ -86,13 +86,13 @@ public class IntegrationTestConfigurationBuilder : IIntegrationTestConfiguration
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder UseNpgDataBase()
+    public IIntegrationTestConfigurationBuilder WithNpgDataBase()
     {
         useNpgDataBase = true;
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder UseLocalServer()
+    public IIntegrationTestConfigurationBuilder WithLocalServer()
     {
         useLocalServer = true;
         return this;

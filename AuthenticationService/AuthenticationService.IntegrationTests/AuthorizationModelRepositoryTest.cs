@@ -18,7 +18,7 @@ public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
 
     protected override void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder)
     {
-        builder.UseRealLogger();
+        builder.WithRealLogger();
     }
 
     [SetUp]
