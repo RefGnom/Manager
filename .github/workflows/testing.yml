@@ -38,12 +38,18 @@ jobs:
         run: docker compose build
 
       - name: Run Integration Tests
-        run: dotnet test Manager.sln --no-build --filter "TestCategory=IntegrationTests" --logger "trx"
+        run: dotnet test --no-build --filter "TestCategory=IntegrationTests" --logger "trx"
 
       - name: Publish Test Results
-        uses: dorny/test-reporter@v1
-        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: (!cancelled())
         with:
-          name: Integration Tests
-          path: "**/*.trx"
-          reporter: dotnet-trx
+          files: |
+            test-results/**/*.xml
+            test-results/**/*.trx
+            test-results/**/*.json
+
+      - name: Upload Allure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
