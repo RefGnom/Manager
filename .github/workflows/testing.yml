@@ -1,0 +1,37 @@
+name: Project Tests
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Grant Docker permissions
+        run: sudo chmod 666 /var/run/docker.sock
+
+      - name: Build docker image
+        run: docker-compose build
+
+      - name: Run Integration Tests
+        run: dotnet test Manager.sln --filter "TestCategory=IntegrationTests" --logger "trx"
+
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Integration Tests
+          path: "**/*.trx"
+          reporter: dotnet-trx
