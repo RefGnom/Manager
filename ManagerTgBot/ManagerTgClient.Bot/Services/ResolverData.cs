@@ -1,7 +1,10 @@
-﻿namespace Manager.ManagerTgClient.Bot.Services;
+﻿using Manager.ManagerTgClient.Bot.Commands;
+using Manager.ManagerTgClient.Bot.Commands.Requests.Factories;
 
-public class ResolverData(Type commandType, Type requestType)
+namespace Manager.ManagerTgClient.Bot.Services;
+
+public class ResolverData(ICommand command, ICommandRequestFactory factory)
 {
-    public Type CommandType = commandType;
-    public Type CommandRequestType = requestType;
+    public ICommand Command = command;
+    public ICommandRequestFactory Factory = factory;
 }

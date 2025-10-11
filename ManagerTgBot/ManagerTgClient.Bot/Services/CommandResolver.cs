@@ -1,27 +1,26 @@
-﻿using System.Reflection;
-using Manager.ManagerTgClient.Bot.Commands;
-using Manager.ManagerTgClient.Bot.Commands.Attributes;
+﻿using Manager.ManagerTgClient.Bot.Commands;
+using Manager.ManagerTgClient.Bot.Commands.Requests.Factories;
 
 namespace Manager.ManagerTgClient.Bot.Services;
 
 public class CommandResolver : ICommandResolver
 {
-    private readonly ResolverData[] commands = Assembly.GetEntryAssembly()!.GetTypes()
-        .Where(type =>
-            typeof(ICommand).IsAssignableFrom(type) && type is { IsClass: true, IsAbstract: false }
-        ).Select(commandType => new ResolverData(commandType, commandType.GetGenericArguments().First()))
-        .ToArray();
+    private readonly Dictionary<string, ResolverData> _resolverDataMap = new Dictionary<string, ResolverData>();
+
+    public CommandResolver(IEnumerable<ICommand> commands, IEnumerable<ICommandRequestFactory> factories)
+    {
+        foreach (var command in commands)
+        {
+            _resolverDataMap[command.Name] = new ResolverData(
+                command,
+                factories.First(x => x.CommandName == command.Name)
+            );
+        }
+    }
 
     public ResolverData Resolve(string userCommand)
     {
-        var result =
-            commands.First(x => $"{x.CommandType.GetCustomAttribute<CommandNameAttribute>()!.Value}".Equals(userCommand)
-            );
-        if (result is null)
-        {
-            throw new ArgumentException($"{userCommand} is not a valid command");
-        }
-
-        return result;
+        var resolverData = _resolverDataMap[userCommand];
+        return resolverData ?? throw new Exception("Unknown command: " + userCommand);
     }
 }
