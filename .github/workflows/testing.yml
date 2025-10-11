@@ -2,7 +2,7 @@ name: Project Tests
 
 on:
   push:
-    branches: [ main, api_integrational_tests ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
