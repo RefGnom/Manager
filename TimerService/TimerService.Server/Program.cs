@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Manager.Core.AppConfiguration;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.TimerService.Server.Configurators;
 using Manager.TimerService.Server.Layers.DbLayer;
@@ -9,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+SolutionRootEnvironmentVariablesLoader.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 

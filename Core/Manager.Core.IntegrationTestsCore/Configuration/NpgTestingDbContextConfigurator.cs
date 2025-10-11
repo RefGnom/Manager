@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Manager.Core.IntegrationTestsCore;
+namespace Manager.Core.IntegrationTestsCore.Configuration;
 
 public class NpgTestingDbContextConfigurator(
     IOptions<DataBaseOptions> dataBaseOptions,

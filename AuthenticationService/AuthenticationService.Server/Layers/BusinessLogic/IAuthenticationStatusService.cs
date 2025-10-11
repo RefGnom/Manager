@@ -29,6 +29,7 @@ public class AuthenticationStatusService(
         var authModelDbo = await authorizationModelRepository.FindAsync(extractAuthorizationModelIdResult.Value);
         if (authModelDbo == null || !apiKeyService.VerifyHashedApiKey(authModelDbo.ApiKeyHash, apiKey))
         {
+            logger.LogInformation("Нашли апи ключ, но хэши не совпали");
             return AuthenticationCode.ApiKeyNotFound;
         }
 

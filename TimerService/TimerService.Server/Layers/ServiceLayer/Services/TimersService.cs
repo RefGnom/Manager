@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Manager.Core.Common.DependencyInjection.LifetimeAttributes;
+using Manager.Core.Common.DependencyInjection.Attributes;
 using Manager.Core.Common.Enum;
 using Manager.Core.Common.Linq;
 using Manager.Core.Common.Time;

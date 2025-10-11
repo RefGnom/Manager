@@ -6,30 +6,24 @@ using FluentAssertions;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 using Manager.AuthenticationService.Server.Layers.Repository;
 using Manager.AuthenticationService.Server.Layers.Repository.Dbos;
+using Manager.Core.IntegrationTestsCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace Manager.AuthenticationService.IntegrationTests;
 
-public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
+public class AuthorizationModelRepositoryTest : IntegrationTestBase
 {
-    private IAuthorizationModelRepository authorizationModelRepository = null!;
-
-    protected override bool UseNullLogger => false;
-
-    [SetUp]
-    public void Setup()
-    {
-        authorizationModelRepository = ServiceProvider.GetRequiredService<IAuthorizationModelRepository>();
-    }
+    private IAuthorizationModelRepository AuthorizationModelRepository =>
+        ServiceProvider.GetRequiredService<IAuthorizationModelRepository>();
 
     [Test]
     public async Task TestCreate()
     {
         var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
-        await authorizationModelRepository.CreateAsync(authorizationModel);
+        await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
-        var foundAuthorizationModel = await authorizationModelRepository.FindAsync(authorizationModel.Id);
+        var foundAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
 
         foundAuthorizationModel.Should().NotBeNull();
         foundAuthorizationModel.Should().BeEquivalentTo(authorizationModel);
@@ -39,12 +33,12 @@ public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
     public async Task TestUpdate()
     {
         var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
-        await authorizationModelRepository.CreateAsync(authorizationModel);
+        await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
-        var foundAuthorizationModel = await authorizationModelRepository.ReadAsync(authorizationModel.Id);
+        var foundAuthorizationModel = await AuthorizationModelRepository.ReadAsync(authorizationModel.Id);
         foundAuthorizationModel.ApiKeyHash = "new hash";
-        await authorizationModelRepository.UpdateAsync(foundAuthorizationModel);
-        var updatedAuthorizationModel = await authorizationModelRepository.FindAsync(authorizationModel.Id);
+        await AuthorizationModelRepository.UpdateAsync(foundAuthorizationModel);
+        var updatedAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
 
         updatedAuthorizationModel.Should().NotBeNull();
         updatedAuthorizationModel.Should().BeEquivalentTo(foundAuthorizationModel);
@@ -54,9 +48,9 @@ public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
     public async Task TestFindByAuthorizationModelBody()
     {
         var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
-        await authorizationModelRepository.CreateAsync(authorizationModel);
+        await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
-        var foundAuthorizationModel = await authorizationModelRepository.FindAsync(
+        var foundAuthorizationModel = await AuthorizationModelRepository.FindAsync(
             authorizationModel.ApiKeyOwner,
             authorizationModel.AvailableServices,
             authorizationModel.AvailableResources
@@ -70,11 +64,11 @@ public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
     public async Task TestDelete()
     {
         var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
-        await authorizationModelRepository.CreateAsync(authorizationModel);
+        await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
-        var foundAuthorizationModel = await authorizationModelRepository.ReadAsync(authorizationModel.Id);
-        await authorizationModelRepository.DeleteAsync(foundAuthorizationModel);
-        var deletedAuthorizationModel = await authorizationModelRepository.FindAsync(authorizationModel.Id);
+        var foundAuthorizationModel = await AuthorizationModelRepository.ReadAsync(authorizationModel.Id);
+        await AuthorizationModelRepository.DeleteAsync(foundAuthorizationModel);
+        var deletedAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
 
         deletedAuthorizationModel.Should().BeNull();
     }
@@ -92,7 +86,7 @@ public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
 
         await DataContext.InsertRangeAsync(authorizationModels);
 
-        var authorizationModelDbos = await authorizationModelRepository.SelectByExpirationTicksAsync(9);
+        var authorizationModelDbos = await AuthorizationModelRepository.SelectByExpirationTicksAsync(9);
 
         authorizationModelDbos.Should().HaveCountGreaterThanOrEqualTo(5);
         authorizationModelDbos.Select(x => x.Id)
@@ -112,7 +106,7 @@ public class AuthorizationModelRepositoryTest : AuthenticationServiceTestBase
 
         await DataContext.InsertRangeAsync(authorizationModels);
 
-        await authorizationModelRepository.SetStatusAsync(AuthorizationModelState.Revoked, authorizationModelIds);
+        await AuthorizationModelRepository.SetStatusAsync(AuthorizationModelState.Revoked, authorizationModelIds);
 
         var selectedAuthorizationModels = await DataContext.SelectAsync<AuthorizationModelWithApiKeyHashDbo, Guid>(
             x => x.Id,

@@ -1,7 +1,8 @@
 using System.Linq;
 using System.Reflection;
-using Manager.Core.Common.DependencyInjection.LifetimeAttributes;
+using Manager.Core.Common.DependencyInjection.Attributes;
 using Manager.Core.Common.Linq;
+using Manager.Core.Common.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Core.Common.DependencyInjection.AutoRegistration;
@@ -68,14 +69,16 @@ public static class AutoRegistrationExtensions
         assembly.GetExportedTypes()
             .Where(x => !x.IsInterface)
             .Where(x => !x.IsAbstract)
-            .SelectMany(x => x.GetInterfaces()
-                .Where(i => serviceAssemblies.Contains(i.Assembly))
-                .Where(i => namespacePrefix is null || i.Namespace!.StartsWith(namespacePrefix))
-                .Select(i =>
+            .Where(implementation => !implementation.HasInterface<IgnoreAutoRegistrationAttribute>())
+            .SelectMany(implementation => implementation.GetInterfaces()
+                .Where(@interface => serviceAssemblies.Contains(@interface.Assembly))
+                .Where(@interface => namespacePrefix is null || @interface.Namespace!.StartsWith(namespacePrefix))
+                .Where(@interface => !@interface.HasInterface<IgnoreAutoRegistrationAttribute>())
+                .Select(@interface =>
                     {
-                        var lifetimeAttribute = x.GetCustomAttributes<LifetimeAttribute>().FirstOrDefault();
+                        var lifetimeAttribute = implementation.GetCustomAttribute<LifetimeAttribute>();
                         var lifetime = lifetimeAttribute?.Lifetime ?? LifestyleByDefault;
-                        return new ServiceDescriptor(i, x, lifetime);
+                        return new ServiceDescriptor(@interface, implementation, lifetime);
                     }
                 )
             )

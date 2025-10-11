@@ -14,6 +14,7 @@ obj/
 *.cache
 *.dotSettings
 *.DotSettings.user
+*.Directory.Build.targets
 
 # Git-related files
 .git/
@@ -34,8 +35,6 @@ TestResults/
 logs/
 
 # Sensitive information (e.g., local configuration)
-appsettings.Development.json
-appsettings.Local.json
 *.env
 .env
 

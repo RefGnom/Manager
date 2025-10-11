@@ -1,5 +1,6 @@
 using Manager.AuthenticationService.Server.Layers.Api.Middleware;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic;
+using Manager.Core.AppConfiguration;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.BackgroundTasks;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
@@ -11,12 +12,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+[assembly: ServerProperties("AUTHENTICATION_SERVICE_PORT", "manager-authentication-service")]
 namespace Manager.AuthenticationService.Server;
 
 public static class Program
 {
     public static void Main(string[] args)
     {
+        SolutionRootEnvironmentVariablesLoader.Load();
+
         var builder = WebApplication.CreateBuilder(args);
         builder.AddCustomLogger();
         var startupLogger = StartupLoggerFactory.CreateStartupLogger();

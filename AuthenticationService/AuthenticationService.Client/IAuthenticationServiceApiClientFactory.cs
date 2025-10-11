@@ -2,10 +2,14 @@
 
 public interface IAuthenticationServiceApiClientFactory
 {
-    IAuthenticationServiceApiClient Create(string apiKey);
+    IAuthenticationServiceApiClient Create(string port, string apiKey);
 }
 
 public class AuthenticationServiceApiClientFactory : IAuthenticationServiceApiClientFactory
 {
-    public IAuthenticationServiceApiClient Create(string apiKey) => new AuthenticationServiceApiClient(apiKey);
+    public IAuthenticationServiceApiClient Create(string port, string apiKey)
+    {
+        var url = $"http://localhost:{port}";
+        return new AuthenticationServiceApiClient(url, apiKey);
+    }
 }
