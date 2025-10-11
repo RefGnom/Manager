@@ -75,7 +75,7 @@ public abstract class IntegrationTestBase
             .WithTargetTestingAssembly(TargetTestingAssembly)
             .WithAutoRegistration()
             .WithNullLogger()
-            .WithNpgDataBase();
+            .WithDataBase();
         CustomizeConfigurationBuilder(integrationTestConfigurationBuilder);
 
         integrationTestConfiguration = integrationTestConfigurationBuilder.Build();

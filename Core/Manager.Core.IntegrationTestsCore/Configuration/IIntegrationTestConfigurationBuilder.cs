@@ -27,7 +27,7 @@ public interface IIntegrationTestConfigurationBuilder
     IIntegrationTestConfigurationBuilder WithRealLogger();
     IIntegrationTestConfigurationBuilder CustomizeServiceCollection(Action<IServiceCollection> customizer);
     IIntegrationTestConfigurationBuilder CustomizeConfigurationManager(Action<IConfigurationManager> customizer);
-    IIntegrationTestConfigurationBuilder WithNpgDataBase();
+    IIntegrationTestConfigurationBuilder WithDataBase();
     IIntegrationTestConfigurationBuilder WithLocalServer();
     IntegrationTestConfiguration Build();
 }
@@ -39,10 +39,10 @@ public class IntegrationTestConfigurationBuilder(
     private readonly IConfigurationManager configurationManager = new ConfigurationManager();
     private readonly IServiceCollection serviceCollection = new ServiceCollection();
     private Assembly? targetAssembly;
-    private bool useAutoRegistration;
-    private bool useLocalServer;
-    private bool useNpgDataBase;
-    private bool useNullLogger;
+    private bool withAutoRegistration;
+    private bool withLocalServer;
+    private bool withDataBase;
+    private bool withNullLogger;
 
     public IIntegrationTestConfigurationBuilder WithTargetTestingAssembly(Assembly targetTestingAssembly)
     {
@@ -52,25 +52,25 @@ public class IntegrationTestConfigurationBuilder(
 
     public IIntegrationTestConfigurationBuilder WithAutoRegistration()
     {
-        useAutoRegistration = true;
+        withAutoRegistration = true;
         return this;
     }
 
     public IIntegrationTestConfigurationBuilder WithoutAutoRegistration()
     {
-        useAutoRegistration = false;
+        withAutoRegistration = false;
         return this;
     }
 
     public IIntegrationTestConfigurationBuilder WithNullLogger()
     {
-        useNullLogger = true;
+        withNullLogger = true;
         return this;
     }
 
     public IIntegrationTestConfigurationBuilder WithRealLogger()
     {
-        useNullLogger = false;
+        withNullLogger = false;
         return this;
     }
 
@@ -86,15 +86,15 @@ public class IntegrationTestConfigurationBuilder(
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder WithNpgDataBase()
+    public IIntegrationTestConfigurationBuilder WithDataBase()
     {
-        useNpgDataBase = true;
+        withDataBase = true;
         return this;
     }
 
     public IIntegrationTestConfigurationBuilder WithLocalServer()
     {
-        useLocalServer = true;
+        withLocalServer = true;
         return this;
     }
 
@@ -105,7 +105,7 @@ public class IntegrationTestConfigurationBuilder(
             throw new ArgumentNullException($"{nameof(targetAssembly)} should be initialized before building.");
         }
 
-        if (useNpgDataBase)
+        if (withDataBase)
         {
             testContainerBuilder.WithPostgres();
             var configurationDictionary = new Dictionary<string, string?>
@@ -126,21 +126,21 @@ public class IntegrationTestConfigurationBuilder(
                 );
         }
 
-        if (useLocalServer)
+        if (withLocalServer)
         {
             SolutionRootEnvironmentVariablesLoader.Load();
             configurationManager.AddEnvironmentVariables();
             testContainerBuilder.WithServer(targetAssembly, configurationManager);
         }
 
-        if (useAutoRegistration)
+        if (withAutoRegistration)
         {
             serviceCollection.UseAutoRegistrationForAssembly(targetAssembly)
                 .UseAutoRegistrationForAssembly(GetTestsAssembly())
                 .UseAutoRegistrationForCoreCommon();
         }
 
-        if (useNullLogger)
+        if (withNullLogger)
         {
             serviceCollection
                 .AddSingleton<ILogger, NullLogger>()
