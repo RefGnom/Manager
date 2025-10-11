@@ -2,7 +2,7 @@ name: Project Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, api_integrational_tests ]
   workflow_dispatch:
 
 jobs:
@@ -22,11 +22,17 @@ jobs:
       - name: Grant Docker permissions
         run: sudo chmod 666 /var/run/docker.sock
 
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
       - name: Build docker image
         run: docker-compose build
 
       - name: Run Integration Tests
-        run: dotnet test Manager.sln --filter "TestCategory=IntegrationTests" --logger "trx"
+        run: dotnet test Manager.sln --no-build --filter "TestCategory=IntegrationTests" --logger "trx"
 
       - name: Publish Test Results
         uses: dorny/test-reporter@v1
