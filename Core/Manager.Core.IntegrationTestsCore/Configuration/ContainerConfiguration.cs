@@ -1,20 +1,21 @@
-﻿using System.Threading.Tasks;
-using DotNet.Testcontainers.Containers;
+﻿using System;
+using System.Threading.Tasks;
 using DotNet.Testcontainers.Networks;
 
 namespace Manager.Core.IntegrationTestsCore.Configuration;
 
 public record ContainerConfiguration(
     INetwork Network,
-    IContainer[] Containers
+    ContainerWithType[] Containers
 )
 {
-    public async Task StartAsync()
+    public async Task StartAsync(Func<ContainerWithType, Task> onStart)
     {
         await Network.CreateAsync();
         foreach (var container in Containers)
         {
-            await container.StartAsync();
+            await container.Container.StartAsync();
+            await onStart(container);
         }
     }
 
@@ -23,7 +24,7 @@ public record ContainerConfiguration(
         await Network.DisposeAsync();
         foreach (var container in Containers)
         {
-            await container.DisposeAsync();
+            await container.Container.DisposeAsync();
         }
     }
 }

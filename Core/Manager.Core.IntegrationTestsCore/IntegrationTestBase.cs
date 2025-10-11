@@ -18,7 +18,17 @@ public abstract class IntegrationTestBase
     {
         ConfigureTests();
         DataContext = ServiceProvider.GetService<IDataContext>()!;
-        await integrationTestConfiguration.ContainerConfiguration.StartAsync();
+        await integrationTestConfiguration.ContainerConfiguration.StartAsync(OnContainerStart);
+        await InnerOneTimeSetUp();
+    }
+
+    protected virtual async Task OnContainerStart(ContainerWithType containerWithType)
+    {
+        if (containerWithType.Type != ContainerType.DataBase)
+        {
+            return;
+        }
+
         var dbContextWrapperFactory = ServiceProvider.GetService<IDbContextWrapperFactory>();
         if (dbContextWrapperFactory != null)
         {
@@ -26,6 +36,8 @@ public abstract class IntegrationTestBase
             await dbContextWrapper.Database.EnsureCreatedAsync();
         }
     }
+
+    protected virtual Task InnerOneTimeSetUp() => Task.CompletedTask;
 
     [OneTimeTearDown]
     public async Task OneTimeTearDown()

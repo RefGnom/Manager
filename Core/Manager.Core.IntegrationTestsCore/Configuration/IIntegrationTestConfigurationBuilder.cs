@@ -105,23 +105,16 @@ public class IntegrationTestConfigurationBuilder(
             throw new ArgumentNullException($"{nameof(targetAssembly)} should be initialized before building.");
         }
 
-        if (useLocalServer)
-        {
-            SolutionRootEnvironmentVariablesLoader.Load();
-            configurationManager.AddEnvironmentVariables();
-            testContainerBuilder.WithServer(targetAssembly, configurationManager);
-        }
-
         if (useNpgDataBase)
         {
-            testContainerBuilder.WithPostgres(out var username, out var password);
-            var configuration = new Dictionary<string, string?>
+            testContainerBuilder.WithPostgres();
+            var configurationDictionary = new Dictionary<string, string?>
             {
                 ["DataBaseOptions:ConnectionStringTemplate"] = testContainerBuilder.ConnectionStringTemplate,
-                ["DataBaseOptions:Username"] = username,
-                ["DataBaseOptions:Password"] = password,
+                ["DataBaseOptions:Username"] = testContainerBuilder.Username,
+                ["DataBaseOptions:Password"] = testContainerBuilder.Password,
             };
-            configurationManager.AddInMemoryCollection(configuration);
+            configurationManager.AddInMemoryCollection(configurationDictionary);
             serviceCollection
                 .ConfigureDb()
                 .AddSingleton<IDataContext, DataContext>()
@@ -131,6 +124,13 @@ public class IntegrationTestConfigurationBuilder(
                         x.GetRequiredService<ILogger<DbContextConfiguratorBase>>()
                     ) { EntitiesAssembly = targetAssembly }
                 );
+        }
+
+        if (useLocalServer)
+        {
+            SolutionRootEnvironmentVariablesLoader.Load();
+            configurationManager.AddEnvironmentVariables();
+            testContainerBuilder.WithServer(targetAssembly, configurationManager);
         }
 
         if (useAutoRegistration)
