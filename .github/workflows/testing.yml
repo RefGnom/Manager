@@ -30,8 +30,6 @@ jobs:
 
       - name: Run docker compose
         uses: hoverkraft-tech/compose-action@b716db5b717cb9b81e391fe638e5aceaa2299e43
-        with:
-          compose-file: ".docker-compose.yml"
 
       - name: Docker compose build
         run: docker compose build
