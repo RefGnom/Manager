@@ -18,9 +18,13 @@ public class CommandResolver : ICommandResolver
         }
     }
 
-    public ResolverData Resolve(string userCommand)
+    public Task<ResolverData> ResolveAsync(string userCommand)
     {
         var resolverData = _resolverDataMap[userCommand];
-        return resolverData ?? throw new Exception("Unknown command: " + userCommand);
+        if (resolverData.Command is null || resolverData.Factory is null)
+        {
+            throw new ResolverMissingComponentException("No factory found for command: " + userCommand);
+        }
+        return Task.FromResult(resolverData ?? throw new Exception("Unknown command: " + userCommand));
     }
 }

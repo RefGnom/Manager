@@ -20,13 +20,12 @@ public class ManagerUpdateHandler(
         {
             if (update.Type == UpdateType.Message && update.Message is not null && update.Message.Text != null)
             {
-                await commandExecutor.ExecuteAsync(update.Message.Text);
+                await commandExecutor.ExecuteAsync(botClient, update.Message.Text, update.Message.Chat.Id);
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
         }
     }
 

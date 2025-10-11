@@ -2,5 +2,5 @@
 
 public interface ICommandResolver
 {
-    ResolverData Resolve(string command);
+    Task<ResolverData> ResolveAsync(string command);
 }

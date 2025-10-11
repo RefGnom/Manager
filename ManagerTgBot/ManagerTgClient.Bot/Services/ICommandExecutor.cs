@@ -1,6 +1,8 @@
-﻿namespace Manager.ManagerTgClient.Bot.Services;
+﻿using Telegram.Bot;
+
+namespace Manager.ManagerTgClient.Bot.Services;
 
 public interface ICommandExecutor
 {
-    Task ExecuteAsync(string userInput);
+    Task ExecuteAsync(ITelegramBotClient botClient, string userInput, long chatId);
 }
