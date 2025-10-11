@@ -18,7 +18,7 @@ public class ManagerUpdateHandler(
     {
         try
         {
-            if (update.Type == UpdateType.Message && update.Message.Text != null)
+            if (update.Type == UpdateType.Message && update.Message is not null && update.Message.Text != null)
             {
                 await commandExecutor.ExecuteAsync(update.Message.Text);
             }

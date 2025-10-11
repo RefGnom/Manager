@@ -8,7 +8,7 @@ public class CommandResolver : ICommandResolver
 {
     private readonly ResolverData[] commands = Assembly.GetEntryAssembly()!.GetTypes()
         .Where(type =>
-            typeof(IManagerBotCommand<>).IsAssignableFrom(type) && type is { IsClass: true, IsAbstract: false }
+            typeof(ICommand).IsAssignableFrom(type) && type is { IsClass: true, IsAbstract: false }
         ).Select(commandType => new ResolverData(commandType, commandType.GetGenericArguments().First()))
         .ToArray();
 
