@@ -1,24 +1,18 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentAssertions;
 using Manager.AuthenticationService.Client;
 using Manager.AuthenticationService.Client.BusinessObjects.Requests;
-using Manager.AuthenticationService.Server.Layers.BusinessLogic;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Converters;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
-using Manager.Core.IntegrationTestsCore.Configuration;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Manager.Core.IntegrationTestsCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using AuthenticationCode = Manager.AuthenticationService.Client.BusinessObjects.AuthenticationCode;
 
 namespace Manager.AuthenticationService.IntegrationTests;
 
-public class AuthenticationClientTest : AuthenticationServiceTestBase
+public class AuthenticationClientTest : IntegrationTestBase
 {
-    private string apiKeyToConnect = null!;
-
     private IAuthenticationServiceApiClient AuthenticationServiceApiClient =>
         ServiceProvider.GetRequiredService<IAuthenticationServiceApiClient>();
 
@@ -27,36 +21,6 @@ public class AuthenticationClientTest : AuthenticationServiceTestBase
 
     private IAuthorizationModelConverter AuthorizationModelConverter =>
         ServiceProvider.GetRequiredService<IAuthorizationModelConverter>();
-
-    protected override void CustomizeServiceCollection(IServiceCollection serviceCollection)
-    {
-        serviceCollection.AddSingleton<IAuthenticationServiceApiClientFactory, AuthenticationServiceApiClientFactory>();
-        serviceCollection.AddSingleton<IPasswordHasher<ApiKeyService>, PasswordHasher<ApiKeyService>>();
-        serviceCollection.AddSingleton<IAuthenticationServiceApiClient>(x => x
-            .GetRequiredService<IAuthenticationServiceApiClientFactory>().Create(
-                x.GetRequiredService<IConfiguration>().GetValue<string>("AUTHENTICATION_SERVICE_PORT") ??
-                throw new Exception("Authentication service port not configured"),
-                apiKeyToConnect
-            )
-        );
-    }
-
-    protected override void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder)
-    {
-        builder.WithLocalServer();
-    }
-
-    protected override async Task InnerOneTimeSetUp()
-    {
-        var authorizationModelWithApiKeyDto = AuthorizationModelFactory.Create(
-            "test owner",
-            ["AuthenticationService"],
-            ["AuthenticationStatus", "AuthorizationModel"],
-            null
-        );
-        await DataContext.InsertAsync(AuthorizationModelConverter.ToDbo(authorizationModelWithApiKeyDto));
-        apiKeyToConnect = authorizationModelWithApiKeyDto.ApiKey;
-    }
 
     [Test]
     public async Task TestGetAuthenticationStatusWithNotExistApiKey()
