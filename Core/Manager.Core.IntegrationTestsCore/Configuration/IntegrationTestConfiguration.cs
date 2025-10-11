@@ -7,6 +7,6 @@ public class IntegrationTestConfiguration(
     ContainerConfiguration containerConfiguration
 )
 {
-    public IServiceProvider ServiceProvider { get; set; } = serviceProvider;
+    public IServiceProvider ServiceProvider { get; } = serviceProvider;
     public ContainerConfiguration ContainerConfiguration { get; } = containerConfiguration;
 }
