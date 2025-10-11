@@ -19,13 +19,6 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: Set up Docker Compose
-        run: |
-          sudo mkdir -p /usr/local/lib/docker/cli-plugins
-          sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64" -o /usr/local/lib/docker/cli-plugins/docker-compose
-          sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-          docker compose version
-
       - name: Grant Docker permissions
         run: sudo chmod 666 /var/run/docker.sock
 
@@ -35,8 +28,13 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Build docker image
-        run: docker-compose build
+      - name: Run docker compose
+        uses: hoverkraft-tech/compose-action@b716db5b717cb9b81e391fe638e5aceaa2299e43
+        with:
+          compose-file: ".docker-compose.yml"
+
+      - name: Docker compose build
+        run: docker compose build
 
       - name: Run Integration Tests
         run: dotnet test Manager.sln --no-build --filter "TestCategory=IntegrationTests" --logger "trx"
