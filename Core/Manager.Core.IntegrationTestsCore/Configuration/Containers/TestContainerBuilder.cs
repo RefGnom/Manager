@@ -8,7 +8,7 @@ using Manager.Core.AppConfiguration;
 using Microsoft.Extensions.Configuration;
 using Testcontainers.PostgreSql;
 
-namespace Manager.Core.IntegrationTestsCore.Configuration;
+namespace Manager.Core.IntegrationTestsCore.Configuration.Containers;
 
 public class TestContainerBuilder : ITestContainerBuilder
 {

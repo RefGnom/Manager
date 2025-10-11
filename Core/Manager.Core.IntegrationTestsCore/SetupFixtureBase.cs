@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Manager.Core.EFCore;
 using Manager.Core.IntegrationTestsCore.Configuration;
+using Manager.Core.IntegrationTestsCore.Configuration.Containers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;

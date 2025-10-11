@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using DotNet.Testcontainers.Networks;
 
-namespace Manager.Core.IntegrationTestsCore.Configuration;
+namespace Manager.Core.IntegrationTestsCore.Configuration.Containers;
 
 public record ContainerConfiguration(
     INetwork Network,

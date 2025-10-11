@@ -1,4 +1,6 @@
-﻿namespace Manager.Core.IntegrationTestsCore.Configuration;
+﻿using Manager.Core.IntegrationTestsCore.Configuration.Containers;
+
+namespace Manager.Core.IntegrationTestsCore.Configuration;
 
 public static class IntegrationTestConfigurationBuilderFactory
 {

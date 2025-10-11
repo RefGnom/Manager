@@ -1,4 +1,5 @@
 ﻿using System;
+using Manager.Core.IntegrationTestsCore.Configuration.Containers;
 
 namespace Manager.Core.IntegrationTestsCore.Configuration;
 

@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
+using Manager.Core.Common.DependencyInjection.Attributes;
 using Microsoft.Extensions.Configuration;
 
-namespace Manager.Core.IntegrationTestsCore.Configuration;
+namespace Manager.Core.IntegrationTestsCore.Configuration.Containers;
 
+[IgnoreAutoRegistration]
 public interface ITestContainerBuilder
 {
     string ConnectionStringTemplate { get; }
