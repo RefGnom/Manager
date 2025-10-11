@@ -19,10 +19,10 @@ public abstract class SetupFixtureBase
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
-        var integrationTestConfigurationBuilder = IntegrationTestConfigurationBuilderFactory.Create()
+        var integrationTestConfigurationBuilder = IntegrationTestConfigurationBuilderFactory
+            .Create(TargetTestingAssembly)
             .CustomizeConfigurationManager(CustomizeConfiguration)
             .CustomizeServiceCollection(CustomizeServiceCollection)
-            .WithTargetTestingAssembly(TargetTestingAssembly)
             .WithAutoRegistration()
             .WithNullLogger()
             .WithDataBase();

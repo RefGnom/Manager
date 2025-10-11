@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Manager.Core.Common.DependencyInjection.Attributes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +8,6 @@ namespace Manager.Core.IntegrationTestsCore.Configuration;
 [IgnoreAutoRegistration]
 public interface IIntegrationTestConfigurationBuilder
 {
-    IIntegrationTestConfigurationBuilder WithTargetTestingAssembly(Assembly targetTestingAssembly);
     IIntegrationTestConfigurationBuilder WithAutoRegistration();
     IIntegrationTestConfigurationBuilder WithoutAutoRegistration();
     IIntegrationTestConfigurationBuilder WithNullLogger();
