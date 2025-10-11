@@ -9,7 +9,8 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
         env_file:
-            - ./AuthenticationService/AuthenticationService.Server/.env
+            - path: ./AuthenticationService/AuthenticationService.Server/.env
+              required: false
         networks:
             - my-network
 
