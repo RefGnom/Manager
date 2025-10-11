@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 [assembly: ServerProperties("AUTHENTICATION_SERVICE_PORT", "manager-authentication-service")]
+
 namespace Manager.AuthenticationService.Server;
 
 public static class Program

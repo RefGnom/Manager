@@ -6,7 +6,8 @@ using NUnit.Framework;
 
 namespace Manager.Core.IntegrationTestsCore;
 
-[TestFixture, Category("IntegrationTests")]
+[TestFixture]
+[Category("IntegrationTests")]
 public abstract class IntegrationTestBase
 {
     /// <summary>

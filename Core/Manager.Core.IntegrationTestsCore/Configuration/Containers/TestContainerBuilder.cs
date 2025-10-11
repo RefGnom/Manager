@@ -20,15 +20,15 @@ public class TestContainerBuilder : ITestContainerBuilder
     private const int PostgresHostPort = 5000;
     private const string DataBaseName = "testdb";
     private const string NetworkAliases = "postgres";
-
-    private readonly INetwork network = new NetworkBuilder().Build();
     private readonly List<ContainerWithType> containers = [];
 
-    public string ConnectionStringTemplate { get; } =
-        $"Host=127.0.0.1;Port={PostgresHostPort};Database={DataBaseName};Username={{0}};Password={{1}}";
+    private readonly INetwork network = new NetworkBuilder().Build();
 
     private string ContainerConnectionStringTemplate { get; } =
         $"Host={NetworkAliases};Port={PostgresContainerPort};Database={DataBaseName};Username={{0}};Password={{1}}";
+
+    public string ConnectionStringTemplate { get; } =
+        $"Host=127.0.0.1;Port={PostgresHostPort};Database={DataBaseName};Username={{0}};Password={{1}}";
 
     public string Username { get; } = Guid.NewGuid().ToString();
     public string Password { get; } = Guid.NewGuid().ToString();

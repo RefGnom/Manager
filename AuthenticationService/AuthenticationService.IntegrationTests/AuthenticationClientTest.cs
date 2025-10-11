@@ -87,7 +87,10 @@ public class AuthenticationClientTest : IntegrationTestBase
         authenticationStatusResponse.AuthenticationCode.Should().Be(AuthenticationCode.ResourceNotAvailable);
     }
 
-    private async Task<AuthorizationModelWithApiKeyDto> CreateAuthorizationModel(string availableService, string availableResource)
+    private async Task<AuthorizationModelWithApiKeyDto> CreateAuthorizationModel(
+        string availableService,
+        string availableResource
+    )
     {
         var authorizationModelWithApiKeyDto = AuthorizationModelFactory.Create(
             "bebe",
