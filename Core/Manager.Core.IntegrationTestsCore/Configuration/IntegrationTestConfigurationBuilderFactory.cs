@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Manager.Core.IntegrationTestsCore.Configuration.ConfigurationActions;
 using Manager.Core.IntegrationTestsCore.Configuration.Containers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,9 +10,11 @@ public static class IntegrationTestConfigurationBuilderFactory
 {
     public static IIntegrationTestConfigurationBuilder Create(Assembly targetAssembly) =>
         new IntegrationTestConfigurationBuilder(
-            new ServiceCollection(),
-            new ConfigurationManager(),
-            new TestContainerBuilder(),
-            targetAssembly
+            new ConfigurationActionContext(
+                new ServiceCollection(),
+                new ConfigurationManager(),
+                new TestContainerBuilder(),
+                targetAssembly
+            )
         );
 }

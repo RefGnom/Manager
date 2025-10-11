@@ -1,28 +1,16 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using Manager.Core.IntegrationTestsCore.Configuration.ConfigurationActions;
-using Manager.Core.IntegrationTestsCore.Configuration.Containers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Core.IntegrationTestsCore.Configuration;
 
 public class IntegrationTestConfigurationBuilder(
-    IServiceCollection serviceCollection,
-    IConfigurationManager configurationManager,
-    ITestContainerBuilder testContainerBuilder,
-    Assembly targetAssembly
+    ConfigurationActionContext buildContext
 ) : IIntegrationTestConfigurationBuilder
 {
     private readonly ConfigurationActionCollection configurationActionCollection = [];
-
-    private readonly ConfigurationActionContext buildContext = new(
-        serviceCollection,
-        configurationManager,
-        testContainerBuilder,
-        targetAssembly
-    );
 
     public IIntegrationTestConfigurationBuilder WithAutoRegistration()
     {
@@ -83,7 +71,10 @@ public class IntegrationTestConfigurationBuilder(
             configurationAction.Invoke(buildContext);
         }
 
-        serviceCollection.AddSingleton<IConfiguration>(configurationManager.Build());
-        return new IntegrationTestConfiguration(serviceCollection.BuildServiceProvider(), testContainerBuilder.Build());
+        buildContext.ServiceCollection.AddSingleton<IConfiguration>(buildContext.ConfigurationManager.Build());
+        return new IntegrationTestConfiguration(
+            buildContext.ServiceCollection.BuildServiceProvider(),
+            buildContext.TestContainerBuilder.Build()
+        );
     }
 }
