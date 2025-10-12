@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Manager.Core.UnitTestsCore;
 
 [TestFixture]
-[Category("IntegrationTests")]
+[Category("UnitTests")]
 public abstract class UnitTestBase
 {
     /// <summary>
