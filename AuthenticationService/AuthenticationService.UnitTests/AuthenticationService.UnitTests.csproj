@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Core\Manager.Core.UnitTestsCore\Manager.Core.UnitTestsCore.csproj" />
+      <ProjectReference Include="..\AuthenticationService.Server\AuthenticationService.Server.csproj" />
     </ItemGroup>
 
 </Project>

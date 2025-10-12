@@ -54,7 +54,7 @@ public class AuthorizationModelRepository(
     {
         var authorizationModelWithApiKeyHashDbo = await dataContext
             .ExecuteReadAsync<AuthorizationModelWithApiKeyHashDbo, AuthorizationModelWithApiKeyHashDbo?>(q
-                => q.Where(x => x.ApiKeyOwner == owner)
+                => q.Where(x => x.Owner == owner)
                     .Where(x => x.AvailableServices.SequenceEqual(services))
                     .Where(x => x.AvailableResources.SequenceEqual(resources))
                     .FirstOrDefaultAsync()

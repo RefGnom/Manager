@@ -19,7 +19,7 @@ public class AuthorizationModelConverter : IAuthorizationModelConverter
     {
         Id = authorizationModelWithApiKeyHashDto.Id,
         ApiKeyHash = authorizationModelWithApiKeyHashDto.ApiKeyHash,
-        ApiKeyOwner = authorizationModelWithApiKeyHashDto.Owner,
+        Owner = authorizationModelWithApiKeyHashDto.Owner,
         AvailableServices = authorizationModelWithApiKeyHashDto.AvailableServices,
         AvailableResources = authorizationModelWithApiKeyHashDto.AvailableResources,
         State = authorizationModelWithApiKeyHashDto.State,
@@ -32,7 +32,7 @@ public class AuthorizationModelConverter : IAuthorizationModelConverter
     ) => new(
         authorizationModelWithApiKeyHashDbo.Id,
         authorizationModelWithApiKeyHashDbo.ApiKeyHash,
-        authorizationModelWithApiKeyHashDbo.ApiKeyOwner,
+        authorizationModelWithApiKeyHashDbo.Owner,
         authorizationModelWithApiKeyHashDbo.AvailableServices,
         authorizationModelWithApiKeyHashDbo.AvailableResources,
         authorizationModelWithApiKeyHashDbo.State,
@@ -43,7 +43,7 @@ public class AuthorizationModelConverter : IAuthorizationModelConverter
     public AuthorizationModelDbo ToDbo(AuthorizationModelDto authorizationModelDto) => new()
     {
         Id = authorizationModelDto.Id,
-        ApiKeyOwner = authorizationModelDto.Owner,
+        Owner = authorizationModelDto.Owner,
         AvailableServices = authorizationModelDto.AvailableServices,
         AvailableResources = authorizationModelDto.AvailableResources,
         State = authorizationModelDto.State,
@@ -53,7 +53,7 @@ public class AuthorizationModelConverter : IAuthorizationModelConverter
 
     public AuthorizationModelDto ToDto(AuthorizationModelDbo authorizationModelDbo) => new(
         authorizationModelDbo.Id,
-        authorizationModelDbo.ApiKeyOwner,
+        authorizationModelDbo.Owner,
         authorizationModelDbo.AvailableServices,
         authorizationModelDbo.AvailableResources,
         authorizationModelDbo.State,

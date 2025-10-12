@@ -36,7 +36,7 @@ public class AuthorizationConverter(
         createAuthorizationModelRequest.Owner ?? existAuthorizationModelDto.Owner,
         createAuthorizationModelRequest.AvailableServices ?? existAuthorizationModelDto.AvailableServices,
         createAuthorizationModelRequest.AvailableResources ?? existAuthorizationModelDto.AvailableResources,
-        AuthorizationModelState.Active,
+        existAuthorizationModelDto.State,
         existAuthorizationModelDto.CreatedUtcTicks,
         createAuthorizationModelRequest.DaysAlive.HasValue
             ? dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(createAuthorizationModelRequest.DaysAlive.Value)).Ticks
