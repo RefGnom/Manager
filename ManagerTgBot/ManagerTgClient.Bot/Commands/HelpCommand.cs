@@ -19,7 +19,7 @@ public class HelpCommand : ICommand
             .ToArray();
     }
 
-    public async Task<ICommandResult> ExecuteAsync(ICommandRequest commandRequest)
+    public Task<ICommandResult> ExecuteAsync(ICommandRequest commandRequest)
     {
         var result = new StringBuilder();
         foreach (var command in commands)
@@ -32,7 +32,7 @@ public class HelpCommand : ICommand
             }
         }
 
-        return await Task.FromResult(new CommandResult(result.ToString()));
+        return Task.FromResult<ICommandResult>(new CommandResult(result.ToString()));
     }
 
     public string Name => "/help";

@@ -2,9 +2,9 @@
 
 namespace Manager.ManagerTgClient.Bot.Services;
 
-public class ManagerCommandExecutor(ICommandResolver commandResolver) : ICommandExecutor
+public class ManagerCommandExecutor(ICommandResolver commandResolver, ITelegramBotClient botClient) : ICommandExecutor
 {
-    public async Task ExecuteAsync(ITelegramBotClient botClient,string userInput, long chatId)
+    public async Task ExecuteAsync(string userInput, long chatId)
     {
         var resolverData = commandResolver.Resolve(userInput);
         var command = resolverData.Command;
