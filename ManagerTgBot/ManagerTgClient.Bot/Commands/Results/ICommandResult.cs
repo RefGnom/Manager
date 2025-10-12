@@ -2,5 +2,5 @@
 
 public interface ICommandResult
 {
-    string Value { get; init; }
+    string Message { get; }
 }

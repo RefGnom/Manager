@@ -18,7 +18,7 @@ public class ManagerUpdateHandler(
     {
         try
         {
-            if (update.Type == UpdateType.Message && update.Message is not null && update.Message.Text != null)
+            if (update is { Type: UpdateType.Message, Message.Text: not null })
             {
                 await commandExecutor.ExecuteAsync(botClient, update.Message.Text, update.Message.Chat.Id);
             }
