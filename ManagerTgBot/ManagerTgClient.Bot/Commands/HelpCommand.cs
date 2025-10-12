@@ -1,24 +1,25 @@
 ﻿using System.Reflection;
 using System.Text;
-using Manager.ManagerTgClient.Bot.Commands.CommandsAttributes;
-using Telegram.Bot;
+using Manager.ManagerTgClient.Bot.Commands.Attributes;
+using Manager.ManagerTgClient.Bot.Commands.Requests;
+using Manager.ManagerTgClient.Bot.Commands.Results;
 
 namespace Manager.ManagerTgClient.Bot.Commands;
 
 [CommandName("/help")]
 [CommandDescription("выводит подробную информацию по командам бота")]
-public class HelpCommand : IManagerBotCommand
+public class HelpCommand : ICommand
 {
     private readonly Type[] commands;
 
     public HelpCommand()
     {
         commands = Assembly.GetEntryAssembly()!.GetTypes()
-            .Where(type => typeof(IManagerBotCommand).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
+            .Where(type => typeof(ICommand).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
             .ToArray();
     }
 
-    public async Task ExecuteAsync(ITelegramBotClient botClient, long chatId)
+    public Task<ICommandResult> ExecuteAsync(ICommandRequest commandRequest)
     {
         var result = new StringBuilder();
         foreach (var command in commands)
@@ -31,6 +32,8 @@ public class HelpCommand : IManagerBotCommand
             }
         }
 
-        await botClient.SendMessage(chatId, result.ToString());
+        return Task.FromResult<ICommandResult>(new CommandResult(result.ToString()));
     }
+
+    public string Name => "/help";
 }

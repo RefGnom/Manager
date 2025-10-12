@@ -1,4 +1,4 @@
-﻿using Manager.ManagerTgClient.Bot.Commands;
+﻿using Manager.ManagerTgClient.Bot.Services;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -7,7 +7,7 @@ using Telegram.Bot.Types.Enums;
 namespace Manager.ManagerTgClient.Bot.Handlers;
 
 public class ManagerUpdateHandler(
-    ICommandResolver commandResolver
+    ICommandExecutor commandExecutor
 ) : IManagerUpdateHandler
 {
     public async Task HandleUpdateAsync(
@@ -18,17 +18,14 @@ public class ManagerUpdateHandler(
     {
         try
         {
-            if (update.Type == UpdateType.Message)
+            if (update is { Type: UpdateType.Message, Message.Text: not null })
             {
-                var message = update.Message!.Text;
-                var command = commandResolver.Resolve(message!);
-                await command.ExecuteAsync(botClient, update.Message.Chat.Id);
+                await commandExecutor.ExecuteAsync(update.Message.Text, update.Message.Chat.Id);
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
         }
     }
 
