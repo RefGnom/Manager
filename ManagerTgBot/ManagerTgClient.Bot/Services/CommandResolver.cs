@@ -5,7 +5,7 @@ namespace Manager.ManagerTgClient.Bot.Services;
 
 public class CommandResolver : ICommandResolver
 {
-    private readonly Dictionary<string, ResolverData> _resolverDataMap = new Dictionary<string, ResolverData>();
+    private readonly Dictionary<string, ResolverData> _resolverDataMap = new();
 
     public CommandResolver(IEnumerable<ICommand> commands, IEnumerable<ICommandRequestFactory> factories)
     {
@@ -25,6 +25,7 @@ public class CommandResolver : ICommandResolver
         {
             throw new ResolverMissingComponentException("No factory found for command: " + userCommand);
         }
+
         return resolverData;
     }
 }

@@ -1,5 +1,5 @@
 ﻿namespace Manager.ManagerTgClient.Bot.Services;
 
-public class ResolverMissingComponentException(string message): Exception(message)
-{
-}
+public class ResolverMissingComponentException(
+    string message
+) : Exception(message) { }

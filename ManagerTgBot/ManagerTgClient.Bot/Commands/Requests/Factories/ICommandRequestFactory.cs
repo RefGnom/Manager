@@ -2,7 +2,6 @@
 
 public interface ICommandRequestFactory
 {
-    Task<ICommandRequest> CreateAsync(string userInput);
     string CommandName { get; }
-
+    Task<ICommandRequest> CreateAsync(string userInput);
 }
