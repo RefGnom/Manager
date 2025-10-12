@@ -2,9 +2,10 @@
 using FluentAssertions;
 using Manager.AuthenticationService.Client;
 using Manager.AuthenticationService.Client.BusinessObjects.Requests;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Factories;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
-using Manager.AuthenticationService.Server.Layers.Repository.Converters;
+using Manager.AuthenticationService.Server.Layers.Repository;
 using Manager.Core.IntegrationTestsCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -20,8 +21,11 @@ public class AuthenticationClientTest : IntegrationTestBase
     private IAuthorizationModelFactory AuthorizationModelFactory =>
         ServiceProvider.GetRequiredService<IAuthorizationModelFactory>();
 
-    private IAuthorizationModelConverter AuthorizationModelConverter =>
-        ServiceProvider.GetRequiredService<IAuthorizationModelConverter>();
+    private IAuthorizationModelHashService AuthorizationModelHashService =>
+        ServiceProvider.GetRequiredService<IAuthorizationModelHashService>();
+
+    private IAuthorizationModelRepository AuthorizationModelRepository =>
+        ServiceProvider.GetRequiredService<IAuthorizationModelRepository>();
 
     [Test]
     public async Task TestGetAuthenticationStatusWithNotExistApiKey()
@@ -99,7 +103,9 @@ public class AuthenticationClientTest : IntegrationTestBase
             [availableResource],
             null
         );
-        await DataContext.InsertAsync(AuthorizationModelConverter.ToDbo(authorizationModelWithApiKeyDto));
+        await AuthorizationModelRepository.CreateAsync(
+            AuthorizationModelHashService.Hash(authorizationModelWithApiKeyDto)
+        );
         return authorizationModelWithApiKeyDto;
     }
 }
