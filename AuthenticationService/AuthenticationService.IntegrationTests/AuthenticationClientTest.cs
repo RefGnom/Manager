@@ -2,8 +2,9 @@
 using FluentAssertions;
 using Manager.AuthenticationService.Client;
 using Manager.AuthenticationService.Client.BusinessObjects.Requests;
-using Manager.AuthenticationService.Server.Layers.BusinessLogic.Converters;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic.Factories;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
+using Manager.AuthenticationService.Server.Layers.Repository.Converters;
 using Manager.Core.IntegrationTestsCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;

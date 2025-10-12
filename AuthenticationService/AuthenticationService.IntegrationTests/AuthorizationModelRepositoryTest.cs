@@ -20,7 +20,7 @@ public class AuthorizationModelRepositoryTest : IntegrationTestBase
     [Test]
     public async Task TestCreate()
     {
-        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
+        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDto>();
         await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
         var foundAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
@@ -32,11 +32,11 @@ public class AuthorizationModelRepositoryTest : IntegrationTestBase
     [Test]
     public async Task TestUpdate()
     {
-        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
+        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDto>();
         await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
         var foundAuthorizationModel = await AuthorizationModelRepository.ReadAsync(authorizationModel.Id);
-        foundAuthorizationModel.ApiKeyHash = "new hash";
+        foundAuthorizationModel = foundAuthorizationModel with { ApiKeyHash = "new hash" };
         await AuthorizationModelRepository.UpdateAsync(foundAuthorizationModel);
         var updatedAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
 
@@ -47,11 +47,11 @@ public class AuthorizationModelRepositoryTest : IntegrationTestBase
     [Test]
     public async Task TestFindByAuthorizationModelBody()
     {
-        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
+        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDto>();
         await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
         var foundAuthorizationModel = await AuthorizationModelRepository.FindAsync(
-            authorizationModel.ApiKeyOwner,
+            authorizationModel.Owner,
             authorizationModel.AvailableServices,
             authorizationModel.AvailableResources
         );
@@ -63,7 +63,7 @@ public class AuthorizationModelRepositoryTest : IntegrationTestBase
     [Test]
     public async Task TestDelete()
     {
-        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
+        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDto>();
         await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
         var foundAuthorizationModel = await AuthorizationModelRepository.ReadAsync(authorizationModel.Id);

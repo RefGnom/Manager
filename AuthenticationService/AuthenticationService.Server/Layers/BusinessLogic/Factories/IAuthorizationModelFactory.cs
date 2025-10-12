@@ -1,7 +1,8 @@
 ﻿using System;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
 using Manager.Core.Common.Time;
 
-namespace Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
+namespace Manager.AuthenticationService.Server.Layers.BusinessLogic.Factories;
 
 public interface IAuthorizationModelFactory
 {
