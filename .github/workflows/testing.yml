@@ -25,12 +25,6 @@ jobs:
             -   name: Build
                 run: dotnet build --no-restore
 
-            -   name: Upload build artifacts
-                uses: actions/upload-artifact@v4
-                with:
-                    name: published-output
-                    path: ./published/
-
     unit-tests:
         name: Unit Tests
         runs-on: ubuntu-latest
@@ -43,18 +37,7 @@ jobs:
             -   name: Checkout code
                 uses: actions/checkout@v4
 
-            -   name: Setup .NET 9
-                uses: actions/setup-dotnet@v4
-                with:
-                    dotnet-version: '9.0.x'
-
-            -   name: Download build artifacts
-                uses: actions/download-artifact@v4
-                with:
-                    name: published-output
-                    path: ./published
-
-            -   name: Run Unit Tests
+            -   name: Run Integration Tests
                 run: dotnet test --no-build --filter "TestCategory=UnitTests" --logger "trx"
 
             -   name: Publish Test Results
@@ -76,17 +59,6 @@ jobs:
         steps:
             -   name: Checkout code
                 uses: actions/checkout@v4
-
-            -   name: Setup .NET 9
-                uses: actions/setup-dotnet@v4
-                with:
-                    dotnet-version: '9.0.x'
-
-            -   name: Download build artifacts
-                uses: actions/download-artifact@v4
-                with:
-                    name: published-output
-                    path: ./published
 
             -   name: Grant Docker permissions
                 run: sudo chmod 666 /var/run/docker.sock
