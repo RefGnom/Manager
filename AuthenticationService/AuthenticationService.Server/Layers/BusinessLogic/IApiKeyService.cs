@@ -56,14 +56,27 @@ public class ApiKeyService(
 
     public string HashApiKey(string apiKey)
     {
-        var apiKeyValue = apiKey.Split(ApiKeySeparator)[1];
-        return passwordHasher.HashPassword(this, apiKeyValue);
+        var generatedApiKey = GetGeneratedApiKey(apiKey);
+        return passwordHasher.HashPassword(this, generatedApiKey);
     }
 
     public bool VerifyHashedApiKey(string hashedApiKey, string providedApiKey)
     {
-        var apiKeyValue = providedApiKey.Split(ApiKeySeparator)[1];
-        var verificationResult = passwordHasher.VerifyHashedPassword(this, hashedApiKey, apiKeyValue);
+        var generatedApiKey = GetGeneratedApiKey(providedApiKey);
+        var verificationResult = passwordHasher.VerifyHashedPassword(this, hashedApiKey, generatedApiKey);
         return verificationResult != PasswordVerificationResult.Failed;
+    }
+
+    private static string GetGeneratedApiKey(string apiKey)
+    {
+        var keyParts = apiKey.Split(ApiKeySeparator);
+        if (keyParts.Length != 2)
+        {
+            throw new ArgumentException(
+                "Апи ключ должен быть составным из идентификатора модели авторизации и сгенерированного ключа"
+            );
+        }
+
+        return keyParts[1];
     }
 }
