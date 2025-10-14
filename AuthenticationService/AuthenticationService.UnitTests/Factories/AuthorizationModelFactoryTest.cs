@@ -13,8 +13,8 @@ namespace Manager.AuthenticationService.UnitTests.Factories;
 
 public class AuthorizationModelFactoryTest : UnitTestBase
 {
-    private AuthorizationModelFactory authorizationModelFactory = null!;
     private IApiKeyService apiKeyService = null!;
+    private AuthorizationModelFactory authorizationModelFactory = null!;
     private IDateTimeProvider dateTimeProvider = null!;
 
     protected override void SetUp()

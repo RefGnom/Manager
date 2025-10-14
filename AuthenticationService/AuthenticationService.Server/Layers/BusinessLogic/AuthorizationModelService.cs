@@ -41,20 +41,14 @@ public class AuthorizationModelService(
         return authorizationModelDtoWithApiKey;
     }
 
-    public Task UpdateAsync(AuthorizationModelDto createAuthorizationModelDto)
-    {
-        return authorizationModelRepository.UpdateAsync(createAuthorizationModelDto);
-    }
+    public Task UpdateAsync(AuthorizationModelDto createAuthorizationModelDto) =>
+        authorizationModelRepository.UpdateAsync(createAuthorizationModelDto);
 
-    public async Task<AuthorizationModelDto?> FindAsync(Guid authorizationModelId)
-    {
-        return await authorizationModelRepository.FindAsync(authorizationModelId);
-    }
+    public async Task<AuthorizationModelDto?> FindAsync(Guid authorizationModelId) =>
+        await authorizationModelRepository.FindAsync(authorizationModelId);
 
-    public Task DeleteAsync(AuthorizationModelDto authorizationModelDto)
-    {
-        return authorizationModelRepository.DeleteAsync(authorizationModelDto);
-    }
+    public Task DeleteAsync(AuthorizationModelDto authorizationModelDto) =>
+        authorizationModelRepository.DeleteAsync(authorizationModelDto);
 
     public Task<AuthorizationModelDto[]> SelectExpiredAsync()
     {

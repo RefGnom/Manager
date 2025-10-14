@@ -185,7 +185,8 @@ public class AuthorizationConverterTest : UnitTestBase
             patchRequest,
             options => options.ExcludingMissingMembers()
         );
-        newAuthorizationModelDto.ExpirationUtcTicks.Should().Be(currentDate.AddDays(patchRequest.DaysAlive!.Value).Ticks);
+        newAuthorizationModelDto.ExpirationUtcTicks.Should()
+            .Be(currentDate.AddDays(patchRequest.DaysAlive!.Value).Ticks);
         newAuthorizationModelDto.Id.Should().Be(oldAuthorizationModelDto.Id);
         newAuthorizationModelDto.State.Should().Be(oldAuthorizationModelDto.State);
         newAuthorizationModelDto.CreatedUtcTicks.Should().Be(oldAuthorizationModelDto.CreatedUtcTicks);

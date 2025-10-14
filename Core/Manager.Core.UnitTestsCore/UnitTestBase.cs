@@ -7,11 +7,11 @@ namespace Manager.Core.UnitTestsCore;
 [Category("UnitTests")]
 public abstract class UnitTestBase
 {
+    [SetUp]
+    protected virtual void SetUp() { }
+
     /// <summary>
     ///     Fixture для создания полностью заполненных моделей случайными значениями
     /// </summary>
     protected readonly Fixture Fixture = new();
-
-    [SetUp]
-    protected virtual void SetUp() { }
 }
