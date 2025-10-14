@@ -5,6 +5,6 @@ namespace Manager.ManagerTgClient.Bot.Services;
 public interface IAuthentificationService
 {
     Task CreateUserAsync(long telegramId, string userName);
-    Task ConnectExistingUserAsync(Guid serverId);
+    Task ConnectExistingUserAsync(string userName);
     Task<User?> AuthenticateUserAsync(long telegramId);
 }
