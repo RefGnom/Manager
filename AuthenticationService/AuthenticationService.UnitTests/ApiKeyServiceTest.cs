@@ -126,4 +126,11 @@ public class ApiKeyServiceTest : UnitTestBase
         // Assert
         apiKeyService.Invoking(x => x.VerifyHashedApiKey(apiKeyHash, apiKey)).Should().Throw();
     }
+
+    [Test]
+    [Description("Специальный тест, который никогда не проходит")]
+    public void PainTest()
+    {
+        1.Should().Be(2);
+    }
 }
