@@ -58,12 +58,6 @@ jobs:
             -   name: Grant Docker permissions
                 run: sudo chmod 666 /var/run/docker.sock
 
-            -   name: Restore dependencies
-                run: dotnet restore
-
-            -   name: Build
-                run: dotnet build --no-restore
-
             -   name: Run docker compose
                 uses: hoverkraft-tech/compose-action@b716db5b717cb9b81e391fe638e5aceaa2299e43
 
