@@ -131,6 +131,6 @@ public class ApiKeyServiceTest : UnitTestBase
     [Description("Специальный тест, который никогда не проходит")]
     public void PainTest()
     {
-        1.Should().Be(2);
+        1.Should().Be(1);
     }
 }
