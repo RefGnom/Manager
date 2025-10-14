@@ -7,8 +7,8 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <RootNamespace>Manager.AuthenticationService.UnitTests</RootNamespace>
-        <AssemblyName>Manager.AuthenticationService.UnitTests</AssemblyName>
+        <RootNamespace>Manager.ManagerTgClient.UnitTests</RootNamespace>
+        <AssemblyName>Manager.ManagerTgClient.UnitTests</AssemblyName>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
@@ -17,8 +17,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Core\Manager.Core.UnitTestsCore\Manager.Core.UnitTestsCore.csproj" />
-      <ProjectReference Include="..\AuthenticationService.Server\AuthenticationService.Server.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core.UnitTestsCore\Manager.Core.UnitTestsCore.csproj" />
+        <ProjectReference Include="..\ManagerTgClient.Bot\ManagerTgClient.Bot.csproj" />
     </ItemGroup>
 
 </Project>
