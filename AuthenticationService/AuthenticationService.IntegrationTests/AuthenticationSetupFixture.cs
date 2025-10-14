@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Manager.AuthenticationService.Client;
 using Manager.AuthenticationService.Server;
 using Manager.AuthenticationService.Server.Layers.BusinessLogic;
-using Manager.AuthenticationService.Server.Layers.BusinessLogic.Converters;
-using Manager.AuthenticationService.Server.Layers.BusinessLogic.Models;
-using Manager.Core.EFCore;
+using Manager.AuthenticationService.Server.Layers.BusinessLogic.Factories;
+using Manager.AuthenticationService.Server.Layers.Repository;
 using Manager.Core.IntegrationTestsCore;
 using Manager.Core.IntegrationTestsCore.Configuration;
 using Microsoft.AspNetCore.Identity;
@@ -48,9 +47,10 @@ public class AuthenticationSetupFixture : SetupFixtureBase
     {
         var authorizationModelFactory =
             TestConfiguration.ServiceProvider.GetRequiredService<IAuthorizationModelFactory>();
-        var dataContext = TestConfiguration.ServiceProvider.GetRequiredService<IDataContext>();
-        var authorizationModelConverter =
-            TestConfiguration.ServiceProvider.GetRequiredService<IAuthorizationModelConverter>();
+        var authorizationModelRepository =
+            TestConfiguration.ServiceProvider.GetRequiredService<IAuthorizationModelRepository>();
+        var authorizationModelHashService =
+            TestConfiguration.ServiceProvider.GetRequiredService<IAuthorizationModelHashService>();
 
         var authorizationModelWithApiKeyDto = authorizationModelFactory.Create(
             "test owner",
@@ -58,7 +58,9 @@ public class AuthenticationSetupFixture : SetupFixtureBase
             ["AuthenticationStatus", "AuthorizationModel"],
             null
         );
-        await dataContext.InsertAsync(authorizationModelConverter.ToDbo(authorizationModelWithApiKeyDto));
+        await authorizationModelRepository.CreateAsync(
+            authorizationModelHashService.Hash(authorizationModelWithApiKeyDto)
+        );
         apiKeyToConnect = authorizationModelWithApiKeyDto.ApiKey;
     }
 }

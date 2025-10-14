@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <RootNamespace>Manager.ManagerTgClient.UnitTests</RootNamespace>
+        <AssemblyName>Manager.ManagerTgClient.UnitTests</AssemblyName>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\Manager.Core.UnitTestsCore\Manager.Core.UnitTestsCore.csproj" />
+        <ProjectReference Include="..\ManagerTgClient.Bot\ManagerTgClient.Bot.csproj" />
+    </ItemGroup>
+
+</Project>

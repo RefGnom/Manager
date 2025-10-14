@@ -20,42 +20,76 @@ public class AuthorizationModelRepositoryTest : IntegrationTestBase
     [Test]
     public async Task TestCreate()
     {
-        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
+        // Arrange
+        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDto>();
+
+        // Act
         await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
+        // Assert
         var foundAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
-
         foundAuthorizationModel.Should().NotBeNull();
         foundAuthorizationModel.Should().BeEquivalentTo(authorizationModel);
     }
 
     [Test]
-    public async Task TestUpdate()
+    public async Task TestUpdateHash_ShouldNotBeUpdated()
     {
-        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
+        // Arrange
+        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDto>();
         await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
         var foundAuthorizationModel = await AuthorizationModelRepository.ReadAsync(authorizationModel.Id);
-        foundAuthorizationModel.ApiKeyHash = "new hash";
-        await AuthorizationModelRepository.UpdateAsync(foundAuthorizationModel);
-        var updatedAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
+        var newAuthorizationModel = foundAuthorizationModel with { ApiKeyHash = "new hash" };
 
+        // Act
+        await AuthorizationModelRepository.UpdateAsync(newAuthorizationModel);
+
+        // Assert
+        var updatedAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
         updatedAuthorizationModel.Should().NotBeNull();
         updatedAuthorizationModel.Should().BeEquivalentTo(foundAuthorizationModel);
     }
 
     [Test]
-    public async Task TestFindByAuthorizationModelBody()
+    public async Task TestUpdateServiceResources_ShouldBeUpdated()
     {
-        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
+        // Arrange
+        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDto>();
         await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
+        var foundAuthorizationModel = await AuthorizationModelRepository.ReadAsync(authorizationModel.Id);
+        var newAuthorizationModel = foundAuthorizationModel with
+        {
+            AvailableServices = ["service1", "service2"],
+            AvailableResources = ["resource1", "resource2", "resource3"],
+        };
+
+        // Act
+        await AuthorizationModelRepository.UpdateAsync(newAuthorizationModel);
+
+        // Assert
+        var updatedAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
+
+        updatedAuthorizationModel.Should().NotBeNull();
+        updatedAuthorizationModel.Should().BeEquivalentTo(newAuthorizationModel);
+    }
+
+    [Test]
+    public async Task TestFindByAuthorizationModelBody()
+    {
+        // Arrange
+        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDto>();
+        await AuthorizationModelRepository.CreateAsync(authorizationModel);
+
+        // Act
         var foundAuthorizationModel = await AuthorizationModelRepository.FindAsync(
-            authorizationModel.ApiKeyOwner,
+            authorizationModel.Owner,
             authorizationModel.AvailableServices,
             authorizationModel.AvailableResources
         );
 
+        // Assert
         foundAuthorizationModel.Should().NotBeNull();
         foundAuthorizationModel.Should().BeEquivalentTo(authorizationModel);
     }
@@ -63,19 +97,24 @@ public class AuthorizationModelRepositoryTest : IntegrationTestBase
     [Test]
     public async Task TestDelete()
     {
-        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDbo>();
+        // Arrange
+        var authorizationModel = Fixture.Create<AuthorizationModelWithApiKeyHashDto>();
         await AuthorizationModelRepository.CreateAsync(authorizationModel);
 
         var foundAuthorizationModel = await AuthorizationModelRepository.ReadAsync(authorizationModel.Id);
-        await AuthorizationModelRepository.DeleteAsync(foundAuthorizationModel);
-        var deletedAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
 
+        // Act
+        await AuthorizationModelRepository.DeleteAsync(foundAuthorizationModel);
+
+        // Assert
+        var deletedAuthorizationModel = await AuthorizationModelRepository.FindAsync(authorizationModel.Id);
         deletedAuthorizationModel.Should().BeNull();
     }
 
     [Test]
     public async Task TestSelectByExpirationTicks()
     {
+        // Arrange
         var authorizationModelsTicks = new[] { 5, 6, 7, 8, 9, 10, 11 };
         var authorizationModels = authorizationModelsTicks.Select(ticks => Fixture
             .Build<AuthorizationModelWithApiKeyHashDbo>()
@@ -86,8 +125,10 @@ public class AuthorizationModelRepositoryTest : IntegrationTestBase
 
         await DataContext.InsertRangeAsync(authorizationModels);
 
+        // Act
         var authorizationModelDbos = await AuthorizationModelRepository.SelectByExpirationTicksAsync(9);
 
+        // Assert
         authorizationModelDbos.Should().HaveCountGreaterThanOrEqualTo(5);
         authorizationModelDbos.Select(x => x.Id)
             .Should()
@@ -97,6 +138,7 @@ public class AuthorizationModelRepositoryTest : IntegrationTestBase
     [Test]
     public async Task TestSetStatus()
     {
+        // Arrange
         var authorizationModels = Enum.GetValues<AuthorizationModelState>().Select(state => Fixture
             .Build<AuthorizationModelWithApiKeyHashDbo>()
             .With(x => x.State, state)
@@ -106,8 +148,10 @@ public class AuthorizationModelRepositoryTest : IntegrationTestBase
 
         await DataContext.InsertRangeAsync(authorizationModels);
 
+        // Act
         await AuthorizationModelRepository.SetStatusAsync(AuthorizationModelState.Revoked, authorizationModelIds);
 
+        // Assert
         var selectedAuthorizationModels = await DataContext.SelectAsync<AuthorizationModelWithApiKeyHashDbo, Guid>(
             x => x.Id,
             authorizationModelIds

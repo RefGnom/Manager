@@ -15,7 +15,7 @@ public class AuthorizationModelDbo
 
     [Column("owner")]
     [Required]
-    public required string ApiKeyOwner { get; set; }
+    public required string Owner { get; set; }
 
     [Column("availableServices")]
     [Required]
