@@ -13,7 +13,7 @@ public class Result<TError>(
     TError? error
 ) : Result(isSuccess)
 {
-    public TError? Error { get; } = error;
+    public TError Error => IsFailure && error is not null ? error : throw new SuccessResultException<TError>(error);
 
     public static implicit operator Result<TError>(TError error) => new(false, error);
 
