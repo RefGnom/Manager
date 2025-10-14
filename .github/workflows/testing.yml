@@ -9,7 +9,7 @@ jobs:
     build:
         name: Build Solution
         runs-on: ubuntu-latest
-
+        
         steps:
             -   name: Checkout code
                 uses: actions/checkout@v4
@@ -32,11 +32,8 @@ jobs:
         permissions:
             checks: write
             pull-requests: write
-
+        
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v4
-
             -   name: Run Integration Tests
                 run: dotnet test --no-build --filter "TestCategory=UnitTests" --logger "trx"
 
@@ -55,11 +52,8 @@ jobs:
         permissions:
             checks: write
             pull-requests: write
-
+        
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v4
-
             -   name: Grant Docker permissions
                 run: sudo chmod 666 /var/run/docker.sock
 
