@@ -26,6 +26,7 @@ services:
         env_file:
             -   path: ./WorkService/WorkService.Server/.env
                 required: false
+            -   path: .env
         networks:
             - my-network
 

@@ -13,6 +13,6 @@ public class PortProvider(
 ) : IPortProvider
 {
     public string GetPort(string applicationPortKey) =>
-        configuration.GetValue<string>("AUTHENTICATION_SERVICE_PORT") ??
+        configuration.GetValue<string>(applicationPortKey) ??
         throw new Exception($"Port by key {applicationPortKey} not configured");
 }

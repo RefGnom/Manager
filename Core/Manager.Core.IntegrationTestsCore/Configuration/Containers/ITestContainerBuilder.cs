@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using Manager.Core.Common.DependencyInjection.Attributes;
 using Microsoft.Extensions.Configuration;
 
@@ -11,7 +12,7 @@ public interface ITestContainerBuilder
     string Username { get; }
     string Password { get; }
 
-    ITestContainerBuilder WithServer(Assembly assembly, IConfiguration configuration);
-    ITestContainerBuilder WithPostgres();
+    void WithServer(Assembly assembly, IConfiguration configuration, IReadOnlyDictionary<string, string> envVariables);
+    void WithPostgres();
     ContainerConfiguration Build();
 }

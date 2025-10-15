@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Manager.Core.Common.DependencyInjection.Attributes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,6 @@ public interface IIntegrationTestConfigurationBuilder
     IIntegrationTestConfigurationBuilder CustomizeServiceCollection(Action<IServiceCollection> customizer);
     IIntegrationTestConfigurationBuilder CustomizeConfigurationManager(Action<IConfigurationManager> customizer);
     IIntegrationTestConfigurationBuilder WithDataBase();
-    IIntegrationTestConfigurationBuilder WithLocalServer();
+    IIntegrationTestConfigurationBuilder WithLocalServer(IReadOnlyDictionary<string, string>? envVariables = null);
     IntegrationTestConfiguration Build();
 }

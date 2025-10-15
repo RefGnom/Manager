@@ -33,9 +33,10 @@ public class TestContainerBuilder : ITestContainerBuilder
     public string Username { get; } = Guid.NewGuid().ToString();
     public string Password { get; } = Guid.NewGuid().ToString();
 
-    public ITestContainerBuilder WithServer(
+    public void WithServer(
         Assembly assembly,
-        IConfiguration configuration
+        IConfiguration configuration,
+        IReadOnlyDictionary<string, string> envVariables
     )
     {
         var serverPropertiesAttribute = assembly.GetCustomAttribute<ServerPropertiesAttribute>();
@@ -58,16 +59,15 @@ public class TestContainerBuilder : ITestContainerBuilder
                     .WithEnvironment("DataBaseOptions:ConnectionStringTemplate", ContainerConnectionStringTemplate)
                     .WithEnvironment("DataBaseOptions:Username", Username)
                     .WithEnvironment("DataBaseOptions:Password", Password)
+                    .WithEnvironment(envVariables)
                     .WithNetwork(network)
                     .Build(),
                 ContainerType.Server
             )
         );
-
-        return this;
     }
 
-    public ITestContainerBuilder WithPostgres()
+    public void WithPostgres()
     {
         containers.Add(
             new ContainerWithType(
@@ -83,8 +83,6 @@ public class TestContainerBuilder : ITestContainerBuilder
                 ContainerType.DataBase
             )
         );
-
-        return this;
     }
 
     public ContainerConfiguration Build()

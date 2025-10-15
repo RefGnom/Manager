@@ -1,26 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Manager.Core.AppConfiguration;
 
 public static class SolutionRootEnvironmentVariablesLoader
 {
-    public static void Load()
+    public static Dictionary<string, string> Load()
     {
         var currentDir = Directory.GetCurrentDirectory();
         var rootDir = FindRepositoryRoot(currentDir);
 
         if (rootDir == null)
         {
-            return;
+            return new Dictionary<string, string>();
         }
 
         var envPath = Path.Combine(rootDir, ".env");
         if (!File.Exists(envPath))
         {
-            return;
+            return new Dictionary<string, string>();
         }
 
+        var loadedVariables = new Dictionary<string, string>();
         foreach (var line in File.ReadAllLines(envPath))
         {
             var trimmed = line.Trim();
@@ -38,7 +40,10 @@ public static class SolutionRootEnvironmentVariablesLoader
             var key = parts[0].Trim();
             var value = parts[1].Trim().Trim('"', '\'');
             Environment.SetEnvironmentVariable(key, value);
+            loadedVariables[key] = value;
         }
+
+        return loadedVariables;
     }
 
     private static string? FindRepositoryRoot(string startPath)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Manager.Core.IntegrationTestsCore.Configuration.ConfigurationActions;
 using Microsoft.Extensions.Configuration;
@@ -58,9 +59,12 @@ public class IntegrationTestConfigurationBuilder(
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder WithLocalServer()
+    public IIntegrationTestConfigurationBuilder WithLocalServer(
+        IReadOnlyDictionary<string, string>? envVariables = null
+    )
     {
-        configurationActionCollection.AddActionWithRemovingExcludedActionTypes(new WithLocalServerAction());
+        envVariables ??= new Dictionary<string, string>();
+        configurationActionCollection.AddActionWithRemovingExcludedActionTypes(new WithLocalServerAction(envVariables));
         return this;
     }
 

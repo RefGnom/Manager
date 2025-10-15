@@ -47,6 +47,17 @@ public static class AutoRegistrationExtensions
     }
 
     /// <summary>
+    ///     Регистрирует все зависимости из проекта Manager.Core.Networking
+    /// </summary>
+    public static IServiceCollection UseAutoRegistrationForCoreNetworking(
+        this IServiceCollection serviceCollection
+    )
+    {
+        var assembly = Assembly.Load("Manager.Core.Networking");
+        return serviceCollection.UseAutoRegistrationForAssembly(assembly);
+    }
+
+    /// <summary>
     ///     Сканирует переданную сборку и автоматически регистрирует все интерфейсы и их реализации с временем жизни
     ///     LifestyleByDefault.
     ///     Время жизни по умолчанию можно переопределить с помощью атрибутов
