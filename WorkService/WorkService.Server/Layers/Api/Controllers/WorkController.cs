@@ -5,6 +5,7 @@ using Manager.WorkService.Server.Layers.Api.Converters;
 using Manager.WorkService.Server.Layers.Api.Requests;
 using Manager.WorkService.Server.Layers.Api.Responses;
 using Manager.WorkService.Server.Layers.BusinessLogic;
+using Manager.WorkService.Server.Layers.BusinessLogic.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Manager.WorkService.Server.Layers.Api.Controllers;
@@ -56,7 +57,7 @@ public class WorkController(
     public async Task<IActionResult> DeleteWork(Guid workId)
     {
         var workDto = await workService.FindWorkAsync(workId);
-        if (workDto == null)
+        if (workDto == null || workDto.WorkStatus == WorkStatus.Deleted)
         {
             return NotFound();
         }

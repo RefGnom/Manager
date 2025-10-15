@@ -1,0 +1,14 @@
+﻿using System;
+
+namespace Manager.WorkService.Client.Responses;
+
+public class GetWorkResponse
+{
+    public required Guid Id { get; set; }
+    public required Guid RecipientId { get; set; }
+    public required string Title { get; init; }
+    public string? Description { get; init; }
+    public required WorkStatus WorkStatus { get; init; }
+    public DateTime? DeadLineUtc { get; init; }
+    public TimeSpan[]? ReminderIntervals { get; init; }
+}
