@@ -25,7 +25,7 @@ public class WorkController(
         var workDto = workApiConverter.ToDto(request, workId);
         await workService.CreateWorkAsync(workDto);
 
-        return Created(string.Empty, workDto);
+        return Created(string.Empty, workDto.Id);
     }
 
     [HttpGet("{workId:guid}")]

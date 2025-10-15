@@ -90,7 +90,7 @@ public class WorkServiceApiClient(
 
     private async Task<GetWorkResponse[]> SelectBaseAsync(Guid recipientId, string concretePath = "")
     {
-        var path = $"api/recipients/{recipientId}/works/{concretePath ?? ""}";
+        var path = $"api/recipients/{recipientId}/works/{concretePath}";
         var request = new HttpRequestMessage(HttpMethod.Get, path);
         var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
