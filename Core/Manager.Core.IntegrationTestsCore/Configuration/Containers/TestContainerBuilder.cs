@@ -17,9 +17,9 @@ public class TestContainerBuilder : ITestContainerBuilder
     private const int ContainerPort = 8080;
 
     private const int PostgresContainerPort = 5432;
-    private const int PostgresHostPort = 5000;
     private const string DataBaseName = "testdb";
     private const string NetworkAliases = "postgres";
+    private readonly int postgresHostPort = Random.Shared.Next(9_000, 10_000);
     private readonly List<ContainerWithType> containers = [];
 
     private readonly INetwork network = new NetworkBuilder().Build();
@@ -27,8 +27,8 @@ public class TestContainerBuilder : ITestContainerBuilder
     private string ContainerConnectionStringTemplate { get; } =
         $"Host={NetworkAliases};Port={PostgresContainerPort};Database={DataBaseName};Username={{0}};Password={{1}}";
 
-    public string ConnectionStringTemplate { get; } =
-        $"Host=127.0.0.1;Port={PostgresHostPort};Database={DataBaseName};Username={{0}};Password={{1}}";
+    public string ConnectionStringTemplate =>
+        $"Host=127.0.0.1;Port={postgresHostPort};Database={DataBaseName};Username={{0}};Password={{1}}";
 
     public string Username { get; } = Guid.NewGuid().ToString();
     public string Password { get; } = Guid.NewGuid().ToString();
@@ -73,7 +73,7 @@ public class TestContainerBuilder : ITestContainerBuilder
             new ContainerWithType(
                 new PostgreSqlBuilder()
                     .WithImage("postgres:16")
-                    .WithPortBinding(PostgresHostPort, PostgresContainerPort)
+                    .WithPortBinding(postgresHostPort, PostgresContainerPort)
                     .WithDatabase(DataBaseName)
                     .WithUsername(Username)
                     .WithPassword(Password)
