@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Manager.WorkService.Client.Requests;
 using Manager.WorkService.Client.Responses;
@@ -29,7 +28,7 @@ public class WorkServiceApiClient(
     {
         var request = new HttpRequestMessage(HttpMethod.Post, WorksBasePath)
         {
-            Content = new ByteArrayContent(JsonSerializer.SerializeToUtf8Bytes(createWorkRequest)),
+            Content = JsonContent.Create(createWorkRequest),
         };
         var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
@@ -71,7 +70,7 @@ public class WorkServiceApiClient(
     {
         var request = new HttpRequestMessage(HttpMethod.Patch, WorksBasePath)
         {
-            Content = new ByteArrayContent(JsonSerializer.SerializeToUtf8Bytes(updateWorkRequest)),
+            Content = JsonContent.Create(updateWorkRequest),
         };
         var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
