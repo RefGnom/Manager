@@ -12,15 +12,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoFixture" Version="4.18.1"/>
-        <PackageReference Include="FluentAssertions" Version="8.7.0"/>
         <PackageReference Include="Testcontainers" Version="4.7.0"/>
         <PackageReference Include="Testcontainers.PostgreSql" Version="4.7.0"/>
-        <PackageReference Include="NUnit" Version="4.4.0"/>
-        <PackageReference Include="NUnit3TestAdapter" Version="4.6.0"/>
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Manager.Core.CommonTestsCore\Manager.Core.CommonTestsCore.csproj"/>
         <ProjectReference Include="..\Manager.Core.Common\Manager.Core.Common.csproj"/>
         <ProjectReference Include="..\Manager.Core.EFCore\Manager.Core.EFCore.csproj"/>
         <ProjectReference Include="..\Manager.Core.Logging\Manager.Core.Logging.csproj"/>

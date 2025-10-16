@@ -68,6 +68,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkService.Client", "WorkS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Core.Networking", "Core\Manager.Core.Networking\Manager.Core.Networking.csproj", "{6831B027-D664-40E3-B666-EEB5841B911E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Core.CommonTestsCore", "Core\Manager.Core.CommonTestsCore\Manager.Core.CommonTestsCore.csproj", "{9E22CF58-2958-4DF7-8BF6-24DBC60BF845}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -182,6 +184,10 @@ Global
 		{6831B027-D664-40E3-B666-EEB5841B911E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6831B027-D664-40E3-B666-EEB5841B911E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6831B027-D664-40E3-B666-EEB5841B911E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E22CF58-2958-4DF7-8BF6-24DBC60BF845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E22CF58-2958-4DF7-8BF6-24DBC60BF845}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E22CF58-2958-4DF7-8BF6-24DBC60BF845}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E22CF58-2958-4DF7-8BF6-24DBC60BF845}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3DC6C3D2-5AE4-4401-B403-AE1C7658E8D5} = {804F8B79-D68C-4673-A903-78923F42E3AD}
@@ -211,5 +217,6 @@ Global
 		{63273779-A0DF-47EA-A1CA-70E7D496A7A1} = {E203E533-4855-4C6A-8AEE-22B7F83DFE4B}
 		{4F312D1F-041B-49B8-8ADB-F1D2F10F90CC} = {E203E533-4855-4C6A-8AEE-22B7F83DFE4B}
 		{6831B027-D664-40E3-B666-EEB5841B911E} = {67CC4B6F-CA92-409B-A1AF-9501B34435E5}
+		{9E22CF58-2958-4DF7-8BF6-24DBC60BF845} = {67CC4B6F-CA92-409B-A1AF-9501B34435E5}
 	EndGlobalSection
 EndGlobal
