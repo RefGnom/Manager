@@ -19,10 +19,10 @@ public class TestContainerBuilder : ITestContainerBuilder
     private const int PostgresContainerPort = 5432;
     private const string DataBaseName = "testdb";
     private const string NetworkAliases = "postgres";
-    private readonly int postgresHostPort = Random.Shared.Next(9_000, 10_000);
     private readonly List<ContainerWithType> containers = [];
 
     private readonly INetwork network = new NetworkBuilder().Build();
+    private readonly int postgresHostPort = Random.Shared.Next(9_000, 10_000);
 
     private string ContainerConnectionStringTemplate { get; } =
         $"Host={NetworkAliases};Port={PostgresContainerPort};Database={DataBaseName};Username={{0}};Password={{1}}";

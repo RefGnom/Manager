@@ -201,10 +201,7 @@ public class WorkClientTest : IntegrationTestBase
 
     [Test]
     [Ignore("У этого метода пока что нет реализации")]
-    public Task TestSelectWorksForReminder()
-    {
-        return Task.CompletedTask;
-    }
+    public Task TestSelectWorksForReminder() => Task.CompletedTask;
 
     private async Task<WorkDbo> CreateWorkAsync(Guid? recipientId = null)
     {
