@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Manager.Core.UnitTestsCore;
 using Manager.TimerService.Server.Layers.RepositoryLayer;
 using Manager.TimerService.Server.Layers.ServiceLayer.Services;
 using Manager.TimerService.Server.ServiceModels;
@@ -10,8 +11,7 @@ using NUnit.Framework;
 
 namespace Manager.TimerService.UnitTest.Tests;
 
-[TestFixture]
-public class TimerSessionsServiceTest
+public class TimerSessionsServiceTest : UnitTestBase
 {
     [SetUp]
     public void Setup()
@@ -22,8 +22,8 @@ public class TimerSessionsServiceTest
 
     private static readonly TimerSessionDtoTestFactory sessionFactory = new();
 
-    private ITimerSessionRepository repository;
-    private TimerSessionService service;
+    private ITimerSessionRepository repository = null!;
+    private TimerSessionService service = null!;
 
     [Test]
     public async Task StartSessionCorrect()
