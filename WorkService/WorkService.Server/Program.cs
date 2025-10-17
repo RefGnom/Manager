@@ -8,9 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+[assembly: ServerProperties("WORK_SERVICE_PORT", "manager-work-service")]
+
 namespace Manager.WorkService.Server;
 
-public static class Program
+public class Program
 {
     public static void Main(string[] args)
     {

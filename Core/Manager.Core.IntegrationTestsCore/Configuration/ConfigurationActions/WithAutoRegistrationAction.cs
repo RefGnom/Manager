@@ -14,7 +14,8 @@ public class WithAutoRegistrationAction : IConfigurationAction
     {
         context.ServiceCollection.UseAutoRegistrationForAssembly(context.TargetAssembly)
             .UseAutoRegistrationForAssembly(GetTestsAssembly())
-            .UseAutoRegistrationForCoreCommon();
+            .UseAutoRegistrationForCoreCommon()
+            .UseAutoRegistrationForCoreNetworking();
     }
 
     private static Assembly GetTestsAssembly()

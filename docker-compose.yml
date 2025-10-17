@@ -9,8 +9,24 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
         env_file:
-            - path: ./AuthenticationService/AuthenticationService.Server/.env
-              required: false
+            -   path: ./AuthenticationService/AuthenticationService.Server/.env
+                required: false
+        networks:
+            - my-network
+
+    work-service:
+        build:
+            context: .
+            dockerfile: ./WorkService/WorkService.Server/Dockerfile
+        container_name: manager-work-service
+        ports:
+            - "${WORK_SERVICE_PORT}:8080"
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+        env_file:
+            -   path: ./WorkService/WorkService.Server/.env
+                required: false
+            -   path: .env
         networks:
             - my-network
 
@@ -19,4 +35,4 @@ networks:
         driver: bridge
         ipam:
             config:
-                - subnet: "172.20.0.0/16"
+                -   subnet: "172.20.0.0/16"
