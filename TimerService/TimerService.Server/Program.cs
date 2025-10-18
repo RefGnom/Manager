@@ -4,6 +4,7 @@ using System.Reflection;
 using Manager.Core.AppConfiguration;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore;
+using Manager.Core.EFCore.Configuration;
 using Manager.TimerService.Server.Configurators;
 using Manager.TimerService.Server.Layers.DbLayer;
 using Microsoft.AspNetCore.Builder;
@@ -32,8 +33,10 @@ public class Program
             )
         );
 
-        builder.Services.UseAutoRegistrationForCurrentAssembly()
-            .UseAutoRegistrationForCoreCommon();
+        builder.Services
+            .UseAutoRegistrationForCurrentAssembly()
+            .UseAutoRegistrationForCoreCommon()
+            .UseNpg();
 
         builder.Services.AddControllers();
         builder.Services.AddSwaggerGen(c =>

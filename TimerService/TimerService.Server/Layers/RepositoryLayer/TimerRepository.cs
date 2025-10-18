@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Manager.Core.Common.DependencyInjection.Attributes;
-using Manager.TimerService.Server.Layers.DbLayer;
+using Manager.Core.EFCore;
 using Manager.TimerService.Server.Layers.DbLayer.Dbos;
 using Manager.TimerService.Server.Layers.ServiceLayer.Exceptions;
 using Manager.TimerService.Server.ServiceModels;
@@ -13,13 +13,14 @@ namespace Manager.TimerService.Server.Layers.RepositoryLayer;
 
 [Scoped]
 public class TimerRepository(
-    ManagerDbContext dbContext,
+    IDbContextWrapperFactory dbContextWrapperFactory,
     IMapper mapper
 ) : ITimerRepository
 {
     public async Task<TimerDto[]> SelectByUserAsync(Guid userId)
     {
-        return await dbContext.Timers
+        var dbContext = dbContextWrapperFactory.Create();
+        return await dbContext.Set<TimerDbo>()
             .Where(x => x.UserId == userId)
             .Select(x => mapper.Map<TimerDto>(x))
             .ToArrayAsync();
@@ -27,14 +28,16 @@ public class TimerRepository(
 
     public async Task CreateAsync(TimerDto timerDto)
     {
+        var dbContext = dbContextWrapperFactory.Create();
         var timerDbo = mapper.Map<TimerDto, TimerDbo>(timerDto);
-        dbContext.Timers.Add(timerDbo);
+        dbContext.Set<TimerDbo>().Add(timerDbo);
         await dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(TimerDto timerDto)
     {
-        var existedTimer = await FindAsync(timerDto.Id);
+        var dbContext = dbContextWrapperFactory.Create();
+        var existedTimer = await FindAsync(dbContext, timerDto.Id);
         if (existedTimer is null)
         {
             throw new NotFoundException("Timer not found");
@@ -46,15 +49,16 @@ public class TimerRepository(
 
     public async Task<TimerDto?> FindAsync(Guid userId, string timerName)
     {
-        var timerDbo = await dbContext.Timers
+        var dbContext = dbContextWrapperFactory.Create();
+        var timerDbo = await dbContext.Set<TimerDbo>()
             .Where(x => x.UserId == userId)
             .Where(x => x.Name == timerName)
             .FirstOrDefaultAsync();
         return mapper.Map<TimerDto>(timerDbo);
     }
 
-    private async Task<TimerDbo?> FindAsync(Guid id)
+    private async Task<TimerDbo?> FindAsync(DbContextWrapper dbContext, Guid id)
     {
-        return await dbContext.Timers.FirstOrDefaultAsync(x => x.Id == id);
+        return await dbContext.Set<TimerDbo>().FirstOrDefaultAsync(x => x.Id == id);
     }
 }
