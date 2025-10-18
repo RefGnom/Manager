@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Manager.TimerService.Server.Layers.DbLayer.Dbos;
 
+[Table("timer_sessions")]
 public class TimerSessionDbo
 {
     public required Guid Id { get; init; }

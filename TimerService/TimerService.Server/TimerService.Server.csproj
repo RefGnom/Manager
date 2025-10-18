@@ -9,6 +9,7 @@
         <AssemblyName>Manager.TimerService.Server</AssemblyName>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);1591</NoWarn>
+        <UserSecretsId>6b1da872-bdc4-405a-8fd2-0c954249658b</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Core\Manager.Core.EFCore\Manager.Core.EFCore.csproj" />
         <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
         <ProjectReference Include="..\TimerService.Client\TimerService.Client.csproj"/>
     </ItemGroup>

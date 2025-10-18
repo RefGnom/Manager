@@ -7,9 +7,9 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <RootNamespace>Manager.TimerService.UnitTest</RootNamespace>
-        <AssemblyName>Manager.TimerService.UnitTest</AssemblyName>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <RootNamespace>Manager.TimerService.IntegrationTests</RootNamespace>
+        <AssemblyName>Manager.TimerService.IntegrationTests</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,8 +17,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Manager.Core.UnitTestsCore\Manager.Core.UnitTestsCore.csproj" />
-        <ProjectReference Include="..\TimerService.Server\TimerService.Server.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core.IntegrationTestsCore\Manager.Core.IntegrationTestsCore.csproj"/>
+        <ProjectReference Include="..\TimerService.Client\TimerService.Client.csproj" />
+        <ProjectReference Include="..\TimerService.Server\TimerService.Server.csproj"/>
     </ItemGroup>
 
 </Project>

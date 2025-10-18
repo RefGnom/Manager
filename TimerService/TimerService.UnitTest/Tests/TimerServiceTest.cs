@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Manager.Core.Common.Time;
+using Manager.Core.UnitTestsCore;
 using Manager.TimerService.Client.ServiceModels;
 using Manager.TimerService.Server.Layers.RepositoryLayer;
 using Manager.TimerService.Server.Layers.ServiceLayer.Exceptions;
@@ -17,8 +18,7 @@ using NUnit.Framework;
 
 namespace Manager.TimerService.UnitTest.Tests;
 
-[TestFixture]
-public class TimerServiceTest
+public class TimerServiceTest : UnitTestBase
 {
     [SetUp]
     public void Setup()
