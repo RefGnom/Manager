@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using Manager.Core.AppConfiguration;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
+using Manager.Core.EFCore;
 using Manager.TimerService.Server.Configurators;
 using Manager.TimerService.Server.Layers.DbLayer;
 using Microsoft.AspNetCore.Builder;
@@ -25,7 +26,7 @@ public class Program
         builder.Services.AddMapper();
 
         builder.Services.AddDbContext<ManagerDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+            options.UseNpgsql(builder.Configuration.GetSection("DataBaseOptions").Get<DataBaseOptions>()!.ConnectionString)
         );
 
         builder.Services.UseAutoRegistrationForCurrentAssembly()
