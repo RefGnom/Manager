@@ -20,7 +20,7 @@ public class TimerServiceApiClient(
 
     public async Task<HttpResponse> StartTimerAsync(StartTimerRequest startTimerRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, "start")
+        var request = new HttpRequestMessage(HttpMethod.Post, "timers/start")
         {
             Content = JsonContent.Create(startTimerRequest),
         };
@@ -36,7 +36,7 @@ public class TimerServiceApiClient(
 
     public async Task<HttpResponse> StopTimerAsync(StopTimerRequest stopTimerRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, "stop")
+        var request = new HttpRequestMessage(HttpMethod.Post, "timers/stop")
         {
             Content = JsonContent.Create(stopTimerRequest),
         };
@@ -54,7 +54,7 @@ public class TimerServiceApiClient(
     {
         var request = new HttpRequestMessage(
             HttpMethod.Get,
-            $"find?UserId={timerRequest.UserId}&Name={timerRequest.Name}"
+            $"timers/find?UserId={timerRequest.UserId}&Name={timerRequest.Name}"
         );
         var responseMessage = await httpClient.SendAsync(request);
         if (responseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -70,7 +70,7 @@ public class TimerServiceApiClient(
     {
         var request = new HttpRequestMessage(
             HttpMethod.Get,
-            $"find?UserId={userTimersRequest.UserId}&" +
+            $"timers/selectForUser?UserId={userTimersRequest.UserId}&" +
             $"WithArchived={userTimersRequest.WithArchived}&" +
             $"WithDeleted={userTimersRequest.WithDeleted}"
         );
@@ -82,7 +82,7 @@ public class TimerServiceApiClient(
 
     public async Task<HttpResponse> ResetTimerAsync(ResetTimerRequest resetTimerRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, "reset")
+        var request = new HttpRequestMessage(HttpMethod.Post, "timers/reset")
         {
             Content = JsonContent.Create(resetTimerRequest),
         };
@@ -98,7 +98,7 @@ public class TimerServiceApiClient(
 
     public async Task<HttpResponse> DeleteTimerAsync(DeleteTimerRequest deleteTimerRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Delete, "delete")
+        var request = new HttpRequestMessage(HttpMethod.Delete, "timers/delete")
         {
             Content = JsonContent.Create(deleteTimerRequest),
         };
