@@ -14,6 +14,7 @@ public interface IDataContext<TEntity> where TEntity : class
 {
     Task InsertAsync(TEntity entity);
     Task<TEntity?> FindAsync<TKey>(TKey primaryKey);
+    Task<TEntity> ReadAsync<TKey>(TKey primaryKey);
     Task<TEntity[]> SelectAsync<TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] primaryKeys);
     Task<TResult> ExecuteReadAsync<TResult>(Func<IQueryable<TEntity>, Task<TResult>> func);
     Task UpdateAsync(TEntity entity);
@@ -39,6 +40,7 @@ internal class DataContext<TEntity>(
     public Task InsertAsync(TEntity entity) => dataContext.InsertAsync(entity);
 
     public Task<TEntity?> FindAsync<TKey>(TKey primaryKey) => dataContext.FindAsync<TEntity, TKey>(primaryKey);
+    public Task<TEntity> ReadAsync<TKey>(TKey primaryKey) => dataContext.ReadAsync<TEntity, TKey>(primaryKey);
 
     public Task<TEntity[]> SelectAsync<TKey>(
         Expression<Func<TEntity, TKey>> primaryKeyPicker,
