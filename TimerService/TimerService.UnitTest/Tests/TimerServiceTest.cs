@@ -20,6 +20,15 @@ namespace Manager.TimerService.UnitTest.Tests;
 
 public class TimerServiceTest : UnitTestBase
 {
+    private static readonly TimerDtoTestFactory timerFactory = new();
+    private static readonly TimerSessionDtoTestFactory sessionFactory = new();
+    private IDateTimeProvider dateTimeProvider = null!;
+    private ITimerDtoFactory timerDtoFactory = null!;
+
+    private ITimerRepository timerRepository = null!;
+    private ITimerSessionService timerSessionService = null!;
+    private TimersService timersService = null!;
+
     [SetUp]
     public void Setup()
     {
@@ -34,15 +43,6 @@ public class TimerServiceTest : UnitTestBase
             timerDtoFactory
         );
     }
-
-    private static readonly TimerDtoTestFactory timerFactory = new();
-    private static readonly TimerSessionDtoTestFactory sessionFactory = new();
-
-    private ITimerRepository timerRepository = null!;
-    private ITimerSessionService timerSessionService = null!;
-    private IDateTimeProvider dateTimeProvider = null!;
-    private ITimerDtoFactory timerDtoFactory = null!;
-    private TimersService timersService = null!;
 
     [Test]
     public async Task StartCreatesAndStartsSessionCorrect()

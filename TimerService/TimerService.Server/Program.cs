@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 [assembly: ServerProperties("TIMER_SERVICE_PORT", "manager-timer-service")]
+
 namespace Manager.TimerService.Server;
 
 public class Program
@@ -26,7 +27,9 @@ public class Program
         builder.Services.AddMapper();
 
         builder.Services.AddDbContext<ManagerDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetSection("DataBaseOptions").Get<DataBaseOptions>()!.ConnectionString)
+            options.UseNpgsql(
+                builder.Configuration.GetSection("DataBaseOptions").Get<DataBaseOptions>()!.ConnectionString
+            )
         );
 
         builder.Services.UseAutoRegistrationForCurrentAssembly()

@@ -13,17 +13,17 @@ namespace Manager.TimerService.UnitTest.Tests;
 
 public class TimerSessionsServiceTest : UnitTestBase
 {
+    private static readonly TimerSessionDtoTestFactory sessionFactory = new();
+
+    private ITimerSessionRepository repository = null!;
+    private TimerSessionService service = null!;
+
     [SetUp]
     public void Setup()
     {
         repository = Substitute.For<ITimerSessionRepository>();
         service = new TimerSessionService(repository);
     }
-
-    private static readonly TimerSessionDtoTestFactory sessionFactory = new();
-
-    private ITimerSessionRepository repository = null!;
-    private TimerSessionService service = null!;
 
     [Test]
     public async Task StartSessionCorrect()
