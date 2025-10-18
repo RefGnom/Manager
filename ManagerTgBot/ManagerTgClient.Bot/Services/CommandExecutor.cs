@@ -4,12 +4,13 @@ namespace Manager.ManagerTgClient.Bot.Services;
 
 public class ManagerCommandExecutor(
     ICommandResolver commandResolver,
-    ITelegramBotClient botClient
+    ITelegramBotClient botClient,
+    ICommandParser commandParser
 ) : ICommandExecutor
 {
     public async Task ExecuteAsync(string userInput, long chatId)
     {
-        var userCommandName = userInput.Split(' ')[0];
+        var userCommandName = commandParser.ParseCommand(userInput);
         var resolverData = commandResolver.Resolve(userCommandName);
         var command = resolverData.Command;
         var requestFactory = resolverData.Factory;
