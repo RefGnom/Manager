@@ -11,4 +11,8 @@
         <AssemblyName>Manager.TimerService.Client</AssemblyName>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\Manager.Core.Networking\Manager.Core.Networking.csproj" />
+    </ItemGroup>
+
 </Project>
