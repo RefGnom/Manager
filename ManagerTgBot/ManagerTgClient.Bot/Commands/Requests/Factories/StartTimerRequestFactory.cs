@@ -2,7 +2,10 @@
 
 public class StartTimerRequestFactory : ICommandRequestFactory
 {
-    public ICommandRequest Create(long telegramId, string userInput) => throw new NotImplementedException();
+    public ICommandRequest Create(long telegramId, string userInput)
+    {
+        return new  StartTimerRequest(telegramId, userInput);
+    }
 
-    public string CommandName => "/StartTimer";
+    public string CommandName => "/startTimer";
 }

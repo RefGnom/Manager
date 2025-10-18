@@ -1,4 +1,5 @@
 ﻿using Manager.ManagerTgClient.Bot.Repository;
+using Manager.ManagerTgClient.Bot.Repository.Model;
 using Manager.ManagerTgClient.Bot.Services.Factories;
 
 namespace Manager.ManagerTgClient.Bot.Services;
@@ -20,5 +21,10 @@ public class AuthentificationService(ITelegramUserRepository userRepository, IUs
         //telegramUser = new User(telegramId, user.Id, .....)
         var user = userFactory.CreateUser(telegramId, userName);
         await userRepository.CreateUserAsync(user);
+    }
+
+    public async Task<User?> FindUserAsync(long telegramId)
+    {
+        return await userRepository.FindAsync(telegramId);
     }
 }

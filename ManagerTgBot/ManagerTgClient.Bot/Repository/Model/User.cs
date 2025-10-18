@@ -6,7 +6,7 @@ namespace Manager.ManagerTgClient.Bot.Repository.Model;
 [Table("user")]
 public class User(
     long telegramId,
-    Guid serverId,
+    Guid recipientId,
     string userName
 )
 {
@@ -15,7 +15,7 @@ public class User(
     public long TelegramId { get; init; } = telegramId;
     [Required]
     [Column("recipientId")]
-    public Guid RecipientId { get; init; } = serverId;
+    public Guid RecipientId { get; init; } = recipientId;
     [Required]
     [Column("userName")]
     public string UserName { get; init; } = userName;
