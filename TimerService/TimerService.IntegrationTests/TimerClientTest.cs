@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -20,16 +21,15 @@ public class TimerClientTest : IntegrationTestBase
         ServiceProvider.GetRequiredService<ITimerServiceApiClient>();
 
     [Test]
-    public async Task TestCreateWork()
+    public async Task TestCreateTimer()
     {
         // Arrange
         var startTimerRequest = Fixture.Build<StartTimerRequest>()
-            //.With(x => x.StartTime, Fixture.Create<DateTime>().ToUniversalTime())
+            .With(x => x.StartTime, Fixture.Create<DateTime>().ToUniversalTime())
             .Create();
 
         // Act
         var httpResponse = await TimerServiceApiClient.StartTimerAsync(startTimerRequest);
-        TestContext.WriteLine(httpResponse.ResponseMessage);
 
         // Asset
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);

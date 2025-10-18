@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Manager.TimerService.Client.ServiceModels;
 
 namespace Manager.TimerService.Server.Layers.DbLayer.Dbos;
 
+[Table("timers")]
 public class TimerDbo
 {
     public required Guid Id { get; init; }
