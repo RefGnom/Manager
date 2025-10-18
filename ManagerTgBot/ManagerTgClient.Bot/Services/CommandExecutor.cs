@@ -12,7 +12,7 @@ public class ManagerCommandExecutor(
         var resolverData = commandResolver.Resolve(userInput);
         var command = resolverData.Command;
         var requestFactory = resolverData.Factory;
-        var request = await requestFactory.CreateAsync(userInput);
+        var request = await requestFactory.CreateAsync(chatId, userInput);
         var commandResult = await command.ExecuteAsync(request);
         await botClient.SendMessage(chatId, commandResult.Message);
     }

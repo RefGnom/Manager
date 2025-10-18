@@ -2,7 +2,7 @@
 
 public class StartTimerRequestFactory : ICommandRequestFactory
 {
-    public Task<ICommandRequest> CreateAsync(string userInput) => throw new NotImplementedException();
+    public Task<ICommandRequest> CreateAsync(long telegramId, string userInput) => throw new NotImplementedException();
 
     public string CommandName => "/StartTimer";
 }

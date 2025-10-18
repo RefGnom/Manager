@@ -1,3 +1,22 @@
-﻿namespace Manager.ManagerTgClient.Bot.Repository.Model;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-public record User(Guid TelegramId, Guid ServerId, string UserName);
+namespace Manager.ManagerTgClient.Bot.Repository.Model;
+
+[Table("user")]
+public class User(
+    long telegramId,
+    Guid serverId,
+    string userName
+)
+{
+    [Key]
+    [Column("id")]
+    public long TelegramId { get; init; } = telegramId;
+    [Required]
+    [Column("serverId")]
+    public Guid ServerId { get; init; } = serverId;
+    [Required]
+    [Column("userName")]
+    public string UserName { get; init; } = userName;
+}

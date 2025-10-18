@@ -1,5 +1,6 @@
 ﻿using Manager.Core.Common.DependencyInjection;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
+using Manager.Core.EFCore.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -26,5 +27,6 @@ public static class ApplicationConfigurator
             .AddSingleton<ITelegramBotClient>(x =>
                 new TelegramBotClient(x.GetRequiredService<IOptions<ManagerBotOptions>>().Value.ManagerTgBotToken)
             )
+            .UseNpg()
             .BuildServiceProvider();
 }

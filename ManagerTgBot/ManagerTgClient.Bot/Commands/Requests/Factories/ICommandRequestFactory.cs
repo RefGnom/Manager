@@ -3,5 +3,5 @@
 public interface ICommandRequestFactory
 {
     string CommandName { get; }
-    Task<ICommandRequest> CreateAsync(string userInput);
+    Task<ICommandRequest> CreateAsync(long telegramId, string userInput);
 }

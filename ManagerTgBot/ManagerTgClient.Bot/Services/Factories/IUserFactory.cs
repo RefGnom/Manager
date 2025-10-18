@@ -4,5 +4,5 @@ namespace Manager.ManagerTgClient.Bot.Services.Factories;
 
 public interface IUserFactory
 {
-    User CreateNewUser(long telegramId, string userName);
+    User CreateUser(long telegramId, string userName);
 }
