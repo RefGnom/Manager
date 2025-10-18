@@ -73,18 +73,6 @@ jobs:
             -   name: Run Tests
                 run: dotnet test --no-build --filter "TestCategory=IntegrationTests" --logger "trx"
 
-            -   name: List Docker containers
-                if: always()  # выполняется даже если тесты упали
-                run: |
-                    echo "=== Запущенные контейнеры ==="
-                    docker ps -a
-                    echo ""
-                    echo "=== Сети ==="
-                    docker network ls
-                    echo ""
-                    echo "=== Порты на хосте ==="
-                    ss -tuln | grep -E ':(5432|808[0-9])'
-
             -   name: Publish Test Results
                 uses: dorny/test-reporter@v1
                 if: always()
