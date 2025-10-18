@@ -3,7 +3,6 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <PackageId>TimerService.Server</PackageId>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.TimerService.Server</RootNamespace>
         <AssemblyName>Manager.TimerService.Server</AssemblyName>
