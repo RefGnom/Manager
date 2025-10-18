@@ -1,16 +1,24 @@
 ﻿using Manager.ManagerTgClient.Bot.Repository;
-using Manager.ManagerTgClient.Bot.Repository.Model;
+using Manager.ManagerTgClient.Bot.Services.Factories;
 
 namespace Manager.ManagerTgClient.Bot.Services;
 
-public class AuthentificationService(ITelegramUserRepository userRepository): IAuthentificationService
+public class AuthentificationService(ITelegramUserRepository userRepository, IUserFactory userFactory): IAuthentificationService
 {
     public async Task CreateUserAsync(long telegramId, string userName)
     {
-        await userRepository.CreateUserAsync()
+        // ToDO:
+        //RecipientClient.CreateUser(userName)
+        var user = userFactory.CreateUser(telegramId, userName);
+        await userRepository.CreateUserAsync(user);
     }
 
-    public async Task ConnectExistingUserAsync(string userName) => throw new NotImplementedException();
-
-    public async Task<User?> AuthenticateUserAsync(long telegramId) => throw new NotImplementedException();
+    public async Task ConnectExistingUserAsync(long telegramId, string userName)
+    {
+        // ToDO:
+        //globalUser = RecipientClient.Find(username)
+        //telegramUser = new User(telegramId, user.Id, .....)
+        var user = userFactory.CreateUser(telegramId, userName);
+        await userRepository.CreateUserAsync(user);
+    }
 }
