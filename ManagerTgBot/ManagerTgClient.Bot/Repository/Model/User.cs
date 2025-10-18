@@ -14,8 +14,8 @@ public class User(
     [Column("id")]
     public long TelegramId { get; init; } = telegramId;
     [Required]
-    [Column("serverId")]
-    public Guid ServerId { get; init; } = serverId;
+    [Column("recipientId")]
+    public Guid RecipientId { get; init; } = serverId;
     [Required]
     [Column("userName")]
     public string UserName { get; init; } = userName;

@@ -2,7 +2,7 @@
 
 public class HelpCommandRequestFactory : ICommandRequestFactory
 {
-    public async Task<ICommandRequest> CreateAsync(long telegramId, string userInput) => await Task.FromResult(new HelpCommandRequest());
+    public ICommandRequest Create(long telegramId, string userInput) => new HelpCommandRequest();
 
     public string CommandName => "/help";
 }

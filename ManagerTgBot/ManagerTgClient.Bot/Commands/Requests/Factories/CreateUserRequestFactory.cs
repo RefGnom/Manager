@@ -2,11 +2,11 @@
 
 public class CreateUserRequestFactory: ICommandRequestFactory
 {
-    public string CommandName => "/createuser";
+    public string CommandName => "/createUser";
 
-    public Task<ICommandRequest> CreateAsync(string userInput)
+    public ICommandRequest Create(long telegramId, string userInput)
     {
-        var request = new CreateUserRequest();
-        
+        var request = new CreateUserRequest(userInput, telegramId);
+        return request;
     }
 }

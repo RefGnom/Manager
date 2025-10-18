@@ -19,5 +19,11 @@
         <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="appsettigns.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 
 </Project>

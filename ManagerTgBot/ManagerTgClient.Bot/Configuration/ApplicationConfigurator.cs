@@ -1,8 +1,10 @@
 ﻿using Manager.Core.Common.DependencyInjection;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
+using Manager.Core.Logging.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 
@@ -14,6 +16,7 @@ public static class ApplicationConfigurator
     {
         var configuration = new ConfigurationManager();
         configuration.AddUserSecrets<Program>()
+            .AddJsonFile("appsettigns.json")
             .Build();
         return configuration;
     }
@@ -28,5 +31,7 @@ public static class ApplicationConfigurator
                 new TelegramBotClient(x.GetRequiredService<IOptions<ManagerBotOptions>>().Value.ManagerTgBotToken)
             )
             .UseNpg()
+            .AddLogging(x => x.AddConsole())
+            .AddCustomLogger(configurationManager, "Development")
             .BuildServiceProvider();
 }

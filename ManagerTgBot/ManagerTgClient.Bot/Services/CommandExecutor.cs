@@ -9,10 +9,11 @@ public class ManagerCommandExecutor(
 {
     public async Task ExecuteAsync(string userInput, long chatId)
     {
-        var resolverData = commandResolver.Resolve(userInput);
+        var userCommandName = userInput.Split(' ')[0];
+        var resolverData = commandResolver.Resolve(userCommandName);
         var command = resolverData.Command;
         var requestFactory = resolverData.Factory;
-        var request = await requestFactory.CreateAsync(chatId, userInput);
+        var request = requestFactory.Create(chatId, userInput);
         var commandResult = await command.ExecuteAsync(request);
         await botClient.SendMessage(chatId, commandResult.Message);
     }
