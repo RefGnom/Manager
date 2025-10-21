@@ -16,9 +16,9 @@ public class RecipientAccountStateRepository(
     IRecipientAccountStateDboFactory recipientAccountStateDboFactory
 ) : IRecipientAccountStateRepository
 {
-    public async Task<RecipientAccountStateWithId> ReadAsync(Guid id)
+    public async Task<RecipientAccountStateWithId> ReadAsync(Guid stateId)
     {
-        var recipientAccountStateDbo = await dataContext.ReadAsync(id);
+        var recipientAccountStateDbo = await dataContext.ReadAsync(stateId);
         return recipientAccountStateConverter.ToDto(recipientAccountStateDbo);
     }
 
