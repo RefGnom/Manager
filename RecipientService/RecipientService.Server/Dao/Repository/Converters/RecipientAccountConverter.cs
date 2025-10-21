@@ -12,7 +12,7 @@ public class RecipientAccountConverter : IRecipientAccountConverter
         Login = recipientAccount.Login,
         PasswordHash = recipientAccount.PasswordHash,
         AccountStateId = stateId,
-        TimeZoneInfo = recipientAccount.TimeZoneInfo,
+        TimeZoneInfoId = recipientAccount.TimeZoneInfo.Id,
         CreatedAtUtc = recipientAccount.CreatedAtUtc,
         UpdatedAtUtc = recipientAccount.UpdatedAtUtc,
     };
@@ -25,7 +25,7 @@ public class RecipientAccountConverter : IRecipientAccountConverter
         recipientAccountDbo.Login,
         recipientAccountDbo.PasswordHash,
         recipientAccountState,
-        recipientAccountDbo.TimeZoneInfo,
+        TimeZoneInfo.FindSystemTimeZoneById(recipientAccountDbo.TimeZoneInfoId),
         recipientAccountDbo.CreatedAtUtc,
         recipientAccountDbo.UpdatedAtUtc
     );

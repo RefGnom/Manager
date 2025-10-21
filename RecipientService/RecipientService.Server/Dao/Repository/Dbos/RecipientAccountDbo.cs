@@ -19,8 +19,8 @@ public class RecipientAccountDbo
     [Column("account_state_id")]
     public required Guid AccountStateId { get; set; }
 
-    [Column("timezone_info")]
-    public required TimeZoneInfo TimeZoneInfo { get; set; }
+    [Column("timezone_info_id")]
+    public required string TimeZoneInfoId { get; set; }
 
     [Column("created_at_utc")]
     public required DateTime CreatedAtUtc { get; set; }
