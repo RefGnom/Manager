@@ -6,6 +6,6 @@ namespace Manager.RecipientService.Server.Dao.Repository;
 
 public interface IRecipientAccountRepository
 {
-    Task CreateAsync(RecipientAccount recipientAccount);
-    Task<RecipientAccount?> FindAsync(Guid recipientAccountId);
+    Task CreateAsync(RecipientAccountWithPasswordHash recipientAccount);
+    Task<RecipientAccountWithPasswordHash?> FindAsync(Guid recipientAccountId);
 }
