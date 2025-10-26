@@ -6,7 +6,10 @@ namespace Manager.RecipientService.Server.Dao.Repository.Converters;
 
 public interface IRecipientAccountConverter
 {
-    RecipientAccountDbo ToDbo(RecipientAccount recipientAccount, Guid stateId);
+    RecipientAccountDbo ToDbo(RecipientAccountWithPasswordHash recipientAccount, Guid stateId);
 
-    RecipientAccount ToDto(RecipientAccountDbo recipientAccountDbo, RecipientAccountState recipientAccountState);
+    RecipientAccountWithPasswordHash ToDto(
+        RecipientAccountDbo recipientAccountDbo,
+        RecipientAccountState recipientAccountState
+    );
 }

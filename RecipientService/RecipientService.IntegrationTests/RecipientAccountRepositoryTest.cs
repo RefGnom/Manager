@@ -31,7 +31,7 @@ public class RecipientAccountRepositoryTest : IntegrationTestBase
     public async Task TestCreate()
     {
         // Arrange
-        var recipientAccount = Fixture.Build<RecipientAccount>()
+        var recipientAccount = Fixture.Build<RecipientAccountWithPasswordHash>()
             .WithUtcDate(x => x.CreatedAtUtc)
             .WithUtcDate(x => x.UpdatedAtUtc)
             .Create();

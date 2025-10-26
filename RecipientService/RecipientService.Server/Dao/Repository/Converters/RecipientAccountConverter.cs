@@ -6,7 +6,7 @@ namespace Manager.RecipientService.Server.Dao.Repository.Converters;
 
 public class RecipientAccountConverter : IRecipientAccountConverter
 {
-    public RecipientAccountDbo ToDbo(RecipientAccount recipientAccount, Guid stateId) => new()
+    public RecipientAccountDbo ToDbo(RecipientAccountWithPasswordHash recipientAccount, Guid stateId) => new()
     {
         Id = recipientAccount.Id,
         Login = recipientAccount.Login,
@@ -17,7 +17,7 @@ public class RecipientAccountConverter : IRecipientAccountConverter
         UpdatedAtUtc = recipientAccount.UpdatedAtUtc,
     };
 
-    public RecipientAccount ToDto(
+    public RecipientAccountWithPasswordHash ToDto(
         RecipientAccountDbo recipientAccountDbo,
         RecipientAccountState recipientAccountState
     ) => new(

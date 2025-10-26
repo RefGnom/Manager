@@ -15,7 +15,7 @@ public class RecipientAccountRepository(
     IRecipientAccountConverter recipientAccountConverter
 ) : IRecipientAccountRepository
 {
-    public async Task CreateAsync(RecipientAccount recipientAccount)
+    public async Task CreateAsync(RecipientAccountWithPasswordHash recipientAccount)
     {
         var storedAccountState = await recipientAccountStateRepository.FindOrCreateAsync(recipientAccount.State);
 
@@ -24,7 +24,7 @@ public class RecipientAccountRepository(
         await dataContext.InsertAsync(recipientAccountDbo);
     }
 
-    public async Task<RecipientAccount?> FindAsync(Guid recipientAccountId)
+    public async Task<RecipientAccountWithPasswordHash?> FindAsync(Guid recipientAccountId)
     {
         var recipientAccountDbo = await dataContext.FindAsync(recipientAccountId);
         if (recipientAccountDbo == null)
