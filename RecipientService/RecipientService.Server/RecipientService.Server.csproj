@@ -7,6 +7,7 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.RecipientService.Server</RootNamespace>
         <AssemblyName>Manager.RecipientService.Server</AssemblyName>
+        <UserSecretsId>c35916b8-5499-4f8f-9dd6-24ad1388656e</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
