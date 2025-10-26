@@ -115,4 +115,43 @@ public class RecipientAccountRepositoryTest : IntegrationTestBase
             options => options.WithDateTimeCloseTo()
         );
     }
+
+    [Test]
+    public async Task TestFindByLoginWhenAccountIsNotExisting()
+    {
+        // Act
+        var recipientAccount = await RecipientAccountRepository.FindByLoginAsync(Fixture.Create<string>());
+
+        // Assert
+        recipientAccount.Should().BeNull();
+    }
+
+    [Test]
+    public async Task TestFindByLoginWhenAccountExistingAndStateExisting()
+    {
+        // Arrange
+        var recipientAccountStateDbo = Fixture.Create<RecipientAccountStateDbo>();
+        var recipientAccountDbo = Fixture.Build<RecipientAccountDbo>()
+            .With(x => x.AccountStateId, recipientAccountStateDbo.Id)
+            .With(x => x.TimeZoneInfoId, TimeZoneInfo.Local.Id)
+            .WithUtcDate(x => x.CreatedAtUtc)
+            .WithUtcDate(x => x.UpdatedAtUtc)
+            .Create();
+        await DataContext.InsertAsync(recipientAccountStateDbo);
+        await DataContext.InsertAsync(recipientAccountDbo);
+
+        // Act
+        var foundAccount = await RecipientAccountRepository.FindByLoginAsync(recipientAccountDbo.Login);
+
+        // Assert
+        foundAccount.Should().NotBeNull();
+        var expectedAccount = RecipientAccountConverter.ToDto(
+            recipientAccountDbo,
+            RecipientAccountStateConverter.ToDto(recipientAccountStateDbo)
+        );
+        foundAccount.Should().BeEquivalentTo(
+            expectedAccount,
+            options => options.WithDateTimeCloseTo()
+        );
+    }
 }

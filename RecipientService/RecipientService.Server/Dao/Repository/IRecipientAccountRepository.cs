@@ -8,4 +8,5 @@ public interface IRecipientAccountRepository
 {
     Task CreateAsync(RecipientAccountWithPasswordHash recipientAccount);
     Task<RecipientAccountWithPasswordHash?> FindAsync(Guid recipientAccountId);
+    Task<RecipientAccountWithPasswordHash?> FindByLoginAsync(string login);
 }

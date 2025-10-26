@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Manager.Core.Common.Time;
 using Manager.Core.EFCore;
 using Manager.RecipientService.Server.Dao.Repository.Converters;
 using Manager.RecipientService.Server.Dao.Repository.Dbos;
 using Manager.RecipientService.Server.Implementation.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manager.RecipientService.Server.Dao.Repository;
 
@@ -27,6 +29,19 @@ public class RecipientAccountRepository(
     public async Task<RecipientAccountWithPasswordHash?> FindAsync(Guid recipientAccountId)
     {
         var recipientAccountDbo = await dataContext.FindAsync(recipientAccountId);
+        return await InnerFindAsync(recipientAccountDbo);
+    }
+
+    public async Task<RecipientAccountWithPasswordHash?> FindByLoginAsync(string login)
+    {
+        var recipientAccountDbo = await dataContext.ExecuteReadAsync<RecipientAccountDbo?>(query =>
+            query.Where(x => x.Login == login).FirstOrDefaultAsync()
+        );
+        return await InnerFindAsync(recipientAccountDbo);
+    }
+
+    private async Task<RecipientAccountWithPasswordHash?> InnerFindAsync(RecipientAccountDbo? recipientAccountDbo)
+    {
         if (recipientAccountDbo == null)
         {
             return null;
