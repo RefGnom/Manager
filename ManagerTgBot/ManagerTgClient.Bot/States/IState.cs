@@ -4,6 +4,6 @@ namespace Manager.ManagerTgClient.Bot.States;
 
 public interface IState
 {
-    Task ProcessAsync(Update update);
+    Task ProcessUpdateAsync(Update update);
     Task InitializeAsync(Update update);
 }

@@ -11,7 +11,7 @@ public class MainMenuState: IState
 
     public Task ProcessCallbackAsync(Update update) => throw new NotImplementedException();
 
-    public Task ProcessAsync(Update update) => throw new NotImplementedException();
+    public Task ProcessUpdateAsync(Update update) => throw new NotImplementedException();
 
     public Task InitializeAsync(Update update)
     {

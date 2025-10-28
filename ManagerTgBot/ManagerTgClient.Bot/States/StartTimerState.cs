@@ -9,7 +9,7 @@ public class EnteringTimerNameState(
     IStartTimerRequestBuilder builder
 ) : IState
 {
-    public Task ProcessAsync(Update update) => throw new NotImplementedException();
+    public Task ProcessUpdateAsync(Update update) => throw new NotImplementedException();
 
     public async Task InitializeAsync(Update update)
     {
