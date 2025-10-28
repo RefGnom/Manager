@@ -1,13 +1,12 @@
-﻿using Manager.ManagerTgClient.Bot.Services;
+﻿using Manager.ManagerTgClient.Bot.States;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
 namespace Manager.ManagerTgClient.Bot.Handlers;
 
 public class ManagerUpdateHandler(
-    ICommandExecutor commandExecutor
+    IStateManager stateManager
 ) : IManagerUpdateHandler
 {
     public async Task HandleUpdateAsync(
@@ -18,10 +17,8 @@ public class ManagerUpdateHandler(
     {
         try
         {
-            if (update is { Type: UpdateType.Message, Message.Text: not null })
-            {
-                await commandExecutor.ExecuteAsync(update.Message.Text, update.Message.Chat.Id);
-            }
+            var chatId = update.Message.Chat.Id;
+            stateManager.GetState(chatId);
         }
         catch (Exception e)
         {
