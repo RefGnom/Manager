@@ -1,4 +1,5 @@
-﻿using Manager.ManagerTgClient.Bot.States;
+﻿using Manager.ManagerTgClient.Bot.Extentions;
+using Manager.ManagerTgClient.Bot.States;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -17,7 +18,7 @@ public class ManagerUpdateHandler(
     {
         try
         {
-            var chatId = update.Message.Chat.Id;
+            var chatId = update.GetChatId();
             stateManager.GetState(chatId);
         }
         catch (Exception e)

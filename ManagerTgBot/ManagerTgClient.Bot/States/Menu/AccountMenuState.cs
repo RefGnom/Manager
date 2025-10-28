@@ -1,8 +1,8 @@
 using Telegram.Bot.Types;
 
-namespace Manager.ManagerTgClient.Bot.States;
+namespace Manager.ManagerTgClient.Bot.States.Menu;
 
-public class TimerMenuState: IState
+public class AccountMenuState : IState
 {
     public Task ProcessUpdateAsync(Update update) => throw new NotImplementedException();
 

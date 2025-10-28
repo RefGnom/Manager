@@ -1,9 +1,10 @@
-﻿using Telegram.Bot;
+﻿using Manager.ManagerTgClient.Bot.Extentions;
+using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Manager.ManagerTgClient.Bot.States;
+namespace Manager.ManagerTgClient.Bot.States.Menu;
 
 public class MainMenuState(
     ITelegramBotClient botClient,
@@ -22,7 +23,7 @@ public class MainMenuState(
             throw new Exception();
         }
 
-        var value = update.Type == UpdateType.CallbackQuery ? update.CallbackQuery?.Data : update.Message?.Text;
+        var value = update.GetUserData();
         switch (value)
         {
             case "/timers":
@@ -30,6 +31,9 @@ public class MainMenuState(
                 break;
             case "/accounts":
                 stateManager.SetState(update.Message!.Chat.Id, stateProvider.GetState<AccountMenuState>());
+                break;
+            default:
+                Console.WriteLine(value);
                 break;
         }
         return Task.CompletedTask;
