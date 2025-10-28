@@ -4,7 +4,16 @@ namespace Manager.ManagerTgClient.Bot.States;
 
 public class MainMenuState: IState
 {
-    public void Process(Update update)
+    public Task ProcessMessageAsync(Update update)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task ProcessCallbackAsync(Update update) => throw new NotImplementedException();
+
+    public Task ProcessAsync(Update update) => throw new NotImplementedException();
+
+    public Task InitializeAsync(Update update)
     {
         throw new NotImplementedException();
     }

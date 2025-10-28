@@ -2,5 +2,6 @@
 
 public interface IStartTimerRequestBuilder
 {
+    IStartTimerRequestBuilder Initialize();
     StartTimerRequest Build();
 }
