@@ -32,10 +32,10 @@ public class MainMenuState(
         var value = update.GetUserData();
         switch (value)
         {
-            case "/timers":
+            case TimerMenu:
                 stateManager.SetState(update.Message!.Chat.Id, stateProvider.GetState<TimerMenuState>());
                 break;
-            case "/accounts":
+            case AccountMenu:
                 stateManager.SetState(update.Message!.Chat.Id, stateProvider.GetState<AccountMenuState>());
                 break;
             default:

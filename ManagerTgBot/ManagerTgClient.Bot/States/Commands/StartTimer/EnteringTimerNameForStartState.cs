@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace Manager.ManagerTgClient.Bot.States.Commands.StartTimer;
 
-public class EnteringTimerNameState(
+public class EnteringTimerNameForStartState(
     ITelegramBotClient botClient,
     IStartTimerRequestBuilder builder
 ) : IState

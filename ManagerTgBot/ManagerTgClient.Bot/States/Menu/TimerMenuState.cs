@@ -1,5 +1,6 @@
 using Manager.ManagerTgClient.Bot.Extentions;
 using Manager.ManagerTgClient.Bot.States.Commands.StartTimer;
+using Manager.ManagerTgClient.Bot.States.Commands.StopTimer;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -9,14 +10,41 @@ namespace Manager.ManagerTgClient.Bot.States.Menu;
 public class TimerMenuState(
     ITelegramBotClient botClient,
     IStateManager stateManager,
-    IStateProvider stateprovider
+    IStateProvider stateProvider
 ) : StateBase(botClient)
 {
-    protected override InlineKeyboardMarkup InlineKeyboard { get; }
-    protected override string MessageToSend { get; }
+    private const string StartTimer = "/startTimer";
+    private const string StopTimer = "/stopTimer";
+
+    protected override InlineKeyboardMarkup InlineKeyboard =>
+        new InlineKeyboardMarkup().AddButton("Запустить таймер", callbackData: StartTimer)
+            .AddButton("Остановить таймер", callbackData: StopTimer);
+
+    protected override string MessageToSend => "Выберите действие";
 
     public override Task ProcessUpdateAsync(Update update)
     {
-        throw new NotImplementedException();
+        var userData = update.GetUserData();
+        var chatId = update.GetChatId();
+        switch (userData)
+        {
+            case StartTimer:
+            {
+                stateManager.SetState(chatId, stateProvider.GetState<EnteringTimerNameForStartState>());
+                break;
+            }
+            case StopTimer:
+            {
+                stateManager.SetState(chatId, stateProvider.GetState<EnteringTimerNameForStopState>());
+                break;
+            }
+            default:
+            {
+                Console.WriteLine();
+                break;
+            }
+        }
+
+        return Task.CompletedTask;
     }
 }
