@@ -7,3 +7,10 @@ public record CreateRecipientAccountDto(
     string Password,
     TimeSpan RecipientTimeUtcOffset
 );
+
+public record UpdateRecipientAccountDto(
+    Guid Id,
+    string? NewLogin,
+    string? NewPassword,
+    TimeSpan? NewRecipientTimeUtcOffset
+);

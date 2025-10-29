@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Manager.Core.Common.HelperObjects.Result;
 using Manager.RecipientService.Server.Dao.Repository;
 using Manager.RecipientService.Server.Implementation.Domain;
@@ -11,6 +12,11 @@ public interface IRecipientAccountService
     Task<ProcessResult<RecipientAccount, string, CreateAccountStatus>> CreateAsync(
         CreateRecipientAccountDto createRecipientAccountDto
     );
+
+    Task<RecipientAccount?> FindAsync(Guid recipientId);
+
+    Task<ProcessResult<string, UpdateAccountStatus>> UpdateAsync(UpdateRecipientAccountDto updateRecipientAccountDto);
+    Task<ProcessResult<string, DeleteAccountStatus>> DeleteAsync(Guid recipientId);
 }
 
 public class RecipientAccountService(
@@ -36,6 +42,47 @@ public class RecipientAccountService(
         return ProcessResult<RecipientAccount, string, CreateAccountStatus>.Ok(
             recipientAccount,
             CreateAccountStatus.Created
+        );
+    }
+
+    public async Task<RecipientAccount?> FindAsync(Guid recipientId) =>
+        await recipientAccountRepository.FindAsync(recipientId);
+
+    public async Task<ProcessResult<string, UpdateAccountStatus>> UpdateAsync(
+        UpdateRecipientAccountDto updateRecipientAccountDto
+    )
+    {
+        var actualRecipientAccount = await recipientAccountRepository.FindAsync(updateRecipientAccountDto.Id);
+        if (actualRecipientAccount is null)
+        {
+            return ProcessResult<string, UpdateAccountStatus>.Failure(
+                $"Не существует аккаунта для получателя {updateRecipientAccountDto.Id}",
+                UpdateAccountStatus.NotFound
+            );
+        }
+
+        var updatedRecipientAccount = recipientAccountFactory.Create(actualRecipientAccount, updateRecipientAccountDto);
+        await recipientAccountRepository.UpdateAsync(updatedRecipientAccount);
+        return ProcessResult<string, UpdateAccountStatus>.Ok(
+            UpdateAccountStatus.Updated
+        );
+    }
+
+    public async Task<ProcessResult<string, DeleteAccountStatus>> DeleteAsync(Guid recipientId)
+    {
+        var actualRecipientAccount = await recipientAccountRepository.FindAsync(recipientId);
+        if (actualRecipientAccount is null)
+        {
+            return ProcessResult<string, DeleteAccountStatus>.Failure(
+                $"Не существует аккаунта для получателя {recipientId}",
+                DeleteAccountStatus.NotFound
+            );
+        }
+
+        var deletedRecipientAccount = recipientAccountFactory.CreateDeleted(actualRecipientAccount);
+        await recipientAccountRepository.UpdateAsync(deletedRecipientAccount);
+        return ProcessResult<string, DeleteAccountStatus>.Ok(
+            DeleteAccountStatus.Deleted
         );
     }
 }
