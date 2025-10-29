@@ -1,18 +1,22 @@
+using Manager.ManagerTgClient.Bot.Extentions;
+using Manager.ManagerTgClient.Bot.States.Commands.StartTimer;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Manager.ManagerTgClient.Bot.States.Menu;
 
-public class TimerMenuState(ITelegramBotClient botClient) : IState
+public class TimerMenuState(
+    ITelegramBotClient botClient,
+    IStateManager stateManager,
+    IStateProvider stateprovider
+) : StateBase(botClient)
 {
-    public Task ProcessUpdateAsync(Update update)
+    protected override InlineKeyboardMarkup InlineKeyboard { get; }
+    protected override string MessageToSend { get; }
+
+    public override Task ProcessUpdateAsync(Update update)
     {
         throw new NotImplementedException();
-    }
-
-    public Task InitializeAsync(long chatId)
-    {
-        botClient.SendMessage(chatId, "Выберите выполняемое действие");
-        return Task.CompletedTask;
     }
 }

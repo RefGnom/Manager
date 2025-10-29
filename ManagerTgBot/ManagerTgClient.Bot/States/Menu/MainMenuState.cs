@@ -10,13 +10,19 @@ public class MainMenuState(
     ITelegramBotClient botClient,
     IStateManager stateManager,
     IStateProvider stateProvider
-) : IState
+) : StateBase(botClient)
 {
     private const string TimerMenu = "/timers";
     private const string AccountMenu = "/accounts";
     private static readonly UpdateType[] supportedUpdateType = [UpdateType.Message, UpdateType.CallbackQuery];
 
-    public Task ProcessUpdateAsync(Update update)
+    protected override string MessageToSend => "Выберите функцию";
+
+    protected override InlineKeyboardMarkup InlineKeyboard => new InlineKeyboardMarkup()
+        .AddButton(InlineKeyboardButton.WithCallbackData("Таймеры", TimerMenu))
+        .AddButton(InlineKeyboardButton.WithCallbackData("Настройка аккаунта", AccountMenu));
+
+    public override Task ProcessUpdateAsync(Update update)
     {
         if (!supportedUpdateType.Contains(update.Type))
         {
@@ -36,15 +42,7 @@ public class MainMenuState(
                 Console.WriteLine(value);
                 break;
         }
-        return Task.CompletedTask;
-    }
 
-    public Task InitializeAsync(long chatId)
-    {
-        var inlineKeyboard =
-            new InlineKeyboardMarkup()
-                .AddButton(InlineKeyboardButton.WithCallbackData("Таймеры", TimerMenu))
-                .AddButton(InlineKeyboardButton.WithCallbackData("Настройка аккаунта", AccountMenu));
-        return botClient.SendMessage(chatId, "Выберите функцию", replyMarkup: inlineKeyboard);
+        return Task.CompletedTask;
     }
 }
