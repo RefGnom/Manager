@@ -6,6 +6,10 @@ public class Result(
 {
     public bool IsSuccess { get; } = isSuccess;
     public bool IsFailure { get; } = !isSuccess;
+
+    public static Result Ok() => new(true);
+
+    public static Result Failure() => new(false);
 }
 
 public class Result<TError>(
