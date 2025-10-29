@@ -8,17 +8,30 @@ namespace Manager.RecipientService.Server.Dao.Api;
 
 public interface IRecipientAccountConverter
 {
-    CreateRecipientAccountDto ToDto(CreateRecipientAccountRequest createRecipientAccountRequest);
+    CreateRecipientAccountDto ToDto(CreateRecipientAccountRequest request);
+    UpdateRecipientAccountDto ToDto(PatchRecipientAccountRequest request);
     RecipientAccountResponse ToResponse(RecipientAccount recipientAccount);
 }
 
 public class RecipientAccountConverter : IRecipientAccountConverter
 {
-    public CreateRecipientAccountDto ToDto(CreateRecipientAccountRequest createRecipientAccountRequest) => new(
-        createRecipientAccountRequest.Login,
-        createRecipientAccountRequest.Password,
-        TimeSpan.FromHours(createRecipientAccountRequest.RecipientTimeUtcOffsetHours)
+    public CreateRecipientAccountDto ToDto(CreateRecipientAccountRequest request) => new(
+        request.Login,
+        request.Password,
+        TimeSpan.FromHours(request.RecipientTimeUtcOffsetHours)
     );
+
+    public UpdateRecipientAccountDto ToDto(PatchRecipientAccountRequest request)
+    {
+        return new UpdateRecipientAccountDto(
+            request.RecipientId,
+            request.NewLogin,
+            request.NewPassword,
+            request.NewRecipientTimeUtcOffsetHours.HasValue
+                ? TimeSpan.FromHours(request.NewRecipientTimeUtcOffsetHours.Value)
+                : null
+        );
+    }
 
     public RecipientAccountResponse ToResponse(RecipientAccount recipientAccount) => new(
         recipientAccount.Id,

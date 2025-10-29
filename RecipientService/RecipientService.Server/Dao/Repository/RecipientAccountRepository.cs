@@ -40,6 +40,15 @@ public class RecipientAccountRepository(
         return await InnerFindAsync(recipientAccountDbo);
     }
 
+    public async Task UpdateAsync(RecipientAccountWithPasswordHash recipientAccount)
+    {
+        var storedAccountState = await recipientAccountStateRepository.FindOrCreateAsync(recipientAccount.State);
+
+        var recipientAccountDbo = recipientAccountConverter.ToDbo(recipientAccount, storedAccountState.Id);
+        recipientAccountDbo.UpdatedAtUtc = dateTimeProvider.UtcNow;
+        await dataContext.UpdateAsync(recipientAccountDbo);
+    }
+
     private async Task<RecipientAccountWithPasswordHash?> InnerFindAsync(RecipientAccountDbo? recipientAccountDbo)
     {
         if (recipientAccountDbo == null)
