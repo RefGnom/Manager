@@ -3,6 +3,7 @@ using Manager.Core.Common.DependencyInjection;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
 using Manager.Core.Logging.Configuration;
+using Manager.ManagerTgClient.Bot.States;
 using Manager.TimerService.Client;
 using Manager.TimerService.Client.ServiceModels.Factories;
 using Microsoft.Extensions.Configuration;
@@ -33,13 +34,17 @@ public static class ApplicationConfigurator
             .UseAutoRegistrationForCoreNetworking()
             .ConfigureOptionsWithValidation<ManagerBotOptions>()
             .AddSingleton<IConfiguration>(configurationManager)
-            .AddSingleton<IRequestFactory,  RequestFactory>()
+            .AddSingleton<IRequestFactory, RequestFactory>()
             .AddSingleton<ITimerServiceApiClientFactory, TimerServiceApiClientFactory>()
             .AddSingleton<ITimerServiceApiClient>(x =>
-                x.GetRequiredService<ITimerServiceApiClientFactory>().Create(configurationManager.GetValue<string>("TimerServiceApiKey")!)
+                x.GetRequiredService<ITimerServiceApiClientFactory>()
+                    .Create(configurationManager.GetValue<string>("TimerServiceApiKey")!)
             )
             .AddSingleton<ITelegramBotClient>(x =>
                 new TelegramBotClient(x.GetRequiredService<IOptions<ManagerBotOptions>>().Value.ManagerTgBotToken)
+            )
+            .AddSingleton<Lazy<IStateProvider>>(x =>
+                new Lazy<IStateProvider>(x.GetRequiredService<IStateProvider>())
             )
             .UseNpg()
             .AddLogging(x => x.AddConsole())

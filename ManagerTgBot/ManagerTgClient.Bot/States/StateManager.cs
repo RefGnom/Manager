@@ -2,7 +2,9 @@ using Manager.ManagerTgClient.Bot.States.Menu;
 
 namespace Manager.ManagerTgClient.Bot.States;
 
-public class StateManager(IStateProvider stateProvider): IStateManager
+public class StateManager(
+    Lazy<IStateProvider> stateProvider
+) : IStateManager
 {
     private readonly Dictionary<long, IState> _states = new();
 
@@ -11,15 +13,16 @@ public class StateManager(IStateProvider stateProvider): IStateManager
         _states.TryGetValue(userId, out var state);
         if (state is null)
         {
-            state = stateProvider.GetState<MainMenuState>();
-            SetState(userId, state);
+            state = stateProvider.Value.GetState<MainMenuState>();
+            SetState<MainMenuState>(userId);
         }
 
         return state;
     }
 
-    public void SetState(long userId, IState state)
+    public void SetState<TState>(long userId) where TState : IState
     {
+        var state = stateProvider.Value.GetState<TState>();
         _states[userId] = state;
     }
 }

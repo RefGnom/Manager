@@ -9,8 +9,7 @@ namespace Manager.ManagerTgClient.Bot.States.Menu;
 
 public class TimerMenuState(
     ITelegramBotClient botClient,
-    IStateManager stateManager,
-    IStateProvider stateProvider
+    IStateManager stateManager
 ) : StateBase(botClient)
 {
     private const string StartTimer = "/startTimer";
@@ -30,12 +29,12 @@ public class TimerMenuState(
         {
             case StartTimer:
             {
-                stateManager.SetState(chatId, stateProvider.GetState<EnteringTimerNameForStartState>());
+                stateManager.SetState<EnteringTimerNameForStartState>(chatId);
                 break;
             }
             case StopTimer:
             {
-                stateManager.SetState(chatId, stateProvider.GetState<EnteringTimerNameForStopState>());
+                stateManager.SetState<EnteringTimerNameForStopState>(chatId);
                 break;
             }
             default:

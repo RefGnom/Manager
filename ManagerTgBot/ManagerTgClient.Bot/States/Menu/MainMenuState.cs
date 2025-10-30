@@ -8,8 +8,7 @@ namespace Manager.ManagerTgClient.Bot.States.Menu;
 
 public class MainMenuState(
     ITelegramBotClient botClient,
-    IStateManager stateManager,
-    IStateProvider stateProvider
+    IStateManager stateManager
 ) : StateBase(botClient)
 {
     private const string TimerMenu = "/timers";
@@ -33,10 +32,10 @@ public class MainMenuState(
         switch (value)
         {
             case TimerMenu:
-                stateManager.SetState(update.Message!.Chat.Id, stateProvider.GetState<TimerMenuState>());
+                stateManager.SetState<TimerMenuState>(update.Message!.Chat.Id);
                 break;
             case AccountMenu:
-                stateManager.SetState(update.Message!.Chat.Id, stateProvider.GetState<AccountMenuState>());
+                stateManager.SetState<TimerMenuState>(update.Message!.Chat.Id);
                 break;
             default:
                 Console.WriteLine(value);
