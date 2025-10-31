@@ -13,21 +13,23 @@ public class StateManager(
         _states.TryGetValue(userId, out var state);
         if (state is null)
         {
-            state = stateProvider.Value.GetState<MainMenuState>();
+            state = stateProvider.Value.GetState(typeof(MainMenuState));
             SetState<MainMenuState>(userId);
         }
 
+        state.InitializeAsync(userId);
         return state;
     }
 
     public void SetState<TState>(long userId) where TState : IState
     {
-        var state = stateProvider.Value.GetState<TState>();
+        var state = stateProvider.Value.GetState(typeof(TState));
         _states[userId] = state;
     }
 
     public void SetState(long userId, Type stateType)
     {
-        throw new NotImplementedException();
+        var state = stateProvider.Value.GetState(stateType);
+        _states[userId] = state;
     }
 }

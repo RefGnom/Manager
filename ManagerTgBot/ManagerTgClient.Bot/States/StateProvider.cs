@@ -1,11 +1,15 @@
+using Manager.ManagerTgClient.Bot.States.Menu;
+
 namespace Manager.ManagerTgClient.Bot.States;
 
 public class StateProvider(
     IEnumerable<IState> states
 ) : IStateProvider
 {
-    public IState GetState<TState>() where TState : IState
+    public IState GetState(Type stateType)
     {
-        return states.First(s => s.GetType() == typeof(TState));
+        return stateType == typeof(IState)
+            ? states.First(s => s.GetType() == typeof(MainMenuState))
+            : states.First(s => s.GetType() == stateType);
     }
 }

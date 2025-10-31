@@ -1,10 +1,25 @@
-using Telegram.Bot.Types;
+using Telegram.Bot;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Manager.ManagerTgClient.Bot.States.Menu;
 
-public class AccountMenuState : IState
+public class AccountMenuState(
+    ITelegramBotClient botClient,
+    IStateManager stateManager
+) : MenuStateBase(botClient, stateManager)
 {
-    public Task ProcessUpdateAsync(Update update) => throw new NotImplementedException();
+    private const string CreateAccount = "/createAccount";
+    private const string GetAccountInfo = "/getAccount";
 
-    public Task InitializeAsync(long chatId) => throw new NotImplementedException();
+    protected override InlineKeyboardMarkup InlineKeyboard => new InlineKeyboardMarkup()
+        .AddButton(InlineKeyboardButton.WithCallbackData("Создать аккаунт", CreateAccount))
+        .AddButton(InlineKeyboardButton.WithCallbackData("Получить информацию об аккаунте", GetAccountInfo));
+
+    protected override string MessageToSend => "Выберите действие";
+
+    protected override Dictionary<string, Type> States => new Dictionary<string, Type>()
+    {
+        { CreateAccount, typeof(StateBase) },
+        { GetAccountInfo, typeof(StateBase) },
+    };
 }

@@ -1,6 +1,7 @@
 ﻿using Manager.ManagerTgClient.Bot.Extentions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace Manager.ManagerTgClient.Bot.States.Menu;
 
@@ -10,6 +11,7 @@ public abstract class MenuStateBase(
 ) : StateBase(botClient)
 {
     protected abstract Dictionary<string, Type> States { get; }
+    protected override UpdateType[] SupportedUpdateType => [UpdateType.Message, UpdateType.CallbackQuery];
 
     public override Task ProcessUpdateAsync(Update update)
     {

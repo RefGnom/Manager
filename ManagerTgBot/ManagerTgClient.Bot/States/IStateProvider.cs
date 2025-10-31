@@ -2,5 +2,6 @@ namespace Manager.ManagerTgClient.Bot.States;
 
 public interface IStateProvider
 {
-    IState GetState<TState>() where TState : IState;
+    IState GetState(Type stateType);
+
 }

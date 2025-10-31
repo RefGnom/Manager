@@ -1,5 +1,6 @@
+using Manager.ManagerTgClient.Bot.States.Commands.StartTimer;
+using Manager.ManagerTgClient.Bot.States.Commands.StopTimer;
 using Telegram.Bot;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Manager.ManagerTgClient.Bot.States.Menu;
@@ -12,13 +13,15 @@ public class TimerMenuState(
     private const string StartTimer = "/startTimer";
     private const string StopTimer = "/stopTimer";
 
-    protected override InlineKeyboardMarkup InlineKeyboard =>
-        new InlineKeyboardMarkup().AddButton("Запустить таймер", callbackData: StartTimer)
-            .AddButton("Остановить таймер", callbackData: StopTimer);
+    protected override Dictionary<string, Type> States => new()
+    {
+        { StartTimer, typeof(EnteringTimerNameForStartState) },
+        { StopTimer, typeof(EnteringTimerNameForStopState) },
+    };
 
     protected override string MessageToSend => "Выберите действие";
 
-    protected override Dictionary<string, Type> States { get; }
-
-    protected override UpdateType[] SupportedUpdateType { get; }
+    protected override InlineKeyboardMarkup InlineKeyboard =>
+        new InlineKeyboardMarkup().AddButton("Запустить таймер", callbackData: StartTimer)
+            .AddButton("Остановить таймер", callbackData: StopTimer);
 }
