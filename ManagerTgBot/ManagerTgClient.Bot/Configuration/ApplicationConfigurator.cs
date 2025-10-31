@@ -43,9 +43,7 @@ public static class ApplicationConfigurator
             .AddSingleton<ITelegramBotClient>(x =>
                 new TelegramBotClient(x.GetRequiredService<IOptions<ManagerBotOptions>>().Value.ManagerTgBotToken)
             )
-            .AddSingleton<Lazy<IStateProvider>>(x =>
-                new Lazy<IStateProvider>(x.GetRequiredService<IStateProvider>())
-            )
+            .AddSingleton<Lazy<IStateProvider>>(x => new Lazy<IStateProvider>(x.GetRequiredService<IStateProvider>))
             .UseNpg()
             .AddLogging(x => x.AddConsole())
             .AddCustomLogger(configurationManager, "Development")
