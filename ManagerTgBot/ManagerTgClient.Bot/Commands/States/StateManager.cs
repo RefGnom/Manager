@@ -16,8 +16,6 @@ public class StateManager(
             state = stateProvider.Value.GetState(typeof(MainMenuState));
             SetState<MainMenuState>(chatId);
         }
-
-        state.InitializeAsync(chatId);
         return state;
     }
 
@@ -25,11 +23,13 @@ public class StateManager(
     {
         var state = stateProvider.Value.GetState(typeof(TState));
         _states[chatId] = state;
+        state.InitializeAsync(chatId);
     }
 
     public void SetState(long chatId, Type stateType)
     {
         var state = stateProvider.Value.GetState(stateType);
         _states[chatId] = state;
+        state.InitializeAsync(chatId);
     }
 }
