@@ -9,7 +9,7 @@ namespace Manager.ManagerTgClient.Bot.States.Menu;
 public class MainMenuState(
     ITelegramBotClient botClient,
     IStateManager stateManager
-) : StateBase(botClient)
+) : MenuStateBase(botClient, stateManager)
 {
     private const string TimerMenu = "/timers";
     private const string AccountMenu = "/accounts";
@@ -20,6 +20,8 @@ public class MainMenuState(
     protected override InlineKeyboardMarkup InlineKeyboard => new InlineKeyboardMarkup()
         .AddButton(InlineKeyboardButton.WithCallbackData("Таймеры", TimerMenu))
         .AddButton(InlineKeyboardButton.WithCallbackData("Настройка аккаунта", AccountMenu));
+
+    protected override Dictionary<string, Type> States { get; }
 
     public override Task ProcessUpdateAsync(Update update)
     {
@@ -35,7 +37,7 @@ public class MainMenuState(
                 stateManager.SetState<TimerMenuState>(update.Message!.Chat.Id);
                 break;
             case AccountMenu:
-                stateManager.SetState<TimerMenuState>(update.Message!.Chat.Id);
+                stateManager.SetState<AccountMenuState>(update.Message!.Chat.Id);
                 break;
             default:
                 Console.WriteLine(value);
@@ -44,4 +46,6 @@ public class MainMenuState(
 
         return Task.CompletedTask;
     }
+
+    protected override UpdateType[] SupportedUpdateType { get; }
 }

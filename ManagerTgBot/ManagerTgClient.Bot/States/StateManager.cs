@@ -25,4 +25,9 @@ public class StateManager(
         var state = stateProvider.Value.GetState<TState>();
         _states[userId] = state;
     }
+
+    public void SetState(long userId, Type stateType)
+    {
+        throw new NotImplementedException();
+    }
 }
