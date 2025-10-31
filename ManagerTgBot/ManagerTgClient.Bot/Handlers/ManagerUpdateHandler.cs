@@ -19,7 +19,7 @@ public class ManagerUpdateHandler(
         try
         {
             var chatId = update.GetChatId();
-            var state = stateManager.GetState(chatId);
+            var state = await stateManager.GetStateAsync(chatId);
             await state.ProcessUpdateAsync(update);
         }
         catch (Exception e)

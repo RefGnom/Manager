@@ -27,7 +27,7 @@ public abstract class MenuStateBase(
             return Task.CompletedTask;
         }
 
-        stateManager.SetState(chatId, state);
+        stateManager.SetStateAsync(chatId, state);
         return Task.CompletedTask;
     }
 }
