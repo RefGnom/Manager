@@ -2,7 +2,7 @@ using Manager.ManagerTgClient.Bot.Commands.Requests.Builders;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace Manager.ManagerTgClient.Bot.States.Commands.StartTimer;
+namespace Manager.ManagerTgClient.Bot.Commands.States.Commands.StartTimer;
 
 public class EnteringTimerNameForStartState(
     ITelegramBotClient botClient,

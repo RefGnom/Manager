@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types;
 
-namespace Manager.ManagerTgClient.Bot.States.Commands.StopTimer;
+namespace Manager.ManagerTgClient.Bot.Commands.States.Commands.StopTimer;
 
 public class EnteringTimerNameForStopState: IState
 {

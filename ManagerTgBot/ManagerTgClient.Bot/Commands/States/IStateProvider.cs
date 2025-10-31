@@ -1,4 +1,4 @@
-namespace Manager.ManagerTgClient.Bot.States;
+namespace Manager.ManagerTgClient.Bot.Commands.States;
 
 public interface IStateProvider
 {

@@ -3,7 +3,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace Manager.ManagerTgClient.Bot.States.Menu;
+namespace Manager.ManagerTgClient.Bot.Commands.States.Menu;
 
 public abstract class MenuStateBase(
     ITelegramBotClient botClient,

@@ -3,7 +3,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Manager.ManagerTgClient.Bot.States;
+namespace Manager.ManagerTgClient.Bot.Commands.States;
 
 public abstract class StateBase(ITelegramBotClient botClient): IState
 {

@@ -1,9 +1,9 @@
-using Manager.ManagerTgClient.Bot.States.Commands.StartTimer;
-using Manager.ManagerTgClient.Bot.States.Commands.StopTimer;
+using Manager.ManagerTgClient.Bot.Commands.States.Commands.StartTimer;
+using Manager.ManagerTgClient.Bot.Commands.States.Commands.StopTimer;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Manager.ManagerTgClient.Bot.States.Menu;
+namespace Manager.ManagerTgClient.Bot.Commands.States.Menu;
 
 public class TimerMenuState(
     ITelegramBotClient botClient,

@@ -3,7 +3,7 @@ using Manager.Core.Common.DependencyInjection;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
 using Manager.Core.Logging.Configuration;
-using Manager.ManagerTgClient.Bot.States;
+using Manager.ManagerTgClient.Bot.Commands.States;
 using Manager.TimerService.Client;
 using Manager.TimerService.Client.ServiceModels.Factories;
 using Microsoft.Extensions.Configuration;

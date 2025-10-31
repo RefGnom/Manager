@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Manager.ManagerTgClient.Bot.States.Menu;
+namespace Manager.ManagerTgClient.Bot.Commands.States.Menu;
 
 public class MainMenuState(
     ITelegramBotClient botClient,

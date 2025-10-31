@@ -1,5 +1,5 @@
-﻿using Manager.ManagerTgClient.Bot.Extentions;
-using Manager.ManagerTgClient.Bot.States;
+﻿using Manager.ManagerTgClient.Bot.Commands.States;
+using Manager.ManagerTgClient.Bot.Extentions;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;

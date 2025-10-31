@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types;
 
-namespace Manager.ManagerTgClient.Bot.States;
+namespace Manager.ManagerTgClient.Bot.Commands.States;
 
 public interface IState
 {

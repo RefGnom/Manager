@@ -1,6 +1,6 @@
-using Manager.ManagerTgClient.Bot.States.Menu;
+using Manager.ManagerTgClient.Bot.Commands.States.Menu;
 
-namespace Manager.ManagerTgClient.Bot.States;
+namespace Manager.ManagerTgClient.Bot.Commands.States;
 
 public class StateProvider(
     IEnumerable<IState> states
