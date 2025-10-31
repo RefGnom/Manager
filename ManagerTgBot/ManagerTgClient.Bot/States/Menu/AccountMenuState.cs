@@ -17,7 +17,7 @@ public class AccountMenuState(
 
     protected override string MessageToSend => "Выберите действие";
 
-    protected override Dictionary<string, Type> States => new Dictionary<string, Type>()
+    protected override Dictionary<string, Type> States => new()
     {
         { CreateAccount, typeof(StateBase) },
         { GetAccountInfo, typeof(StateBase) },

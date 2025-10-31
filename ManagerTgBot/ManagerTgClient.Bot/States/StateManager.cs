@@ -8,28 +8,28 @@ public class StateManager(
 {
     private readonly Dictionary<long, IState> _states = new();
 
-    public IState GetState(long userId)
+    public IState GetState(long chatId)
     {
-        _states.TryGetValue(userId, out var state);
+        _states.TryGetValue(chatId, out var state);
         if (state is null)
         {
             state = stateProvider.Value.GetState(typeof(MainMenuState));
-            SetState<MainMenuState>(userId);
+            SetState<MainMenuState>(chatId);
         }
 
-        state.InitializeAsync(userId);
+        state.InitializeAsync(chatId);
         return state;
     }
 
-    public void SetState<TState>(long userId) where TState : IState
+    public void SetState<TState>(long chatId) where TState : IState
     {
         var state = stateProvider.Value.GetState(typeof(TState));
-        _states[userId] = state;
+        _states[chatId] = state;
     }
 
-    public void SetState(long userId, Type stateType)
+    public void SetState(long chatId, Type stateType)
     {
         var state = stateProvider.Value.GetState(stateType);
-        _states[userId] = state;
+        _states[chatId] = state;
     }
 }
