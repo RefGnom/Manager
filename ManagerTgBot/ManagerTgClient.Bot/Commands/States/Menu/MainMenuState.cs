@@ -20,6 +20,6 @@ public class MainMenuState(
     protected override string MessageToSend => "Выберите функцию";
 
     protected override InlineKeyboardMarkup InlineKeyboard => new InlineKeyboardMarkup()
-        .AddButton(InlineKeyboardButton.WithCallbackData("Таймеры", TimerMenu))
-        .AddButton(InlineKeyboardButton.WithCallbackData("Настройка аккаунта", AccountMenu));
+        .AddButton("Таймеры", TimerMenu)
+        .AddButton("Настройка аккаунта", AccountMenu);
 }

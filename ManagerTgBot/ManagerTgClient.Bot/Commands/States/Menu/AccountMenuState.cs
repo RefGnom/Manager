@@ -10,10 +10,12 @@ public class AccountMenuState(
 {
     private const string CreateAccount = "/createAccount";
     private const string GetAccountInfo = "/getAccount";
+    private const string Exit = "/exit";
 
     protected override InlineKeyboardMarkup InlineKeyboard => new InlineKeyboardMarkup()
-        .AddButton(InlineKeyboardButton.WithCallbackData("Создать аккаунт", CreateAccount))
-        .AddButton(InlineKeyboardButton.WithCallbackData("Получить информацию об аккаунте", GetAccountInfo));
+        .AddButton("Создать аккаунт", CreateAccount)
+        .AddButton("Получить информацию об аккаунте", GetAccountInfo)
+        .AddButton("В главное меню", Exit);
 
     protected override string MessageToSend => "Выберите действие";
 
@@ -21,5 +23,6 @@ public class AccountMenuState(
     {
         { CreateAccount, typeof(StateBase) },
         { GetAccountInfo, typeof(StateBase) },
+        { Exit, typeof(MainMenuState) },
     };
 }
