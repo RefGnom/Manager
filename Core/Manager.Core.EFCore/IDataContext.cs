@@ -15,6 +15,7 @@ public interface IDataContext
     Task InsertAsync<TEntity>(TEntity entity) where TEntity : class;
     Task InsertRangeAsync<TEntity>(params TEntity[] entities) where TEntity : class;
     Task<TEntity?> FindAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class;
+    Task<TEntity> ReadAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class;
 
     Task<TEntity[]> SelectAsync<TEntity, TKey>(
         Expression<Func<TEntity, TKey>> primaryKeyPicker,
@@ -61,6 +62,13 @@ public class DataContext(
     {
         await using var dbContext = dbContextWrapperFactory.Create();
         return await dbContext.FindAsync<TEntity>(primaryKey);
+    }
+
+    public async Task<TEntity> ReadAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class
+    {
+        return await FindAsync<TEntity, TKey>(primaryKey) ?? throw new EntityNotFoundException(
+            $"Entity {typeof(TEntity).Name} not found with primary key {primaryKey}"
+        );
     }
 
     public async Task<TEntity[]> SelectAsync<TEntity, TKey>(

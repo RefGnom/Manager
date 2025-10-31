@@ -4,7 +4,9 @@ using Manager.Core.BackgroundTasks;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
 using Manager.Core.Logging.Configuration;
+using Manager.RecipientService.Server.Implementation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -29,7 +31,8 @@ public static class Program
             .UseNpg()
             .ConfigureAuthentication()
             .AddSwaggerGen(c => c.ConfigureAuthentication())
-            .AddBackgroundTasks(startupLogger);
+            .AddBackgroundTasks(startupLogger)
+            .AddSingleton<IPasswordHasher<PasswordHashService>, PasswordHasher<PasswordHashService>>();
         startupLogger.LogInformation("Service collection configured");
 
         startupLogger.LogInformation("Build application");
