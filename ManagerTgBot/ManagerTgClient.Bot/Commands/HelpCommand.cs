@@ -1,39 +1,26 @@
-﻿using System.Reflection;
-using System.Text;
-using Manager.ManagerTgClient.Bot.Commands.Attributes;
+﻿using System.Text;
 using Manager.ManagerTgClient.Bot.Commands.Requests;
 using Manager.ManagerTgClient.Bot.Commands.Results;
 
 namespace Manager.ManagerTgClient.Bot.Commands;
 
-[CommandName("/help")]
-[CommandDescription("выводит подробную информацию по командам бота")]
-public class HelpCommand : ICommand
+public class HelpCommand(
+    ICommand[] commands
+) : CommandBase
 {
-    private readonly Type[] commands;
+    public override string Name => "/help";
+    public override string Description => "выводит подробную информацию по командам бота";
 
-    public HelpCommand()
-    {
-        commands = Assembly.GetEntryAssembly()!.GetTypes()
-            .Where(type => typeof(ICommand).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
-            .ToArray();
-    }
-
-    public Task<ICommandResult> ExecuteAsync(ICommandRequest commandRequest)
+    public override Task<ICommandResult> ExecuteAsync(ICommandRequest commandRequest)
     {
         var result = new StringBuilder();
         foreach (var command in commands)
         {
-            var nameAttribute = command.GetCustomAttribute<CommandNameAttribute>();
-            var descriptionAttribute = command.GetCustomAttribute<CommandDescriptionAttribute>();
-            if (nameAttribute is not null && descriptionAttribute is not null)
-            {
-                result.Append($"{nameAttribute.Value} - {descriptionAttribute.Value}\n");
-            }
+            var name = command.Name;
+            var description = command.Description;
+            result.Append($"{name} - {description}\n");
         }
 
         return Task.FromResult<ICommandResult>(new CommandResult(result.ToString()));
     }
-
-    public string Name => "/help";
 }

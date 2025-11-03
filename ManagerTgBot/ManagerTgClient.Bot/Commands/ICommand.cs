@@ -6,5 +6,6 @@ namespace Manager.ManagerTgClient.Bot.Commands;
 public interface ICommand
 {
     string Name { get; }
+    string Description { get; }
     Task<ICommandResult> ExecuteAsync(ICommandRequest commandRequest);
 }
