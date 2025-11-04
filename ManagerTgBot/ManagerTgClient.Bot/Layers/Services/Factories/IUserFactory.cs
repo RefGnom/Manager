@@ -1,8 +1,8 @@
-﻿using Manager.ManagerTgClient.Bot.Layers.Repository.Model;
+﻿using Manager.ManagerTgClient.Bot.Layers.Services.Models;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Services.Factories;
 
 public interface IUserFactory
 {
-    UserDbo CreateUser(long telegramId, string userName);
+    UserDto CreateUser(long telegramId, string userName);
 }

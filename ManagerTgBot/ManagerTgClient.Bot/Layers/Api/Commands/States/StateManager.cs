@@ -7,16 +7,19 @@ public class StateManager(
 ) : IStateManager
 {
     private readonly Dictionary<long, IState> states = new();
+    private static readonly Type mainMenuType = typeof(MainMenuState);
 
     public async Task<IState> GetStateAsync(long userId)
     {
         states.TryGetValue(userId, out var state);
-        if (state is null)
+        if (state is not null)
         {
-            await SetStateAsync(userId, typeof(MainMenuState));
+            return state!;
         }
 
-        return state;
+        await SetStateAsync(userId, mainMenuType);
+        return states[userId];
+
     }
 
     public async Task SetStateAsync(long userId, Type stateType)

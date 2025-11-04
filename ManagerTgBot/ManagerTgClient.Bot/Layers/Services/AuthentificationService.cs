@@ -1,6 +1,6 @@
 ﻿using Manager.ManagerTgClient.Bot.Layers.Repository;
-using Manager.ManagerTgClient.Bot.Layers.Repository.Model;
 using Manager.ManagerTgClient.Bot.Layers.Services.Factories;
+using Manager.ManagerTgClient.Bot.Layers.Services.Models;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Services;
 
@@ -23,7 +23,7 @@ public class AuthentificationService(ITelegramUserRepository userRepository, IUs
         await userRepository.CreateUserAsync(user);
     }
 
-    public async Task<UserDbo?> FindUserAsync(long telegramId)
+    public async Task<UserDto?> FindUserAsync(long telegramId)
     {
         return await userRepository.FindAsync(telegramId);
     }

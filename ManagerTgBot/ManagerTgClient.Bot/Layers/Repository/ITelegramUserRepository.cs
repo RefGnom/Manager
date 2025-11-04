@@ -4,6 +4,6 @@ namespace Manager.ManagerTgClient.Bot.Layers.Repository;
 
 public interface ITelegramUserRepository
 {
-    Task CreateUserAsync(UserDto userDbo);
+    Task CreateUserAsync(UserDto user);
     Task<UserDto?> FindAsync(long telegramId);
 }

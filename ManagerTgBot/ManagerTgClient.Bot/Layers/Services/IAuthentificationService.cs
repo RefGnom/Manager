@@ -1,4 +1,4 @@
-﻿using Manager.ManagerTgClient.Bot.Layers.Repository.Model;
+﻿using Manager.ManagerTgClient.Bot.Layers.Services.Models;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Services;
 
@@ -6,5 +6,5 @@ public interface IAuthentificationService
 {
     Task CreateUserAsync(long telegramId, string userName);
     Task ConnectExistingUserAsync(long telegramId, string userName);
-    Task<UserDbo?> FindUserAsync(long telegramId);
+    Task<UserDto?> FindUserAsync(long telegramId);
 }

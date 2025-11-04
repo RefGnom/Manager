@@ -22,7 +22,7 @@ public abstract class MenuStateBase(
         }
 
         var userData = update.GetUserData()!;
-        var userId = update.GetChatId();
+        var userId = update.GetUserId();
         if (!States.TryGetValue(userData, out var state))
         {
             return Task.CompletedTask;

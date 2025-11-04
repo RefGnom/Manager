@@ -1,10 +1,9 @@
-﻿using Manager.Core.EFCore;
-using Manager.ManagerTgClient.Bot.Layers.Services.Models;
+﻿using Manager.ManagerTgClient.Bot.Layers.Services.Models;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Repository;
 
-public class TelegramUserRepository(IDataContext dataContext): ITelegramUserRepository
+public class TelegramUserRepository(): ITelegramUserRepository
 {
-    public async Task CreateUserAsync(UserDto userDbo) => throw new NotImplementedException();
-    public async Task<UserDto?> FindAsync(long telegramId) => throw new NotImplementedException();
+    public Task CreateUserAsync(UserDto user) => throw new NotImplementedException();
+    public Task<UserDto?> FindAsync(long telegramId) => throw new NotImplementedException();
 }

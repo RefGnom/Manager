@@ -18,7 +18,7 @@ public class ManagerUpdateHandler(
     {
         try
         {
-            var chatId = update.GetChatId();
+            var chatId = update.GetUserId();
             var state = await stateManager.GetStateAsync(chatId);
             await state.ProcessUpdateAsync(update);
         }

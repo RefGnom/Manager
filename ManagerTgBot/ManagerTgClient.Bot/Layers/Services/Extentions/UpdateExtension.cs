@@ -6,12 +6,12 @@ namespace Manager.ManagerTgClient.Bot.Layers.Services.Extentions;
 
 public static class UpdateExtension
 {
-    public static long GetChatId(this Update update)
+    public static long GetUserId(this Update update)
     {
         return update.Type switch
         {
-            UpdateType.Message => update.Message!.Chat.Id,
-            UpdateType.CallbackQuery => update.CallbackQuery!.Message!.Chat.Id,
+            UpdateType.Message => update.Message!.From!.Id,
+            UpdateType.CallbackQuery => update.CallbackQuery!.From!.Id,
             _ => throw new NotSupportedUpdateTypeException("Unknown update type"),
         };
     }
