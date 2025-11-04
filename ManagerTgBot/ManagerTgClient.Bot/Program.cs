@@ -1,4 +1,5 @@
-﻿using Manager.ManagerTgClient.Bot.Configuration;
+﻿using Manager.ManagerTgClient.Bot.Application;
+using Manager.ManagerTgClient.Bot.Application.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.ManagerTgClient.Bot;

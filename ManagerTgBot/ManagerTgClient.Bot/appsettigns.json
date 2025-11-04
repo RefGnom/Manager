@@ -1,0 +1,6 @@
+﻿{
+  "DataBaseOptions": {
+    "ConnectionStringTemplate": "Server=147.45.150.159;Port=5432;Database=telegramuser;Username={0};Password={1}",
+    "EnableSensitiveDataLogging": true
+  }
+}
