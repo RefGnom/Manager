@@ -15,8 +15,8 @@ public abstract class StateBase(
 
     protected abstract UpdateType[] SupportedUpdateType { get; }
 
-    public async Task InitializeAsync(long chatId) => await botClient.SendMessage(
-        chatId,
+    public async Task InitializeAsync(long userId) => await botClient.SendMessage(
+        userId,
         MessageToSend,
         replyMarkup: InlineKeyboard
     );

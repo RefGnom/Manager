@@ -11,9 +11,9 @@ public class EnteringTimerNameForStartState(
 {
     public Task ProcessUpdateAsync(Update update) => throw new NotImplementedException();
 
-    public async Task InitializeAsync(long chatId)
+    public async Task InitializeAsync(long userId)
     {
-        builder.Initialize();
-        await botClient.SendMessage(chatId, "Введите название своего таймера");
+        builder = new StartTimerRequestBuilder();
+        await botClient.SendMessage(userId, "Введите название своего таймера");
     }
 }

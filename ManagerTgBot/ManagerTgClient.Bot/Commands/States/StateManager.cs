@@ -6,24 +6,23 @@ public class StateManager(
     Lazy<IStateProvider> stateProvider
 ) : IStateManager
 {
-    private readonly Dictionary<long, IState> _states = new();
+    private readonly Dictionary<long, IState> states = new();
 
-    public async Task<IState> GetStateAsync(long chatId)
+    public async Task<IState> GetStateAsync(long userId)
     {
-        _states.TryGetValue(chatId, out var state);
+        states.TryGetValue(userId, out var state);
         if (state is null)
         {
-            state = stateProvider.Value.GetState(typeof(MainMenuState));
-            await SetStateAsync(chatId, typeof(MainMenuState));
+            await SetStateAsync(userId, typeof(MainMenuState));
         }
 
         return state;
     }
 
-    public async Task SetStateAsync(long chatId, Type stateType)
+    public async Task SetStateAsync(long userId, Type stateType)
     {
         var state = stateProvider.Value.GetState(stateType);
-        _states[chatId] = state;
-        await state.InitializeAsync(chatId);
+        states[userId] = state;
+        await state.InitializeAsync(userId);
     }
 }

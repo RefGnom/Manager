@@ -20,7 +20,7 @@ public class StartTimerCommand(
     public override async Task<ICommandResult> ExecuteAsync(ICommandRequest commandRequest)
     {
         var request = CastRequest<StartTimerRequest>(commandRequest);
-        var user = await authService.FindUserAsync(request!.ChatId);
+        var user = await authService.FindUserAsync(request!.UserId);
         var httpResponse = await serviceApiClient.StartTimerAsync(
             requestFactory.CreateStartTimerRequest(
                 user!.RecipientId,

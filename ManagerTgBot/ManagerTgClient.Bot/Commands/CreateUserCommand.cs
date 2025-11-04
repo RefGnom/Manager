@@ -14,7 +14,7 @@ public class CreateUserCommand(
     public override async Task<ICommandResult> ExecuteAsync(ICommandRequest commandRequest)
     {
         var request = CastRequest<CreateUserRequest>(commandRequest);
-        await authentificationService.CreateUserAsync(request!.TelegramId, request.UserName);
+        await authentificationService.CreateUserAsync(request!.UserId, request.UserName);
         return await Task.FromResult(
             new CommandResult($"Пользователь с юзернеймом {request.UserName} успешно создан") as ICommandResult
         );

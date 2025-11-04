@@ -1,4 +1,5 @@
-﻿using Manager.ManagerTgClient.Bot.Extentions;
+﻿using Manager.ManagerTgClient.Bot.Exceptions;
+using Manager.ManagerTgClient.Bot.Extentions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -17,17 +18,17 @@ public abstract class MenuStateBase(
     {
         if (!SupportedUpdateType.Contains(update.Type))
         {
-            throw new Exception();
+            throw new NotSupportedUpdateTypeException($"{update.Type} не поддерживается.");
         }
 
         var userData = update.GetUserData()!;
-        var chatId = update.GetChatId();
+        var userId = update.GetChatId();
         if (!States.TryGetValue(userData, out var state))
         {
             return Task.CompletedTask;
         }
 
-        stateManager.SetStateAsync(chatId, state);
+        stateManager.SetStateAsync(userId, state);
         return Task.CompletedTask;
     }
 }

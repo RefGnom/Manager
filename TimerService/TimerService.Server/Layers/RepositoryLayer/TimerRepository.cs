@@ -29,7 +29,6 @@ public class TimerRepository(
     public async Task CreateAsync(TimerDto timerDto)
     {
         var dbContext = dbContextWrapperFactory.Create();
-        dbContext.Database.EnsureCreated();
         var timerDbo = mapper.Map<TimerDto, TimerDbo>(timerDto);
         dbContext.Set<TimerDbo>().Add(timerDbo);
         await dbContext.SaveChangesAsync();
