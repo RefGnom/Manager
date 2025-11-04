@@ -1,6 +1,6 @@
 ﻿namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.Requests.Factories;
 
-public class CreateUserRequestFactory: ICommandRequestFactory
+public class CreateUserRequestFactory : ICommandRequestFactory
 {
     public string CommandName => "/createUser";
 

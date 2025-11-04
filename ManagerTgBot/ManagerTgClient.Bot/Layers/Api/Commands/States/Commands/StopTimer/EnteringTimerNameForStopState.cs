@@ -2,7 +2,7 @@
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Commands.StopTimer;
 
-public class EnteringTimerNameForStopState: IState
+public class EnteringTimerNameForStopState : IState
 {
     public Task ProcessUpdateAsync(Update update) => throw new NotImplementedException();
 

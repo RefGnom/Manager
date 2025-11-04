@@ -26,7 +26,7 @@ public class TimerMenuState(
 
     protected override InlineKeyboardMarkup InlineKeyboard =>
         new InlineKeyboardMarkup()
-            .AddButton("Запустить таймер",  StartTimer)
+            .AddButton("Запустить таймер", StartTimer)
             .AddButton("Остановить таймер", StopTimer)
             .AddButton("В главное меню", Exit);
 }

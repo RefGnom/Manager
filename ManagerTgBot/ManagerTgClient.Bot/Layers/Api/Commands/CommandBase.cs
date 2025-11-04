@@ -17,6 +17,7 @@ public abstract class CommandBase : ICommand
         {
             throw new ArgumentException("Неправильный реквест");
         }
+
         return result;
     }
 }

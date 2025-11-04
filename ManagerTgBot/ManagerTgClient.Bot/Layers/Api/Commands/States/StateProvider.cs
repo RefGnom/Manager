@@ -8,6 +8,7 @@ public class StateProvider(
 {
     private static readonly Type mainMenuType = typeof(MainMenuState);
     private static readonly Type stateInterface = typeof(IState);
+
     public IState GetState(Type stateType)
     {
         return stateType == stateInterface

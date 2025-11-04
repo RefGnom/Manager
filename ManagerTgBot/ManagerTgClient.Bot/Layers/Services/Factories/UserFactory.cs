@@ -2,10 +2,7 @@
 
 namespace Manager.ManagerTgClient.Bot.Layers.Services.Factories;
 
-public class UserFactory: IUserFactory
+public class UserFactory : IUserFactory
 {
-    public UserDto CreateUser(long telegramId, string userName)
-    {
-        return new UserDto(telegramId, Guid.NewGuid(), userName);
-    }
+    public UserDto CreateUser(long telegramId, string userName) => new(telegramId, Guid.NewGuid(), userName);
 }

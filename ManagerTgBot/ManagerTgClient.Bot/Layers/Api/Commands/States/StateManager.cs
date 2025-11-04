@@ -6,8 +6,8 @@ public class StateManager(
     Lazy<IStateProvider> stateProvider
 ) : IStateManager
 {
-    private readonly Dictionary<long, IState> states = new();
     private static readonly Type mainMenuType = typeof(MainMenuState);
+    private readonly Dictionary<long, IState> states = new();
 
     public async Task<IState> GetStateAsync(long userId)
     {
@@ -19,7 +19,6 @@ public class StateManager(
 
         await SetStateAsync(userId, mainMenuType);
         return states[userId];
-
     }
 
     public async Task SetStateAsync(long userId, Type stateType)

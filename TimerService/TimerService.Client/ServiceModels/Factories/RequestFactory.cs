@@ -9,14 +9,11 @@ public class RequestFactory : IRequestFactory
         string name,
         DateTime startTime,
         TimeSpan? pingTimeout = null
-    )
+    ) => new()
     {
-        return new StartTimerRequest()
-        {
-            UserId = userId,
-            Name = name,
-            StartTime = startTime,
-            PingTimeout = pingTimeout,
-        };
-    }
+        UserId = userId,
+        Name = name,
+        StartTime = startTime,
+        PingTimeout = pingTimeout,
+    };
 }

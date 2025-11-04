@@ -11,9 +11,9 @@ public abstract class StateBase(
 {
     protected abstract InlineKeyboardMarkup InlineKeyboard { get; }
     protected abstract string MessageToSend { get; }
-    public abstract Task ProcessUpdateAsync(Update update);
 
     protected abstract UpdateType[] SupportedUpdateType { get; }
+    public abstract Task ProcessUpdateAsync(Update update);
 
     public async Task InitializeAsync(long userId) => await botClient.SendMessage(
         userId,
