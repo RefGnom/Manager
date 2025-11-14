@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.RecipientService.Server.Dao.Api.Requests;
 using Manager.RecipientService.Server.Implementation;
+using Manager.RecipientService.Server.Implementation.UseCase.Statuses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Manager.RecipientService.Server.Dao.Api;

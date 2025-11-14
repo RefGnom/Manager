@@ -4,6 +4,8 @@ using Manager.Core.Common.HelperObjects.Result;
 using Manager.RecipientService.Server.Dao.Repository;
 using Manager.RecipientService.Server.Implementation.Domain;
 using Manager.RecipientService.Server.Implementation.Factories;
+using Manager.RecipientService.Server.Implementation.UseCase.Dto;
+using Manager.RecipientService.Server.Implementation.UseCase.Statuses;
 
 namespace Manager.RecipientService.Server.Implementation;
 

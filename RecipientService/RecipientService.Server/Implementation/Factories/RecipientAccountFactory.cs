@@ -2,6 +2,7 @@
 using Manager.Core.Common.String;
 using Manager.Core.Common.Time;
 using Manager.RecipientService.Server.Implementation.Domain;
+using Manager.RecipientService.Server.Implementation.UseCase.Dto;
 
 namespace Manager.RecipientService.Server.Implementation.Factories;
 

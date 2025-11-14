@@ -1,8 +1,8 @@
 ﻿using System;
 using Manager.RecipientService.Server.Dao.Api.Requests;
 using Manager.RecipientService.Server.Dao.Api.Responses;
-using Manager.RecipientService.Server.Implementation;
 using Manager.RecipientService.Server.Implementation.Domain;
+using Manager.RecipientService.Server.Implementation.UseCase.Dto;
 
 namespace Manager.RecipientService.Server.Dao.Api;
 
