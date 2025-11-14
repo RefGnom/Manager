@@ -21,7 +21,7 @@ public class Result<TError>(
 
     public static implicit operator Result<TError>(TError error) => new(false, error);
 
-    public static Result<TError> Ok() => new(true, default);
+    public new static Result<TError> Ok() => new(true, default);
 
     public static Result<TError> Failure(TError error) => error;
 }
