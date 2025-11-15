@@ -16,7 +16,7 @@ public class RecipientAuthorizationController(
 {
     [HttpGet]
     public async Task<IActionResult> GetAuthorization(
-        [FromRoute] RecipientAuthorizationRequest request
+        [FromQuery] RecipientAuthorizationRequest request
     )
     {
         var foundRecipientAuthorization = await recipientAuthorizationService.FindRecipientAuthorizationAsync(

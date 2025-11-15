@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+[assembly: ServerProperties("RECIPIENT_SERVICE_PORT", "manager-recipient-service")]
+
 namespace Manager.RecipientService.Server;
 
 public static class Program
