@@ -19,7 +19,7 @@ public class RecipientServiceApiClient(
         DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
     };
 
-    public async Task<HttpResult> CreateRecipientAccountAsync(CreateRecipientAccountRequest request)
+    public async Task<HttpResult<RecipientAccountResponse>> CreateRecipientAccountAsync(CreateRecipientAccountRequest request)
     {
         var httpRequest = new HttpRequestMessage(HttpMethod.Post, "recipient-account")
         {

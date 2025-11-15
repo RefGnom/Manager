@@ -8,7 +8,7 @@ namespace Manager.RecipientService.Client;
 
 public interface IRecipientServiceApiClient
 {
-    Task<HttpResult> CreateRecipientAccountAsync(CreateRecipientAccountRequest request);
+    Task<HttpResult<RecipientAccountResponse>> CreateRecipientAccountAsync(CreateRecipientAccountRequest request);
     Task<HttpResult<RecipientAccountResponse>> GetRecipientAccountAsync(Guid recipientId);
     Task<HttpResult> DeleteRecipientAccountAsync(Guid recipientId);
     Task<HttpResult> UpdateRecipientAccountAsync(PatchRecipientAccountRequest request);
