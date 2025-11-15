@@ -2,16 +2,14 @@
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
+        <OutputType>Library</OutputType>
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <IsPackable>true</IsPackable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <RootNamespace>Manager.RecipientService.Client</RootNamespace>
-        <AssemblyName>Manager.RecipientService.Client</AssemblyName>
+        <RootNamespace>Manager.Core.ApiClientBase</RootNamespace>
+        <AssemblyName>Manager.Core.ApiClientBase</AssemblyName>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\Core\Manager.Core.ApiClientBase\Manager.Core.ApiClientBase.csproj" />
-    </ItemGroup>
 
 </Project>
