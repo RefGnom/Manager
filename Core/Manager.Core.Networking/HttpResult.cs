@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 
 namespace Manager.Core.Networking;
 
@@ -10,7 +11,11 @@ public class HttpResult(
 {
     public HttpStatusCode StatusCode => httpResponseMessage.StatusCode;
     public bool IsSuccess => httpResponseMessage.IsSuccessStatusCode;
-    public string ResultMessage => httpResponseMessage.ReasonPhrase ?? string.Empty;
+
+    public string ResultMessage =>
+        !IsSuccess
+            ? Encoding.UTF8.GetString(httpResponseMessage.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult())
+            : httpResponseMessage.ReasonPhrase ?? string.Empty;
 
     public static implicit operator HttpResult(HttpResponseMessage httpResponse) => new(httpResponse);
 }
