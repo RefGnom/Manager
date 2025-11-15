@@ -1,12 +1,14 @@
-﻿namespace Manager.RecipientService.Client;
+﻿using Manager.Core.Networking;
+
+namespace Manager.RecipientService.Client;
 
 public interface IRecipientServiceApiClientFactory
 {
-    IRecipientServiceApiClient Create(string port, string apiKey);
+    IRecipientServiceApiClient Create(string apiKey);
 }
 
-public class RecipientServiceApiClientFactory : IRecipientServiceApiClientFactory
+public class RecipientServiceApiClientFactory(IPortProvider portProvider) : IRecipientServiceApiClientFactory
 {
-    public IRecipientServiceApiClient Create(string port, string apiKey) =>
-        new RecipientServiceApiClient($"http://localhost:{port}/api", apiKey);
+    public IRecipientServiceApiClient Create(string apiKey) =>
+        new RecipientServiceApiClient($"http://localhost:{portProvider.GetPort("RECIPIENT_SERVICE_PORT")}", apiKey);
 }

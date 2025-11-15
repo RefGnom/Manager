@@ -14,6 +14,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Core\Manager.Core.IntegrationTestsCore\Manager.Core.IntegrationTestsCore.csproj"/>
+        <ProjectReference Include="..\RecipientService.Client\RecipientService.Client.csproj" />
         <ProjectReference Include="..\RecipientService.Server\RecipientService.Server.csproj" />
     </ItemGroup>
 

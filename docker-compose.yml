@@ -46,6 +46,22 @@ services:
         networks:
             - my-network
 
+    recipient-service:
+        build:
+            context: .
+            dockerfile: ./RecipientService/RecipientService.Server/Dockerfile
+        container_name: manager-recipient-service
+        ports:
+            - "${RECIPIENT_SERVICE_PORT}:8080"
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+        env_file:
+            -   path: ./RecipientService/RecipientService.Server/.env
+                required: false
+            -   path: .env
+        networks:
+            - my-network
+
 networks:
     my-network:
         driver: bridge
