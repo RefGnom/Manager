@@ -8,7 +8,8 @@ namespace Manager.RecipientService.Server.Dao.Repository.Dbos;
 [Table("recipient_account_state")]
 public class RecipientAccountStateDbo
 {
-    [Key, Column("id")]
+    [Key]
+    [Column("id")]
     public required Guid Id { get; set; }
 
     [Column("state")]

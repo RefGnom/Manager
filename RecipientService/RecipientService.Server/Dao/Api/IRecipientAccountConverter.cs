@@ -21,17 +21,14 @@ public class RecipientAccountConverter : IRecipientAccountConverter
         TimeSpan.FromHours(request.RecipientTimeUtcOffsetHours)
     );
 
-    public UpdateRecipientAccountDto ToDto(PatchRecipientAccountRequest request)
-    {
-        return new UpdateRecipientAccountDto(
-            request.RecipientId,
-            request.NewLogin,
-            request.NewPassword,
-            request.NewRecipientTimeUtcOffsetHours.HasValue
-                ? TimeSpan.FromHours(request.NewRecipientTimeUtcOffsetHours.Value)
-                : null
-        );
-    }
+    public UpdateRecipientAccountDto ToDto(PatchRecipientAccountRequest request) => new(
+        request.RecipientId,
+        request.NewLogin,
+        request.NewPassword,
+        request.NewRecipientTimeUtcOffsetHours.HasValue
+            ? TimeSpan.FromHours(request.NewRecipientTimeUtcOffsetHours.Value)
+            : null
+    );
 
     public RecipientAccountResponse ToResponse(RecipientAccount recipientAccount) => new(
         recipientAccount.Id,

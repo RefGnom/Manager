@@ -64,12 +64,10 @@ public class DataContext(
         return await dbContext.FindAsync<TEntity>(primaryKey);
     }
 
-    public async Task<TEntity> ReadAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class
-    {
-        return await FindAsync<TEntity, TKey>(primaryKey) ?? throw new EntityNotFoundException(
+    public async Task<TEntity> ReadAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class =>
+        await FindAsync<TEntity, TKey>(primaryKey) ?? throw new EntityNotFoundException(
             $"Entity {typeof(TEntity).Name} not found with primary key {primaryKey}"
         );
-    }
 
     public async Task<TEntity[]> SelectAsync<TEntity, TKey>(
         Expression<Func<TEntity, TKey>> primaryKeyPicker,
