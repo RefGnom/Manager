@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
@@ -25,12 +26,15 @@ public class RecipientServiceApiClientTest : IntegrationTestBase
     public async Task TestCreate()
     {
         // Arrange
-        var request = Fixture.Build<CreateRecipientAccountRequest>().With(x => x.RecipientTimeUtcOffsetHours, 7).Create();
+        var request = Fixture.Build<CreateRecipientAccountRequest>()
+            .With(x => x.RecipientTimeUtcOffsetHours, 7)
+            .Create();
 
         // Act
         var httpResult = await RecipientServiceApiClient.CreateRecipientAccountAsync(request);
 
         // Assert
+        await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
         httpResult.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var found = await RecipientAccountRepository.FindByLoginAsync(request.Login);
@@ -47,5 +51,84 @@ public class RecipientServiceApiClientTest : IntegrationTestBase
                 found.TimeZoneInfo.BaseUtcOffset
             )
         );
+    }
+
+    [Test]
+    public async Task TestCreateWithExistingLogin()
+    {
+        // Arrange
+        var request = Fixture.Build<CreateRecipientAccountRequest>()
+            .With(x => x.RecipientTimeUtcOffsetHours, 7)
+            .Create();
+        var existAccount = Fixture.Build<RecipientAccountWithPasswordHash>()
+            .With(x => x.Login, request.Login)
+            .With(x => x.CreatedAtUtc, Fixture.Create<DateTime>().ToUniversalTime())
+            .With(x => x.UpdatedAtUtc, Fixture.Create<DateTime>().ToUniversalTime())
+            .Create();
+        await RecipientAccountRepository.CreateAsync(existAccount);
+
+        // Act
+        var httpResult = await RecipientServiceApiClient.CreateRecipientAccountAsync(request);
+
+        // Assert
+        await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
+        httpResult.StatusCode.Should().Be(HttpStatusCode.Conflict);
+        httpResult.ResultMessage.Should().Contain("Аккаунт с таким логином уже существует");
+    }
+
+    [TestCase(-20)]
+    [TestCase(-13)]
+    [TestCase(15)]
+    [TestCase(20)]
+    public async Task TestCreateWithIncorrectTimeOffset(int offset)
+    {
+        // Arrange
+        var request = Fixture.Build<CreateRecipientAccountRequest>()
+            .With(x => x.RecipientTimeUtcOffsetHours, offset)
+            .Create();
+
+        // Act
+        var httpResult = await RecipientServiceApiClient.CreateRecipientAccountAsync(request);
+
+        // Assert
+        await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
+        httpResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        httpResult.ResultMessage.Should().Contain("Неправильное смещение времени от всемирного времени UTC");
+    }
+
+    [Test]
+    public async Task TestCreateWithEmptyLogin()
+    {
+        // Arrange
+        var request = Fixture.Build<CreateRecipientAccountRequest>()
+            .With(x => x.RecipientTimeUtcOffsetHours, 7)
+            .With(x => x.Login, string.Empty)
+            .Create();
+
+        // Act
+        var httpResult = await RecipientServiceApiClient.CreateRecipientAccountAsync(request);
+
+        // Assert
+        await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
+        httpResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        httpResult.ResultMessage.Should().Contain("The Login field is required");
+    }
+
+    [Test]
+    public async Task TestCreateWithEmptyPassword()
+    {
+        // Arrange
+        var request = Fixture.Build<CreateRecipientAccountRequest>()
+            .With(x => x.RecipientTimeUtcOffsetHours, 7)
+            .With(x => x.Password, string.Empty)
+            .Create();
+
+        // Act
+        var httpResult = await RecipientServiceApiClient.CreateRecipientAccountAsync(request);
+
+        // Assert
+        await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
+        httpResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        httpResult.ResultMessage.Should().Contain("The Password field is required");
     }
 }
