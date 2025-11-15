@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Manager.Core.ApiClientBase;
+using Manager.Core.Networking;
 using Manager.RecipientService.Client.BusinessObjects.Requests;
 using Manager.RecipientService.Client.BusinessObjects.Responses;
 

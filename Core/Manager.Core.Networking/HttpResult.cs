@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 
-namespace Manager.Core.ApiClientBase;
+namespace Manager.Core.Networking;
 
 public class HttpResult(
     HttpResponseMessage httpResponseMessage

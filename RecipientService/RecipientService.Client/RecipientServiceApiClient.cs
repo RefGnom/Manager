@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Manager.Core.ApiClientBase;
+using Manager.Core.Networking;
 using Manager.RecipientService.Client.BusinessObjects.Requests;
 using Manager.RecipientService.Client.BusinessObjects.Responses;
 

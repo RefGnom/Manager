@@ -11,7 +11,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Core\Manager.Core.ApiClientBase\Manager.Core.ApiClientBase.csproj" />
       <ProjectReference Include="..\..\Core\Manager.Core.Networking\Manager.Core.Networking.csproj" />
     </ItemGroup>
 
