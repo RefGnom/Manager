@@ -13,6 +13,8 @@ public class RecipientServiceApiClient(
     string apiKey
 ) : IRecipientServiceApiClient
 {
+    private const string RecipientAccountPath = "api/recipient-account";
+
     private readonly HttpClient httpClient = new()
     {
         BaseAddress = new Uri(url),
@@ -21,7 +23,7 @@ public class RecipientServiceApiClient(
 
     public async Task<HttpResult<RecipientAccountResponse>> CreateRecipientAccountAsync(CreateRecipientAccountRequest request)
     {
-        var httpRequest = new HttpRequestMessage(HttpMethod.Post, "recipient-account")
+        var httpRequest = new HttpRequestMessage(HttpMethod.Post, RecipientAccountPath)
         {
             Content = JsonContent.Create(request),
         };
@@ -30,19 +32,19 @@ public class RecipientServiceApiClient(
 
     public async Task<HttpResult<RecipientAccountResponse>> GetRecipientAccountAsync(Guid recipientId)
     {
-        var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"recipient-account/{recipientId}");
+        var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{RecipientAccountPath}/{recipientId}");
         return await httpClient.SendAsync(httpRequest);
     }
 
     public async Task<HttpResult> DeleteRecipientAccountAsync(Guid recipientId)
     {
-        var httpRequest = new HttpRequestMessage(HttpMethod.Delete, $"recipient-account/{recipientId}");
+        var httpRequest = new HttpRequestMessage(HttpMethod.Delete, $"{RecipientAccountPath}/{recipientId}");
         return await httpClient.SendAsync(httpRequest);
     }
 
     public async Task<HttpResult> UpdateRecipientAccountAsync(PatchRecipientAccountRequest request)
     {
-        var httpRequest = new HttpRequestMessage(HttpMethod.Patch, "recipient-account");
+        var httpRequest = new HttpRequestMessage(HttpMethod.Patch, RecipientAccountPath);
         return await httpClient.SendAsync(httpRequest);
     }
 

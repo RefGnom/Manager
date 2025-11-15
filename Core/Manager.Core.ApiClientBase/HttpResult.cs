@@ -35,6 +35,8 @@ public class HttpResult<TResponse>(
 
     public static implicit operator HttpResult<TResponse>(HttpResponseMessage httpResponse) => new(
         httpResponse,
-        httpResponse.Content.ReadFromJsonAsync<TResponse>().GetAwaiter().GetResult()
+        httpResponse.IsSuccessStatusCode
+            ? httpResponse.Content.ReadFromJsonAsync<TResponse>().GetAwaiter().GetResult()
+            : default
     );
 }
