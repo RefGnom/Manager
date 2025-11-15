@@ -10,4 +10,8 @@
         <AssemblyName>Manager.RecipientService.Client</AssemblyName>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\Manager.Core.Common\Manager.Core.Common.csproj" />
+    </ItemGroup>
+
 </Project>
