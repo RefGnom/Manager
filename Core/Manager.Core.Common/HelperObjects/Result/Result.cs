@@ -6,6 +6,10 @@ public class Result(
 {
     public bool IsSuccess { get; } = isSuccess;
     public bool IsFailure { get; } = !isSuccess;
+
+    public static Result Ok() => new(true);
+
+    public static Result Failure() => new(false);
 }
 
 public class Result<TError>(
@@ -17,7 +21,7 @@ public class Result<TError>(
 
     public static implicit operator Result<TError>(TError error) => new(false, error);
 
-    public static Result<TError> Ok() => new(true, default);
+    public new static Result<TError> Ok() => new(true, default);
 
     public static Result<TError> Failure(TError error) => error;
 }

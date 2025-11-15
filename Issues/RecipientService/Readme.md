@@ -24,32 +24,49 @@ RecipientService - это сервис для работы с пользоват
     * `Guid Id` - уникальный идентификатор пользователя в среде Manager
     * `string Login` - логин пользователя
     * `string PasswordHash` - хэш пароля пользователя
+    * `Guid AccountStateId` - идентификатор состояния
     * `TimeZoneInfo RecipientTimeZone` - информация о часовом поясе пользователя
     * `DateTime CreatedUtc` - время создания аккаунта
     * `DateTime UpdatedUt` - время обновления аккаунта
-    * `RecipientAccountState State` - состояние аккаунта
-    * `RecipientAccountExtendedState ExtendedState` - расширенное состояние аккаунта
+
+* `AccountState` - таблица состояний аккаунтов
+    * `Guid StateId` - уникальный идентификатор состояния
+    * `AccountState State` - Enum. Состояние аккаунта
+    * `StateReason Reason` - Enum. Причина по которой аккаунт находится в данном состоянии
+
 * `RecipientAuthorization` (Не нужна на первом шаге)
-    * `Guid Id` - идентификатор сущности авторизации
-    * `Guid RecipientId` - идентификатор пользователя
+    * `Guid Id` - уникальный идентификатор сущности авторизации
+    * `Guid RecipientId` - уникальный идентификатор пользователя
     * `string[] AllowedServices` - доступные сервисы для использования
     * `string[] AllowedResources` - доступные ресурсы для использования
-    * `DateTime CreatedUtc` - время создания сущности авторизации
-    * `DateTime UpdatedUt` - время обновления сущности авторизации
+    * `DateTime CreatedAtUtc` - время создания сущности авторизации
+    * `DateTime UpdatedAtUtc` - время обновления сущности авторизации
 
-`RecipientAccountState` имеет следующие значения:
+* `ServiceResource` - таблица для сервисов и их ресурсов
+    * `Guid ServiceResourceId` - уникальный идентификатор сервиса-ресурса
+    * `string ServiceName` - имя сервиса
+    * `string ResourceName` - имя ресурса
 
+* `AuthorizationServiceResourceLink` - таблица для связи модели авторизации пользователя и сервиса-ресурса.
+  Многие ко многим
+    * `Guid RecipientAuthorizationId` - идентификатор модели авторизации пользователя
+    * `Guid ServiceResourceId` - идентификатор сервиса-ресурса
+
+`AccountState` имеет следующие значения:
+* `Unknown` - Неизвестно. Является значением по умолчанию в случае аномалий данных
+* `Inactive` - Неактивный. Стартовое состояние, запрещает пользоваться аккаунтом
 * `Active` - Активный. Разрешает пользоваться аккаунтом
 * `Deleted` - Удалённый. Запрещает пользоваться аккаунтом
 * `Banned` - Заблокированный. Запрещает пользоваться аккаунтом
 
-`RecipientAccountExtendedState` имеет следующие значения:
-
-* `Active` - Активный. Разрешает пользоваться аккаунтом
-* `Restored` - Восстановленный. Разрешает пользоваться аккаунтом
-* `Unbanned` - Разбаненный. Разрешает пользоваться аккаунтом
-* `DeletedDueToRequest` - Удалён по запросу пользователя. Запрещает пользоваться аккаунтом
-* `BannedDueToNonPayment` - Заблокированный из-за неуплаты. Запрещает пользоваться аккаунтом
+`StateReason` имеет следующие значения:
+* `Unknown` - Неизвестно. Является значением по умолчанию в случае аномалий данных
+* `NewUser` - Новый пользователь. Является причиной для (AccountState.Inactive)
+* `ActivatedByAdmin` - Активированный администратором. (AccountState.Active)
+* `RestoredByUserRequest` - Восстановленный по запросу пользователя (AccountState.Active)
+* `Unbanned` - Разблокированный (AccountState.Active)
+* `DeletedByUserRequest` - Удалён по запросу пользователя (AccountState.Deleted)
+* `Banned` - Заблокированный (AccountState.Banned)
 
 #### Результат
 
