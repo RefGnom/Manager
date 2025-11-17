@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using Manager.AuthenticationService.Client;
 using Manager.Core.Common.DependencyInjection;
+using Manager.Core.Networking;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -67,6 +68,7 @@ public static class AddApiKeyRequirementExtensions
             return services;
         }
 
+        services.AddSingleton<IResilientHttpClientFactory, ResilientHttpClientFactory>();
         services.AddSingleton<IAuthenticationServiceApiClientFactory, AuthenticationServiceApiClientFactory>();
         services.AddSingleton<IAuthenticationServiceApiClient>(x
             => x.GetRequiredService<IAuthenticationServiceApiClientFactory>().Create(
