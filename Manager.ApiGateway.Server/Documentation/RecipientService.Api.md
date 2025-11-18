@@ -21,6 +21,12 @@
 }
 ```
 
+**Fields description**
+
+- **Login:** Уникальный логин пользователя
+- **Password:** Пароль пользователя
+- **RecipientTimeUtcOffsetHours:** Часы смещения времени получателя относительно UTC. Принимает значение от -12 до 14
+
 - **Responses**
 
     - **201 Created**
@@ -50,6 +56,18 @@
 
 ```
 
+**Fields description**
+
+- **Login:** Уникальный логин пользователя
+- **AccountState:** Текущее состояние аккаунта. Принимает следующие значения:
+    - "Unknown"(Неизвестно),
+    - Inactive(Неактивный),
+    - Active(Активный),
+    - Deleted(Удаленный),
+    - Banned(Заблокированный)
+- **StateReason:** Почему аккаунт находится в том или ином состоянии
+- **RecipientTimeUtcOffsetHours:** Часы смещения времени получателя относительно UTC. Принимает значение от -12 до 14
+
 ### 3) PatchRecipientAccount
 
 - **Method:** PATCH
@@ -64,6 +82,13 @@
     "NewRecipientTimeUtcOffsetHours": "int?"
 }
 ```
+
+**Fields description**
+
+- **NewLogin:** Новый логин для пользователя
+- **NewPassword:** Новый пароль для пользователя
+- **NewRecipientTimeUtcOffsetHours:** Новые часы смещения времени получателя относительно UTC. Принимает значение от -12
+  до 14
 
 - **Responses**
 
@@ -109,3 +134,12 @@
 }
 
 ```
+**Fields description**
+
+- **RequestService:** Запрашиваемый сервис
+- **RequestedResource** Запрашиваемый ресурс
+- **RecipientAuthorizationStatus** Статус авторизации. Принимает следующие значения:
+    - "Success"(Доступ разрешен),
+    - AccountIsNotActive(Доступ запрещён, т.к. аккаунт не в активном состоянии),
+    - AccessToServiceDenied(Доступ к сервису запрещён),
+    - AccessToResourceDenied(Доступ к ресурсу запрещён)
