@@ -3,7 +3,7 @@
 
 ### 1) StartTimer
 - **Method:** POST
-- **URL:** /api/recipient/{recipientId}/timers
+- **URL:** /api/recipients/{recipientId}/timers
 - **Description:** Создаёт новый таймер для пользователя или стартует существующий
 - **Request Body:**
 ```json
@@ -20,7 +20,7 @@
     - **400 Bad Request**
 ### 2) SelectUserTimers
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/timers
+- **URL:** /api/recipients/{recipientId}/timers
 - **Description:** Получает все таймеры для конкретного пользователя
 - **Query Parameters:**
   - WithArchived: "bool",
@@ -40,7 +40,7 @@
 ```
 ### 3) StopTimer
 - **Method:** PATCH
-- **URL:** /api/recipient/{recipientId}/timers/{name}/stop
+- **URL:** /api/recipients/{recipientId}/timers/{name}/stop
 - **Description:** Останавливает сессию таймера и переводит таймер в статус остановлен
 - **Request Body:**
 ```json
@@ -56,7 +56,7 @@
 
 ### 4) FindTimer
 - **Method:** PATCH
-- **URL:** /api/recipient/{recipientId}/timers/{name}
+- **URL:** /api/recipients/{recipientId}/timers/{name}
 - **Description:** Ищет таймер по его уникальному индексу
 
 - **Response Body:**
@@ -73,7 +73,7 @@
 ```
 ### 5) ResetTimer
 - **Method:** PATCH
-- **URL:** /api/recipient/{recipientId}/timers/{name}/reset
+- **URL:** /api/recipients/{recipientId}/timers/{name}/reset
 - **Description: Сбрасывает время таймера и архивирует его, добавляет к имени таймера archived**
 
 - **Responses**
@@ -84,7 +84,7 @@
 
 ### 6) DeleteTimer
 - **Method:** DELETE
-- **URL:** /api/recipient/{recipientId}/timers/{name}/delete
+- **URL:** /api/recipients/{recipientId}/timers/{name}/delete
 - **Description:** Добавляет к имени таймера Deleted и переводит статус в Deleted
 
 - **Responses**

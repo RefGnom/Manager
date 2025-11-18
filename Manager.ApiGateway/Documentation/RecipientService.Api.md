@@ -9,7 +9,7 @@
 ### 1) CreateRecipientAccount
 
 - **Method:** POST
-- **URL:** /api/recipient/
+- **URL:** /api/recipients/
 - **Description:** Создает новый аккаунт для пользователя
 - **Request Body:**
 
@@ -30,7 +30,7 @@
 ### 2) GetRecipientAccount
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}
+- **URL:** /api/recipients/{recipientId}
 - **Description:** Получает данные для аккаунта
 
 - **Responses**
@@ -53,7 +53,7 @@
 ### 3) PatchRecipientAccount
 
 - **Method:** PATCH
-- **URL:** /api/recipient/{recipientId}
+- **URL:** /api/recipients/{recipientId}
 - **Description:** Изменяет данные аккаунта
 - **Request Body:**
 
@@ -74,7 +74,7 @@
 ### 4) DeleteRecipientAccount
 
 - **Method:** DELETE
-- **URL:** /api/recipient/{recipientId}
+- **URL:** /api/recipients/{recipientId}
 - **Description:** Удаляет пользователя
 
 - **Responses:**
@@ -90,7 +90,7 @@
 ### 1) GetAuthorization
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/authorization
+- **URL:** /api/recipients/{recipientId}/authorization
 - **Description:** Получает авторизацию пользователя
 
 

@@ -5,7 +5,7 @@
 ### 1) CreateWork
 
 - **Method:** POST
-- **URL:** /api/recipient/{recipientId}/works
+- **URL:** /api/recipients/{recipientId}/works
 - **Description:** Создаёт новую задачу для пользователя
 - **Request Body:**
 
@@ -25,7 +25,7 @@
 ### 2) GetWork
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/works/{workId}
+- **URL:** /api/recipients/{recipientId}/works/{workId}
 - **Description:** Получает задачу по айдишнику
 
 - **Request Body:**
@@ -43,7 +43,7 @@
 ### 3) PatchWork
 
 - **Method:** PATCH
-- **URL:** /api/recipient/{recipientId}/works/{workId}
+- **URL:** /api/recipients/{recipientId}/works/{workId}
 - **Description:** Изменяет задачу
 
 - **Request Body:**
@@ -64,7 +64,7 @@
 ### 4) DeleteWork
 
 - **Method:** DELETE
-- **URL:** /api/recipient/{recipientId}/works/{workId}
+- **URL:** /api/recipients/{recipientId}/works/{workId}
 - **Description:** Удаляет задачу
 
 - **Responses**
@@ -74,7 +74,7 @@
 ### 5) GetWorks
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/works
+- **URL:** /api/recipients/{recipientId}/works
 - **Description:** Получает все задачи пользователя
 
 - **Response Body:**
@@ -92,7 +92,7 @@
 ### 6) GetActualWorks
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/works/actual
+- **URL:** /api/recipients/{recipientId}/works/actual
 - **Description:** Получает все актуальные задачи пользователя
 
 - **Response Body:**
@@ -112,7 +112,7 @@
 ### 7) GetWorksForReminder
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/works/ready-for-reminder
+- **URL:** /api/recipients/{recipientId}/works/ready-for-reminder
 - **Description:** Получает все задачи, про которые нужно напомнить пользователю
 
 - **Response Body:**
@@ -132,7 +132,7 @@
 ### 8) GetExpiredWorks
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/works/expired
+- **URL:** /api/recipients/{recipientId}/works/expired
 - **Description:** Получает все задачи, про которые нужно напомнить пользователю
 
 - **Response Body:**
@@ -152,7 +152,7 @@
 ### 8) GetDeletedWorks
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/works/deleted
+- **URL:** /api/recipients/{recipientId}/works/deleted
 - **Description:** Получает все удаленные задачи (с пометкой "deleted") пользователя
 
 - **Response Body:**
@@ -172,8 +172,8 @@
 ### 9) GetExpiredWorks
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/works/expired
-- **Description:** Получает все истекшие по дедлайну задачи пользователюя
+- **URL:** /api/recipients/{recipientId}/works/expired
+- **Description:** Получает все истекшие по дедлайну задачи пользователя
 - **Response Body:**
 
 ```json
@@ -191,7 +191,7 @@
 ### 10) GetCompletedWorks
 
 - **Method:** GET
-- **URL:** /api/recipient/{recipientId}/works/completed
+- **URL:** /api/recipients/{recipientId}/works/completed
 - **Description:** Получает все выполненные задачи пользователя
 
 - **Response Body:**
