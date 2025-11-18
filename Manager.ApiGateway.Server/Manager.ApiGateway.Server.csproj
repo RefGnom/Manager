@@ -5,8 +5,8 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <RootNamespace>Manager.ApiGateway</RootNamespace>
-        <AssemblyName>Manager.ApiGateway</AssemblyName>
+        <RootNamespace>Manager.ApiGateway.Server</RootNamespace>
+        <PackageId>Manager.ApiGateway.Server</PackageId>
     </PropertyGroup>
 
     <ItemGroup>

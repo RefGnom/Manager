@@ -74,7 +74,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerService.IntegrationTes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{BBDB441E-5C9A-421F-88CD-0566D6320773}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.ApiGateway", "Manager.ApiGateway\Manager.ApiGateway.csproj", "{1818A366-B327-4D20-8F0D-09A487A10C7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.ApiGateway.Server", "Manager.ApiGateway.Server\Manager.ApiGateway.Server.csproj", "{1818A366-B327-4D20-8F0D-09A487A10C7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

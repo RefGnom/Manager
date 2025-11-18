@@ -31,7 +31,7 @@
 
 - **Method:** GET
 - **URL:** /api/recipients/{recipientId}
-- **Description:** Получает данные для аккаунта
+- **Description:** Возвращает данные для аккаунта
 
 - **Responses**
 
@@ -75,7 +75,7 @@
 
 - **Method:** DELETE
 - **URL:** /api/recipients/{recipientId}
-- **Description:** Удаляет пользователя
+- **Description:** Добавляет к имени пользователя Deleted и переводит статус в Deleted
 
 - **Responses:**
 
@@ -91,7 +91,7 @@
 
 - **Method:** GET
 - **URL:** /api/recipients/{recipientId}/authorization
-- **Description:** Получает авторизацию пользователя
+- **Description:** Возвращает авторизацию пользователя
 
 
 - **Responses**

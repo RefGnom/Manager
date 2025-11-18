@@ -21,7 +21,7 @@
 ### 2) SelectUserTimers
 - **Method:** GET
 - **URL:** /api/recipients/{recipientId}/timers
-- **Description:** Получает все таймеры для конкретного пользователя
+- **Description:** Возвращает все таймеры для конкретного пользователя
 - **Query Parameters:**
   - WithArchived: "bool",
   - WithDeleted: "bool"
@@ -29,6 +29,7 @@
 ```json
 [
     {
+        "TimerId":  "Guid",
         "Name": "String",
         "StartTime": "DateTime?",
         "ElapsedTime": "TimeSpan",
@@ -57,7 +58,7 @@
 ### 4) FindTimer
 - **Method:** PATCH
 - **URL:** /api/recipients/{recipientId}/timers/{name}
-- **Description:** Ищет таймер по его уникальному индексу
+- **Description:** Ищет таймер по его уникальному имени
 
 - **Response Body:**
 ```json

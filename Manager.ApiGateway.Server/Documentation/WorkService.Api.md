@@ -26,7 +26,7 @@
 
 - **Method:** GET
 - **URL:** /api/recipients/{recipientId}/works/{workId}
-- **Description:** Получает задачу по айдишнику
+- **Description:** Возвращает задачу по айдишнику
 
 - **Request Body:**
 
@@ -65,7 +65,7 @@
 
 - **Method:** DELETE
 - **URL:** /api/recipients/{recipientId}/works/{workId}
-- **Description:** Удаляет задачу
+- **Description:** Добавляет к имени задачи Deleted и переводит статус в Deleted
 
 - **Responses**
     - **200 OK**
@@ -75,31 +75,35 @@
 
 - **Method:** GET
 - **URL:** /api/recipients/{recipientId}/works
-- **Description:** Получает все задачи пользователя
-
-- **Response Body:**
-
-```json
-{
-    "Title": "string",
-    "Description": "string?",
-    "WorkStatus": "string",
-    "DeadLineUtc": "DateTime?",
-    "ReminderIntervals": "TimeSpan[]?"
-}
-```
-
-### 6) GetActualWorks
-
-- **Method:** GET
-- **URL:** /api/recipients/{recipientId}/works/actual
-- **Description:** Получает все актуальные задачи пользователя
+- **Description:** Возвращает все задачи пользователя
 
 - **Response Body:**
 
 ```json
 [
     {
+        "WorkId": "Guid",
+        "Title": "string",
+        "Description": "string?",
+        "WorkStatus": "string",
+        "DeadLineUtc": "DateTime?",
+        "ReminderIntervals": "TimeSpan[]?"
+    }
+]
+```
+
+### 6) GetActualWorks
+
+- **Method:** GET
+- **URL:** /api/recipients/{recipientId}/works/actual
+- **Description:** Возвращает все актуальные задачи пользователя
+
+- **Response Body:**
+
+```json
+[
+    {
+        "WorkId": "Guid",
         "Title": "string",
         "Description": "string?",
         "WorkStatus": "string",
@@ -113,13 +117,14 @@
 
 - **Method:** GET
 - **URL:** /api/recipients/{recipientId}/works/ready-for-reminder
-- **Description:** Получает все задачи, про которые нужно напомнить пользователю
+- **Description:** Возвращает все задачи, про которые нужно напомнить пользователю
 
 - **Response Body:**
 
 ```json
 [
     {
+        "WorkId": "Guid",
         "Title": "string",
         "Description": "string?",
         "WorkStatus": "string",
@@ -133,13 +138,14 @@
 
 - **Method:** GET
 - **URL:** /api/recipients/{recipientId}/works/expired
-- **Description:** Получает все задачи, про которые нужно напомнить пользователю
+- **Description:** Возвращает все просроченный задачи для пользователя
 
 - **Response Body:**
 
 ```json
 [
     {
+        "WorkId": "Guid",
         "Title": "string",
         "Description": "string?",
         "WorkStatus": "string",
@@ -149,36 +155,18 @@
 ]
 ```
 
-### 8) GetDeletedWorks
+### 9) GetDeletedWorks
 
 - **Method:** GET
 - **URL:** /api/recipients/{recipientId}/works/deleted
-- **Description:** Получает все удаленные задачи (с пометкой "deleted") пользователя
+- **Description:** Возвращает все удаленные задачи (с пометкой "deleted") пользователя
 
 - **Response Body:**
 
 ```json
 [
     {
-        "Title": "string",
-        "Description": "string?",
-        "WorkStatus": "string",
-        "DeadLineUtc": "DateTime?",
-        "ReminderIntervals": "TimeSpan[]?"
-    }
-]
-```
-
-### 9) GetExpiredWorks
-
-- **Method:** GET
-- **URL:** /api/recipients/{recipientId}/works/expired
-- **Description:** Получает все истекшие по дедлайну задачи пользователя
-- **Response Body:**
-
-```json
-[
-    {
+        "WorkId": "Guid",
         "Title": "string",
         "Description": "string?",
         "WorkStatus": "string",
@@ -192,13 +180,14 @@
 
 - **Method:** GET
 - **URL:** /api/recipients/{recipientId}/works/completed
-- **Description:** Получает все выполненные задачи пользователя
+- **Description:** Возвращает все выполненные задачи пользователя
 
 - **Response Body:**
 
 ```json
 [
     {
+        "WorkId": "Id",
         "Title": "string",
         "Description": "string?",
         "WorkStatus": "string",
