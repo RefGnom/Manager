@@ -72,6 +72,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Core.CommonTestsCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerService.IntegrationTests", "TimerService\TimerService.IntegrationTests\TimerService.IntegrationTests.csproj", "{1707BC38-BC17-42B3-91AD-776E81D01545}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{BBDB441E-5C9A-421F-88CD-0566D6320773}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.ApiGateway.Server", "Manager.ApiGateway.Server\Manager.ApiGateway.Server.csproj", "{1818A366-B327-4D20-8F0D-09A487A10C7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -194,6 +198,10 @@ Global
 		{1707BC38-BC17-42B3-91AD-776E81D01545}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1707BC38-BC17-42B3-91AD-776E81D01545}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1707BC38-BC17-42B3-91AD-776E81D01545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1818A366-B327-4D20-8F0D-09A487A10C7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1818A366-B327-4D20-8F0D-09A487A10C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1818A366-B327-4D20-8F0D-09A487A10C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1818A366-B327-4D20-8F0D-09A487A10C7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3DC6C3D2-5AE4-4401-B403-AE1C7658E8D5} = {804F8B79-D68C-4673-A903-78923F42E3AD}
@@ -225,5 +233,6 @@ Global
 		{6831B027-D664-40E3-B666-EEB5841B911E} = {67CC4B6F-CA92-409B-A1AF-9501B34435E5}
 		{9E22CF58-2958-4DF7-8BF6-24DBC60BF845} = {67CC4B6F-CA92-409B-A1AF-9501B34435E5}
 		{1707BC38-BC17-42B3-91AD-776E81D01545} = {78110398-B45D-45EF-BCA8-EF879BA6AC4F}
+		{1818A366-B327-4D20-8F0D-09A487A10C7F} = {BBDB441E-5C9A-421F-88CD-0566D6320773}
 	EndGlobalSection
 EndGlobal
