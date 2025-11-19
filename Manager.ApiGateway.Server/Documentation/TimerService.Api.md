@@ -117,6 +117,7 @@
 
 ```json
 {
+    "TimerId": "Guid",
     "StartTime": "DateTime?",
     "ElapsedTime": "TimeSpan",
     "StopTime": "DateTime?",
@@ -124,6 +125,7 @@
     
     "TimerSessions": [
         {
+            "SessionId": "Guid",
             "StartTime": "DateTime",
             "StopTime": "DateTime?",
             "IsOver": "bool"
@@ -135,6 +137,8 @@
 
 **Fields description**
 
+- **SessionId:** Уникальный Id сессии
+- **TimerId:** Уникальный Id в базе данных
 - **StartTime:** Время запуска таймера (опционально)
 - **ElapsedTime:** Пройденное время после запуска таймера. 0 если таймер не запущен
 - **StopTime:** Время остановки таймера(опционально)

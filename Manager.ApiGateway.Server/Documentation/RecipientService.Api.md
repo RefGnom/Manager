@@ -48,6 +48,7 @@
 
 ```json
 {
+    "RecipientId": "guid",
     "Login": "string",
     "AccountState": "string",
     "StateReason": "string",
@@ -58,7 +59,8 @@
 
 **Fields description**
 
-- **Login:** Уникальный логин пользователя
+-**RecipientId:** Уникальный Id пользователя
+- **Login:** Логин пользователя
 - **AccountState:** Текущее состояние аккаунта. Принимает следующие значения:
     - "Unknown"(Неизвестно),
     - Inactive(Неактивный),
@@ -77,18 +79,18 @@
 
 ```json
 {
-    "NewLogin": "string",
-    "NewPassword": "string",
+    "NewLogin": "string?",
+    "NewPassword": "string?",
     "NewRecipientTimeUtcOffsetHours": "int?"
 }
 ```
 
 **Fields description**
 
-- **NewLogin:** Новый логин для пользователя
-- **NewPassword:** Новый пароль для пользователя
+- **NewLogin:** Новый логин для пользователя (опционально)
+- **NewPassword:** Новый пароль для пользователя (опционально)
 - **NewRecipientTimeUtcOffsetHours:** Новые часы смещения времени получателя относительно UTC. Принимает значение от -12
-  до 14
+  до 14 (опционально)
 
 - **Responses**
 
@@ -100,7 +102,7 @@
 
 - **Method:** DELETE
 - **URL:** /api/recipients/{recipientId}
-- **Description:** Добавляет к имени пользователя Deleted и переводит статус в Deleted
+- **Description:** Переводит статус AccountState в Deleted
 
 - **Responses:**
 

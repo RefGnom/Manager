@@ -40,6 +40,7 @@
 
 ```json
 {
+    "WorkId": "Id",
     "Title": "string",
     "Description": "string?",
     "WorkStatus": "string",
@@ -50,6 +51,7 @@
 
 **Fields description**
 
+- **WorkId:** Идентификатор пользователя
 - **Title:** Название задачи
 - **Description:** Описание задачи(опционально)
 - **WorkStatus:** статус задачи. Принимает следующие значения:
