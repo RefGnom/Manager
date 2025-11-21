@@ -7,7 +7,5 @@ namespace Manager.TimerService.Server.Layers.Api.Models;
 /// </summary>
 public class StopTimerRequest
 {
-    public required Guid UserId { get; set; }
-    public required string Name { get; set; }
     public required DateTime StopTime { get; set; }
 }

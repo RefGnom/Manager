@@ -5,7 +5,7 @@
 ### 1) StartTimer
 
 - **Method:** POST
-- **URL:** /api/recipients/{recipientId}/timers
+- **URL:** /api/recipients/{recipientId}/timers/{timerName}
 - **Description:** Создаёт новый таймер для пользователя или стартует существующий
 - **Request Body:**
 
@@ -36,8 +36,8 @@
 - **URL:** /api/recipients/{recipientId}/timers
 - **Description:** Возвращает все таймеры для конкретного пользователя
 - **Query Parameters:**
-    - WithArchived: "bool",
-    - WithDeleted: "bool"
+    - withArchived: "bool",
+    - withDeleted: "bool"
 - **Response Body:**
 
 ```json
@@ -122,7 +122,6 @@
     "ElapsedTime": "TimeSpan",
     "StopTime": "DateTime?",
     "PingTimeout": "TimeSpan?",
-    
     "TimerSessions": [
         {
             "SessionId": "Guid",
