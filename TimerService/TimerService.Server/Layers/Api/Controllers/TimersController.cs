@@ -15,7 +15,7 @@ namespace Manager.TimerService.Server.Layers.Api.Controllers;
 /// <param name="timerService"></param>
 /// <param name="timerHttpModelsConverter"></param>
 [ApiController]
-[Route("/api/recipients/{recipientId}/timers")]
+[Route("/api/recipients/{recipientId:guid}/timers")]
 public class TimersController(
     ITimerService timerService,
     ITimerHttpModelsConverter timerHttpModelsConverter

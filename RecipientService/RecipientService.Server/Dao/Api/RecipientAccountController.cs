@@ -31,7 +31,7 @@ public class RecipientAccountController(
             : BadRequest(createResult.Error);
     }
 
-    [HttpGet("{recipientId}")]
+    [HttpGet("{recipientId:guid}")]
     public async Task<IActionResult> GetRecipientAccount([FromRoute] Guid recipientId)
     {
         var recipientAccount = await recipientAccountService.FindAsync(recipientId);
@@ -43,7 +43,7 @@ public class RecipientAccountController(
         return Ok(recipientAccountConverter.ToResponse(recipientAccount));
     }
 
-    [HttpPatch("{recipientId}")]
+    [HttpPatch("{recipientId:guid}")]
     public async Task<IActionResult> PatchRecipientAccount(
         PatchRecipientAccountRequest request
     )
@@ -60,7 +60,7 @@ public class RecipientAccountController(
             : BadRequest(updateResult.Error);
     }
 
-    [HttpDelete("{recipientId}")]
+    [HttpDelete("{recipientId:guid}")]
     public async Task<IActionResult> DeleteRecipientAccount([FromRoute] Guid recipientId)
     {
         var deleteResult = await recipientAccountService.DeleteAsync(recipientId);
