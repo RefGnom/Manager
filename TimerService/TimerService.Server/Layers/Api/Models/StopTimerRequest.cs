@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Manager.TimerService.Server.Layers.Api.Models;
 
@@ -7,7 +8,12 @@ namespace Manager.TimerService.Server.Layers.Api.Models;
 /// </summary>
 public class StopTimerRequest
 {
-    public required Guid UserId { get; set; }
-    public required string Name { get; set; }
+    [FromRoute]
+    public required Guid RecipientId { get; set; }
+
+    [FromRoute]
+    public required string TimerName { get; set; }
+
+    [FromBody]
     public required DateTime StopTime { get; set; }
 }

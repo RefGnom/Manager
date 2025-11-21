@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Manager.TimerService.Server.Layers.Api.Models;
 
@@ -8,8 +9,15 @@ namespace Manager.TimerService.Server.Layers.Api.Models;
 /// </summary>
 public class StartTimerRequest
 {
-    public required Guid UserId { get; set; }
-    public required string Name { get; set; }
+    [FromRoute]
+    public required Guid RecipientId { get; init; }
+
+    [FromRoute]
+    public required string TimerName { get; init; }
+
+    [FromBody]
     public required DateTime StartTime { get; set; }
+
+    [FromBody]
     public TimeSpan? PingTimeout { get; set; }
 }
