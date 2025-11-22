@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Manager.Core.UnitTestsCore;
 using NUnit.Framework;
 
@@ -28,8 +29,8 @@ public class ResilientHttpClientTests : UnitTestBase
 
         var result = await resilientHttpClient.SendAsync(request, CancellationToken.None);
 
-        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        Assert.That(requestCount, Is.EqualTo(2));
+        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        requestCount.Should().Be(2);
     }
 
     [Test]
@@ -49,7 +50,7 @@ public class ResilientHttpClientTests : UnitTestBase
 
         var result = await resilientHttpClient.SendAsync(request, CancellationToken.None);
 
-        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
-        Assert.That(requestCount, Is.EqualTo(4));
+        result.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        requestCount.Should().Be(4);
     }
 }

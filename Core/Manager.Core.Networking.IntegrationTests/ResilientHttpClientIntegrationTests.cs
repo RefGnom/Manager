@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Manager.Core.IntegrationTestsCore;
 using NUnit.Framework;
 
@@ -18,7 +19,7 @@ public class ResilientHttpClientIntegrationTests : IntegrationTestBase
 
         var result = await resilientHttpClient.SendAsync(request, CancellationToken.None);
 
-        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        result.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Test]
@@ -30,6 +31,6 @@ public class ResilientHttpClientIntegrationTests : IntegrationTestBase
 
         var result = await resilientHttpClient.SendAsync(request, CancellationToken.None);
 
-        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
+        result.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
     }
 }
