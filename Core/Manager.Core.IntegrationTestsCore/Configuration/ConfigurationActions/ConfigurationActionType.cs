@@ -3,6 +3,7 @@
 public enum ConfigurationActionType
 {
     WithDataBase,
+    WithoutDataBase,
     WithLocalServer,
     WithAutoRegistration,
     WithoutAutoRegistration,
