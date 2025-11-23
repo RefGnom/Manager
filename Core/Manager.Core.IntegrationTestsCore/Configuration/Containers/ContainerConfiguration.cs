@@ -11,6 +11,11 @@ public record ContainerConfiguration(
 {
     public async Task StartAsync(Func<ContainerWithType, Task> onStart)
     {
+        if (Containers.Length == 0)
+        {
+            return;
+        }
+
         await Network.CreateAsync();
         foreach (var container in Containers)
         {

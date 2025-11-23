@@ -11,7 +11,7 @@ namespace Manager.Core.IntegrationTestsCore.Configuration.ConfigurationActions;
 public class WithPostgresDataBaseAction : IConfigurationAction
 {
     public ConfigurationActionType Type { get; } = ConfigurationActionType.WithDataBase;
-    public ConfigurationActionType[] ExcludedTypes { get; } = [];
+    public ConfigurationActionType[] ExcludedTypes { get; } = [ConfigurationActionType.WithoutDataBase];
 
     public void Invoke(ConfigurationActionContext context)
     {
