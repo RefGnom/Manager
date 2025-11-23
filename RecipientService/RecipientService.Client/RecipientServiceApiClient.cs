@@ -21,7 +21,9 @@ public class RecipientServiceApiClient(
         DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
     };
 
-    public async Task<HttpResult<RecipientAccountResponse>> CreateRecipientAccountAsync(CreateRecipientAccountRequest request)
+    public async Task<HttpResult<RecipientAccountResponse>> CreateRecipientAccountAsync(
+        CreateRecipientAccountRequest request
+    )
     {
         var httpRequest = new HttpRequestMessage(HttpMethod.Post, RecipientAccountPath)
         {
@@ -44,7 +46,10 @@ public class RecipientServiceApiClient(
 
     public async Task<HttpResult> UpdateRecipientAccountAsync(PatchRecipientAccountRequest request)
     {
-        var httpRequest = new HttpRequestMessage(HttpMethod.Patch, RecipientAccountPath);
+        var httpRequest = new HttpRequestMessage(HttpMethod.Patch, RecipientAccountPath)
+        {
+            Content = JsonContent.Create(request),
+        };
         return await httpClient.SendAsync(httpRequest);
     }
 
@@ -54,7 +59,7 @@ public class RecipientServiceApiClient(
     {
         var httpRequest = new HttpRequestMessage(
             HttpMethod.Get,
-            $"recipient-authorization" +
+            $"api/recipient-authorization" +
             $"?RecipientId={request.RecipientId}" +
             $"&RequestedService={request.RequestedService}" +
             $"&RequestedResource={request.RequestedResource}"

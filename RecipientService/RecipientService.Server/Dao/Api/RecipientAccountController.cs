@@ -31,7 +31,7 @@ public class RecipientAccountController(
             : BadRequest(createResult.Error);
     }
 
-    [HttpGet]
+    [HttpGet("{recipientId:guid}")]
     public async Task<IActionResult> GetRecipientAccount([FromRoute] Guid recipientId)
     {
         var recipientAccount = await recipientAccountService.FindAsync(recipientId);
@@ -58,7 +58,7 @@ public class RecipientAccountController(
             : BadRequest(updateResult.Error);
     }
 
-    [HttpDelete]
+    [HttpDelete("{recipientId:guid}")]
     public async Task<IActionResult> DeleteRecipientAccount([FromRoute] Guid recipientId)
     {
         var deleteResult = await recipientAccountService.DeleteAsync(recipientId);
