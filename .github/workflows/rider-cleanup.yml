@@ -33,7 +33,7 @@ jobs:
 
             -   name: Run solution cleanup
                 run: |
-                    jb cleanupcode Manager.sln
+                    jb cleanupcode Manager.slnx
 
             -   name: Commit and push changes
                 run: |
