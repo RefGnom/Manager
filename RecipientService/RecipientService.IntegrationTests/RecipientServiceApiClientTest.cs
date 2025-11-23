@@ -16,6 +16,14 @@ namespace Manager.RecipientService.IntegrationTests;
 
 public class RecipientServiceApiClientTest : IntegrationTestBase
 {
+    public RecipientServiceApiClientTest()
+    {
+        Fixture.Customize<RecipientAccountWithPasswordHash>(composer => composer
+            .With(x => x.CreatedAtUtc, Fixture.Create<DateTime>().ToUniversalTime)
+            .With(x => x.UpdatedAtUtc, Fixture.Create<DateTime>().ToUniversalTime)
+        );
+    }
+
     private IRecipientServiceApiClient RecipientServiceApiClient =>
         ServiceProvider.GetRequiredService<IRecipientServiceApiClient>();
 
@@ -130,5 +138,40 @@ public class RecipientServiceApiClientTest : IntegrationTestBase
         await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
         httpResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         httpResult.ResultMessage.Should().Contain("The Password field is required");
+    }
+
+    [Test]
+    public async Task TestGetWhenAccountIsNotExist()
+    {
+        // Act
+        var httpResult = await RecipientServiceApiClient.GetRecipientAccountAsync(Guid.NewGuid());
+
+        // Assert
+        await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
+        httpResult.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Test]
+    public async Task TestGetWhenAccountIsExist()
+    {
+        // Arrange
+        var account = Fixture.Create<RecipientAccountWithPasswordHash>();
+        await RecipientAccountRepository.CreateAsync(account);
+
+        // Act
+        var httpResult = await RecipientServiceApiClient.GetRecipientAccountAsync(account.Id);
+
+        // Assert
+        await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
+        httpResult.StatusCode.Should().Be(HttpStatusCode.OK);
+        httpResult.EnsureResponse.Should().BeEquivalentTo(
+            new RecipientAccountResponse(
+                account.Id,
+                account.Login,
+                account.State.AccountState,
+                account.State.StateReason,
+                account.TimeZoneInfo.BaseUtcOffset
+            )
+        );
     }
 }
