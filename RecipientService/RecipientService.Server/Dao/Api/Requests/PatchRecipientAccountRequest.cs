@@ -15,6 +15,6 @@ public class PatchRecipientAccountRequest
     [FromBody]
     public string? NewPassword { get; init; }
 
-    [FromBody]
+    [FromBody, Range(-12, 14, ErrorMessage = "Неправильное смещение времени от всемирного времени UTC")]
     public int? NewRecipientTimeUtcOffsetHours { get; init; }
 }
