@@ -292,7 +292,7 @@ public class RecipientServiceApiClientTest : IntegrationTestBase
 
         // Assert
         await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
-        httpResult.StatusCode.Should().Be(HttpStatusCode.OK);
+        httpResult.StatusCode.Should().Be(HttpStatusCode.OK, httpResult.ResultMessage);
         var recipientAuthorizationResponse = httpResult.EnsureResponse;
         recipientAuthorizationResponse.Should().NotBeNull();
         recipientAuthorizationResponse.Should().BeEquivalentTo(recipientAuthorizationRequest);
