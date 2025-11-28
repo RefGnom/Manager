@@ -221,7 +221,7 @@ public class RecipientServiceApiClientTest : IntegrationTestBase
 
         // Act
         var httpResult = await RecipientServiceApiClient.UpdateRecipientAccountAsync(patchRecipientAccountRequest);
-g
+
         // Assert
         await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
         httpResult.StatusCode.Should().Be(HttpStatusCode.NotFound, httpResult.ResultMessage);
