@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Manager.RecipientService.Client.BusinessObjects.Requests;
 
 public record RecipientAuthorizationRequest(
-    Guid RecipientId,
+    [property: JsonIgnore] Guid RecipientId,
     string RequestedService,
     string RequestedResource
 );
