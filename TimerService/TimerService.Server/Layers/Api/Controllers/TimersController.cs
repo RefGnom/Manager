@@ -143,7 +143,7 @@ public class TimersController(
     /// <param name="recipientId"></param>
     /// <param name="timerName"></param>
     /// <returns></returns>
-    [HttpDelete("{timerName}/delete")]
+    [HttpDelete("{timerName}")]
     public async Task<ActionResult> DeleteTimer([FromRoute] Guid recipientId, [FromRoute] string timerName)
     {
         try
