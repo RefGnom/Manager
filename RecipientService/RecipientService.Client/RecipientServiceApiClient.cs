@@ -59,11 +59,10 @@ public class RecipientServiceApiClient(
     {
         var httpRequest = new HttpRequestMessage(
             HttpMethod.Get,
-            $"{RecipientAccountPath}/{request.RecipientId}/authorization/"
-        )
-        {
-            Content = JsonContent.Create(request),
-        };
+            $"{RecipientAccountPath}/{request.RecipientId}/authorization" +
+            $"?RequestedService={request.RequestedService}" +
+            $"&RequestedResource={request.RequestedResource}"
+        );
         return await httpClient.SendAsync(httpRequest);
     }
 }
