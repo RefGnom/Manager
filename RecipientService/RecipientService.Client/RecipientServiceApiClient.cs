@@ -13,7 +13,7 @@ public class RecipientServiceApiClient(
     string apiKey
 ) : IRecipientServiceApiClient
 {
-    private const string RecipientAccountPath = "api/recipient-account";
+    private const string RecipientAccountPath = "api/recipients";
 
     private readonly HttpClient httpClient = new()
     {
@@ -46,7 +46,7 @@ public class RecipientServiceApiClient(
 
     public async Task<HttpResult> UpdateRecipientAccountAsync(PatchRecipientAccountRequest request)
     {
-        var httpRequest = new HttpRequestMessage(HttpMethod.Patch, RecipientAccountPath)
+        var httpRequest = new HttpRequestMessage(HttpMethod.Patch, $"{RecipientAccountPath}/{request.RecipientId}")
         {
             Content = JsonContent.Create(request),
         };
@@ -59,9 +59,8 @@ public class RecipientServiceApiClient(
     {
         var httpRequest = new HttpRequestMessage(
             HttpMethod.Get,
-            $"api/recipient-authorization" +
-            $"?RecipientId={request.RecipientId}" +
-            $"&RequestedService={request.RequestedService}" +
+            $"{RecipientAccountPath}/{request.RecipientId}/authorization" +
+            $"?RequestedService={request.RequestedService}" +
             $"&RequestedResource={request.RequestedResource}"
         );
         return await httpClient.SendAsync(httpRequest);

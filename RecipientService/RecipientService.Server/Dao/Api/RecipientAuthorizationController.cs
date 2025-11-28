@@ -8,7 +8,7 @@ namespace Manager.RecipientService.Server.Dao.Api;
 
 [ApiController]
 [AuthorizationResource("RecipientAuthorization")]
-[Route("api/recipient-authorization")]
+[Route("api/recipients/{recipientId:guid}/authorization")]
 public class RecipientAuthorizationController(
     IRecipientAuthorizationService recipientAuthorizationService,
     IRecipientAuthorizationConverter recipientAuthorizationConverter
@@ -16,7 +16,7 @@ public class RecipientAuthorizationController(
 {
     [HttpGet]
     public async Task<IActionResult> GetAuthorization(
-        [FromQuery] RecipientAuthorizationRequest request
+        RecipientAuthorizationRequest request
     )
     {
         var foundRecipientAuthorization = await recipientAuthorizationService.FindRecipientAuthorizationAsync(
