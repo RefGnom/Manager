@@ -1,4 +1,5 @@
 ﻿using Manager.Core.Common.Factories;
+using Manager.Core.Common.Hashing;
 using Manager.Core.Common.String;
 using Manager.Core.Common.Time;
 using Manager.RecipientService.Server.Implementation.Domain;
@@ -20,7 +21,7 @@ public interface IRecipientAccountFactory
 
 public class RecipientAccountFactory(
     IGuidFactory guidFactory,
-    IPasswordHashService passwordHashService,
+    IHasher hasher,
     IRecipientAccountStateFactory recipientAccountStateFactory,
     ITimeZoneInfoFactory timeZoneInfoFactory,
     IDateTimeProvider dateTimeProvider
@@ -29,7 +30,7 @@ public class RecipientAccountFactory(
     public RecipientAccountWithPasswordHash Create(CreateRecipientAccountDto createRecipientAccountDto) => new(
         guidFactory.Create(),
         createRecipientAccountDto.Login,
-        passwordHashService.HashPassword(createRecipientAccountDto.Password),
+        hasher.Hash(createRecipientAccountDto.Password),
         recipientAccountStateFactory.CreateInactiveByNewUser(),
         timeZoneInfoFactory.CreateByOffset(createRecipientAccountDto.RecipientTimeUtcOffset),
         dateTimeProvider.UtcNow,
@@ -44,7 +45,7 @@ public class RecipientAccountFactory(
         updateRecipientAccountDto.NewLogin ?? recipientAccount.Login,
         updateRecipientAccountDto.NewPassword.IsNullOrEmpty()
             ? recipientAccount.PasswordHash
-            : passwordHashService.HashPassword(updateRecipientAccountDto.NewPassword),
+            : hasher.Hash(updateRecipientAccountDto.NewPassword),
         recipientAccount.State,
         updateRecipientAccountDto.NewRecipientTimeUtcOffset.HasValue
             ? timeZoneInfoFactory.CreateByOffset(updateRecipientAccountDto.NewRecipientTimeUtcOffset.Value)

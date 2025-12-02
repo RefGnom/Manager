@@ -1,11 +1,11 @@
 name: Rider Cleanup with Dotnet Tool
 
-on:
-    push:
-        branches: [ main ]
-    
-    schedule:
-        -   cron: '0 2 * * *'
+#on:
+#    push:
+#        branches: [ main ]
+#    
+#    schedule:
+#        -   cron: '0 2 * * *'
 
 jobs:
     cleanup:
@@ -24,7 +24,7 @@ jobs:
             -   name: Setup .NET
                 uses: actions/setup-dotnet@v4
                 with:
-                    dotnet-version: 8.x
+                    dotnet-version: 9.x
 
             -   name: Install JetBrains ReSharper Global Tools
                 run: |
@@ -33,7 +33,7 @@ jobs:
 
             -   name: Run solution cleanup
                 run: |
-                    jb cleanupcode Manager.sln
+                    jb cleanupcode Manager.slnx
 
             -   name: Commit and push changes
                 run: |

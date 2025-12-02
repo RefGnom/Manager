@@ -66,10 +66,11 @@ public class IntegrationTestConfigurationBuilder(
     }
 
     public IIntegrationTestConfigurationBuilder WithLocalServer(
-        IReadOnlyDictionary<string, string>? envVariables = null
+        Dictionary<string, string>? envVariables = null
     )
     {
         envVariables ??= new Dictionary<string, string>();
+        envVariables.TryAdd("AuthenticationServiceSetting:ApiKey", "fake api key");
         configurationActionCollection.AddActionWithRemovingExcludedActionTypes(new WithLocalServerAction(envVariables));
         return this;
     }

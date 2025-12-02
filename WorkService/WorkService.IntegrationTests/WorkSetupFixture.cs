@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using Manager.Core.IntegrationTestsCore;
 using Manager.Core.IntegrationTestsCore.Configuration;
 using Manager.WorkService.Client;
@@ -14,12 +13,7 @@ public class WorkSetupFixture : SetupFixtureBase
 
     protected override void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder)
     {
-        builder.WithLocalServer(
-            new Dictionary<string, string>
-            {
-                ["AuthenticationServiceSetting:ApiKey"] = "random key",
-            }
-        ).WithRealLogger();
+        builder.WithLocalServer().WithRealLogger();
     }
 
     protected override void CustomizeServiceCollection(IServiceCollection serviceCollection)
