@@ -14,6 +14,7 @@ public class AuthenticationServiceApiClientFactory(
     public IAuthenticationServiceApiClient Create(string port, string apiKey)
     {
         var url = $"http://localhost:{port}";
-        return new AuthenticationServiceApiClient(resilientHttpClientFactory, url, apiKey);
+        var httpClient = resilientHttpClientFactory.CreateClient(url, apiKey);
+        return new AuthenticationServiceApiClient(httpClient);
     }
 }

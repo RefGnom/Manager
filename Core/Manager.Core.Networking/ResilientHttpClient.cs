@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +25,10 @@ public class ResilientHttpClient : IHttpClient
         policyWrap = Policy.WrapAsync(fallbackPolicy, retryPolicy);
     }
 
-    public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    public Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
+        CancellationToken cancellationToken = default
+    )
     {
         return policyWrap.ExecuteAsync(
             async ct =>
@@ -70,7 +74,9 @@ public static class HttpPolicyBuilders
     public static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy()
     {
         return Policy
-            .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            .HandleResult<HttpResponseMessage>(r =>
+                (int)r.StatusCode >= 500 || r.StatusCode == HttpStatusCode.RequestTimeout
+            )
             .Or<HttpRequestException>()
             .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
     }
@@ -78,12 +84,13 @@ public static class HttpPolicyBuilders
     public static AsyncFallbackPolicy<HttpResponseMessage> GetFallbackPolicy()
     {
         return Policy
-            .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            .HandleResult<HttpResponseMessage>(r =>
+                (int)r.StatusCode >= 500 || r.StatusCode == HttpStatusCode.RequestTimeout
+            )
             .Or<HttpRequestException>()
             .FallbackAsync(
-                new HttpResponseMessage
+                new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
-                    StatusCode = System.Net.HttpStatusCode.InternalServerError,
                     Content = new StringContent("Fallback response"),
                 }
             );

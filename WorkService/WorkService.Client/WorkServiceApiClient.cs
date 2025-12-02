@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using Manager.Core.Networking;
 using Manager.WorkService.Client.Requests;
@@ -12,13 +11,10 @@ using Microsoft.Extensions.Logging;
 namespace Manager.WorkService.Client;
 
 public class WorkServiceApiClient(
-    IResilientHttpClientFactory httpClientFactory,
-    ILogger<WorkServiceApiClient> logger,
-    string apiKey,
-    string url
+    IHttpClient httpClient,
+    ILogger<WorkServiceApiClient> logger
 ) : IWorkServiceApiClient
 {
-    private readonly IHttpClient httpClient = httpClientFactory.CreateClient(url, apiKey);
     private const string WorksBasePath = "api/works/";
 
     public async Task<Guid> CreateWorkAsync(CreateWorkRequest createWorkRequest)
@@ -27,7 +23,7 @@ public class WorkServiceApiClient(
         {
             Content = JsonContent.Create(createWorkRequest),
         };
-        var responseMessage = await httpClient.SendAsync(request, CancellationToken.None);
+        var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
         return await responseMessage.Content.ReadFromJsonAsync<Guid>();
     }
@@ -35,7 +31,7 @@ public class WorkServiceApiClient(
     public async Task<GetWorkResponse?> FindWorkAsync(Guid workId)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"{WorksBasePath}{workId}");
-        var responseMessage = await httpClient.SendAsync(request, CancellationToken.None);
+        var responseMessage = await httpClient.SendAsync(request);
         if (responseMessage.StatusCode == HttpStatusCode.NotFound)
         {
             return null;
@@ -69,14 +65,14 @@ public class WorkServiceApiClient(
         {
             Content = JsonContent.Create(updateWorkRequest),
         };
-        var responseMessage = await httpClient.SendAsync(request, CancellationToken.None);
+        var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
     }
 
     public async Task DeleteWorkAsync(Guid workId)
     {
         var request = new HttpRequestMessage(HttpMethod.Delete, $"{WorksBasePath}{workId}");
-        var responseMessage = await httpClient.SendAsync(request, CancellationToken.None);
+        var responseMessage = await httpClient.SendAsync(request);
         if (responseMessage.StatusCode == HttpStatusCode.NotFound)
         {
             logger.LogInformation("Work {workId} already deleted", workId);
@@ -89,7 +85,7 @@ public class WorkServiceApiClient(
     {
         var path = $"api/recipients/{recipientId}/works/{concretePath}";
         var request = new HttpRequestMessage(HttpMethod.Get, path);
-        var responseMessage = await httpClient.SendAsync(request, CancellationToken.None);
+        var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
         return await responseMessage.Content.ReadFromJsonAsync<GetWorkResponse[]>() ??
                throw new Exception("Не смогли десериализовать ответ от сервера");

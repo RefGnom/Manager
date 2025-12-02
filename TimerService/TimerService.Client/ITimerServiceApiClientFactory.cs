@@ -16,6 +16,7 @@ public class TimerServiceApiClientFactory(
     {
         var port = portProvider.GetPort("TIMER_SERVICE_PORT");
         var url = $"http://localhost:{port}";
-        return new TimerServiceApiClient(resilientHttpClientFactory, url, apiKey);
+        var httpClient = resilientHttpClientFactory.CreateClient(url, apiKey);
+        return new TimerServiceApiClient(httpClient);
     }
 }

@@ -6,5 +6,5 @@ namespace Manager.Core.Networking;
 
 public interface IHttpClient
 {
-    Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken);
+    Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default);
 }

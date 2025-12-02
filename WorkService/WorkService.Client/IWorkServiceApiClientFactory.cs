@@ -18,6 +18,7 @@ public class WorkServiceApiClientFactory(
     {
         var port = portProvider.GetPort("WORK_SERVICE_PORT");
         var url = $"http://localhost:{port}";
-        return new WorkServiceApiClient(resilientHttpClientFactory, logger, apiKey, url);
+        var httpClient = resilientHttpClientFactory.CreateClient(url, apiKey);
+        return new WorkServiceApiClient(httpClient, logger);
     }
 }
