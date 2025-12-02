@@ -17,5 +17,6 @@ public interface IIntegrationTestConfigurationBuilder
     IIntegrationTestConfigurationBuilder CustomizeConfigurationManager(Action<IConfigurationManager> customizer);
     IIntegrationTestConfigurationBuilder WithDataBase();
     IIntegrationTestConfigurationBuilder WithLocalServer(Dictionary<string, string>? envVariables = null);
+    IIntegrationTestConfigurationBuilder WithoutDataBase();
     IntegrationTestConfiguration Build();
 }

@@ -59,6 +59,12 @@ public class IntegrationTestConfigurationBuilder(
         return this;
     }
 
+    public IIntegrationTestConfigurationBuilder WithoutDataBase()
+    {
+        configurationActionCollection.AddActionWithRemovingExcludedActionTypes(new WithoutPostgresDataBaseAction());
+        return this;
+    }
+
     public IIntegrationTestConfigurationBuilder WithLocalServer(
         Dictionary<string, string>? envVariables = null
     )

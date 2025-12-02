@@ -26,5 +26,5 @@ public abstract class IntegrationTestBase
     ///     Null если база данных не сконфигурирована
     /// </summary>
     protected IDataContext DataContext { get; } =
-        SetupFixtureBase.TestConfiguration.ServiceProvider.GetRequiredService<IDataContext>();
+        SetupFixtureBase.TestConfiguration.ServiceProvider.GetService<IDataContext>()!;
 }

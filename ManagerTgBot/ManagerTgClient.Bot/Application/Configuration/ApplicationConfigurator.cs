@@ -1,8 +1,9 @@
-﻿using Manager.Core.AppConfiguration;
+using Manager.Core.AppConfiguration;
 using Manager.Core.Common.DependencyInjection;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
 using Manager.Core.Logging.Configuration;
+using Manager.Core.Networking;
 using Manager.ManagerTgClient.Bot.Layers.Api.Commands.States;
 using Manager.TimerService.Client;
 using Manager.TimerService.Client.ServiceModels.Factories;
@@ -35,6 +36,7 @@ public static class ApplicationConfigurator
             .ConfigureOptionsWithValidation<ManagerBotOptions>()
             .AddSingleton<IConfiguration>(configurationManager)
             .AddSingleton<IRequestFactory, RequestFactory>()
+            .AddSingleton<IResilientHttpClientFactory, ResilientHttpClientFactory>()
             .AddSingleton<ITimerServiceApiClientFactory, TimerServiceApiClientFactory>()
             .AddSingleton<ITimerServiceApiClient>(x =>
                 x.GetRequiredService<ITimerServiceApiClientFactory>()
