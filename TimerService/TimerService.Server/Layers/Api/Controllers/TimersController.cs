@@ -24,17 +24,21 @@ public class TimersController(
     /// <summary>
     ///     Запускает таймер и создает для него сессию. Если таймера не существует - создает новый.
     /// </summary>
+    /// <param name="timerName"></param>
     /// <param name="request">Запрос для запуска таймера</param>
+    /// <param name="recipientId"></param>
     /// <returns></returns>
     [HttpPost("{timerName}")]
     public async Task<ActionResult> StartTimer(
-        StartTimerRequest request
+        [FromRoute] Guid recipientId,
+        [FromRoute] string timerName,
+        [FromBody] StartTimerRequest request
     )
     {
         try
         {
             await timerService.StartAsync(
-                timerHttpModelsConverter.FromStartRequest(
+                timerHttpModelsConverter.FromStartRequest(recipientId, timerName,
                     request
                 )
             );
@@ -71,16 +75,20 @@ public class TimersController(
     /// <summary>
     ///     Останавливает сессию таймера и переводит таймер в статус остановлен
     /// </summary>
-    /// <param name="request">Запрос для остановки таймера</param>
+    /// <param name="recipientId"></param>
+    /// <param name="timerName"></param>
+    /// <param name="stopTime"></param>
     /// <returns></returns>
     [HttpPatch("{timerName}/stop")]
     public async Task<ActionResult> StopTimer(
-        StopTimerRequest request
+        [FromRoute] Guid recipientId,
+        [FromRoute] string timerName,
+        [FromBody] DateTime stopTime
     )
     {
         try
         {
-            await timerService.StopAsync(request.RecipientId, request.TimerName, request.StopTime);
+            await timerService.StopAsync(recipientId, timerName, stopTime);
         }
         catch (NotFoundException)
         {

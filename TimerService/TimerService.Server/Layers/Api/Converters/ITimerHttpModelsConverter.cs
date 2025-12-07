@@ -7,6 +7,6 @@ namespace Manager.TimerService.Server.Layers.Api.Converters;
 
 public interface ITimerHttpModelsConverter
 {
-    TimerDto FromStartRequest(StartTimerRequest startTimerRequest);
+    TimerDto FromStartRequest(Guid recipientId, string timerName, StartTimerRequest startTimerRequest);
     TimerResponse ConvertToTimerResponse(TimerDto timerDto, TimeSpan elapsedTime);
 }

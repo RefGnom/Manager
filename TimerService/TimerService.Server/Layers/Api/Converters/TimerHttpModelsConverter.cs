@@ -10,14 +10,14 @@ public class TimerHttpModelsConverter(
     ITimerSessionHttpModelConverter timerSessionHttpModelConverter
 ) : ITimerHttpModelsConverter
 {
-    public TimerDto FromStartRequest(StartTimerRequest request)
+    public TimerDto FromStartRequest(Guid recipientId, string timerName, StartTimerRequest request)
     {
         var timerId = Guid.NewGuid();
         return new TimerDto
         {
             Id = timerId,
-            UserId = request.RecipientId,
-            Name = request.TimerName,
+            UserId = recipientId,
+            Name = timerName,
             StartTime = request.StartTime,
             PingTimeout = request.PingTimeout,
             Sessions = [],

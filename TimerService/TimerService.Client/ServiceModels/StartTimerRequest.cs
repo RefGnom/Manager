@@ -1,11 +1,11 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace Manager.TimerService.Client.ServiceModels;
 
-public class StartTimerRequest
-{
-    public required Guid UserId { get; set; }
-    public required string Name { get; set; }
-    public required DateTime StartTime { get; set; }
-    public TimeSpan? PingTimeout { get; set; }
-}
+public record StartTimerRequest(
+    [property: JsonIgnore] Guid UserId,
+    [property: JsonIgnore] string Name,
+    DateTime StartTime,
+    TimeSpan? PingTimeout
+);

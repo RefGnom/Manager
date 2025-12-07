@@ -12,6 +12,8 @@ public class TimerServiceApiClient(
     string apiKey
 ) : ITimerServiceApiClient
 {
+    private const string RecipientPath = "api/recipients";
+
     private readonly HttpClient httpClient = new()
     {
         BaseAddress = new Uri(url),
@@ -20,7 +22,10 @@ public class TimerServiceApiClient(
 
     public async Task<HttpResponse> StartTimerAsync(StartTimerRequest startTimerRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, "timers/start")
+        var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"{RecipientPath}/{startTimerRequest.UserId}/timers/{startTimerRequest.Name}"
+        )
         {
             Content = JsonContent.Create(startTimerRequest),
         };
@@ -36,7 +41,10 @@ public class TimerServiceApiClient(
 
     public async Task<HttpResponse> StopTimerAsync(StopTimerRequest stopTimerRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, "timers/stop")
+        var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"{RecipientPath}/{stopTimerRequest.UserId}/timers/{stopTimerRequest.Name}/stop"
+        )
         {
             Content = JsonContent.Create(stopTimerRequest),
         };
@@ -54,7 +62,7 @@ public class TimerServiceApiClient(
     {
         var request = new HttpRequestMessage(
             HttpMethod.Get,
-            $"timers/find?UserId={timerRequest.UserId}&Name={timerRequest.Name}"
+            $"{RecipientPath}/{timerRequest.UserId}/timers/{timerRequest.Name}"
         );
         var responseMessage = await httpClient.SendAsync(request);
         if (responseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -70,9 +78,9 @@ public class TimerServiceApiClient(
     {
         var request = new HttpRequestMessage(
             HttpMethod.Get,
-            $"timers/selectForUser?UserId={userTimersRequest.UserId}&" +
-            $"WithArchived={userTimersRequest.WithArchived}&" +
-            $"WithDeleted={userTimersRequest.WithDeleted}"
+            $"{RecipientPath}/{userTimersRequest.UserId}&" +
+            $"WithArchived={userTimersRequest.WithArchived}" +
+            $"&WithDeleted={userTimersRequest.WithDeleted}"
         );
         var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
@@ -82,10 +90,10 @@ public class TimerServiceApiClient(
 
     public async Task<HttpResponse> ResetTimerAsync(ResetTimerRequest resetTimerRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, "timers/reset")
-        {
-            Content = JsonContent.Create(resetTimerRequest),
-        };
+        var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"{RecipientPath}/{resetTimerRequest.UserId}/timers/{resetTimerRequest.Name}/reset"
+        );
         var responseMessage = await httpClient.SendAsync(request);
         if (responseMessage.StatusCode == HttpStatusCode.NotFound)
         {
@@ -98,10 +106,10 @@ public class TimerServiceApiClient(
 
     public async Task<HttpResponse> DeleteTimerAsync(DeleteTimerRequest deleteTimerRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Delete, "timers/delete")
-        {
-            Content = JsonContent.Create(deleteTimerRequest),
-        };
+        var request = new HttpRequestMessage(
+            HttpMethod.Delete,
+            $"{RecipientPath}/{deleteTimerRequest.UserId}/timers/{deleteTimerRequest.Name}"
+        );
         var responseMessage = await httpClient.SendAsync(request);
         if (responseMessage.StatusCode == HttpStatusCode.NotFound)
         {

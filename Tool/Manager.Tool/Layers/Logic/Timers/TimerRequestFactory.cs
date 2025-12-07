@@ -22,13 +22,7 @@ public class TimerRequestFactory : ITimerRequestFactory
         string timerName,
         DateTime startTime,
         TimeSpan? pingTimeout = null
-    ) => new()
-    {
-        UserId = userId,
-        Name = timerName,
-        StartTime = startTime,
-        PingTimeout = pingTimeout,
-    };
+    ) => new(userId, timerName, startTime, pingTimeout);
 
     public StopTimerRequest CreateStopTimerRequest(Guid userId, string timerName, DateTime stopTime) => new()
     {
