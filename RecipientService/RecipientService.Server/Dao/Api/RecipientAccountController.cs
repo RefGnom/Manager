@@ -44,8 +44,8 @@ public class RecipientAccountController(
     }
 
     [HttpPatch("{recipientId:guid}")]
-    public async Task<IActionResult> PatchRecipientAccount(
-        PatchRecipientAccountRequest request
+    public async Task<IActionResult> PatchRecipientAccount([FromRoute] Guid recipientId,
+        [FromBody] PatchRecipientAccountRequest request
     )
     {
         var updateRecipientAccountDto = recipientAccountConverter.ToDto(request);

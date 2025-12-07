@@ -218,13 +218,12 @@ public class RecipientServiceApiClientTest : IntegrationTestBase
         var patchRecipientAccountRequest = Fixture.Build<PatchRecipientAccountRequest>()
             .With(x => x.NewRecipientTimeUtcOffsetHours, 1)
             .Create();
-
         // Act
         var httpResult = await RecipientServiceApiClient.UpdateRecipientAccountAsync(patchRecipientAccountRequest);
 
         // Assert
         await TestContext.Out.WriteLineAsync(httpResult.ResultMessage);
-        httpResult.StatusCode.Should().Be(HttpStatusCode.NotFound, httpResult.ResultMessage);
+        httpResult.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Test]

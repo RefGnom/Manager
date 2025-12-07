@@ -50,7 +50,7 @@ public class RecipientServiceApiClient(
         {
             Content = JsonContent.Create(request),
         };
-        return await httpClient.SendAsync(httpRequest);
+         return await httpClient.SendAsync(httpRequest);
     }
 
     public async Task<HttpResult<RecipientAuthorizationResponse>> GetRecipientAuthorizationAsync(
