@@ -15,7 +15,7 @@ public class WorkServiceApiClient(
     string url
 ) : IWorkServiceApiClient
 {
-    private const string WorksBasePath = "api/works/";
+    private const string RecipientPath = "api/recipients";
 
     private readonly HttpClient httpClient = new()
     {
@@ -26,7 +26,10 @@ public class WorkServiceApiClient(
 
     public async Task<Guid> CreateWorkAsync(CreateWorkRequest createWorkRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, WorksBasePath)
+        var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            GetWorksUrl(createWorkRequest.RecipientId)
+        )
         {
             Content = JsonContent.Create(createWorkRequest),
         };
@@ -35,9 +38,10 @@ public class WorkServiceApiClient(
         return await responseMessage.Content.ReadFromJsonAsync<Guid>();
     }
 
-    public async Task<GetWorkResponse?> FindWorkAsync(Guid workId)
+    public async Task<GetWorkResponse?> FindWorkAsync(Guid recipientId, Guid workId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{WorksBasePath}{workId}");
+        var worksUrl = GetWorksUrl(recipientId);
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{worksUrl}/{workId}");
         var responseMessage = await httpClient.SendAsync(request);
         if (responseMessage.StatusCode == HttpStatusCode.NotFound)
         {
@@ -68,7 +72,10 @@ public class WorkServiceApiClient(
 
     public async Task UpdateWorkAsync(UpdateWorkRequest updateWorkRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Patch, WorksBasePath)
+        var request = new HttpRequestMessage(
+            HttpMethod.Patch,
+            $"{GetWorksUrl(updateWorkRequest.RecipientId)}/{updateWorkRequest.Id}"
+        )
         {
             Content = JsonContent.Create(updateWorkRequest),
         };
@@ -76,9 +83,10 @@ public class WorkServiceApiClient(
         responseMessage.EnsureSuccessStatusCode();
     }
 
-    public async Task DeleteWorkAsync(Guid workId)
+    public async Task DeleteWorkAsync(Guid recipientId, Guid workId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Delete, $"{WorksBasePath}{workId}");
+        var worksUrl = GetWorksUrl(recipientId);
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{worksUrl}/{workId}");
         var responseMessage = await httpClient.SendAsync(request);
         if (responseMessage.StatusCode == HttpStatusCode.NotFound)
         {
@@ -90,11 +98,14 @@ public class WorkServiceApiClient(
 
     private async Task<GetWorkResponse[]> SelectBaseAsync(Guid recipientId, string concretePath = "")
     {
-        var path = $"api/recipients/{recipientId}/works/{concretePath}";
+        var worksUrl = GetWorksUrl(recipientId);
+        var path = $"{worksUrl}/{concretePath}";
         var request = new HttpRequestMessage(HttpMethod.Get, path);
         var responseMessage = await httpClient.SendAsync(request);
         responseMessage.EnsureSuccessStatusCode();
         return await responseMessage.Content.ReadFromJsonAsync<GetWorkResponse[]>() ??
                throw new Exception("Не смогли десериализовать ответ от сервера");
     }
+
+    private string GetWorksUrl(Guid recipientId) => $"{RecipientPath}/{recipientId}/works";
 }

@@ -20,7 +20,7 @@ public class WorkController(
 ) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<Guid>> CreateWork(CreateWorkRequest request)
+    public async Task<ActionResult<Guid>> CreateWork([FromBody] CreateWorkRequest request)
     {
         var workId = Guid.NewGuid();
         var workDto = workApiConverter.ToDto(request, workId);
@@ -41,8 +41,9 @@ public class WorkController(
         return workApiConverter.ToResponse(workDto);
     }
 
-    [HttpPatch]
-    public async Task<IActionResult> PatchWork(PatchWorkRequest request)
+    [HttpPatch("{workId:guid}")]
+
+public async Task<IActionResult> PatchWork([FromBody] PatchWorkRequest request)
     {
         var workDto = await workService.FindWorkAsync(request.Id);
         if (workDto == null)
