@@ -1,10 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 
 namespace Manager.RecipientService.Server.Dao.Api.Requests;
 
 public class PatchRecipientAccountRequest
 {
+    [JsonIgnore]
+    public Guid Id { get; set; }
+
     public string? NewLogin { get; init; }
 
     public string? NewPassword { get; init; }

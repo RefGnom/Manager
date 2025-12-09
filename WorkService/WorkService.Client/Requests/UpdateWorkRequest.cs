@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Manager.WorkService.Client.Requests;
 
-public class UpdateWorkRequest
-{
-    public required Guid Id { get; set; }
-    public required Guid RecipientId { get; set; }
-    public string? Title { get; init; }
-    public string? Description { get; init; }
-    public DateTime? DeadLineUtc { get; init; }
-    public TimeSpan[]? ReminderIntervals { get; init; }
-}
+public record UpdateWorkRequest(
+    [property: JsonIgnore] Guid Id,
+    [property: JsonIgnore] Guid RecipientId,
+    string? Title,
+    string? Description,
+    DateTime? DeadLineUtc,
+    TimeSpan[]? ReminderIntervals
+);

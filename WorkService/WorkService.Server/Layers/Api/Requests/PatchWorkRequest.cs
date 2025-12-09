@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Manager.WorkService.Server.Layers.Api.Requests;
 
 public class PatchWorkRequest
 {
-    public required Guid Id { get; init; }
+    [JsonIgnore]
+    public Guid Id { get; set; }
 
-    public required Guid RecipientId { get; init; }
+    [JsonIgnore]
+    public Guid RecipientId { get; set; }
 
     public string? Title { get; init; }
 
