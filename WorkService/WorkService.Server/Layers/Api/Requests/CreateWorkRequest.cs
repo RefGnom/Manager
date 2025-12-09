@@ -6,7 +6,7 @@ namespace Manager.WorkService.Server.Layers.Api.Requests;
 public class CreateWorkRequest
 {
     [JsonIgnore]
-    public required Guid RecipientId { get; set; }
+    public Guid RecipientId { get; set; }
 
     public required string Title { get; init; }
 
