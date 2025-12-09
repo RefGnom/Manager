@@ -49,7 +49,8 @@ public class RecipientAccountController(
         [FromBody] PatchRecipientAccountRequest request
     )
     {
-        var updateRecipientAccountDto = recipientAccountConverter.ToDto(recipientId, request);
+        request.RecipientId = recipientId;
+        var updateRecipientAccountDto = recipientAccountConverter.ToDto(request);
         var updateResult = await recipientAccountService.UpdateAsync(updateRecipientAccountDto);
         if (updateResult.IsSuccess)
         {
