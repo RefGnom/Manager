@@ -9,6 +9,7 @@ public class PatchRecipientAccountRequest
 {
     [JsonIgnore]
     public Guid Id { get; set; }
+
     [JsonIgnore]
     public Guid RecipientId { get; set; }
 

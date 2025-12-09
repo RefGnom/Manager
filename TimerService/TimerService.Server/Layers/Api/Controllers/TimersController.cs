@@ -35,12 +35,12 @@ public class TimersController(
         [FromBody] StartTimerRequest request
     )
     {
+        request.Name = timerName;
+        request.RecipientId = recipientId;
         try
         {
             await timerService.StartAsync(
-                timerHttpModelsConverter.FromStartRequest(recipientId, timerName,
-                    request
-                )
+                timerHttpModelsConverter.FromStartRequest(request)
             );
             return Ok();
         }
