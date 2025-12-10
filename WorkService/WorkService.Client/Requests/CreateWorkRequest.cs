@@ -7,5 +7,5 @@ public record CreateWorkRequest(
     string Title,
     string? Description,
     DateTime? DeadLineUtc,
-    TimeSpan[]? ReminderIntervals
+    TimeSpan[]? ReminderIntervals = null
 );

@@ -5,8 +5,8 @@ namespace Manager.WorkService.Client.Requests;
 public record UpdateWorkRequest(
     Guid Id,
     Guid RecipientId,
-    string? Title,
-    string? Description,
-    DateTime? DeadLineUtc,
-    TimeSpan[]? ReminderIntervals
+    string? Title = null,
+    string? Description = null,
+    DateTime? DeadLineUtc = null,
+    TimeSpan[]? ReminderIntervals= null
 );

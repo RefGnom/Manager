@@ -50,7 +50,6 @@ public class RecipientAccountController(
     )
     {
         request.Id = recipientId;
-        request.RecipientId = recipientId;
         var updateRecipientAccountDto = recipientAccountConverter.ToDto(request);
         var updateResult = await recipientAccountService.UpdateAsync(updateRecipientAccountDto);
         if (updateResult.IsSuccess)

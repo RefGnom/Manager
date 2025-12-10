@@ -6,5 +6,5 @@ public record StartTimerRequest(
     Guid UserId,
     string Name,
     DateTime StartTime,
-    TimeSpan? PingTimeout
+    TimeSpan? PingTimeout = null
 );

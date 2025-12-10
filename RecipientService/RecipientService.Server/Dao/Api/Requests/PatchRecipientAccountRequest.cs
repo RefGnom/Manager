@@ -10,9 +10,6 @@ public class PatchRecipientAccountRequest
     [JsonIgnore]
     public Guid Id { get; set; }
 
-    [JsonIgnore]
-    public Guid RecipientId { get; set; }
-
     public string? NewLogin { get; init; }
 
     public string? NewPassword { get; init; }

@@ -4,7 +4,7 @@ namespace Manager.RecipientService.Client.BusinessObjects.Requests;
 
 public record PatchRecipientAccountRequest(
     Guid RecipientId,
-    string? NewLogin,
-    string? NewPassword,
-    int? NewRecipientTimeUtcOffsetHours
+    string? NewLogin = null,
+    string? NewPassword = null,
+    int? NewRecipientTimeUtcOffsetHours = null
 );
