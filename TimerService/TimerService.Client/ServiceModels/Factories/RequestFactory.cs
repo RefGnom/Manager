@@ -9,11 +9,5 @@ public class RequestFactory : IRequestFactory
         string name,
         DateTime startTime,
         TimeSpan? pingTimeout = null
-    ) => new()
-    {
-        UserId = userId,
-        Name = name,
-        StartTime = startTime,
-        PingTimeout = pingTimeout,
-    };
+    ) => new (userId, name, startTime, pingTimeout);
 }

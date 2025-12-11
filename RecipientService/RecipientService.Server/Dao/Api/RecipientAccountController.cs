@@ -10,7 +10,7 @@ namespace Manager.RecipientService.Server.Dao.Api;
 
 [ApiController]
 [AuthorizationResource("RecipientAccount")]
-[Route("api/recipient-account")]
+[Route("api/recipients")]
 public class RecipientAccountController(
     IRecipientAccountService recipientAccountService,
     IRecipientAccountConverter recipientAccountConverter
@@ -43,9 +43,13 @@ public class RecipientAccountController(
         return Ok(recipientAccountConverter.ToResponse(recipientAccount));
     }
 
-    [HttpPatch]
-    public async Task<IActionResult> PatchRecipientAccount([FromBody] PatchRecipientAccountRequest request)
+    [HttpPatch("{recipientId:guid}")]
+    public async Task<IActionResult> PatchRecipientAccount(
+        [FromRoute] Guid recipientId,
+        [FromBody] PatchRecipientAccountRequest request
+    )
     {
+        request.Id = recipientId;
         var updateRecipientAccountDto = recipientAccountConverter.ToDto(request);
         var updateResult = await recipientAccountService.UpdateAsync(updateRecipientAccountDto);
         if (updateResult.IsSuccess)

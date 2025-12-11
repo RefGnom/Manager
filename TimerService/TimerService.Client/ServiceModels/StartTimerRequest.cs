@@ -2,10 +2,9 @@ using System;
 
 namespace Manager.TimerService.Client.ServiceModels;
 
-public class StartTimerRequest
-{
-    public required Guid UserId { get; set; }
-    public required string Name { get; set; }
-    public required DateTime StartTime { get; set; }
-    public TimeSpan? PingTimeout { get; set; }
-}
+public record StartTimerRequest(
+    Guid UserId,
+    string Name,
+    DateTime StartTime,
+    TimeSpan? PingTimeout = null
+);

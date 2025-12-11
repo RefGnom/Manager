@@ -22,7 +22,7 @@ public class GetTimerCommandExecutor(
     {
         var timerName = context.GetCommandArgument(command.CommandName) ?? TimerCommandConstants.DefaultTimerName;
 
-        var getTimerRequest = timerRequestFactory.CreateTimerRequest(context.EnsureUser().Id, timerName);
+        var getTimerRequest = timerRequestFactory.CreateCommonTimerRequest(context.EnsureUser().Id, timerName);
         var timerResponse = await timerServiceApiClient.FindTimerAsync(getTimerRequest);
 
         if (timerResponse is null)

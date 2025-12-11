@@ -8,7 +8,7 @@ namespace Manager.WorkService.Server.Layers.Api.Converters;
 
 public interface IWorkApiConverter
 {
-    WorkDto ToDto(CreateWorkRequest createWorkRequest, Guid workId);
+    WorkDto ToDto(Guid workId, CreateWorkRequest createWorkRequest);
     WorkDto ToDto(WorkDto workDto, PatchWorkRequest patchWorkRequest);
     GetWorkResponse ToResponse(WorkDto workDto);
 }
@@ -17,7 +17,7 @@ public class WorkApiConverter(
     IDateTimeProvider dateTimeProvider
 ) : IWorkApiConverter
 {
-    public WorkDto ToDto(CreateWorkRequest createWorkRequest, Guid workId) => new(
+    public WorkDto ToDto(Guid workId, CreateWorkRequest createWorkRequest) => new(
         workId,
         createWorkRequest.RecipientId,
         createWorkRequest.Title,

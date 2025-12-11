@@ -5,7 +5,7 @@
 ### 1) StartTimer
 
 - **Method:** POST
-- **URL:** /api/recipients/{recipientId}/timers
+- **URL:** /api/recipients/{recipientId}/timers/{timerName}
 - **Description:** Создаёт новый таймер для пользователя или стартует существующий
 - **Request Body:**
 
@@ -36,10 +36,31 @@
 - **URL:** /api/recipients/{recipientId}/timers
 - **Description:** Возвращает все таймеры для конкретного пользователя
 - **Query Parameters:**
-    - WithArchived: "bool",
-    - WithDeleted: "bool"
-- **Response Body:**
+    - withArchived: "bool",
+    - withDeleted: "bool"
 
+**Parameters description**
+
+- **withArchived:** фильтр, который позволяет вернуть еще и архивные таймеры (со статусом Archived) (optional)
+- **withDeleted** фильтр, который позволяет вернуть еще и удаленные таймеры (со статусом Deleted) (optional)
+
+- **Response Body:**
+**Parameters description**
+
+- **SessionId:** Уникальный Id сессии
+- **TimerId:** Уникальный Id таймера
+- **StartTime:** Время запуска таймера (опционально)
+- **ElapsedTime:** Пройденное время после запуска таймера. 0 если таймер не запущен
+- **StopTime:** Время остановки таймера(опционально)
+- **PingTimeout:** Через сколько напомнить о таймере(опционально):
+- **TimerSessions** Сессии таймера. Запустил таймер, затем остановил его - 1 сессия
+- **TimerStatus:** Текущее состояние таймера. Принимает следующие значения:
+    - **Created:** Созданный, но не запущенный таймер. Базовый статус.
+    - **Started** Запущенный таймер
+    - **Stopped** Остановленный таймер
+    - **Reset** Сброшенный таймер
+    - **Archived** Архивный таймер
+    - **Deleted** Удаленный таймер
 ```json
 [
     {
@@ -122,7 +143,6 @@
     "ElapsedTime": "TimeSpan",
     "StopTime": "DateTime?",
     "PingTimeout": "TimeSpan?",
-    
     "TimerSessions": [
         {
             "SessionId": "Guid",
