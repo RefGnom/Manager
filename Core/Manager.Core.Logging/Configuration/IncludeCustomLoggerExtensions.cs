@@ -42,13 +42,15 @@ public static class IncludeCustomLoggerExtensions
     public static IServiceCollection AddCustomLogger(
         this IServiceCollection services,
         IConfigurationManager configuration,
-        string environmentName
+        string environmentName,
+        CustomWriteStrategy? customWriteStrategy = null
     )
     {
         AddCustomLoggerConfiguration(configuration, environmentName);
 
         var startupLogger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
+            .WriteTo.Custom(customWriteStrategy ?? new CustomWriteStrategy())
             .CreateLogger()
             .ForContext(Constants.SourceContextPropertyName, StartupLoggerContext);
         Log.Logger = startupLogger;
