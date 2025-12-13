@@ -3,6 +3,7 @@ using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
 using Manager.Core.Logging.Configuration;
+using Manager.Core.Telemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,7 +20,7 @@ public class Program
         SolutionRootEnvironmentVariablesLoader.Load();
 
         var builder = WebApplication.CreateBuilder(args);
-        builder.AddCustomLogger();
+        builder.AddCustomLogger(new OpenTelemetryLogWriteStrategy());
         var startupLogger = StartupLoggerFactory.CreateStartupLogger();
 
         builder.Services.AddControllers();
@@ -29,7 +30,8 @@ public class Program
             .UseAutoRegistrationForCoreCommon()
             .UseNpg()
             .ConfigureAuthentication()
-            .AddSwaggerGen(c => c.ConfigureAuthentication());
+            .AddSwaggerGen(c => c.ConfigureAuthentication())
+            .AddTelemetry();
         startupLogger.LogInformation("Service collection configured");
 
         startupLogger.LogInformation("Build application");
