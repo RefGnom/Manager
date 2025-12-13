@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Manager.Core.Common;
 using Manager.Core.Logging.Configuration;
 using Serilog;
 using Serilog.Configuration;
@@ -15,6 +15,6 @@ public class OpenTelemetryLogWriteStrategy : CustomWriteStrategy
     {
         options.Endpoint = TelemetryOptions.EndPoint;
         options.Protocol = (OtlpProtocol)TelemetryOptions.Protocol;
-        options.ResourceAttributes["service.name"] = AppDomain.CurrentDomain.FriendlyName;
+        options.ResourceAttributes["service.name"] = ManagerApp.FriendlyName;
     }
 }

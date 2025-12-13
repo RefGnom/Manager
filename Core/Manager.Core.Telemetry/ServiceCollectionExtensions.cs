@@ -1,4 +1,5 @@
 ﻿using System;
+using Manager.Core.Common;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
@@ -12,7 +13,7 @@ public static class ServiceCollectionExtensions
     public static void AddTelemetry(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddOpenTelemetry()
-            .ConfigureResource(r => r.AddService(serviceName: AppDomain.CurrentDomain.FriendlyName))
+            .ConfigureResource(r => r.AddService(serviceName: ManagerApp.FriendlyName))
             .UseOtlpExporter(TelemetryOptions.Protocol, new Uri(TelemetryOptions.EndPoint))
             .WithTracing(tracerProviderBuilder => tracerProviderBuilder
                 .AddAspNetCoreInstrumentation()
