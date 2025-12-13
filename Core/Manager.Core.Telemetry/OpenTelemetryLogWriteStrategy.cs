@@ -13,8 +13,8 @@ public class OpenTelemetryLogWriteStrategy : CustomWriteStrategy
 
     private static void ConfigureOpenTelemetry(OpenTelemetrySinkOptions options)
     {
-        options.Endpoint = "http://147.45.150.159:4318";
-        options.Protocol = OtlpProtocol.HttpProtobuf;
+        options.Endpoint = TelemetryOptions.EndPoint;
+        options.Protocol = (OtlpProtocol)TelemetryOptions.Protocol;
         options.ResourceAttributes["service.name"] = AppDomain.CurrentDomain.FriendlyName;
     }
 }
