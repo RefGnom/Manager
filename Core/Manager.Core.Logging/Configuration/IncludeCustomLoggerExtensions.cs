@@ -24,9 +24,16 @@ public static class IncludeCustomLoggerExtensions
     ///     Важно. Если логгера в вашем сервисе вовсе нет, то его нужно зарегистрировать с помощью
     ///     serviceCollection.AddLogging(x => x.AddConsole())
     /// </summary>
-    public static IHostApplicationBuilder AddCustomLogger(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddCustomLogger(
+        this IHostApplicationBuilder builder,
+        CustomWriteStrategy? customWriteStrategy
+    )
     {
-        builder.Services.AddCustomLogger(builder.Configuration, builder.Environment.EnvironmentName);
+        builder.Services.AddCustomLogger(
+            builder.Configuration,
+            builder.Environment.EnvironmentName,
+            customWriteStrategy
+        );
 
         return builder;
     }

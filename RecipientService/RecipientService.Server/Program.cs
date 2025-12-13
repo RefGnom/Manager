@@ -4,6 +4,7 @@ using Manager.Core.BackgroundTasks;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
 using Manager.Core.Logging.Configuration;
+using Manager.Core.Telemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,9 +21,8 @@ public static class Program
         SolutionRootEnvironmentVariablesLoader.Load();
 
         var builder = WebApplication.CreateBuilder(args);
-        builder.AddCustomLogger();
+        builder.AddCustomLogger(new OpenTelemetryLogWriteStrategy());
         var startupLogger = StartupLoggerFactory.CreateStartupLogger();
-
         builder.Services.AddControllers();
         startupLogger.LogInformation("Start configuration service collection");
         builder.Services.AddEndpointsApiExplorer()
@@ -31,7 +31,8 @@ public static class Program
             .UseNpg()
             .ConfigureAuthentication()
             .AddSwaggerGen(c => c.ConfigureAuthentication())
-            .AddBackgroundTasks(startupLogger);
+            .AddBackgroundTasks(startupLogger)
+            .AddTelemetry();
         startupLogger.LogInformation("Service collection configured");
 
         startupLogger.LogInformation("Build application");
