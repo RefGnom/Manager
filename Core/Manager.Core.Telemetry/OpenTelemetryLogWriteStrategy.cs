@@ -1,4 +1,6 @@
-﻿using Manager.Core.Common;
+﻿using System;
+using System.Net;
+using Manager.Core.Common;
 using Manager.Core.Logging.Configuration;
 using Serilog;
 using Serilog.Configuration;
@@ -16,5 +18,7 @@ public class OpenTelemetryLogWriteStrategy : CustomWriteStrategy
         options.Endpoint = TelemetryOptions.EndPoint;
         options.Protocol = (OtlpProtocol)TelemetryOptions.Protocol;
         options.ResourceAttributes["service.name"] = ManagerApp.FriendlyName;
+        options.ResourceAttributes["host.name"] = Environment.MachineName;
+        options.ResourceAttributes["host.name.dns"] = Dns.GetHostName();
     }
 }

@@ -58,6 +58,7 @@ public static class IncludeCustomLoggerExtensions
         var startupLogger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .WriteTo.Custom(customWriteStrategy ?? new CustomWriteStrategy())
+            .Enrich.WithProperty("environment", environmentName)
             .CreateLogger()
             .ForContext(Constants.SourceContextPropertyName, StartupLoggerContext);
         Log.Logger = startupLogger;
