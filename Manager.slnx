@@ -12,6 +12,7 @@
     <Project Path="Core/Manager.Core.Common/Manager.Core.Common.csproj" />
     <Project Path="Core/Manager.Core.CommonTestsCore/Manager.Core.CommonTestsCore.csproj" />
     <Project Path="Core/Manager.Core.EFCore/Manager.Core.EFCore.csproj" />
+    <Project Path="Core/Manager.Core.HostApp/Manager.Core.HostApp.csproj" />
     <Project Path="Core/Manager.Core.IntegrationTestsCore/Manager.Core.IntegrationTestsCore.csproj" />
     <Project Path="Core/Manager.Core.Logging/Manager.Core.Logging.csproj" />
     <Project Path="Core/Manager.Core.Networking/Manager.Core.Networking.csproj" />

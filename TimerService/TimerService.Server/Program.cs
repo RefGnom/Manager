@@ -1,13 +1,7 @@
-using System;
-using System.IO;
-using System.Reflection;
 using Manager.Core.AppConfiguration;
-using Manager.Core.Common.DependencyInjection.AutoRegistration;
-using Manager.Core.EFCore.Configuration;
-using Manager.TimerService.Server.Configurators;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Manager.Core.HostApp;
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 [assembly: ServerProperties("TIMER_SERVICE_PORT", "manager-timer-service")]
 
@@ -17,35 +11,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        SolutionRootEnvironmentVariablesLoader.Load();
-
-        var builder = WebApplication.CreateBuilder(args);
-
-        builder.Services
-            .UseAutoRegistrationForCurrentAssembly()
-            .UseAutoRegistrationForCoreCommon()
-            .UseNpg()
-            .AddSwaggerGen(c =>
-                {
-                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                    c.IncludeXmlComments(xmlPath);
-                }
-            )
-            .AddMapper();
-
-        builder.Services.AddControllers();
-
-        var app = builder.Build();
-
-        app.UseRouting();
-        app.MapControllers();
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
-        app.Run();
+        var managerHostApp = new ManagerHostApp<HostAppConfigurator>(args);
+        managerHostApp.Run();
     }
 }

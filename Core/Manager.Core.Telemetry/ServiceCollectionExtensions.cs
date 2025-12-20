@@ -9,7 +9,7 @@ namespace Manager.Core.Telemetry;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddTelemetry<TResourceFiller>(this IServiceCollection serviceCollection)
+    public static IServiceCollection AddTelemetry<TResourceFiller>(this IServiceCollection serviceCollection)
         where TResourceFiller : class, IResourcesFactory
     {
         serviceCollection
@@ -27,5 +27,7 @@ public static class ServiceCollectionExtensions
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
             );
+
+        return serviceCollection;
     }
 }
