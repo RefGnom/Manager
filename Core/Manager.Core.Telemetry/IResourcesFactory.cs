@@ -21,3 +21,10 @@ public class HostAppResourcesFactory(
         ["environment"] = hostEnvironment.EnvironmentName,
     };
 }
+
+public class StaticResourcesFactory(
+    Dictionary<string, object> resources
+) : IResourcesFactory
+{
+    public Dictionary<string, object> Create() => resources;
+}

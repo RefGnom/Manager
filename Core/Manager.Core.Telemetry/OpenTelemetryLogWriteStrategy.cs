@@ -1,4 +1,5 @@
-﻿using Manager.Core.Logging.Configuration;
+﻿using System.Collections.Generic;
+using Manager.Core.Logging.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Configuration;
@@ -25,4 +26,7 @@ public static class OpenTelemetryLogWriteStrategyFactory
 {
     public static OpenTelemetryLogWriteStrategy CreateForHostApp(IHostApplicationBuilder hostApplicationBuilder) =>
         new(new HostAppResourcesFactory(hostApplicationBuilder.Environment));
+
+    public static OpenTelemetryLogWriteStrategy CreateWithResources(Dictionary<string, object> resources) =>
+        new(new StaticResourcesFactory(resources));
 }
