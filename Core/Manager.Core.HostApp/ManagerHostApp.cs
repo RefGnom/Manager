@@ -49,8 +49,8 @@ public class ManagerHostApp<TConfigurator>
     {
         startupLogger.LogInformation("Start configuration service collection");
 
-        applicationBuilder.Services.AddControllers();
-        applicationBuilder.Services.AddEndpointsApiExplorer()
+        applicationBuilder.Services
+            .AddEndpointsApiExplorer()
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
             .UseNpg()
@@ -62,7 +62,8 @@ public class ManagerHostApp<TConfigurator>
             })
             .AddBackgroundTasks(startupLogger)
             .AddTelemetry<HostAppResourcesFactory>()
-            .AddDistributedCache();
+            .AddDistributedCache(applicationBuilder.Configuration)
+            .AddControllers();
         customConfigurator.ConfigureServiceCollection(applicationBuilder.Services, startupLogger);
 
         startupLogger.LogInformation("Service collection configured");
