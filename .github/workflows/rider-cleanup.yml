@@ -1,11 +1,13 @@
 name: Rider Cleanup with Dotnet Tool
 
 on:
-    push:
-        branches: [ main ]
+#    push:
+#        branches: [ main ]
+#
+#    schedule:
+#        -   cron: '0 2 * * *'
 
-    schedule:
-        -   cron: '0 2 * * *'
+    workflow_dispatch:
 
 jobs:
     cleanup:
