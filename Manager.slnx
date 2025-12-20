@@ -9,6 +9,7 @@
     <Project Path="AuthenticationService/AuthenticationService.UnitTests/AuthenticationService.UnitTests.csproj" />
   </Folder>
   <Folder Name="/Core/">
+    <Project Path="Core/Manager.Core.Caching/Manager.Core.Caching.csproj" />
     <Project Path="Core/Manager.Core.Common/Manager.Core.Common.csproj" />
     <Project Path="Core/Manager.Core.CommonTestsCore/Manager.Core.CommonTestsCore.csproj" />
     <Project Path="Core/Manager.Core.EFCore/Manager.Core.EFCore.csproj" />

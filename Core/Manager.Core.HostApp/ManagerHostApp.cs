@@ -2,6 +2,7 @@
 using Manager.Core.AppConfiguration;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.BackgroundTasks;
+using Manager.Core.Caching;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
 using Manager.Core.Logging.Configuration;
@@ -60,7 +61,8 @@ public class ManagerHostApp<TConfigurator>
                 customConfigurator.ConfigureSwaggerOption(c);
             })
             .AddBackgroundTasks(startupLogger)
-            .AddTelemetry<HostAppResourcesFactory>();
+            .AddTelemetry<HostAppResourcesFactory>()
+            .AddDistributedCache();
         customConfigurator.ConfigureServiceCollection(applicationBuilder.Services, startupLogger);
 
         startupLogger.LogInformation("Service collection configured");
