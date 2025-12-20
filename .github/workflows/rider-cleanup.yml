@@ -33,7 +33,7 @@ jobs:
 
             -   name: Run solution cleanup
                 run: |
-                    jb cleanupcode Manager.slnx
+                    jb cleanupcode Manager.slnx --profile="Built-in: Full Cleanup"
 
             -   name: Commit and push changes
                 run: |

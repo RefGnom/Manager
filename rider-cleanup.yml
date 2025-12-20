@@ -1,0 +1,62 @@
+# Rider Cleanup Configuration for .slnx files
+# Note: Rider should automatically detect and work with .slnx files
+# The key is to ensure the solution file path is correctly referenced
+version: 1.0
+solutionFile: Manager.slnx  # Updated to use .slnx file
+projects:
+  - name: "*"  # Apply to all projects in solution
+    settings:
+      # Code cleanup settings
+      codeStyle:
+        # Remove unused usings
+        removeUnusedUsings: true
+        # Sort usings
+        sortUsings: true
+        # Remove unused variables
+        removeUnusedVariables: true
+        # Remove unused members
+        removeUnusedMembers: true
+        # Remove unused parameters
+        removeUnusedParameters: true
+      formatting:
+        # Reformat code
+        reformatCode: true
+        # Optimize usings
+        optimizeUsings: true
+      naming:
+        # Apply naming conventions
+        enforceNaming: true
+      # The profile to use for cleanup
+      codeCleanupProfile: "Built-in: Full Cleanup"  # Using built-in profile that should work with .slnx
+
+# Global settings
+globalSettings:
+  runOnSolutionLoad: false
+  autoSaveFiles: true
+  backupFiles: false
+
+# File patterns to include/exclude
+fileFilters:
+  include:
+    - "**/*.cs"
+    - "**/*.vb"
+  exclude:
+    - "**/node_modules/**"
+    - "**/bin/**"
+    - "**/obj/**"
+    - "**/packages/**"
+    - "**/.git/**"
+
+# Additional actions to perform
+actions:
+  # Run inspections
+  - name: "RunInspections"
+    enabled: true
+  # Cleanup solution
+  - name: "CleanupSolution"
+    enabled: true
+    settings:
+      profile: "Built-in: Full Cleanup"  # Consistent with project-level profile
+  # Update solution file references if needed
+  - name: "UpdateSolutionReferences"
+    enabled: true
