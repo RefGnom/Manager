@@ -20,7 +20,7 @@ public class Program
         SolutionRootEnvironmentVariablesLoader.Load();
 
         var builder = WebApplication.CreateBuilder(args);
-        builder.AddCustomLogger(new OpenTelemetryLogWriteStrategy());
+        builder.AddCustomLogger(OpenTelemetryLogWriteStrategyFactory.CreateForHostApp(builder));
         var startupLogger = StartupLoggerFactory.CreateStartupLogger();
 
         builder.Services.AddControllers();
@@ -31,7 +31,7 @@ public class Program
             .UseNpg()
             .ConfigureAuthentication()
             .AddSwaggerGen(c => c.ConfigureAuthentication())
-            .AddTelemetry();
+            .AddTelemetry<HostAppResourcesFactory>();
         startupLogger.LogInformation("Service collection configured");
 
         startupLogger.LogInformation("Build application");

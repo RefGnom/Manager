@@ -24,7 +24,7 @@ public static class Program
         SolutionRootEnvironmentVariablesLoader.Load();
 
         var builder = WebApplication.CreateBuilder(args);
-        builder.AddCustomLogger(new OpenTelemetryLogWriteStrategy());
+        builder.AddCustomLogger(OpenTelemetryLogWriteStrategyFactory.CreateForHostApp(builder));
         var startupLogger = StartupLoggerFactory.CreateStartupLogger();
 
         builder.Services.AddControllers();
@@ -37,7 +37,7 @@ public static class Program
             .AddSwaggerGen(c => c.ConfigureAuthentication())
             .AddBackgroundTasks(startupLogger)
             .AddSingleton<IPasswordHasher<ApiKeyService>, PasswordHasher<ApiKeyService>>()
-            .AddTelemetry();
+            .AddTelemetry<HostAppResourcesFactory>();
         startupLogger.LogInformation("Service collection configured");
 
         startupLogger.LogInformation("Build application");

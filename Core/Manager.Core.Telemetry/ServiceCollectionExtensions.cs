@@ -1,5 +1,4 @@
 ﻿using System;
-using Manager.Core.Common;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
@@ -10,10 +9,14 @@ namespace Manager.Core.Telemetry;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddTelemetry(this IServiceCollection serviceCollection)
+    public static void AddTelemetry<TResourceFiller>(this IServiceCollection serviceCollection)
+        where TResourceFiller : class, IResourcesFactory
     {
-        serviceCollection.AddOpenTelemetry()
-            .ConfigureResource(r => r.AddService(serviceName: ManagerApp.FriendlyName))
+        serviceCollection
+            .AddSingleton<IResourceDetector, ResourceDetector>()
+            .AddSingleton<IResourcesFactory, TResourceFiller>()
+            .AddOpenTelemetry()
+            .ConfigureResource(builder => builder.AddDetector(s => s.GetRequiredService<IResourceDetector>()))
             .UseOtlpExporter(TelemetryOptions.Protocol, new Uri(TelemetryOptions.EndPoint))
             .WithTracing(tracerProviderBuilder => tracerProviderBuilder
                 .AddAspNetCoreInstrumentation()
