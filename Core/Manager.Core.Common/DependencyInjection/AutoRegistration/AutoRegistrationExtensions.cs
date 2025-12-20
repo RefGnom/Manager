@@ -16,8 +16,13 @@ public static class AutoRegistrationExtensions
     ///     LifestyleByDefault.
     ///     Время жизни по умолчанию можно переопределить с помощью атрибутов
     /// </summary>
-    public static IServiceCollection UseAutoRegistrationForCurrentAssembly(this IServiceCollection serviceCollection) =>
-        serviceCollection.UseAutoRegistrationForAssembly(Assembly.GetCallingAssembly());
+    public static IServiceCollection UseAutoRegistrationForCurrentAssembly(this IServiceCollection serviceCollection)
+    {
+        var currentAssembly = Assembly.GetEntryAssembly();
+        return currentAssembly == null
+            ? serviceCollection
+            : serviceCollection.UseAutoRegistrationForAssembly(currentAssembly);
+    }
 
     /// <summary>
     ///     Сканирует сборку, в которой находится переданный тип и автоматически регистрирует
