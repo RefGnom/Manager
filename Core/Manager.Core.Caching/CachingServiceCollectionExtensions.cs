@@ -12,7 +12,12 @@ public static class ServiceCollectionExtensions
         {
             var redisOptions = new RedisOptions();
             configuration.Bind("RedisOptions", redisOptions);
-            options.Configuration = $"147.45.150.159,password={redisOptions.Password}";
+            options.Configuration = string.Join(
+                ',',
+                redisOptions.Host,
+                $"password={redisOptions.Password}",
+                $"syncTimeout={redisOptions.TimeoutInMs}"
+            );
             options.InstanceName = "ManagerRedisCache";
         }
     );

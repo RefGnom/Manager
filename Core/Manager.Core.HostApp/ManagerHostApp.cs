@@ -5,6 +5,7 @@ using Manager.Core.BackgroundTasks;
 using Manager.Core.Caching;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
+using Manager.Core.HealthCheck;
 using Manager.Core.Logging.Configuration;
 using Manager.Core.Telemetry;
 using Microsoft.AspNetCore.Builder;
@@ -53,6 +54,7 @@ public class ManagerHostApp<TConfigurator>
             .AddEndpointsApiExplorer()
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
+            .AddSingleton<IHealthCheckService, HealthCheckService>()
             .UseNpg()
             .ConfigureAuthentication(addAuthenticationClient: !isAuth)
             .AddSwaggerGen(c =>
