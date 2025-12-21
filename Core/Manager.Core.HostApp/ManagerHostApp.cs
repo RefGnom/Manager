@@ -54,14 +54,16 @@ public class ManagerHostApp<TConfigurator>
             .AddEndpointsApiExplorer()
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
+            .UseAutoRegistrationForCoreNetworking()
             .AddSingleton<IHealthCheckService, HealthCheckService>()
             .UseNpg()
             .ConfigureAuthentication(addAuthenticationClient: !isAuth)
             .AddSwaggerGen(c =>
-            {
-                c.ConfigureAuthentication();
-                customConfigurator.ConfigureSwaggerOption(c);
-            })
+                {
+                    c.ConfigureAuthentication();
+                    customConfigurator.ConfigureSwaggerOption(c);
+                }
+            )
             .AddBackgroundTasks(startupLogger)
             .AddTelemetry<HostAppResourcesFactory>()
             .AddDistributedCache(applicationBuilder.Configuration)

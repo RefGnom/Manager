@@ -18,7 +18,7 @@ public record ContainerConfiguration(
         }
 
         await Network.CreateAsync();
-        using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+        using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
 
         foreach (var container in Containers)
         {
@@ -29,7 +29,7 @@ public record ContainerConfiguration(
 
     public async Task DisposeAsync()
     {
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(2));
         await Network.DeleteAsync(cts.Token).ConfigureAwait(false);
         foreach (var container in Containers)
         {
