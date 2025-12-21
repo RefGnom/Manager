@@ -41,7 +41,7 @@ public class HealthCheckService(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Cache error");
+            logger.LogError(e, "Cache error in health check");
             return $"Cache error: {e.Message}";
         }
     }
