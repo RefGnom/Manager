@@ -15,7 +15,6 @@ public static class Program
         var serviceProvider = ToolConfigurator
             .CreateSettingsConfiguration()
             .CreateServiceProvider();
-
         var managerTool = serviceProvider.GetRequiredService<IManagerTool>();
         await managerTool.RunAsync(args);
     }
