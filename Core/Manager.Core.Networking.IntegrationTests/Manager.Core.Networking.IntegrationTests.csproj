@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Manager.Core.IntegrationTestsCore\Manager.Core.IntegrationTestsCore.csproj"/>
+        <ProjectReference Include="..\Manager.Core.Networking.UnitTests\Manager.Core.Networking.UnitTests.csproj" />
         <ProjectReference Include="..\Manager.Core.Networking\Manager.Core.Networking.csproj"/>
     </ItemGroup>
 

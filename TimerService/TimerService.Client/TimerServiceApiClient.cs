@@ -13,7 +13,7 @@ public class TimerServiceApiClient(
 ) : ITimerServiceApiClient
 {
     private const string RecipientPath = "api/recipients";
-    
+
     public async Task<HttpResponse> StartTimerAsync(StartTimerRequest request)
     {
         var httpRequest = new HttpRequestMessage(

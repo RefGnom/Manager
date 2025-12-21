@@ -16,6 +16,8 @@
     <Project Path="Core/Manager.Core.HostApp/Manager.Core.HostApp.csproj" />
     <Project Path="Core/Manager.Core.IntegrationTestsCore/Manager.Core.IntegrationTestsCore.csproj" />
     <Project Path="Core/Manager.Core.Logging/Manager.Core.Logging.csproj" />
+    <Project Path="Core/Manager.Core.Networking.IntegrationTests/Manager.Core.Networking.IntegrationTests.csproj" />
+    <Project Path="Core/Manager.Core.Networking.UnitTests/Manager.Core.Networking.UnitTests.csproj" />
     <Project Path="Core/Manager.Core.Networking/Manager.Core.Networking.csproj" />
     <Project Path="Core/Manager.Core.Telemetry/Manager.Core.Telemetry.csproj" />
     <Project Path="Core/Manager.Core.UnitTestsCore/Manager.Core.UnitTestsCore.csproj" />
