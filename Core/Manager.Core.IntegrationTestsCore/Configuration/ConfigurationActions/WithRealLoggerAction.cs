@@ -1,6 +1,9 @@
-﻿using Manager.Core.Logging.Configuration;
+﻿using System.Collections.Generic;
+using System.Net;
+using Manager.Core.Common;
+using Manager.Core.Logging.Configuration;
+using Manager.Core.Telemetry;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Manager.Core.IntegrationTestsCore.Configuration.ConfigurationActions;
@@ -12,8 +15,19 @@ public class WithRealLoggerAction : IConfigurationAction
 
     public void Invoke(ConfigurationActionContext context)
     {
+        var resources = new Dictionary<string, object>
+        {
+            ["service.name"] = "IntegrationTests",
+            ["HostName"] = Dns.GetHostName(),
+            ["environment"] = Environments.Testing,
+        };
+
         context.ServiceCollection
             .AddLogging(x => x.AddConsole())
-            .AddCustomLogger(context.ConfigurationManager, Environments.Development);
+            .AddCustomLogger(
+                context.ConfigurationManager,
+                Environments.Testing,
+                OpenTelemetryLogWriteStrategyFactory.CreateWithResources(resources)
+            );
     }
 }

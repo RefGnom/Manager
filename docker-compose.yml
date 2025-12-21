@@ -7,7 +7,7 @@ services:
         ports:
             - "${AUTHENTICATION_SERVICE_PORT}:8080"
         environment:
-            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
         env_file:
             -   path: ./AuthenticationService/AuthenticationService.Server/.env
                 required: false
@@ -22,7 +22,7 @@ services:
         ports:
             - "${WORK_SERVICE_PORT}:8080"
         environment:
-            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
         env_file:
             -   path: ./WorkService/WorkService.Server/.env
                 required: false
@@ -38,9 +38,25 @@ services:
         ports:
             - "${TIMER_SERVICE_PORT}:8080"
         environment:
-            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
         env_file:
             -   path: ./TimerService/TimerService.Server/.env
+                required: false
+            -   path: .env
+        networks:
+            - my-network
+
+    recipient-service:
+        build:
+            context: .
+            dockerfile: ./RecipientService/RecipientService.Server/Dockerfile
+        container_name: manager-recipient-service
+        ports:
+            - "${RECIPIENT_SERVICE_PORT}:8080"
+        environment:
+            - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
+        env_file:
+            -   path: ./RecipientService/RecipientService.Server/.env
                 required: false
             -   path: .env
         networks:

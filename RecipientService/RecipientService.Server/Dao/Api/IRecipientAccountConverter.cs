@@ -22,7 +22,7 @@ public class RecipientAccountConverter : IRecipientAccountConverter
     );
 
     public UpdateRecipientAccountDto ToDto(PatchRecipientAccountRequest request) => new(
-        request.RecipientId,
+        request.Id,
         request.NewLogin,
         request.NewPassword,
         request.NewRecipientTimeUtcOffsetHours.HasValue

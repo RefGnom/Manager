@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <ImplicitUsings>false</ImplicitUsings>
+        <ImplicitUsings>disable</ImplicitUsings>
         <UserSecretsId>cf050487-56e8-4bfc-b480-123db022c4c0</UserSecretsId>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>Manager.AuthenticationService.Server</RootNamespace>
@@ -11,13 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\Core\Manager.Core.EFCore\Manager.Core.EFCore.csproj"/>
-        <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj"/>
-        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
+        <ProjectReference Include="..\..\Core\Manager.Core.HostApp\Manager.Core.HostApp.csproj" />
     </ItemGroup>
 
 </Project>

@@ -19,7 +19,7 @@ public class ResetTimerCommandExecutor(
     {
         var timerName = context.GetCommandArgument(command.CommandName) ?? TimerCommandConstants.DefaultTimerName;
 
-        var deleteTimerRequest = timerRequestFactory.CreateDeleteTimerRequest(context.EnsureUser().Id, timerName);
+        var deleteTimerRequest = timerRequestFactory.CreateCommonTimerRequest(context.EnsureUser().Id, timerName);
         var httpResponse = await timerServiceApiClient.DeleteTimerAsync(deleteTimerRequest);
 
         if (httpResponse.IsSuccessStatusCode)

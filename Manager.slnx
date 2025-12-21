@@ -1,0 +1,51 @@
+<Solution>
+  <Folder Name="/ApiGateway/">
+    <Project Path="ApiGateway/ApiGateway.Server/ApiGateway.Server.csproj" />
+  </Folder>
+  <Folder Name="/AuthenticationService/">
+    <Project Path="AuthenticationService/AuthenticationService.Client/AuthenticationService.Client.csproj" />
+    <Project Path="AuthenticationService/AuthenticationService.IntegrationTests/AuthenticationService.IntegrationTests.csproj" />
+    <Project Path="AuthenticationService/AuthenticationService.Server/AuthenticationService.Server.csproj" />
+    <Project Path="AuthenticationService/AuthenticationService.UnitTests/AuthenticationService.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/Core/">
+    <Project Path="Core/Manager.Core.Caching/Manager.Core.Caching.csproj" />
+    <Project Path="Core/Manager.Core.Common/Manager.Core.Common.csproj" />
+    <Project Path="Core/Manager.Core.CommonTestsCore/Manager.Core.CommonTestsCore.csproj" />
+    <Project Path="Core/Manager.Core.EFCore/Manager.Core.EFCore.csproj" />
+    <Project Path="Core/Manager.Core.HostApp/Manager.Core.HostApp.csproj" />
+    <Project Path="Core/Manager.Core.IntegrationTestsCore/Manager.Core.IntegrationTestsCore.csproj" />
+    <Project Path="Core/Manager.Core.Logging/Manager.Core.Logging.csproj" />
+    <Project Path="Core/Manager.Core.Networking/Manager.Core.Networking.csproj" />
+    <Project Path="Core/Manager.Core.Telemetry/Manager.Core.Telemetry.csproj" />
+    <Project Path="Core/Manager.Core.UnitTestsCore/Manager.Core.UnitTestsCore.csproj" />
+    <Project Path="Core/Manager.Core/Manager.Core.csproj" />
+  </Folder>
+  <Folder Name="/ManagerTgBot/">
+    <Project Path="ManagerTgBot/ManagerTgClient.Bot/ManagerTgClient.Bot.csproj" />
+    <Project Path="ManagerTgBot/ManagerTgClient.IntegrationTests/ManagerTgClient.IntegrationTests.csproj" />
+    <Project Path="ManagerTgBot/ManagerTgClient.UnitTests/ManagerTgClient.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/RecipientService/">
+    <Project Path="RecipientService/RecipientService.Client/RecipientService.Client.csproj" />
+    <Project Path="RecipientService/RecipientService.IntegrationTests/RecipientService.IntegrationTests.csproj" />
+    <Project Path="RecipientService/RecipientService.Server/RecipientService.Server.csproj" />
+    <Project Path="RecipientService/RecipientService.UnitTests/RecipientService.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/TimerService/">
+    <Project Path="TimerService/TimerService.Client/TimerService.Client.csproj" />
+    <Project Path="TimerService/TimerService.IntegrationTests/TimerService.IntegrationTests.csproj" />
+    <Project Path="TimerService/TimerService.Server/TimerService.Server.csproj" />
+    <Project Path="TimerService/TimerService.UnitTest/TimerService.UnitTest.csproj" />
+  </Folder>
+  <Folder Name="/Tool/">
+    <Project Path="Tool/Manager.Tool.UnitTests/Manager.Tool.UnitTests.csproj" />
+    <Project Path="Tool/Manager.Tool/Manager.Tool.csproj" />
+  </Folder>
+  <Folder Name="/WorkService/">
+    <Project Path="WorkService/WorkService.Client/WorkService.Client.csproj" />
+    <Project Path="WorkService/WorkService.IntegrationTests/WorkService.IntegrationTests.csproj" />
+    <Project Path="WorkService/WorkService.Server/WorkService.Server.csproj" />
+    <Project Path="WorkService/WorkService.UnitTests/WorkService.UnitTests.csproj" />
+  </Folder>
+</Solution>

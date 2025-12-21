@@ -48,6 +48,7 @@ public class WorkClientTest : IntegrationTestBase
 
         var updateWorkRequest = Fixture.Build<UpdateWorkRequest>()
             .With(x => x.Id, workDbo.Id)
+            .With(x=> x.RecipientId, workDbo.RecipientId)
             .With(x => x.DeadLineUtc, Fixture.Create<DateTime>().ToUniversalTime())
             .Create();
 
@@ -72,7 +73,7 @@ public class WorkClientTest : IntegrationTestBase
         var workDbo = await CreateWorkAsync();
 
         // Act
-        await WorkServiceApiClient.DeleteWorkAsync(workDbo.Id);
+        await WorkServiceApiClient.DeleteWorkAsync(workDbo.RecipientId, workDbo.Id);
 
         // Asset
         var foundWorkDbo = await DataContext.FindAsync<WorkDbo, Guid>(workDbo.Id);
@@ -90,7 +91,7 @@ public class WorkClientTest : IntegrationTestBase
         var workDbo = await CreateWorkAsync();
 
         // Act
-        var getWorkResponse = await WorkServiceApiClient.FindWorkAsync(workDbo.Id);
+        var getWorkResponse = await WorkServiceApiClient.FindWorkAsync(workDbo.RecipientId, workDbo.Id);
 
         // Assert
         getWorkResponse.Should().NotBeNull();

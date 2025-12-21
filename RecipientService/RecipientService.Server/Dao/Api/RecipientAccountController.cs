@@ -10,7 +10,7 @@ namespace Manager.RecipientService.Server.Dao.Api;
 
 [ApiController]
 [AuthorizationResource("RecipientAccount")]
-[Route("api/recipient-account")]
+[Route("api/recipients")]
 public class RecipientAccountController(
     IRecipientAccountService recipientAccountService,
     IRecipientAccountConverter recipientAccountConverter
@@ -31,7 +31,7 @@ public class RecipientAccountController(
             : BadRequest(createResult.Error);
     }
 
-    [HttpGet]
+    [HttpGet("{recipientId:guid}")]
     public async Task<IActionResult> GetRecipientAccount([FromRoute] Guid recipientId)
     {
         var recipientAccount = await recipientAccountService.FindAsync(recipientId);
@@ -43,9 +43,13 @@ public class RecipientAccountController(
         return Ok(recipientAccountConverter.ToResponse(recipientAccount));
     }
 
-    [HttpPatch]
-    public async Task<IActionResult> PatchRecipientAccount([FromBody] PatchRecipientAccountRequest request)
+    [HttpPatch("{recipientId:guid}")]
+    public async Task<IActionResult> PatchRecipientAccount(
+        [FromRoute] Guid recipientId,
+        [FromBody] PatchRecipientAccountRequest request
+    )
     {
+        request.Id = recipientId;
         var updateRecipientAccountDto = recipientAccountConverter.ToDto(request);
         var updateResult = await recipientAccountService.UpdateAsync(updateRecipientAccountDto);
         if (updateResult.IsSuccess)
@@ -58,7 +62,7 @@ public class RecipientAccountController(
             : BadRequest(updateResult.Error);
     }
 
-    [HttpDelete]
+    [HttpDelete("{recipientId:guid}")]
     public async Task<IActionResult> DeleteRecipientAccount([FromRoute] Guid recipientId)
     {
         var deleteResult = await recipientAccountService.DeleteAsync(recipientId);

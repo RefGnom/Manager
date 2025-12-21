@@ -15,7 +15,7 @@ namespace Manager.TimerService.Server.Layers.Api.Controllers;
 /// <param name="timerService"></param>
 /// <param name="timerHttpModelsConverter"></param>
 [ApiController]
-[Route("timers")]
+[Route("/api/recipients/{recipientId:guid}/timers")]
 public class TimersController(
     ITimerService timerService,
     ITimerHttpModelsConverter timerHttpModelsConverter
@@ -24,14 +24,24 @@ public class TimersController(
     /// <summary>
     ///     Запускает таймер и создает для него сессию. Если таймера не существует - создает новый.
     /// </summary>
+    /// <param name="timerName"></param>
     /// <param name="request">Запрос для запуска таймера</param>
+    /// <param name="recipientId"></param>
     /// <returns></returns>
-    [HttpPost("start")]
-    public async Task<ActionResult> StartTimer([FromBody] StartTimerRequest request)
+    [HttpPost("{timerName}")]
+    public async Task<ActionResult> StartTimer(
+        [FromRoute] Guid recipientId,
+        [FromRoute] string timerName,
+        [FromBody] StartTimerRequest request
+    )
     {
+        request.Name = timerName;
+        request.RecipientId = recipientId;
         try
         {
-            await timerService.StartAsync(timerHttpModelsConverter.FromStartRequest(request));
+            await timerService.StartAsync(
+                timerHttpModelsConverter.FromStartRequest(request)
+            );
             return Ok();
         }
         catch (InvalidOperationException e)
@@ -43,16 +53,18 @@ public class TimersController(
     /// <summary>
     ///     Получает все таймеры для конкретного пользователя
     /// </summary>
-    /// <param name="request">Запрос для получения таймеров пользователя</param>
+    /// <param name="recipientId"></param>
+    /// <param name="withArchived"></param>
+    /// <param name="withDeleted"></param>
     /// <returns></returns>
-    [HttpGet("selectForUser")]
-    public async Task<ActionResult<UserTimersResponse>> SelectUserTimers([FromQuery] UserTimersRequest request)
+    [HttpGet]
+    public async Task<ActionResult<UserTimersResponse>> SelectUserTimers(
+        [FromRoute] Guid recipientId,
+        [FromQuery] bool withArchived,
+        [FromQuery] bool withDeleted
+    )
     {
-        var dtos = await timerService.SelectByUserAsync(
-            request.UserId,
-            request.WithArchived,
-            request.WithDeleted
-        );
+        var dtos = await timerService.SelectByUserAsync(recipientId, withArchived, withDeleted);
         var timerResponses = dtos
             .Select(x => timerHttpModelsConverter.ConvertToTimerResponse(x, timerService.CalculateElapsedTime(x)))
             .ToArray();
@@ -63,14 +75,20 @@ public class TimersController(
     /// <summary>
     ///     Останавливает сессию таймера и переводит таймер в статус остановлен
     /// </summary>
-    /// <param name="request">Запрос для остановки таймера</param>
+    /// <param name="recipientId"></param>
+    /// <param name="timerName"></param>
+    /// <param name="stopTime"></param>
     /// <returns></returns>
-    [HttpPost("stop")]
-    public async Task<ActionResult> StopTimer([FromBody] StopTimerRequest request)
+    [HttpPatch("{timerName}/stop")]
+    public async Task<ActionResult> StopTimer(
+        [FromRoute] Guid recipientId,
+        [FromRoute] string timerName,
+        [FromBody] DateTime stopTime
+    )
     {
         try
         {
-            await timerService.StopAsync(request.UserId, request.Name, request.StopTime);
+            await timerService.StopAsync(recipientId, timerName, stopTime);
         }
         catch (NotFoundException)
         {
@@ -87,12 +105,13 @@ public class TimersController(
     /// <summary>
     ///     Ищет таймер по его уникальному индексу
     /// </summary>
-    /// <param name="request">Запрос для получения таймера</param>
+    /// <param name="recipientId"></param>
+    /// <param name="timerName"></param>
     /// <returns></returns>
-    [HttpGet("find")]
-    public async Task<ActionResult<TimerResponse>> FindTimer([FromQuery] TimerRequest request)
+    [HttpGet("{timerName}")]
+    public async Task<ActionResult<TimerResponse>> FindTimer([FromRoute] Guid recipientId, [FromRoute] string timerName)
     {
-        var timer = await timerService.FindAsync(request.UserId, request.Name);
+        var timer = await timerService.FindAsync(recipientId, timerName);
         if (timer == null)
         {
             return NotFound();
@@ -104,14 +123,15 @@ public class TimersController(
     /// <summary>
     ///     Сбрасывает время таймера и архивирует его
     /// </summary>
-    /// <param name="request">Запрос для сброса таймера</param>
+    /// <param name="recipientId"></param>
+    /// <param name="timerName"></param>
     /// <returns></returns>
-    [HttpPost("reset")]
-    public async Task<ActionResult> ResetTimer([FromBody] ResetTimerRequest request)
+    [HttpPatch("{timerName}/reset")]
+    public async Task<ActionResult> ResetTimer([FromRoute] Guid recipientId, [FromRoute] string timerName)
     {
         try
         {
-            await timerService.ResetAsync(request.UserId, request.Name);
+            await timerService.ResetAsync(recipientId, timerName);
         }
         catch (NotFoundException)
         {
@@ -128,14 +148,15 @@ public class TimersController(
     /// <summary>
     ///     Добавляет к таймеру Deleted и переводит статус в Deleted
     /// </summary>
-    /// <param name="request">Запрос для удаления таймера</param>
+    /// <param name="recipientId"></param>
+    /// <param name="timerName"></param>
     /// <returns></returns>
-    [HttpDelete("delete")]
-    public async Task<ActionResult> DeleteTimer([FromBody] DeleteTimerRequest request)
+    [HttpDelete("{timerName}")]
+    public async Task<ActionResult> DeleteTimer([FromRoute] Guid recipientId, [FromRoute] string timerName)
     {
         try
         {
-            await timerService.DeleteAsync(request.UserId, request.Name);
+            await timerService.DeleteAsync(recipientId, timerName);
         }
         catch (NotFoundException)
         {
