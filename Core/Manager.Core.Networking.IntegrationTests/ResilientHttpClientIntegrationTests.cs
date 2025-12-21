@@ -1,9 +1,11 @@
+using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading; // Добавлено для CancellationToken
 using System.Threading.Tasks;
 using FluentAssertions;
 using Manager.Core.IntegrationTestsCore;
-using Manager.Core.Networking.UnitTests; // Подключаем ваш MockHttpMessageHandler
+using Manager.Core.Networking.UnitTests;
 using NUnit.Framework;
 
 namespace Manager.Core.Networking.IntegrationTests;
@@ -19,9 +21,11 @@ public class ResilientHttpClientIntegrationTests : IntegrationTestBase
 
         var httpClient = new HttpClient(handler);
         var resilientHttpClient = new ResilientHttpClient(httpClient);
-        var request = new HttpRequestMessage(HttpMethod.Get, "https://fake-service.com/get");
+        var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/api/test");
 
-        var result = await resilientHttpClient.SendAsync(request);
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+
+        var result = await resilientHttpClient.SendAsync(request, cts.Token);
 
         result.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -39,12 +43,13 @@ public class ResilientHttpClientIntegrationTests : IntegrationTestBase
 
         var httpClient = new HttpClient(handler);
         var resilientHttpClient = new ResilientHttpClient(httpClient);
-        var request = new HttpRequestMessage(HttpMethod.Get, "https://fake-service.com/status/503");
+        var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/api/error");
 
-        var result = await resilientHttpClient.SendAsync(request);
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+
+        var result = await resilientHttpClient.SendAsync(request, cts.Token);
 
         result.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
-
         attempts.Should().BeGreaterThan(1);
     }
 }
