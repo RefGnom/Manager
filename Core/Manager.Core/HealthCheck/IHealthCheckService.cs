@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 
 namespace Manager.Core.HealthCheck;
 
@@ -11,7 +12,8 @@ public interface IHealthCheckService
 }
 
 public class HealthCheckService(
-    IDistributedCache cache
+    IDistributedCache cache,
+    ILogger<HealthCheckService> logger
 ) : IHealthCheckService
 {
     private const string CacheHealthCheckKey = "health-check";
@@ -39,6 +41,7 @@ public class HealthCheckService(
         }
         catch (Exception e)
         {
+            logger.LogError(e, "Cache error");
             return $"Cache error: {e.Message}";
         }
     }
