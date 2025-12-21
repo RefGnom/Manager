@@ -21,7 +21,11 @@ public class WithAutoRegistrationAction : IConfigurationAction
     private static Assembly GetTestsAssembly()
     {
         var testAssemblyName = AppContext.BaseDirectory.Split(Path.DirectorySeparatorChar)[^5];
-        var testName = $"Manager.{testAssemblyName}";
-        return Assembly.Load(testName);
+        if (!testAssemblyName.StartsWith("Manager."))
+        {
+            testAssemblyName = $"Manager.{testAssemblyName}";
+        }
+
+        return Assembly.Load(testAssemblyName);
     }
 }

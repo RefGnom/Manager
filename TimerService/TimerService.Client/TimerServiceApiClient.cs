@@ -1,24 +1,18 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Manager.Core.Networking;
 using Manager.TimerService.Client.ServiceModels;
 
 namespace Manager.TimerService.Client;
 
 public class TimerServiceApiClient(
-    string url,
-    string apiKey
+    IHttpClient httpClient
 ) : ITimerServiceApiClient
 {
     private const string RecipientPath = "api/recipients";
-
-    private readonly HttpClient httpClient = new()
-    {
-        BaseAddress = new Uri(url),
-        DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
-    };
 
     public async Task<HttpResponse> StartTimerAsync(StartTimerRequest request)
     {

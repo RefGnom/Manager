@@ -1,22 +1,18 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Manager.AuthenticationService.Client.BusinessObjects.Requests;
 using Manager.AuthenticationService.Client.BusinessObjects.Responses;
+using Manager.Core.Networking;
 
 namespace Manager.AuthenticationService.Client;
 
 public class AuthenticationServiceApiClient(
-    string url,
-    string apiKey
+    IHttpClient httpClient
 ) : IAuthenticationServiceApiClient
 {
-    private readonly HttpClient httpClient = new()
-    {
-        BaseAddress = new Uri(url),
-        DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
-    };
+
 
     public async Task<AuthenticationStatusResponse> GetAuthenticationStatusAsync(
         AuthenticationStatusRequest authenticationStatusRequest

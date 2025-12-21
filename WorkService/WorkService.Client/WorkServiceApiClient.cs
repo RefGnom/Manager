@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Manager.Core.Networking;
 using Manager.WorkService.Client.Requests;
 using Manager.WorkService.Client.Responses;
 using Microsoft.Extensions.Logging;
@@ -10,19 +11,11 @@ using Microsoft.Extensions.Logging;
 namespace Manager.WorkService.Client;
 
 public class WorkServiceApiClient(
-    ILogger<WorkServiceApiClient> logger,
-    string apiKey,
-    string url
+    IHttpClient httpClient,
+    ILogger<WorkServiceApiClient> logger
 ) : IWorkServiceApiClient
 {
     private const string RecipientPath = "api/recipients";
-
-    private readonly HttpClient httpClient = new()
-    {
-        BaseAddress = new Uri(url),
-        DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
-    };
-
 
     public async Task<Guid> CreateWorkAsync(CreateWorkRequest createWorkRequest)
     {

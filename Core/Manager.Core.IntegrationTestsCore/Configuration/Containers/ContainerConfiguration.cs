@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DotNet.Testcontainers.Networks;
 
@@ -11,17 +12,25 @@ public record ContainerConfiguration(
 {
     public async Task StartAsync(Func<ContainerWithType, Task> onStart)
     {
+        if (Containers.Length == 0)
+        {
+            return;
+        }
+
         await Network.CreateAsync();
+        using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
+
         foreach (var container in Containers)
         {
-            await container.Container.StartAsync();
+            await container.Container.StartAsync(cts.Token);
             await onStart(container);
         }
     }
 
     public async Task DisposeAsync()
     {
-        await Network.DisposeAsync();
+        using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+        await Network.DeleteAsync(cts.Token).ConfigureAwait(false);
         foreach (var container in Containers)
         {
             await container.Container.DisposeAsync();

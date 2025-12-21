@@ -55,6 +55,7 @@ public class TestContainerBuilder : ITestContainerBuilder
                         Wait.ForUnixContainer()
                             .UntilHttpRequestIsSucceeded(r => r.ForPort(ContainerPort).ForPath("health"))
                     )
+                    .WithOutputConsumer(Consume.RedirectStdoutAndStderrToConsole())
                     .WithEnvironment("ASPNETCORE_ENVIRONMENT", EnvironmentName)
                     .WithEnvironment("DataBaseOptions:ConnectionStringTemplate", ContainerConnectionStringTemplate)
                     .WithEnvironment("DataBaseOptions:Username", Username)

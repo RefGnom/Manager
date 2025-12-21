@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Manager.AuthenticationService.Client;
 using Manager.Core.Common.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
