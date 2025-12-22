@@ -2,10 +2,13 @@ using System;
 using System.Threading.RateLimiting;
 // using Manager.Core.AppConfiguration;
 // using Manager.Core.HostApp;
+using Manager.Core.AppConfiguration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+[assembly: ServerProperties("API_GATEWAY_PORT", "It-wanna-docker-container")]
 
 namespace Manager.ApiGateway.Server;
 
