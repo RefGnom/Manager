@@ -1,11 +1,11 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using Manager.ApiGateway.Server;
 using Manager.Core.IntegrationTestsCore;
 using Manager.Core.IntegrationTestsCore.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-
-namespace ApiGateway.IntegrationalTests;
+namespace Manager.ApiGateway.IntegrationalTests;
 
 public class ApiGatewaySetupFixture : SetupFixtureBase
 {
