@@ -1,8 +1,11 @@
 ﻿using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Manager.Core.IntegrationTestsCore;
 
-namespace ApiGateway.IntegrationalTests;
+namespace Manager.ApiGateway.IntegrationalTests;
 
 public class TimerClientTest : IntegrationTestBase
 {
