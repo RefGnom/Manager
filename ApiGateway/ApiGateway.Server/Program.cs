@@ -2,7 +2,7 @@
 // using Manager.Core.HostApp;
 // using Microsoft.AspNetCore.Builder;
 //
-// [assembly: ServerProperties("API_GATEWAY_PORT", "davay randomnoe mi ego ni budem zapuskat")]
+// 
 //
 // namespace Manager.ApiGateway.Server;
 //
@@ -16,12 +16,15 @@
 // }
 
 using Manager.Core;
+using Manager.Core.AppConfiguration;
 using Manager.Core.Caching;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.HealthCheck;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+[assembly: ServerProperties("API_GATEWAY_PORT", "It-wanna-docker-container")]
 
 namespace Manager.ApiGateway.Server;
 
