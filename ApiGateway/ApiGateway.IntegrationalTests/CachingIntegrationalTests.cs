@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using FluentAssertions;
 using Manager.Core.IntegrationTestsCore;
-using NUnit.Framework;
-
 
 namespace ApiGateway.IntegrationalTests;
 
