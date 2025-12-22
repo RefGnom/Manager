@@ -50,6 +50,7 @@ public class CachingMiddleware(
         if (context.Response.StatusCode is >= 200 and < 300)
         {
             var byteBuffer = new byte[bodyDummy.Length];
+            bodyDummy.Position = 0;
             await bodyDummy.ReadExactlyAsync(byteBuffer, 0, byteBuffer.Length);
             bodyDummy.Seek(0, SeekOrigin.Begin);
             await bodyDummy.CopyToAsync(originalBody);

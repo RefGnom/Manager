@@ -7,17 +7,24 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace Manager.ApiGateway.Server;
 
-builder.Services.AddControllers().AddApplicationPart(typeof(HealthController).Assembly);
-builder.Services.UseAutoRegistrationForCoreCommon();
-builder.Services.AddDistributedCache(builder.Configuration);
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-builder.Services
-    .AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+        builder.Services.AddControllers();
+        builder.Services.UseAutoRegistrationForCoreCommon();
+        builder.Services.AddDistributedCache(builder.Configuration);
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddSingleton<IHealthCheckService, HealthCheckService>();
+
+        builder.Services
+            .AddReverseProxy()
+            .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 builder.Services.AddRateLimiter(options =>
     {
@@ -37,14 +44,18 @@ builder.Services.AddRateLimiter(options =>
     }
 );
 
-var app = builder.Build();
+        var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-app.UseMiddleware<CachingMiddleware>();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseMiddleware<CachingMiddleware>();
 app.UseRateLimiter();
-app.MapReverseProxy();
-app.Run();
+        app.MapReverseProxy();
+        app.MapControllers();
+        app.Run();
+    }
+}
