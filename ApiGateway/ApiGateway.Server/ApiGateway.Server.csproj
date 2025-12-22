@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4"/>
+        <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
     </ItemGroup>
     
     <ItemGroup>
