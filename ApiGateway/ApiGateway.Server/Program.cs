@@ -6,12 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// builder.Services.AddDistributedMemoryCache(options =>)
 builder.Services
     .AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 var app = builder.Build();
 
+
+app.UseMiddleware<>()
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -19,5 +22,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
+
+
 app.MapReverseProxy();
-app.Run();
+app.Run(); YARP
