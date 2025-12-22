@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/ApiGateway/">
     <Project Path="ApiGateway/ApiGateway.Server/ApiGateway.Server.csproj" />
+    <Project Path="ApiGateway\ApiGateway.IntegrationalTests\ApiGateway.IntegrationalTests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/AuthenticationService/">
     <Project Path="AuthenticationService/AuthenticationService.Client/AuthenticationService.Client.csproj" />

@@ -16,6 +16,8 @@
     </ItemGroup>
     
     <ItemGroup>
+        <ProjectReference Include="..\..\Core\Manager.Core.Caching\Manager.Core.Caching.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core.HostApp\Manager.Core.HostApp.csproj" />
         <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj"/>
         <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
     </ItemGroup>
