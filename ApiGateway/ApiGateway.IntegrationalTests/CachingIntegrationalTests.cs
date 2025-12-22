@@ -1,30 +1,40 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Net;
 using FluentAssertions;
 using Manager.Core.IntegrationTestsCore;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace Manager.ApiGateway.IntegrationalTests;
+
+namespace ApiGateway.IntegrationalTests;
 
 public class TimerClientTest : IntegrationTestBase
 {
     [Test]
-    public async Task TestApiGatewayCache()
+    public async Task TestCreateTimer()
     {
         // Arrange
-        var cache = ServiceProvider.GetRequiredService<IDistributedCache>();
-        const string cacheKey = "testKey";
-        var cacheValue = "testValue".Select(x => (byte)x).ToArray();
+        var client = new HttpClient();
+
         // Act
-        cache.Should().NotBeNull("Низя");
-        await cache.SetAsync(cacheKey, cacheValue);
+        var healthRequest = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5000/Health");
+        var httpResponse = await client.SendAsync(healthRequest);
 
         // Asset
-        var cacheResponse = await cache.GetAsync(cacheKey);
-        cacheResponse.Should().NotBeNull();
-        cacheResponse.Should().BeEquivalentTo(cacheValue);
+
+        // Asset
+        httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var baseReturnedAnswer = await httpResponse.Content.ReadAsStringAsync();
+        Thread.Sleep((int)(10 * 1e3));
+
+        httpResponse = await client.SendAsync(healthRequest);
+        httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var newReturnedAnswer = await httpResponse.Content.ReadAsStringAsync();
+        newReturnedAnswer.Should().BeEquivalentTo(baseReturnedAnswer);
+        Thread.Sleep((int)(40 * 1e3));
+
+        httpResponse = await client.SendAsync(healthRequest);
+        httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        newReturnedAnswer = await httpResponse.Content.ReadAsStringAsync();
+        newReturnedAnswer.Should().NotBeEquivalentTo(baseReturnedAnswer);
 
         /*
          * Господь не любит программистов

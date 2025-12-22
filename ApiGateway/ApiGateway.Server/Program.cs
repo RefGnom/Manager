@@ -3,6 +3,22 @@ using System.Threading.RateLimiting;
 // using Manager.Core.AppConfiguration;
 // using Manager.Core.HostApp;
 using Manager.Core.AppConfiguration;
+//
+// namespace Manager.ApiGateway.Server;
+//
+// public static class Program
+// {
+//     public static void Main(string[] args)
+//     {
+//         var managerHostApp = new ManagerHostApp<HostAppConfigurator>(args);
+//         managerHostApp.Run();
+//     }
+// }
+
+using Manager.Core;
+using Manager.Core.Caching;
+using Manager.Core.Common.DependencyInjection.AutoRegistration;
+using Manager.Core.HealthCheck;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,6 +70,8 @@ builder.Services.AddRateLimiter(options =>
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+
 
         app.UseMiddleware<CachingMiddleware>();
 app.UseRateLimiter();
