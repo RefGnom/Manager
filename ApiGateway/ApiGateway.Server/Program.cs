@@ -16,6 +16,7 @@ using Manager.Core.AppConfiguration;
 // }
 
 using Manager.Core;
+using Manager.Core.AppConfiguration;
 using Manager.Core.Caching;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.HealthCheck;
