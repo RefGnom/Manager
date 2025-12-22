@@ -65,7 +65,7 @@ jobs:
                 run: dotnet build --no-restore
 
             -   name: Docker compose build and run
-                run: docker compose up --build --force-recreate
+                run: docker compose up --build
 
             -   name: Run Tests
                 run: dotnet test --no-build --filter "TestCategory=IntegrationTests" --logger "trx"
