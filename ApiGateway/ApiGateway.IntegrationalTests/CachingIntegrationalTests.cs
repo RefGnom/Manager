@@ -1,11 +1,7 @@
 ﻿using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Manager.Core.IntegrationTestsCore;
-using Manager.Core.Networking;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -27,6 +23,7 @@ public class TimerClientTest : IntegrationTestBase
 
         // Asset
         var cacheResponse = await cache.GetAsync(cacheKey);
+        cacheResponse.Should().NotBeNull();
         cacheResponse.Should().BeEquivalentTo(cacheValue);
 
         /*
