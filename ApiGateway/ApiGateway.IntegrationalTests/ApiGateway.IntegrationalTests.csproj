@@ -3,9 +3,13 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <RootNamespace>Manager.ApiGateway.IntegrationalTests</RootNamespace>
+        <AssemblyName>Manager.ApiGateway.IntegrationalTests</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
