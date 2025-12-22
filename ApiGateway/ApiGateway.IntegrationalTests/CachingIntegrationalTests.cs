@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Manager.Core.IntegrationTestsCore;
+using Manager.Core.Networking;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.ApiGateway.IntegrationalTests;
 
@@ -14,9 +16,13 @@ public class TimerClientTest : IntegrationTestBase
     {
         // Arrange
         var client = new HttpClient();
+        var portProvider = ServiceProvider.GetRequiredService<IPortProvider>();
 
         // Act
-        var healthRequest = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5000/Health");
+        var healthRequest = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"http://localhost:{portProvider.GetPort("API_GATEWAY_PORT")}/Health"
+        );
         var httpResponse = await client.SendAsync(healthRequest);
 
         // Asset
