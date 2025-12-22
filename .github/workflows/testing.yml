@@ -64,14 +64,15 @@ jobs:
             -   name: Build
                 run: dotnet build --no-restore
 
-#            -   name: Run docker compose
-#                uses: hoverkraft-tech/compose-action@b716db5b717cb9b81e391fe638e5aceaa2299e43
-
-            -   name: Docker compose build
-                run: docker compose build
+            -   name: Docker compose build and run
+                run: docker compose up --build --force-recreate
 
             -   name: Run Tests
                 run: dotnet test --no-build --filter "TestCategory=IntegrationTests" --logger "trx"
+                
+            -   name: Clean up environment
+                if: always()
+                run: docker compose down
 
             -   name: Publish Test Results
                 uses: dorny/test-reporter@v1
