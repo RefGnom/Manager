@@ -7,7 +7,7 @@ namespace ApiGateway.IntegrationalTests;
 public class TimerClientTest : IntegrationTestBase
 {
     [Test]
-    public async Task TestCreateTimer()
+    public async Task TestApiGatewayCache()
     {
         // Arrange
         var client = new HttpClient();
