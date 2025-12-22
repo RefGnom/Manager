@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-[assembly: ServerProperties("API_GATEWAY_PORT", "It-wanna-docker-container")]
+[assembly: ServerProperties("API_GATEWAY_PORT", "manager-api-gateway-service")]
 
 namespace Manager.ApiGateway.Server;
 
