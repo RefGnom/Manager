@@ -1,5 +1,7 @@
 using System;
 using System.Threading.RateLimiting;
+// using Manager.Core.AppConfiguration;
+// using Manager.Core.HostApp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +9,9 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers().AddApplicationPart(typeof(HealthController).Assembly);
+builder.Services.UseAutoRegistrationForCoreCommon();
+builder.Services.AddDistributedCache(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -39,9 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
+app.UseMiddleware<CachingMiddleware>();
 app.UseRateLimiter();
-
 app.MapReverseProxy();
 app.Run();
