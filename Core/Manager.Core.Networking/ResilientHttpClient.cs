@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -33,39 +32,11 @@ public class ResilientHttpClient : IHttpClient
         return policyWrap.ExecuteAsync(
             async ct =>
             {
-                var clonedRequest = await CloneHttpRequestMessageAsync(request);
+                var clonedRequest = await request.CloneAsync();
                 return await httpClient.SendAsync(clonedRequest, ct);
             },
             cancellationToken
         );
-    }
-
-    private static async Task<HttpRequestMessage> CloneHttpRequestMessageAsync(HttpRequestMessage req)
-    {
-        var clone = new HttpRequestMessage(req.Method, req.RequestUri);
-
-        if (req.Content != null)
-        {
-            var ms = new System.IO.MemoryStream();
-            await req.Content.CopyToAsync(ms);
-            ms.Position = 0;
-            clone.Content = new StreamContent(ms);
-
-            if (req.Content.Headers != null)
-                foreach (var h in req.Content.Headers)
-                    clone.Content.Headers.Add(h.Key, h.Value);
-        }
-
-
-        clone.Version = req.Version;
-
-        foreach (var prop in req.Options)
-            clone.Options.TryAdd(prop.Key, prop.Value);
-
-        foreach (var header in req.Headers)
-            clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
-
-        return clone;
     }
 }
 

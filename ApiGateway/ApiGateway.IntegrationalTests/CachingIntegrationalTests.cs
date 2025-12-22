@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Manager.Core.IntegrationTestsCore;
+using Manager.Core.Networking;
 
 namespace Manager.ApiGateway.IntegrationalTests;
 
@@ -24,13 +25,13 @@ public class TimerClientTest : IntegrationTestBase
         var baseReturnedAnswer = await httpResponse.Content.ReadAsStringAsync();
         Thread.Sleep((int)(10 * 1e3));
 
-        httpResponse = await client.SendAsync(healthRequest);
+        httpResponse = await client.SendAsync(await healthRequest.CloneAsync());
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var newReturnedAnswer = await httpResponse.Content.ReadAsStringAsync();
         newReturnedAnswer.Should().BeEquivalentTo(baseReturnedAnswer);
         Thread.Sleep((int)(40 * 1e3));
 
-        httpResponse = await client.SendAsync(healthRequest);
+        httpResponse = await client.SendAsync(await healthRequest.CloneAsync());
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         newReturnedAnswer = await httpResponse.Content.ReadAsStringAsync();
         newReturnedAnswer.Should().NotBeEquivalentTo(baseReturnedAnswer);
