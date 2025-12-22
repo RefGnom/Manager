@@ -23,25 +23,36 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace Manager.ApiGateway.Server;
 
-builder.Services.AddControllers().AddApplicationPart(typeof(HealthController).Assembly);
-builder.Services.UseAutoRegistrationForCoreCommon();
-builder.Services.AddDistributedCache(builder.Configuration);
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services
-    .AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddControllers();
+        builder.Services.UseAutoRegistrationForCoreCommon();
+        builder.Services.AddDistributedCache(builder.Configuration);
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddSingleton<IHealthCheckService, HealthCheckService>();
+
+        builder.Services
+            .AddReverseProxy()
+            .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseMiddleware<CachingMiddleware>();
+        app.MapReverseProxy();
+        app.MapControllers();
+        app.Run();
+    }
 }
-app.UseMiddleware<CachingMiddleware>();
-app.MapReverseProxy();
-app.Run();

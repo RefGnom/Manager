@@ -8,6 +8,7 @@
         <PackageId>ApiGateway.Server</PackageId>
         <RootNamespace>Manager.ApiGateway.Server</RootNamespace>
         <AssemblyName>Manager.ApiGateway.Server</AssemblyName>
+        <UserSecretsId>a8c0e84a-d2fe-4386-adcc-5589e45f1b12</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
