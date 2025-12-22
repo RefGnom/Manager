@@ -29,7 +29,7 @@ public class TimerClientTest : IntegrationTestBase
         // Asset
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var baseReturnedAnswer = await httpResponse.Content.ReadAsStringAsync();
-        Thread.Sleep((int)(10 * 1e3));
+        Thread.Sleep((int)(2 * 1e3));
 
         httpResponse = await client.SendAsync(await healthRequest.CloneAsync());
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
