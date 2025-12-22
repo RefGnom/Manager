@@ -6,6 +6,7 @@ using FluentAssertions;
 using Manager.Core.IntegrationTestsCore;
 using Manager.Core.Networking;
 using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
 
 namespace Manager.ApiGateway.IntegrationalTests;
 
