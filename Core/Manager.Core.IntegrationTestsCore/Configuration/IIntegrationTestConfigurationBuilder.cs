@@ -18,5 +18,6 @@ public interface IIntegrationTestConfigurationBuilder
     IIntegrationTestConfigurationBuilder WithDataBase();
     IIntegrationTestConfigurationBuilder WithoutDataBase();
     IIntegrationTestConfigurationBuilder WithLocalServer(Dictionary<string, string>? envVariables = null);
+    IIntegrationTestConfigurationBuilder WithDistributedCache();
     IntegrationTestConfiguration Build();
 }

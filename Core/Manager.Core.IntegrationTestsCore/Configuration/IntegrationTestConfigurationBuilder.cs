@@ -75,6 +75,12 @@ public class IntegrationTestConfigurationBuilder(
         return this;
     }
 
+    public IIntegrationTestConfigurationBuilder WithDistributedCache()
+    {
+        configurationActionCollection.AddActionWithRemovingExcludedActionTypes(new WithRedisAction());
+        return this;
+    }
+
     public IntegrationTestConfiguration Build()
     {
         foreach (var configurationAction in configurationActionCollection.OrderBy(x => x.Type))
