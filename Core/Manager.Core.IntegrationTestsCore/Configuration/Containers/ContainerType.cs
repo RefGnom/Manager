@@ -4,4 +4,5 @@ public enum ContainerType
 {
     DataBase,
     Server,
+    Cache,
 }
