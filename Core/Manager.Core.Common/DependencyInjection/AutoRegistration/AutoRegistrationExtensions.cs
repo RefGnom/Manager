@@ -85,11 +85,11 @@ public static class AutoRegistrationExtensions
         assembly.GetExportedTypes()
             .Where(x => !x.IsInterface)
             .Where(x => !x.IsAbstract)
-            .Where(implementation => !implementation.HasInterface<IgnoreAutoRegistrationAttribute>())
+            .Where(implementation => !implementation.HasAttribute<IgnoreAutoRegistrationAttribute>())
             .SelectMany(implementation => implementation.GetInterfaces()
                 .Where(@interface => serviceAssemblies.Contains(@interface.Assembly))
                 .Where(@interface => namespacePrefix is null || @interface.Namespace!.StartsWith(namespacePrefix))
-                .Where(@interface => !@interface.HasInterface<IgnoreAutoRegistrationAttribute>())
+                .Where(@interface => !@interface.HasAttribute<IgnoreAutoRegistrationAttribute>())
                 .Select(@interface =>
                     {
                         var lifetimeAttribute = implementation.GetCustomAttribute<LifetimeAttribute>();

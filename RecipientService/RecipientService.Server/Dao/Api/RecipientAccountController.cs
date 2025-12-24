@@ -4,6 +4,7 @@ using Manager.Core.AppConfiguration.Authentication;
 using Manager.RecipientService.Server.Dao.Api.Requests;
 using Manager.RecipientService.Server.Implementation;
 using Manager.RecipientService.Server.Implementation.UseCase.Statuses;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Manager.RecipientService.Server.Dao.Api;
@@ -29,6 +30,13 @@ public class RecipientAccountController(
         return createResult.Status == CreateAccountStatus.LoginAlreadyExists
             ? Conflict(createResult.Error)
             : BadRequest(createResult.Error);
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginRecipientAccount([FromBody] LoginRecipientAccountRequest request)
+    {
+        var recipientAccountCredentials = recipientAccountConverter.ToDto(request);
+        var loginResult = await recipientAccountService.LoginAsync(recipientAccountCredentials);
     }
 
     [HttpGet("{recipientId:guid}")]

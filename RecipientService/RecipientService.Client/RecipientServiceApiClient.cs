@@ -32,6 +32,15 @@ public class RecipientServiceApiClient(
         return await httpClient.SendAsync(httpRequest);
     }
 
+    public async Task<HttpResult> LoginRecipientAccountAsync(LoginRecipientAccountRequest request)
+    {
+        var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"{RecipientAccountPath}/login")
+        {
+            Content = JsonContent.Create(request),
+        };
+        return await httpClient.SendAsync(httpRequest);
+    }
+
     public async Task<HttpResult<RecipientAccountResponse>> GetRecipientAccountAsync(Guid recipientId)
     {
         var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{RecipientAccountPath}/{recipientId}");

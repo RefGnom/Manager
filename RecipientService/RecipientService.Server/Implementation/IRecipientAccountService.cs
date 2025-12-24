@@ -19,6 +19,7 @@ public interface IRecipientAccountService
 
     Task<ProcessResult<string, UpdateAccountStatus>> UpdateAsync(UpdateRecipientAccountDto updateRecipientAccountDto);
     Task<ProcessResult<string, DeleteAccountStatus>> DeleteAsync(Guid recipientId);
+    Task<ProcessResult<string, LoginAccountStatus>> LoginAsync(RecipientAccountCredentials credentials);
 }
 
 public class RecipientAccountService(
@@ -45,6 +46,18 @@ public class RecipientAccountService(
             recipientAccount,
             CreateAccountStatus.Created
         );
+    }
+
+    public async Task<ProcessResult<string, LoginAccountStatus>> LoginAsync(RecipientAccountCredentials credentials)
+    {
+        var foundRecipientAccount = await recipientAccountRepository.FindByLoginAsync(createRecipientAccountDto.Login);
+        if (foundRecipientAccount is null)
+        {
+            return ProcessResult<string, LoginAccountStatus>.Failure(
+                $"Не существует аккаунта с логином {credentials.Login}",
+                LoginAccountStatus.NotFound
+            );
+        }
     }
 
     public async Task<RecipientAccount?> FindAsync(Guid recipientId) =>
