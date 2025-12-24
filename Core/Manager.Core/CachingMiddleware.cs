@@ -54,7 +54,7 @@ public class CachingMiddleware(
             bodyDummy.Seek(0, SeekOrigin.Begin);
             await bodyDummy.CopyToAsync(originalBody);
             context.Response.Body = originalBody;
-            TrySetCacheByKey(cacheKey, byteBuffer);
+            _ = TrySetCacheByKey(cacheKey, byteBuffer);
             logger.LogInformation("New cache fot {RequestPath} registered", context.Request.Path);
         }
     }
