@@ -13,7 +13,7 @@ public class WithRedisAction: IConfigurationAction
         context.TestContainerBuilder.WithRedis();
         var configurationDictionary = new Dictionary<string, string?>
         {
-            ["RedisOptions:ConnectionStringTemplate"] = context.TestContainerBuilder.RedisConnectionStringTemplate,
+            ["RedisOptions:Host"] = context.TestContainerBuilder.RedisHost,
             ["RedisOptions:Password"] = context.TestContainerBuilder.RedisPassword,
         };
         context.ConfigurationManager.AddInMemoryCollection(configurationDictionary);

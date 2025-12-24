@@ -13,7 +13,7 @@ public interface IIntegrationTestConfigurationBuilder
     IIntegrationTestConfigurationBuilder WithoutAutoRegistration();
     IIntegrationTestConfigurationBuilder WithNullLogger();
     IIntegrationTestConfigurationBuilder WithRealLogger();
-    IIntegrationTestConfigurationBuilder CustomizeServiceCollection(Action<IServiceCollection> customizer);
+    IIntegrationTestConfigurationBuilder CustomizeServiceCollection(Action<IServiceCollection, IConfiguration> customizer);
     IIntegrationTestConfigurationBuilder CustomizeConfigurationManager(Action<IConfigurationManager> customizer);
     IIntegrationTestConfigurationBuilder WithDataBase();
     IIntegrationTestConfigurationBuilder WithoutDataBase();
