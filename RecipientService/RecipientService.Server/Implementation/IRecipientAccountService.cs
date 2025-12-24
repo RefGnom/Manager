@@ -50,7 +50,7 @@ public class RecipientAccountService(
 
     public async Task<ProcessResult<string, LoginAccountStatus>> LoginAsync(RecipientAccountCredentials credentials)
     {
-        var foundRecipientAccount = await recipientAccountRepository.FindByLoginAsync(createRecipientAccountDto.Login);
+        var foundRecipientAccount = await recipientAccountRepository.FindByLoginAsync(credentials.Login);
         if (foundRecipientAccount is null)
         {
             return ProcessResult<string, LoginAccountStatus>.Failure(
@@ -58,6 +58,19 @@ public class RecipientAccountService(
                 LoginAccountStatus.NotFound
             );
         }
+
+        return foundRecipientAccount.State.AccountState switch
+        {
+            AccountState.Active => ProcessResult<string, LoginAccountStatus>.Ok(LoginAccountStatus.Success),
+            AccountState.Deleted => ProcessResult<string, LoginAccountStatus>.Failure(
+                $"Аккаунт с логином {credentials.Login} удалён",
+                LoginAccountStatus.Deleted
+            ),
+            _ => ProcessResult<string, LoginAccountStatus>.Failure(
+                $"Аккаунт находится в состоянии {foundRecipientAccount.State}",
+                LoginAccountStatus.LoginRejected
+            ),
+        };
     }
 
     public async Task<RecipientAccount?> FindAsync(Guid recipientId) =>

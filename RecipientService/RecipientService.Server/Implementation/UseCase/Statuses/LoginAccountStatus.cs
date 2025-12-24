@@ -5,5 +5,5 @@ public enum LoginAccountStatus
     Success,
     NotFound,
     Deleted,
-    LoginDenied,
+    LoginRejected,
 }

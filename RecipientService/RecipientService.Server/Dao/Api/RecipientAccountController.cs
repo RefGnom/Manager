@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.RecipientService.Server.Dao.Api.Requests;
+using Manager.RecipientService.Server.Dao.Api.Responses;
 using Manager.RecipientService.Server.Implementation;
 using Manager.RecipientService.Server.Implementation.UseCase.Statuses;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Manager.RecipientService.Server.Dao.Api;
@@ -37,6 +37,15 @@ public class RecipientAccountController(
     {
         var recipientAccountCredentials = recipientAccountConverter.ToDto(request);
         var loginResult = await recipientAccountService.LoginAsync(recipientAccountCredentials);
+
+        return loginResult.Status switch
+        {
+            LoginAccountStatus.Success => Ok(LoginRecipientAccountResponse.CreateSuccess()),
+            LoginAccountStatus.NotFound => NotFound(LoginRecipientAccountResponse.CreateNotFound(loginResult.Error)),
+            LoginAccountStatus.Deleted => Ok(LoginRecipientAccountResponse.CreateDeleted(loginResult.Error)),
+            LoginAccountStatus.LoginRejected => Ok(LoginRecipientAccountResponse.CreateRejected(loginResult.Error)),
+            _ => throw new Exception($"Unknown login status {loginResult.Status}"),
+        };
     }
 
     [HttpGet("{recipientId:guid}")]
