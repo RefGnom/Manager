@@ -11,7 +11,7 @@ public interface ITestContainerBuilder
     string ConnectionStringTemplate { get; }
     string PostgresUsername { get; }
     string PostgresPassword { get; }
-    string RedisConnectionStringTemplate { get; }
+    string RedisHost { get; }
     string RedisPassword { get; }
 
     void WithServer(Assembly assembly, IConfiguration configuration, IReadOnlyDictionary<string, string> envVariables);

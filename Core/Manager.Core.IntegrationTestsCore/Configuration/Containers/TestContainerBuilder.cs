@@ -34,7 +34,7 @@ public class TestContainerBuilder : ITestContainerBuilder
     public string ConnectionStringTemplate =>
         $"Host=127.0.0.1;Port={postgresHostPort};Database={DataBaseName};Username={{0}};Password={{1}}";
 
-    public string RedisConnectionStringTemplate => $"127.0.0.1:{RedisContainerPort},password={{0}}";
+    public string RedisHost => RedisNetworkAliases;
 
     public string PostgresUsername { get; } = Guid.NewGuid().ToString();
     public string PostgresPassword { get; } = Guid.NewGuid().ToString();
@@ -67,6 +67,9 @@ public class TestContainerBuilder : ITestContainerBuilder
                     .WithEnvironment("DataBaseOptions:ConnectionStringTemplate", ContainerConnectionStringTemplate)
                     .WithEnvironment("DataBaseOptions:Username", PostgresUsername)
                     .WithEnvironment("DataBaseOptions:Password", PostgresPassword)
+                    .WithEnvironment("RedisOptions:Host", RedisHost)
+                    .WithEnvironment("RedisOptions:Password", RedisPassword)
+                    .WithEnvironment("RedisOptions:TimeoutInMs", "5000")
                     .WithEnvironment(envVariables)
                     .WithNetwork(network)
                     .Build(),

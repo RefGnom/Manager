@@ -4,7 +4,7 @@ using Manager.ApiGateway.Server;
 using Manager.Core.Caching;
 using Manager.Core.IntegrationTestsCore;
 using Manager.Core.IntegrationTestsCore.Configuration;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.ApiGateway.IntegrationalTests;
@@ -20,12 +20,11 @@ public class ApiGatewaySetupFixture : SetupFixtureBase
             {
                 ["AuthenticationServiceSetting:ApiKey"] = "random key",
             }
-        ).WithRealLogger();
+        ).WithRealLogger().WithDistributedCache();
     }
 
-    protected override void CustomizeServiceCollection(IServiceCollection serviceCollection)
+    protected override void CustomizeServiceCollection(IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        var builder = WebApplication.CreateBuilder();
-        serviceCollection.AddDistributedCache(builder.Configuration);
+        serviceCollection.AddDistributedCache(configuration);
     }
 }
