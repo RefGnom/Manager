@@ -32,7 +32,7 @@ public class RecipientServiceApiClient(
         return await httpClient.SendAsync(httpRequest);
     }
 
-    public async Task<HttpResult> LoginRecipientAccountAsync(LoginRecipientAccountRequest request)
+    public async Task<HttpResult<LoginRecipientAccountResponse>> LoginRecipientAccountAsync(LoginRecipientAccountRequest request)
     {
         var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"{RecipientAccountPath}/login")
         {
