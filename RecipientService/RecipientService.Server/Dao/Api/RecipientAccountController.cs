@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.RecipientService.Server.Dao.Api.Requests;
+using Manager.RecipientService.Server.Dao.Api.Responses;
 using Manager.RecipientService.Server.Implementation;
 using Manager.RecipientService.Server.Implementation.UseCase.Statuses;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,37 @@ public class RecipientAccountController(
         return createResult.Status == CreateAccountStatus.LoginAlreadyExists
             ? Conflict(createResult.Error)
             : BadRequest(createResult.Error);
+    }
+
+    [HttpPost("{recipientId:guid}/activate")]
+    public async Task<IActionResult> ActivateRecipientAccount([FromRoute] Guid recipientId)
+    {
+        var activateResult = await recipientAccountService.ActivateAsync(recipientId);
+        return activateResult.Status switch
+        {
+            ActivateAccountStatus.Activated => Ok(),
+            ActivateAccountStatus.NotFound => NotFound(),
+            ActivateAccountStatus.Rejected => BadRequest(
+                ErrorResponse.Create("Rejected", $"активация запрещена по причине: {activateResult.Error}")
+            ),
+            _ => throw new Exception($"Unknown activation status `{activateResult.Status}`"),
+        };
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginRecipientAccount([FromBody] LoginRecipientAccountRequest request)
+    {
+        var recipientAccountCredentials = recipientAccountConverter.ToDto(request);
+        var loginResult = await recipientAccountService.LoginAsync(recipientAccountCredentials);
+
+        return loginResult.Status switch
+        {
+            LoginAccountStatus.Success => Ok(LoginRecipientAccountResponse.CreateSuccess()),
+            LoginAccountStatus.NotFound => NotFound(LoginRecipientAccountResponse.CreateNotFound(loginResult.Error)),
+            LoginAccountStatus.Deleted => Ok(LoginRecipientAccountResponse.CreateDeleted(loginResult.Error)),
+            LoginAccountStatus.LoginRejected => Ok(LoginRecipientAccountResponse.CreateRejected(loginResult.Error)),
+            _ => throw new Exception($"Unknown login status {loginResult.Status}"),
+        };
     }
 
     [HttpGet("{recipientId:guid}")]

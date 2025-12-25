@@ -17,6 +17,17 @@ public class RecipientAccountConverter : IRecipientAccountConverter
         UpdatedAtUtc = recipientAccount.UpdatedAtUtc,
     };
 
+    public RecipientAccountDbo ToDbo(RecipientAccountDbo original, RecipientAccount updated, Guid stateId) => new()
+    {
+        Id = original.Id,
+        Login = updated.Login,
+        PasswordHash = original.PasswordHash,
+        AccountStateId = stateId,
+        TimeZoneInfoId = updated.TimeZoneInfo.Id,
+        CreatedAtUtc = original.CreatedAtUtc,
+        UpdatedAtUtc = updated.UpdatedAtUtc,
+    };
+
     public RecipientAccountWithPasswordHash ToDto(
         RecipientAccountDbo recipientAccountDbo,
         RecipientAccountState recipientAccountState

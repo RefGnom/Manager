@@ -1,8 +1,6 @@
-using System;
 using Manager.AuthenticationService.Client;
 using Manager.Core.Common.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
@@ -69,9 +67,7 @@ public static class AddApiKeyRequirementExtensions
 
         services.AddSingleton<IAuthenticationServiceApiClientFactory, AuthenticationServiceApiClientFactory>();
         services.AddSingleton<IAuthenticationServiceApiClient>(x
-            => x.GetRequiredService<IAuthenticationServiceApiClientFactory>().Create(
-                x.GetRequiredService<IConfiguration>().GetValue<string>("AUTHENTICATION_SERVICE_PORT") ??
-                throw new Exception("Authentication service port not configured"),
+            => x.GetRequiredService<IAuthenticationServiceApiClientFactory>().CreateInternal(
                 x.GetRequiredService<IOptions<AuthenticationServiceSetting>>().Value.ApiKey
             )
         );
