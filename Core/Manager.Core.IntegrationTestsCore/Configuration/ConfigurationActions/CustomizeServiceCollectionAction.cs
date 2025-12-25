@@ -1,10 +1,11 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.Core.IntegrationTestsCore.Configuration.ConfigurationActions;
 
 public class CustomizeServiceCollectionAction(
-    Action<IServiceCollection> customize
+    Action<IServiceCollection, IConfiguration> customize
 ) : IConfigurationAction
 {
     public ConfigurationActionType Type { get; } = ConfigurationActionType.CustomizeServiceCollection;
@@ -12,6 +13,6 @@ public class CustomizeServiceCollectionAction(
 
     public void Invoke(ConfigurationActionContext context)
     {
-        customize(context.ServiceCollection);
+        customize(context.ServiceCollection, context.ConfigurationManager.Build());
     }
 }
