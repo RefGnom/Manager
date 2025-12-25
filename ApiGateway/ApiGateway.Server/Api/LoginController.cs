@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Manager.ApiGateway.Server.Api.Requests;
 using Manager.RecipientService.Client;
 using Manager.RecipientService.Client.BusinessObjects.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Manager.ApiGateway.Server;
+namespace Manager.ApiGateway.Server.Api;
 
 [ApiController]
 [Route("login")]
@@ -27,6 +28,12 @@ public class LoginController(
             return Results.StatusCode((int)loginHttpResult.StatusCode);
         }
 
+        var loginRecipientAccountResponse = loginHttpResult.EnsureResponse;
+        if (!loginRecipientAccountResponse.CanLogin)
+        {
+            return Results.BadRequest(loginRecipientAccountResponse.RejectMessage);
+        }
+
         var claims = new List<Claim> { new(ClaimTypes.Name, request.Login) };
         var jwt = new JwtSecurityToken(
             issuer: JwtAuthOptions.Issuer,
@@ -39,10 +46,13 @@ public class LoginController(
             )
         );
 
-        return Results.Json(new
-        {
-            access_token = new JwtSecurityTokenHandler().WriteToken(jwt),
-            username = request.Login,
-        });
+        var jwtToken = new JwtSecurityTokenHandler().WriteToken(jwt);
+        return Results.Json(
+            new
+            {
+                access_token = $"Bearer {jwtToken}",
+                username = request.Login,
+            }
+        );
     }
 }
