@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using Manager.ApiGateway.Server;
 using Manager.Core.Caching;
 using Manager.Core.IntegrationTestsCore;
@@ -15,12 +14,7 @@ public class ApiGatewaySetupFixture : SetupFixtureBase
 
     protected override void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder)
     {
-        builder.WithLocalServer(
-            new Dictionary<string, string>
-            {
-                ["AuthenticationServiceSetting:ApiKey"] = "random key",
-            }
-        ).WithRealLogger().WithDistributedCache();
+        builder.WithLocalServer().WithRealLogger().WithDistributedCache();
     }
 
     protected override void CustomizeServiceCollection(IServiceCollection serviceCollection, IConfiguration configuration)

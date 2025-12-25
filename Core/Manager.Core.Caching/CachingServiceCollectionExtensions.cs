@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
             configuration.Bind("RedisOptions", redisOptions);
             options.Configuration = string.Join(
                 ',',
-                $"{redisOptions.Host}:{redisOptions.Port}",
+                $"127.0.0.1:{redisOptions.Port}",
                 $"password={redisOptions.Password}",
                 $"syncTimeout={redisOptions.TimeoutInMs}"
             );
