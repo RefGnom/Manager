@@ -8,7 +8,7 @@ public record RecipientAccountState(
     StateReason StateReason
 )
 {
-    public override string ToString() => $"{AccountState.GetDescription()}, {StateReason.GetDescription()}";
+    public sealed override string ToString() => $"'{AccountState.GetDescription()}, {StateReason.GetDescription()}'";
 };
 
 public record RecipientAccountStateWithId(
