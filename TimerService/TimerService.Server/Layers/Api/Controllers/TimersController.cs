@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Manager.Core.AppConfiguration.Authentication;
 using Manager.TimerService.Server.Layers.Api.Converters;
 using Manager.TimerService.Server.Layers.Api.Models;
 using Manager.TimerService.Server.Layers.ServiceLayer.Exceptions;
@@ -16,6 +17,7 @@ namespace Manager.TimerService.Server.Layers.Api.Controllers;
 /// <param name="timerHttpModelsConverter"></param>
 [ApiController]
 [Route("/api/recipients/{recipientId:guid}/timers")]
+[AuthorizationResource("timers")]
 public class TimersController(
     ITimerService timerService,
     ITimerHttpModelsConverter timerHttpModelsConverter
