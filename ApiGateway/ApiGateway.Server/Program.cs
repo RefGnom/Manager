@@ -1,5 +1,7 @@
 using System.Text;
+using Manager.ApiGateway.Server.Configuration;
 using Manager.Core.AppConfiguration;
+using Manager.Core.Common.DependencyInjection;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.Logging.Configuration;
 using Manager.RecipientService.Client;
@@ -23,6 +25,7 @@ builder.Services.AddEndpointsApiExplorer()
     .AddSingleton<IRecipientServiceApiClient>(x =>
         x.GetRequiredService<IRecipientServiceApiClientFactory>().Create("fake key")
     )
+    .ConfigureOptionsWithValidation<ApiKeysOptions>()
     .AddAuthorization()
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
@@ -39,7 +42,8 @@ builder.Services.AddEndpointsApiExplorer()
 
 builder.Services
     .AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .AddTransforms<ApiKeyTransformProvider>();
 
 var app = builder.Build();
 
@@ -49,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseDefaultFiles().UseStaticFiles().UseAuthentication().UseAuthorization();
+app.UseAuthentication().UseAuthorization();
 app.MapControllers();
 app.MapReverseProxy();
 app.Run();
