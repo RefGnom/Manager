@@ -49,6 +49,24 @@ public class RecipientAccountRepository(
         await dataContext.UpdateAsync(recipientAccountDbo);
     }
 
+    public async Task UpdateAsync(RecipientAccount recipientAccount)
+    {
+        var foundAccount = await dataContext.FindAsync(recipientAccount.Id);
+        if (foundAccount == null)
+        {
+            throw new EntityNotFoundException($"Не нашли аккаунт {recipientAccount.Id} при обновлении");
+        }
+
+        var storedAccountState = await recipientAccountStateRepository.FindOrCreateAsync(recipientAccount.State);
+        var recipientAccountDbo = recipientAccountConverter.ToDbo(
+            foundAccount,
+            recipientAccount,
+            storedAccountState.Id
+        );
+        recipientAccountDbo.UpdatedAtUtc = dateTimeProvider.UtcNow;
+        await dataContext.UpdateAsync(recipientAccountDbo);
+    }
+
     private async Task<RecipientAccountWithPasswordHash?> InnerFindAsync(RecipientAccountDbo? recipientAccountDbo)
     {
         if (recipientAccountDbo == null)

@@ -32,6 +32,21 @@ public class RecipientAccountController(
             : BadRequest(createResult.Error);
     }
 
+    [HttpPost("{recipientId:guid}/activate")]
+    public async Task<IActionResult> ActivateRecipientAccount([FromRoute] Guid recipientId)
+    {
+        var activateResult = await recipientAccountService.ActivateAsync(recipientId);
+        return activateResult.Status switch
+        {
+            ActivateAccountStatus.Activated => Ok(),
+            ActivateAccountStatus.NotFound => NotFound(),
+            ActivateAccountStatus.Rejected => BadRequest(
+                ErrorResponse.Create("Rejected", $"активация запрещена по причине: {activateResult.Error}")
+            ),
+            _ => throw new Exception($"Unknown activation status `{activateResult.Status}`"),
+        };
+    }
+
     [HttpPost("login")]
     public async Task<IActionResult> LoginRecipientAccount([FromBody] LoginRecipientAccountRequest request)
     {

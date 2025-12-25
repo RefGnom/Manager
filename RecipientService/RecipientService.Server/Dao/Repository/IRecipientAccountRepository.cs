@@ -10,4 +10,5 @@ public interface IRecipientAccountRepository
     Task<RecipientAccountWithPasswordHash?> FindAsync(Guid recipientAccountId);
     Task<RecipientAccountWithPasswordHash?> FindByLoginAsync(string login);
     Task UpdateAsync(RecipientAccountWithPasswordHash recipientAccount);
+    Task UpdateAsync(RecipientAccount recipientAccount);
 }
