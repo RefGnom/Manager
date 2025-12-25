@@ -3,6 +3,7 @@ using Manager.Core.IntegrationTestsCore;
 using Manager.Core.IntegrationTestsCore.Configuration;
 using Manager.RecipientService.Client;
 using Manager.RecipientService.Server;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager.RecipientService.IntegrationTests;
@@ -16,7 +17,7 @@ public class SetupFixture : SetupFixtureBase
         builder.WithRealLogger().WithLocalServer();
     }
 
-    protected override void CustomizeServiceCollection(IServiceCollection serviceCollection)
+    protected override void CustomizeServiceCollection(IServiceCollection serviceCollection, IConfiguration configuration)
     {
         serviceCollection.AddSingleton<IRecipientServiceApiClientFactory, RecipientServiceApiClientFactory>();
         serviceCollection.AddSingleton<IRecipientServiceApiClient>(x => x
