@@ -15,6 +15,8 @@ public class WithRedisAction: IConfigurationAction
         {
             ["RedisOptions:Host"] = context.TestContainerBuilder.RedisHost,
             ["RedisOptions:Password"] = context.TestContainerBuilder.RedisPassword,
+            ["RedisOptions:Port"] = 6379.ToString(),
+            ["RedisOptions:TimeoutInMs"] = 50000.ToString(),
         };
         context.ConfigurationManager.AddInMemoryCollection(configurationDictionary);
     }

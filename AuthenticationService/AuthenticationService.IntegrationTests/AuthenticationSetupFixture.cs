@@ -30,7 +30,7 @@ public class AuthenticationSetupFixture : SetupFixtureBase
         builder.WithLocalServer().WithRealLogger();
     }
 
-    protected override void CustomizeServiceCollection(IServiceCollection serviceCollection)
+    protected override void CustomizeServiceCollection(IServiceCollection serviceCollection, IConfiguration configuration)
     {
         serviceCollection.AddSingleton<IAuthenticationServiceApiClientFactory, AuthenticationServiceApiClientFactory>();
         serviceCollection.AddSingleton<IPasswordHasher<ApiKeyService>, PasswordHasher<ApiKeyService>>();
