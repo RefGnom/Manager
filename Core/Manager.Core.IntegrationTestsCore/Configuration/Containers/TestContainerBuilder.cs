@@ -26,7 +26,6 @@ public class TestContainerBuilder : ITestContainerBuilder
 
     private readonly INetwork network = new NetworkBuilder().Build();
     private readonly int postgresHostPort = Random.Shared.Next(9_000, 10_000);
-    private readonly int redisContainerPort = Random.Shared.Next(8_000, 9_000);
 
     private string ContainerConnectionStringTemplate { get; } =
         $"Host={PostgresNetworkAliases};Port={PostgresContainerPort};Database={DataBaseName};Username={{0}};Password={{1}}";
@@ -35,6 +34,7 @@ public class TestContainerBuilder : ITestContainerBuilder
         $"Host=127.0.0.1;Port={postgresHostPort};Database={DataBaseName};Username={{0}};Password={{1}}";
 
     public string RedisHost => RedisNetworkAliases;
+    public int RedisHostPort { get; } = Random.Shared.Next(8_000, 9_000);
 
     public string PostgresUsername { get; } = Guid.NewGuid().ToString();
     public string PostgresPassword { get; } = Guid.NewGuid().ToString();
@@ -103,7 +103,7 @@ public class TestContainerBuilder : ITestContainerBuilder
             new ContainerWithType(
                 new RedisBuilder()
                     .WithImage("redis:7-alpine")
-                    .WithPortBinding(redisContainerPort, RedisContainerPort)
+                    .WithPortBinding(RedisHostPort, RedisContainerPort)
                     .WithCommand("redis-server", "--requirepass", RedisPassword)
                     .WithNetwork(network)
                     .WithNetworkAliases(RedisNetworkAliases)
