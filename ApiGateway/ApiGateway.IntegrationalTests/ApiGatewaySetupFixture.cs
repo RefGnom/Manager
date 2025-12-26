@@ -1,27 +1,24 @@
 ﻿using System.Reflection;
+using Manager.ApiGateway.Server;
+using Manager.Core.Caching;
 using Manager.Core.IntegrationTestsCore;
 using Manager.Core.IntegrationTestsCore.Configuration;
-using Manager.RecipientService.Client;
-using Manager.RecipientService.Server;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Manager.RecipientService.IntegrationTests;
+namespace Manager.ApiGateway.IntegrationalTests;
 
-public class SetupFixture : SetupFixtureBase
+public class ApiGatewaySetupFixture : SetupFixtureBase
 {
     protected override Assembly TargetTestingAssembly => typeof(Program).Assembly;
 
     protected override void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder)
     {
-        builder.WithRealLogger().WithLocalServer();
+        builder.WithLocalServer().WithRealLogger().WithDistributedCache();
     }
 
     protected override void CustomizeServiceCollection(IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        serviceCollection.AddSingleton<IRecipientServiceApiClientFactory, RecipientServiceApiClientFactory>();
-        serviceCollection.AddSingleton<IRecipientServiceApiClient>(x => x
-            .GetRequiredService<IRecipientServiceApiClientFactory>().Create("fake key")
-        );
+        serviceCollection.AddDistributedCache(configuration);
     }
 }

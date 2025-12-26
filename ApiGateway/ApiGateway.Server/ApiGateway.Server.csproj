@@ -8,6 +8,7 @@
         <PackageId>ApiGateway.Server</PackageId>
         <RootNamespace>Manager.ApiGateway.Server</RootNamespace>
         <AssemblyName>Manager.ApiGateway.Server</AssemblyName>
+        <UserSecretsId>a8c0e84a-d2fe-4386-adcc-5589e45f1b12</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,6 +17,8 @@
     </ItemGroup>
     
     <ItemGroup>
+        <ProjectReference Include="..\..\Core\Manager.Core.Caching\Manager.Core.Caching.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core.HostApp\Manager.Core.HostApp.csproj" />
         <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj"/>
         <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
     </ItemGroup>

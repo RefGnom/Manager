@@ -7,6 +7,7 @@ using DotNet.Testcontainers.Networks;
 using Manager.Core.AppConfiguration;
 using Microsoft.Extensions.Configuration;
 using Testcontainers.PostgreSql;
+using Testcontainers.Redis;
 
 namespace Manager.Core.IntegrationTestsCore.Configuration.Containers;
 
@@ -16,22 +17,29 @@ public class TestContainerBuilder : ITestContainerBuilder
 
     private const int ContainerPort = 8080;
 
+    private const int RedisContainerPort = 6379;
     private const int PostgresContainerPort = 5432;
     private const string DataBaseName = "testdb";
-    private const string NetworkAliases = "postgres";
+    private const string PostgresNetworkAliases = "postgres";
+    private const string RedisNetworkAliases = "redis";
     private readonly List<ContainerWithType> containers = [];
 
     private readonly INetwork network = new NetworkBuilder().Build();
     private readonly int postgresHostPort = Random.Shared.Next(9_000, 10_000);
 
     private string ContainerConnectionStringTemplate { get; } =
-        $"Host={NetworkAliases};Port={PostgresContainerPort};Database={DataBaseName};Username={{0}};Password={{1}}";
+        $"Host={PostgresNetworkAliases};Port={PostgresContainerPort};Database={DataBaseName};Username={{0}};Password={{1}}";
 
     public string ConnectionStringTemplate =>
         $"Host=127.0.0.1;Port={postgresHostPort};Database={DataBaseName};Username={{0}};Password={{1}}";
 
-    public string Username { get; } = Guid.NewGuid().ToString();
-    public string Password { get; } = Guid.NewGuid().ToString();
+    public string RedisHost => "127.0.0.1";
+    public int RedisHostPort { get; } = Random.Shared.Next(8_500, 9_000);
+
+    public string PostgresUsername { get; } = Guid.NewGuid().ToString();
+    public string PostgresPassword { get; } = Guid.NewGuid().ToString();
+    public string RedisPassword { get; } = Guid.NewGuid().ToString();
+    public int RedisTimeoutInMs => 5000;
 
     public void WithServer(
         Assembly assembly,
@@ -58,8 +66,12 @@ public class TestContainerBuilder : ITestContainerBuilder
                     .WithOutputConsumer(Consume.RedirectStdoutAndStderrToConsole())
                     .WithEnvironment("ASPNETCORE_ENVIRONMENT", EnvironmentName)
                     .WithEnvironment("DataBaseOptions:ConnectionStringTemplate", ContainerConnectionStringTemplate)
-                    .WithEnvironment("DataBaseOptions:Username", Username)
-                    .WithEnvironment("DataBaseOptions:Password", Password)
+                    .WithEnvironment("DataBaseOptions:Username", PostgresUsername)
+                    .WithEnvironment("DataBaseOptions:Password", PostgresPassword)
+                    .WithEnvironment("RedisOptions:Host", $"{RedisNetworkAliases}")
+                    .WithEnvironment("RedisOptions:Port", RedisContainerPort.ToString())
+                    .WithEnvironment("RedisOptions:Password", RedisPassword)
+                    .WithEnvironment("RedisOptions:TimeoutInMs", RedisTimeoutInMs.ToString())
                     .WithEnvironment(envVariables)
                     .WithNetwork(network)
                     .Build(),
@@ -76,12 +88,32 @@ public class TestContainerBuilder : ITestContainerBuilder
                     .WithImage("postgres:16")
                     .WithPortBinding(postgresHostPort, PostgresContainerPort)
                     .WithDatabase(DataBaseName)
-                    .WithUsername(Username)
-                    .WithPassword(Password)
+                    .WithUsername(PostgresUsername)
+                    .WithPassword(PostgresPassword)
                     .WithNetwork(network)
-                    .WithNetworkAliases(NetworkAliases)
+                    .WithNetworkAliases(PostgresNetworkAliases)
                     .Build(),
                 ContainerType.DataBase
+            )
+        );
+    }
+
+    public void WithRedis()
+    {
+        containers.Add(
+            new ContainerWithType(
+                new RedisBuilder()
+                    .WithImage("redis:7-alpine")
+                    .WithPortBinding(RedisHostPort, RedisContainerPort)
+                    .WithCommand("redis-server", "--requirepass", RedisPassword)
+                    .WithNetwork(network)
+                    .WithNetworkAliases(RedisNetworkAliases)
+                    .WithWaitStrategy(
+                        Wait.ForUnixContainer()
+                            .UntilInternalTcpPortIsAvailable(RedisContainerPort)
+                    )
+                    .Build(),
+                ContainerType.Cache
             )
         );
     }

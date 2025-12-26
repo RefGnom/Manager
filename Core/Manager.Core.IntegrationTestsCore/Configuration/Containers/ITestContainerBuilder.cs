@@ -9,10 +9,14 @@ namespace Manager.Core.IntegrationTestsCore.Configuration.Containers;
 public interface ITestContainerBuilder
 {
     string ConnectionStringTemplate { get; }
-    string Username { get; }
-    string Password { get; }
-
+    string PostgresUsername { get; }
+    string PostgresPassword { get; }
+    string RedisHost { get; }
+    int RedisHostPort { get; }
+    string RedisPassword { get; }
+    int RedisTimeoutInMs { get; }
     void WithServer(Assembly assembly, IConfiguration configuration, IReadOnlyDictionary<string, string> envVariables);
     void WithPostgres();
+    void WithRedis();
     ContainerConfiguration Build();
 }

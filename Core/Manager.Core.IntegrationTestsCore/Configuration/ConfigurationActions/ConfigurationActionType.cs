@@ -11,4 +11,5 @@ public enum ConfigurationActionType
     WithRealLogger,
     CustomizeConfiguration,
     CustomizeServiceCollection,
+    WithDistributedCache,
 }

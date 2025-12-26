@@ -9,7 +9,7 @@ namespace Manager.Core;
 
 public class CachingMiddleware(
     RequestDelegate next,
-    ILogger logger,
+    ILogger<CachingMiddleware> logger,
     IDistributedCache cache
 )
 {
@@ -36,7 +36,7 @@ public class CachingMiddleware(
 
         if (cacheResponse is not null)
         {
-            logger.LogDebug("Cache hit for {RequestPath}", cacheKey);
+            logger.LogInformation("Cache hit for {RequestPath}", cacheKey);
             context.Response.StatusCode = 200;
             await context.Response.Body.WriteAsync(cacheResponse);
             return;
@@ -50,12 +50,14 @@ public class CachingMiddleware(
         if (context.Response.StatusCode is >= 200 and < 300)
         {
             var byteBuffer = new byte[bodyDummy.Length];
+            bodyDummy.Position = 0;
             await bodyDummy.ReadExactlyAsync(byteBuffer, 0, byteBuffer.Length);
             bodyDummy.Seek(0, SeekOrigin.Begin);
             await bodyDummy.CopyToAsync(originalBody);
             context.Response.Body = originalBody;
+
             _ = TrySetCacheByKey(cacheKey, byteBuffer);
-            logger.LogInformation("New cache fot {RequestPath} registered", context.Request.Path);
+            logger.LogInformation("New cache for {RequestPath} registered", cacheKey);
         }
     }
 
