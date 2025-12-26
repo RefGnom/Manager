@@ -15,15 +15,22 @@ builder.Services
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 builder.Services.AddRateLimiter(options =>
-{
-    options.AddFixedWindowLimiter("ManagerPolicy", opt =>
     {
-        opt.PermitLimit = 4;
-        opt.Window = TimeSpan.FromSeconds(12);
-        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        opt.QueueLimit = 2;
-    });
-});
+        options.AddFixedWindowLimiter(
+            "ManagerPolicy",
+            opt =>
+            {
+                opt.PermitLimit = 4; //в течении окна можно сделать 4 запроса
+                opt.Window = TimeSpan.FromSeconds(12); //размер окна в 12 секунд
+                opt.QueueProcessingOrder =
+                    QueueProcessingOrder
+                        .OldestFirst; //Порядок обработки запросов в очереди. Сначала обрабатывается самый старый запрос
+                opt.QueueLimit =
+                    2; //Максимальное количество запросов, которые могут быть поставлены в очередь Если лимит превышен - запросы отклоняются сразу
+            }
+        );
+    }
+);
 
 var app = builder.Build();
 
