@@ -13,6 +13,6 @@ public class CustomizeServiceCollectionAction(
 
     public void Invoke(ConfigurationActionContext context)
     {
-        customize(context.ServiceCollection, context.ConfigurationManager.Build());
+        customize(context.ServiceCollection, context.ConfigurationManager);
     }
 }

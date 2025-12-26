@@ -14,7 +14,7 @@ public interface ITestContainerBuilder
     string RedisHost { get; }
     int RedisHostPort { get; }
     string RedisPassword { get; }
-
+    int RedisTimeoutInMs { get; }
     void WithServer(Assembly assembly, IConfiguration configuration, IReadOnlyDictionary<string, string> envVariables);
     void WithPostgres();
     void WithRedis();

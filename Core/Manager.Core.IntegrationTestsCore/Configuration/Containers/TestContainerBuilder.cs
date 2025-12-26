@@ -33,12 +33,13 @@ public class TestContainerBuilder : ITestContainerBuilder
     public string ConnectionStringTemplate =>
         $"Host=127.0.0.1;Port={postgresHostPort};Database={DataBaseName};Username={{0}};Password={{1}}";
 
-    public string RedisHost => RedisNetworkAliases;
-    public int RedisHostPort { get; } = Random.Shared.Next(8_000, 9_000);
+    public string RedisHost => "127.0.0.1";
+    public int RedisHostPort { get; } = Random.Shared.Next(8_500, 9_000);
 
     public string PostgresUsername { get; } = Guid.NewGuid().ToString();
     public string PostgresPassword { get; } = Guid.NewGuid().ToString();
     public string RedisPassword { get; } = Guid.NewGuid().ToString();
+    public int RedisTimeoutInMs => 5000;
 
     public void WithServer(
         Assembly assembly,
@@ -70,7 +71,7 @@ public class TestContainerBuilder : ITestContainerBuilder
                     .WithEnvironment("RedisOptions:Host", $"{RedisNetworkAliases}")
                     .WithEnvironment("RedisOptions:Port", RedisContainerPort.ToString())
                     .WithEnvironment("RedisOptions:Password", RedisPassword)
-                    .WithEnvironment("RedisOptions:TimeoutInMs", "5000")
+                    .WithEnvironment("RedisOptions:TimeoutInMs", RedisTimeoutInMs.ToString())
                     .WithEnvironment(envVariables)
                     .WithNetwork(network)
                     .Build(),
