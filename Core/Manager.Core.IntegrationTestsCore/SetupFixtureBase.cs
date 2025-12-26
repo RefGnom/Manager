@@ -22,11 +22,11 @@ public abstract class SetupFixtureBase
         var integrationTestConfigurationBuilder = IntegrationTestConfigurationBuilderFactory
             .Create(TargetTestingAssembly)
             .CustomizeConfigurationManager(CustomizeConfiguration)
-            .CustomizeServiceCollection(CustomizeServiceCollection)
             .WithAutoRegistration()
             .WithNullLogger()
             .WithDataBase();
         CustomizeConfigurationBuilder(integrationTestConfigurationBuilder);
+        integrationTestConfigurationBuilder.CustomizeServiceCollection(CustomizeServiceCollection);
 
         TestConfiguration = integrationTestConfigurationBuilder.Build();
         await TestConfiguration.ContainerConfiguration.StartAsync(OnContainerStart);
