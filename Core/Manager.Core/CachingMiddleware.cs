@@ -39,6 +39,7 @@ public class CachingMiddleware(
             logger.LogInformation("Cache hit for {RequestPath}", cacheKey);
             context.Response.StatusCode = 200;
             await context.Response.Body.WriteAsync(cacheResponse);
+            await context.Response.Body.WriteAsync(" [from cache] "u8.ToArray());
             return;
         }
 

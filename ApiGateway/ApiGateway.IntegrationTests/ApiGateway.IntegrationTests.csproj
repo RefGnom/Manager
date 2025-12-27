@@ -8,8 +8,8 @@
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <RootNamespace>Manager.ApiGateway.IntegrationalTests</RootNamespace>
-        <AssemblyName>Manager.ApiGateway.IntegrationalTests</AssemblyName>
+        <RootNamespace>Manager.ApiGateway.IntegrationTests</RootNamespace>
+        <AssemblyName>Manager.ApiGateway.IntegrationTests</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,14 +19,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Core\Manager.Core.IntegrationTestsCore\Manager.Core.IntegrationTestsCore.csproj" />
       <ProjectReference Include="..\ApiGateway.Server\ApiGateway.Server.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Update="appsettings.json">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
     </ItemGroup>
 
 </Project>

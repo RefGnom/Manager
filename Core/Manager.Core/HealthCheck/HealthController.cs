@@ -30,7 +30,8 @@ public class HealthController(
                 status = "Healthy",
                 timestamp,
                 cache_result = cacheHealth,
-                elapsed_ms = (endTimestamp - startTimestamp) / TimeSpan.TicksPerMillisecond,
+                //elapsed_ms = (endTimestamp - startTimestamp) / TimeSpan.TicksPerMillisecond,
+                elapsed_ms = TimeSpan.FromTicks(endTimestamp - startTimestamp).TotalMilliseconds,
             }
         );
     }
