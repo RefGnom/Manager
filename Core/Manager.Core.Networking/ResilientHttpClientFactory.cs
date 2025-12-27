@@ -1,22 +1,28 @@
 using System;
 using System.Net.Http;
+using Microsoft.Extensions.Options;
 
 namespace Manager.Core.Networking;
 
-public interface IResilientHttpClientFactory
-{
-    IHttpClient CreateClient(string url, string apiKey);
-}
-
-public class ResilientHttpClientFactory : IResilientHttpClientFactory
+public class ResilientHttpClientFactory(
+    IOptions<HttpClientOptions> options
+) : IResilientHttpClientFactory
 {
     public IHttpClient CreateClient(string url, string apiKey)
     {
+        var currentOptions = options.Value;
+
         var httpClient = new HttpClient
         {
             BaseAddress = new Uri(url),
             DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
         };
-        return new ResilientHttpClient(httpClient);
+
+        if (currentOptions.TimeoutMs.HasValue)
+        {
+            httpClient.Timeout = TimeSpan.FromMilliseconds(currentOptions.TimeoutMs.Value);
+        }
+
+        return new ResilientHttpClient(httpClient, currentOptions);
     }
 }

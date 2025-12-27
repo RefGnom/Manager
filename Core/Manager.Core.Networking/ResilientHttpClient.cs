@@ -7,22 +7,34 @@ using System.Threading.Tasks;
 using Polly;
 using Polly.Retry;
 using Polly.Fallback;
-using Polly.Wrap;
 
 namespace Manager.Core.Networking;
 
 public class ResilientHttpClient : IHttpClient
 {
-    private readonly AsyncPolicyWrap<HttpResponseMessage> policyWrap;
+    private readonly IAsyncPolicy<HttpResponseMessage> resiliencePipeline;
     private readonly HttpClient httpClient;
 
-    public ResilientHttpClient(HttpClient httpClient)
+    public ResilientHttpClient(
+        HttpClient httpClient,
+        HttpClientOptions options
+    )
     {
         this.httpClient = httpClient;
-        var retryPolicy = HttpPolicyBuilders.GetRetryPolicy();
-        var fallbackPolicy = HttpPolicyBuilders.GetFallbackPolicy();
 
-        policyWrap = Policy.WrapAsync(fallbackPolicy, retryPolicy);
+        TimeSpan? fixedDelay = options.RetryDelayMs.HasValue
+            ? TimeSpan.FromMilliseconds(options.RetryDelayMs.Value)
+            : null;
+
+        IAsyncPolicy<HttpResponseMessage> policy = HttpPolicyBuilders.GetRetryPolicy(options.RetryCount, fixedDelay);
+
+        if (options.EnableFallback)
+        {
+            var fallbackPolicy = HttpPolicyBuilders.GetFallbackPolicy();
+            policy = Policy.WrapAsync(fallbackPolicy, policy);
+        }
+
+        resiliencePipeline = policy;
     }
 
     public Task<HttpResponseMessage> SendAsync(
@@ -30,7 +42,7 @@ public class ResilientHttpClient : IHttpClient
         CancellationToken cancellationToken = default
     )
     {
-        return policyWrap.ExecuteAsync(
+        return resiliencePipeline.ExecuteAsync(
             async ct =>
             {
                 var clonedRequest = await CloneHttpRequestMessageAsync(request);
@@ -56,7 +68,6 @@ public class ResilientHttpClient : IHttpClient
                     clone.Content.Headers.Add(h.Key, h.Value);
         }
 
-
         clone.Version = req.Version;
 
         foreach (var prop in req.Options)
@@ -71,14 +82,21 @@ public class ResilientHttpClient : IHttpClient
 
 public static class HttpPolicyBuilders
 {
-    public static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy()
+    public static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy(int retryCount, TimeSpan? fixedDelay)
     {
-        return Policy
+        var policyBuilder = Policy
             .HandleResult<HttpResponseMessage>(r =>
                 (int)r.StatusCode >= 500 || r.StatusCode == HttpStatusCode.RequestTimeout
             )
             .Or<HttpRequestException>()
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+            .Or<TaskCanceledException>();
+
+        return fixedDelay.HasValue
+            ? policyBuilder.WaitAndRetryAsync(retryCount, _ => fixedDelay.Value)
+            : policyBuilder.WaitAndRetryAsync(
+                retryCount,
+                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+            );
     }
 
     public static AsyncFallbackPolicy<HttpResponseMessage> GetFallbackPolicy()
@@ -88,10 +106,11 @@ public static class HttpPolicyBuilders
                 (int)r.StatusCode >= 500 || r.StatusCode == HttpStatusCode.RequestTimeout
             )
             .Or<HttpRequestException>()
+            .Or<TaskCanceledException>()
             .FallbackAsync(
-                new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
                 {
-                    Content = new StringContent("Fallback response"),
+                    Content = new StringContent("Fallback response: Service is currently unavailable."),
                 }
             );
     }
