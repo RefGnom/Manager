@@ -6,7 +6,7 @@ using Manager.Core.IntegrationTestsCore.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Manager.ApiGateway.IntegrationalTests;
+namespace Manager.ApiGateway.IntegrationTests;
 
 public class ApiGatewaySetupFixture : SetupFixtureBase
 {
@@ -17,7 +17,10 @@ public class ApiGatewaySetupFixture : SetupFixtureBase
         builder.WithLocalServer().WithRealLogger().WithDistributedCache();
     }
 
-    protected override void CustomizeServiceCollection(IServiceCollection serviceCollection, IConfiguration configuration)
+    protected override void CustomizeServiceCollection(
+        IServiceCollection serviceCollection,
+        IConfiguration configuration
+    )
     {
         serviceCollection.AddDistributedCache(configuration);
     }

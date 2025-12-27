@@ -1,20 +1,3 @@
-// using Manager.Core.AppConfiguration;
-// using Manager.Core.HostApp;
-// using Microsoft.AspNetCore.Builder;
-//
-// 
-//
-// namespace Manager.ApiGateway.Server;
-//
-// public static class Program
-// {
-//     public static void Main(string[] args)
-//     {
-//         var managerHostApp = new ManagerHostApp<HostAppConfigurator>(args);
-//         managerHostApp.Run();
-//     }
-// }
-
 using Manager.Core;
 using Manager.Core.AppConfiguration;
 using Manager.Core.Caching;

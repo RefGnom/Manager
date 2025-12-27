@@ -37,7 +37,9 @@ public class IntegrationTestConfigurationBuilder(
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder CustomizeServiceCollection(Action<IServiceCollection, IConfiguration> customizer)
+    public IIntegrationTestConfigurationBuilder CustomizeServiceCollection(
+        Action<IServiceCollection, IConfiguration> customizer
+    )
     {
         configurationActionCollection.AddActionWithRemovingExcludedActionTypes(
             new CustomizeServiceCollectionAction(customizer)
