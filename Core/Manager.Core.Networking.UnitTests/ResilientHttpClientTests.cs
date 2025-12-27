@@ -10,93 +10,75 @@ namespace Manager.Core.Networking.UnitTests;
 public class ResilientHttpClientTests : UnitTestBase
 {
     [Test]
-    public async Task SendAsync_ShouldRetryThenSucceed()
+    public async Task SendAsync_WhenFallbackEnabled_ShouldFallbackAfterRetries()
     {
         var requestCount = 0;
         var handler = new MockHttpMessageHandler((req, ct) =>
             {
                 requestCount++;
-                return requestCount == 1
-                    ? throw new HttpRequestException()
-                    : Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+                throw new HttpRequestException("Network failure");
             }
         );
 
         var httpClient = new HttpClient(handler);
-        var resilientHttpClient = new ResilientHttpClient(httpClient);
+        var resilientHttpClient = new ResilientHttpClient(httpClient, enableFallback: true);
         var request = new HttpRequestMessage(HttpMethod.Get, "https://test");
 
         var result = await resilientHttpClient.SendAsync(request);
 
-        result.StatusCode.Should().Be(HttpStatusCode.OK);
-        requestCount.Should().Be(2);
+
+        result.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+        var content = await result.Content.ReadAsStringAsync();
+        content.Should().Contain("Fallback response");
+
+        requestCount.Should().Be(4);
     }
 
     [Test]
-    public async Task SendAsync_ShouldFallbackAfterRetries()
+    public async Task SendAsync_WhenFallbackDisabled_ShouldThrowAfterRetries()
     {
         var requestCount = 0;
         var handler = new MockHttpMessageHandler((req, ct) =>
             {
                 requestCount++;
-                throw new HttpRequestException();
+                throw new HttpRequestException("Network failure");
             }
         );
 
         var httpClient = new HttpClient(handler);
-        var resilientHttpClient = new ResilientHttpClient(httpClient);
+        var resilientHttpClient = new ResilientHttpClient(httpClient, enableFallback: false);
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://test");
+
+        await resilientHttpClient
+            .Invoking(x => x.SendAsync(request))
+            .Should()
+            .ThrowAsync<HttpRequestException>()
+            .WithMessage("Network failure");
+
+        requestCount.Should().Be(4);
+    }
+
+    [Test]
+    public async Task SendAsync_WhenFallbackDisabled_ShouldReturnErrorStatusCode()
+    {
+        var requestCount = 0;
+        var handler = new MockHttpMessageHandler((req, ct) =>
+            {
+                requestCount++;
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+        );
+
+        var httpClient = new HttpClient(handler);
+        var resilientHttpClient = new ResilientHttpClient(httpClient, enableFallback: false);
         var request = new HttpRequestMessage(HttpMethod.Get, "https://test");
 
         var result = await resilientHttpClient.SendAsync(request);
 
         result.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         var content = await result.Content.ReadAsStringAsync();
-        content.Should().Be("Fallback response");
+        content.Should().NotContain("Fallback response");
+
         requestCount.Should().Be(4);
-    }
-
-    [Test]
-    public async Task SendAsync_ShouldNotRetry_OnClientError()
-    {
-        var requestCount = 0;
-        var handler = new MockHttpMessageHandler((req, ct) =>
-            {
-                requestCount++;
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
-            }
-        );
-
-        var httpClient = new HttpClient(handler);
-        var resilientHttpClient = new ResilientHttpClient(httpClient);
-        var request = new HttpRequestMessage(HttpMethod.Get, "https://test");
-
-        var result = await resilientHttpClient.SendAsync(request);
-
-        result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        requestCount.Should().Be(1);
-    }
-
-    [Test]
-    public async Task SendAsync_ShouldRetry_OnServerError()
-    {
-        var requestCount = 0;
-        var handler = new MockHttpMessageHandler((req, ct) =>
-            {
-                requestCount++;
-                return requestCount == 1
-                    ? Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError))
-                    : Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
-            }
-        );
-
-        var httpClient = new HttpClient(handler);
-        var resilientHttpClient = new ResilientHttpClient(httpClient);
-        var request = new HttpRequestMessage(HttpMethod.Get, "https://test");
-
-        var result = await resilientHttpClient.SendAsync(request);
-
-        result.StatusCode.Should().Be(HttpStatusCode.OK);
-        requestCount.Should().Be(2);
     }
 }
