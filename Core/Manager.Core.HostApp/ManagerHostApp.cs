@@ -3,10 +3,12 @@ using Manager.Core.AppConfiguration;
 using Manager.Core.AppConfiguration.Authentication;
 using Manager.Core.BackgroundTasks;
 using Manager.Core.Caching;
+using Manager.Core.Common.DependencyInjection;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.EFCore.Configuration;
 using Manager.Core.HealthCheck;
 using Manager.Core.Logging.Configuration;
+using Manager.Core.Networking;
 using Manager.Core.Telemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,6 +57,7 @@ public class ManagerHostApp<TConfigurator>
             .UseAutoRegistrationForCurrentAssembly()
             .UseAutoRegistrationForCoreCommon()
             .UseAutoRegistrationForCoreNetworking()
+            .ConfigureOptionsWithValidation<HttpClientOptions>()
             .AddSingleton<IHealthCheckService, HealthCheckService>()
             .UseNpg()
             .ConfigureAuthentication(addAuthenticationClient: !isAuth)

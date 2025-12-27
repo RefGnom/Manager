@@ -7,36 +7,34 @@ using System.Threading.Tasks;
 using Polly;
 using Polly.Retry;
 using Polly.Fallback;
-using Polly.Wrap;
 
 namespace Manager.Core.Networking;
 
 public class ResilientHttpClient : IHttpClient
 {
-    private readonly AsyncPolicyWrap<HttpResponseMessage>? policyWrap;
-    private readonly AsyncRetryPolicy<HttpResponseMessage> retryPolicy;
+    private readonly IAsyncPolicy<HttpResponseMessage> resiliencePipeline;
     private readonly HttpClient httpClient;
-    private readonly bool enableFallback;
 
     public ResilientHttpClient(
         HttpClient httpClient,
-        bool enableFallback,
-        int retryCount = 3,
-        TimeSpan? fixedRetryDelay = null
+        HttpClientOptions options
     )
     {
         this.httpClient = httpClient;
-        this.enableFallback = enableFallback;
 
-        retryPolicy = HttpPolicyBuilders.GetRetryPolicy(retryCount, fixedRetryDelay);
+        TimeSpan? fixedDelay = options.RetryDelayMs.HasValue
+            ? TimeSpan.FromMilliseconds(options.RetryDelayMs.Value)
+            : null;
 
-        if (!enableFallback)
+        IAsyncPolicy<HttpResponseMessage> policy = HttpPolicyBuilders.GetRetryPolicy(options.RetryCount, fixedDelay);
+
+        if (options.EnableFallback)
         {
-            return;
+            var fallbackPolicy = HttpPolicyBuilders.GetFallbackPolicy();
+            policy = Policy.WrapAsync(fallbackPolicy, policy);
         }
 
-        var fallbackPolicy = HttpPolicyBuilders.GetFallbackPolicy();
-        policyWrap = Policy.WrapAsync(fallbackPolicy, retryPolicy);
+        resiliencePipeline = policy;
     }
 
     public Task<HttpResponseMessage> SendAsync(
@@ -44,23 +42,11 @@ public class ResilientHttpClient : IHttpClient
         CancellationToken cancellationToken = default
     )
     {
-        if (enableFallback && policyWrap != null)
-        {
-            return policyWrap.ExecuteAsync(
-                async ct =>
-                {
-                    var cloned = await CloneHttpRequestMessageAsync(request);
-                    return await httpClient.SendAsync(cloned, ct);
-                },
-                cancellationToken
-            );
-        }
-
-        return retryPolicy.ExecuteAsync(
+        return resiliencePipeline.ExecuteAsync(
             async ct =>
             {
-                var cloned = await CloneHttpRequestMessageAsync(request);
-                return await httpClient.SendAsync(cloned, ct);
+                var clonedRequest = await CloneHttpRequestMessageAsync(request);
+                return await httpClient.SendAsync(clonedRequest, ct);
             },
             cancellationToken
         );
@@ -69,19 +55,27 @@ public class ResilientHttpClient : IHttpClient
     private static async Task<HttpRequestMessage> CloneHttpRequestMessageAsync(HttpRequestMessage req)
     {
         var clone = new HttpRequestMessage(req.Method, req.RequestUri);
+
         if (req.Content != null)
         {
             var ms = new System.IO.MemoryStream();
             await req.Content.CopyToAsync(ms);
             ms.Position = 0;
             clone.Content = new StreamContent(ms);
-            foreach (var h in req.Content.Headers)
-                clone.Content.Headers.Add(h.Key, h.Value);
+
+            if (req.Content.Headers != null)
+                foreach (var h in req.Content.Headers)
+                    clone.Content.Headers.Add(h.Key, h.Value);
         }
 
         clone.Version = req.Version;
-        foreach (var prop in req.Options) clone.Options.TryAdd(prop.Key, prop.Value);
-        foreach (var header in req.Headers) clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
+
+        foreach (var prop in req.Options)
+            clone.Options.TryAdd(prop.Key, prop.Value);
+
+        foreach (var header in req.Headers)
+            clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
+
         return clone;
     }
 }
@@ -96,18 +90,13 @@ public static class HttpPolicyBuilders
             )
             .Or<HttpRequestException>()
             .Or<TaskCanceledException>();
-        ;
 
-        // Если задержка задана, используем её вместо экспоненты
-        if (fixedDelay.HasValue)
-        {
-            return policyBuilder.WaitAndRetryAsync(retryCount, _ => fixedDelay.Value);
-        }
-
-        return policyBuilder.WaitAndRetryAsync(
-            retryCount,
-            retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
-        );
+        return fixedDelay.HasValue
+            ? policyBuilder.WaitAndRetryAsync(retryCount, _ => fixedDelay.Value)
+            : policyBuilder.WaitAndRetryAsync(
+                retryCount,
+                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+            );
     }
 
     public static AsyncFallbackPolicy<HttpResponseMessage> GetFallbackPolicy()

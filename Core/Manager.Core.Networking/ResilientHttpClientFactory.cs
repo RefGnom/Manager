@@ -1,24 +1,16 @@
 using System;
 using System.Net.Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Manager.Core.Networking;
 
 public class ResilientHttpClientFactory(
-    IConfiguration configuration
+    IOptions<HttpClientOptions> options
 ) : IResilientHttpClientFactory
 {
     public IHttpClient CreateClient(string url, string apiKey)
     {
-        var section = configuration.GetSection("HttpClientOptions");
-
-        var enableFallback = section.GetValue<bool>("EnableFallback"); // false
-        var retryCount = section.GetValue<int?>("RetryCount") ?? 3;
-
-        var retryDelayMs = section.GetValue<int?>("RetryDelayMs");
-        TimeSpan? fixedDelay = retryDelayMs.HasValue ? TimeSpan.FromMilliseconds(retryDelayMs.Value) : null;
-
-        var timeoutMs = section.GetValue<int?>("TimeoutMs");
+        var currentOptions = options.Value;
 
         var httpClient = new HttpClient
         {
@@ -26,11 +18,11 @@ public class ResilientHttpClientFactory(
             DefaultRequestHeaders = { { "X-Api-Key", apiKey } },
         };
 
-        if (timeoutMs.HasValue)
+        if (currentOptions.TimeoutMs.HasValue)
         {
-            httpClient.Timeout = TimeSpan.FromMilliseconds(timeoutMs.Value);
+            httpClient.Timeout = TimeSpan.FromMilliseconds(currentOptions.TimeoutMs.Value);
         }
 
-        return new ResilientHttpClient(httpClient, enableFallback, retryCount, fixedDelay);
+        return new ResilientHttpClient(httpClient, currentOptions);
     }
 }
