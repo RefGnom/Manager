@@ -19,8 +19,8 @@ public class WithPostgresDataBaseAction : IConfigurationAction
         var configurationDictionary = new Dictionary<string, string?>
         {
             ["DataBaseOptions:ConnectionStringTemplate"] = context.TestContainerBuilder.ConnectionStringTemplate,
-            ["DataBaseOptions:Username"] = context.TestContainerBuilder.Username,
-            ["DataBaseOptions:Password"] = context.TestContainerBuilder.Password,
+            ["DataBaseOptions:Username"] = context.TestContainerBuilder.PostgresUsername,
+            ["DataBaseOptions:Password"] = context.TestContainerBuilder.PostgresPassword,
         };
         context.ConfigurationManager.AddInMemoryCollection(configurationDictionary);
         context.ServiceCollection

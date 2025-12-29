@@ -37,7 +37,9 @@ public class IntegrationTestConfigurationBuilder(
         return this;
     }
 
-    public IIntegrationTestConfigurationBuilder CustomizeServiceCollection(Action<IServiceCollection> customizer)
+    public IIntegrationTestConfigurationBuilder CustomizeServiceCollection(
+        Action<IServiceCollection, IConfiguration> customizer
+    )
     {
         configurationActionCollection.AddActionWithRemovingExcludedActionTypes(
             new CustomizeServiceCollectionAction(customizer)
@@ -72,6 +74,12 @@ public class IntegrationTestConfigurationBuilder(
         envVariables ??= new Dictionary<string, string>();
         envVariables.TryAdd("AuthenticationServiceSetting:ApiKey", "fake api key");
         configurationActionCollection.AddActionWithRemovingExcludedActionTypes(new WithLocalServerAction(envVariables));
+        return this;
+    }
+
+    public IIntegrationTestConfigurationBuilder WithDistributedCache()
+    {
+        configurationActionCollection.AddActionWithRemovingExcludedActionTypes(new WithRedisAction());
         return this;
     }
 

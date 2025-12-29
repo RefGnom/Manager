@@ -1,0 +1,27 @@
+﻿using System.Reflection;
+using Manager.ApiGateway.Server;
+using Manager.Core.Caching;
+using Manager.Core.IntegrationTestsCore;
+using Manager.Core.IntegrationTestsCore.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Manager.ApiGateway.IntegrationTests;
+
+public class ApiGatewaySetupFixture : SetupFixtureBase
+{
+    protected override Assembly TargetTestingAssembly => typeof(Program).Assembly;
+
+    protected override void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder)
+    {
+        builder.WithLocalServer().WithRealLogger().WithDistributedCache();
+    }
+
+    protected override void CustomizeServiceCollection(
+        IServiceCollection serviceCollection,
+        IConfiguration configuration
+    )
+    {
+        serviceCollection.AddDistributedCache(configuration);
+    }
+}

@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoFixture;
 using Manager.Core.EFCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
@@ -27,4 +28,11 @@ public abstract class IntegrationTestBase
     /// </summary>
     protected IDataContext DataContext { get; } =
         SetupFixtureBase.TestConfiguration.ServiceProvider.GetService<IDataContext>()!;
+
+    /// <summary>
+    ///     Распределённый кэш для тестов. Можно работать с ним не используя тестируемый сервис.
+    ///     Null если распределённый кэш не сконфигурирован
+    /// </summary>
+    protected IDistributedCache DistributedCache { get; } =
+        SetupFixtureBase.TestConfiguration.ServiceProvider.GetService<IDistributedCache>()!;
 }

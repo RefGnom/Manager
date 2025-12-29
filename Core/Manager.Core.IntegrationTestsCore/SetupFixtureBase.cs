@@ -22,11 +22,11 @@ public abstract class SetupFixtureBase
         var integrationTestConfigurationBuilder = IntegrationTestConfigurationBuilderFactory
             .Create(TargetTestingAssembly)
             .CustomizeConfigurationManager(CustomizeConfiguration)
-            .CustomizeServiceCollection(CustomizeServiceCollection)
             .WithAutoRegistration()
             .WithNullLogger()
             .WithDataBase();
         CustomizeConfigurationBuilder(integrationTestConfigurationBuilder);
+        integrationTestConfigurationBuilder.CustomizeServiceCollection(CustomizeServiceCollection);
 
         TestConfiguration = integrationTestConfigurationBuilder.Build();
         await TestConfiguration.ContainerConfiguration.StartAsync(OnContainerStart);
@@ -41,7 +41,12 @@ public abstract class SetupFixtureBase
     }
 
     protected virtual void CustomizeConfiguration(IConfigurationManager configurationManager) { }
-    protected virtual void CustomizeServiceCollection(IServiceCollection serviceCollection) { }
+
+    protected virtual void CustomizeServiceCollection(
+        IServiceCollection serviceCollection,
+        IConfiguration configuration
+    ) { }
+
     protected virtual void CustomizeConfigurationBuilder(IIntegrationTestConfigurationBuilder builder) { }
 
     protected virtual async Task OnContainerStart(ContainerWithType containerWithType)
