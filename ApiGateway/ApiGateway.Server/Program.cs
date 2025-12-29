@@ -6,6 +6,7 @@ using Manager.Core.AppConfiguration;
 using Manager.Core.Caching;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.HealthCheck;
+using Manager.Core.Telemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddSingleton<IHealthCheckService, HealthCheckService>();
+        builder.Services.AddTelemetry<HostAppResourcesFactory>();
 
         builder.Services
             .AddReverseProxy()
