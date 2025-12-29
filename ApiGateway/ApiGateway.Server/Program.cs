@@ -2,7 +2,6 @@ using System;
 using System.Threading.RateLimiting;
 using Manager.Core.AppConfiguration;
 using Manager.Core;
-using Manager.Core.AppConfiguration;
 using Manager.Core.Caching;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
 using Manager.Core.HealthCheck;
@@ -22,35 +21,36 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
-        builder.Services.UseAutoRegistrationForCoreCommon();
-        builder.Services.AddDistributedCache(builder.Configuration);
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        builder.Services.AddSingleton<IHealthCheckService, HealthCheckService>();
-        builder.Services.AddTelemetry<HostAppResourcesFactory>();
+        builder.Services.UseAutoRegistrationForCoreCommon()
+            .AddDistributedCache(builder.Configuration)
+            .AddEndpointsApiExplorer()
+            .AddSwaggerGen()
+            .AddSingleton<IHealthCheckService, HealthCheckService>()
+            .AddTelemetry<HostAppResourcesFactory>()
+            .AddControllers();
 
         builder.Services
             .AddReverseProxy()
             .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
-builder.Services.AddRateLimiter(options =>
-    {
-        options.AddFixedWindowLimiter(
-            "ManagerPolicy",
-            opt =>
+        builder.Services.AddRateLimiter(options =>
             {
-                opt.PermitLimit = 1000; //в течении окна можно сделать 1000 запроса
-                opt.Window = TimeSpan.FromSeconds(10); //размер окна в 10 секунд
-                opt.QueueProcessingOrder =
-                    QueueProcessingOrder
-                        .OldestFirst; //Порядок обработки запросов в очереди. Сначала обрабатывается самый старый запрос
-                opt.QueueLimit =
-                    10000; //Максимальное количество запросов - 1000, которые могут быть поставлены в очередь Если лимит превышен - запросы отклоняются сразу
+                options.AddFixedWindowLimiter(
+                    "ManagerPolicy",
+                    opt =>
+                    {
+                        opt.PermitLimit = 1000; // в течении окна можно сделать 1000 запросов
+                        opt.Window = TimeSpan.FromSeconds(10); // размер окна в 10 секунд
+
+                        // Порядок обработки запросов в очереди. Сначала обрабатывается самый старый запрос
+                        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+
+                        //Максимальное количество запросов - 1000, которые могут быть поставлены в очередь Если лимит превышен - запросы отклоняются
+                        opt.QueueLimit = 1000;
+                    }
+                );
             }
         );
-    }
-);
 
         var app = builder.Build();
 
@@ -61,9 +61,8 @@ builder.Services.AddRateLimiter(options =>
         }
 
 
-
         app.UseMiddleware<CachingMiddleware>();
-app.UseRateLimiter();
+        app.UseRateLimiter();
         app.MapReverseProxy();
         app.MapControllers();
         app.Run();
