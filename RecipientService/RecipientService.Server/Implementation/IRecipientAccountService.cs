@@ -15,8 +15,9 @@ public interface IRecipientAccountService
         CreateRecipientAccountDto createRecipientAccountDto
     );
 
+    Task<ProcessResult<string, ActivateAccountStatus>> ActivateAsync(Guid recipientId);
+    Task<ProcessResult<string, LoginAccountStatus>> LoginAsync(RecipientAccountCredentials credentials);
     Task<RecipientAccount?> FindAsync(Guid recipientId);
-
     Task<ProcessResult<string, UpdateAccountStatus>> UpdateAsync(UpdateRecipientAccountDto updateRecipientAccountDto);
     Task<ProcessResult<string, DeleteAccountStatus>> DeleteAsync(Guid recipientId);
 }
@@ -45,6 +46,55 @@ public class RecipientAccountService(
             recipientAccount,
             CreateAccountStatus.Created
         );
+    }
+
+    public async Task<ProcessResult<string, ActivateAccountStatus>> ActivateAsync(Guid recipientId)
+    {
+        var foundRecipientAccount = await recipientAccountRepository.FindAsync(recipientId);
+        if (foundRecipientAccount is null)
+        {
+            return ProcessResult<string, ActivateAccountStatus>.Failure(
+                $"Не существует аккаунта с идентификатором {recipientId}",
+                ActivateAccountStatus.NotFound
+            );
+        }
+
+        var activateAccountResult = foundRecipientAccount.Activate();
+        if (activateAccountResult.IsFailure)
+        {
+            return ProcessResult<string, ActivateAccountStatus>.Failure(
+                activateAccountResult.Error,
+                ActivateAccountStatus.Rejected
+            );
+        }
+
+        await recipientAccountRepository.UpdateAsync(activateAccountResult.Value);
+        return ProcessResult<string, ActivateAccountStatus>.Ok(ActivateAccountStatus.Activated);
+    }
+
+    public async Task<ProcessResult<string, LoginAccountStatus>> LoginAsync(RecipientAccountCredentials credentials)
+    {
+        var foundRecipientAccount = await recipientAccountRepository.FindByLoginAsync(credentials.Login);
+        if (foundRecipientAccount is null)
+        {
+            return ProcessResult<string, LoginAccountStatus>.Failure(
+                $"Не существует аккаунта с логином {credentials.Login}",
+                LoginAccountStatus.NotFound
+            );
+        }
+
+        return foundRecipientAccount.State.AccountState switch
+        {
+            AccountState.Active => ProcessResult<string, LoginAccountStatus>.Ok(LoginAccountStatus.Success),
+            AccountState.Deleted => ProcessResult<string, LoginAccountStatus>.Failure(
+                $"Аккаунт с логином {credentials.Login} удалён",
+                LoginAccountStatus.Deleted
+            ),
+            _ => ProcessResult<string, LoginAccountStatus>.Failure(
+                $"Аккаунт находится в состоянии {foundRecipientAccount.State}",
+                LoginAccountStatus.LoginRejected
+            ),
+        };
     }
 
     public async Task<RecipientAccount?> FindAsync(Guid recipientId) =>

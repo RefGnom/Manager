@@ -26,7 +26,7 @@ public static class IncludeCustomLoggerExtensions
     /// </summary>
     public static IHostApplicationBuilder AddCustomLogger(
         this IHostApplicationBuilder builder,
-        CustomWriteStrategy? customWriteStrategy
+        CustomWriteStrategy? customWriteStrategy = null
     )
     {
         builder.Services.AddCustomLogger(
