@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Manager.ApiGateway.Server.Api.Requests;
+using Manager.ApiGateway.Server.Configuration;
 using Manager.RecipientService.Client;
 using Manager.RecipientService.Client.BusinessObjects.Requests;
 using Microsoft.AspNetCore.Http;

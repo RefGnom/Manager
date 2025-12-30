@@ -1,20 +1,20 @@
-using System.Text;
+using System;
+using System.Threading.RateLimiting;
 using Manager.ApiGateway.Server.Configuration;
+using Manager.Core;
 using Manager.Core.AppConfiguration;
+using Manager.Core.Caching;
 using Manager.Core.Common.DependencyInjection;
 using Manager.Core.Common.DependencyInjection.AutoRegistration;
+using Manager.Core.HealthCheck;
 using Manager.Core.Logging.Configuration;
 using Manager.RecipientService.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Manager.Core.HealthCheck;
-using Manager.Core.Telemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-
-SolutionRootEnvironmentVariablesLoader.Load();
 
 [assembly: ServerProperties("API_GATEWAY_PORT", "manager-api-gateway-service")]
 
@@ -24,37 +24,40 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        SolutionRootEnvironmentVariablesLoader.Load();
         var builder = WebApplication.CreateBuilder(args);
-builder.AddCustomLogger();
+        builder.AddCustomLogger();
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer()
-    .AddSwaggerGen()
-    .UseAutoRegistrationForCoreNetworking()
-    .UseAutoRegistrationForCoreCommon()
-    .AddSingleton<IRecipientServiceApiClientFactory, RecipientServiceApiClientFactory>()
-    .AddSingleton<IRecipientServiceApiClient>(x =>
-        x.GetRequiredService<IRecipientServiceApiClientFactory>().Create("fake key")
-    )
-    .ConfigureOptionsWithValidation<ApiKeysOptions>()
-    .AddAuthorization()
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = JwtAuthOptions.Issuer,
-            ValidateAudience = true,
-            ValidAudience = JwtAuthOptions.Audience,
-            ValidateLifetime = true,
-            IssuerSigningKey = JwtAuthOptions.GetSymmetricSecurityKey(),
-            ValidateIssuerSigningKey = true,
-        }
-    );
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer()
+            .AddSwaggerGen()
+            .AddDistributedCache(builder.Configuration)
+            .UseAutoRegistrationForCoreNetworking()
+            .UseAutoRegistrationForCoreCommon()
+            .AddSingleton<IHealthCheckService, HealthCheckService>()
+            .AddSingleton<IRecipientServiceApiClientFactory, RecipientServiceApiClientFactory>()
+            .AddSingleton<IRecipientServiceApiClient>(x =>
+                x.GetRequiredService<IRecipientServiceApiClientFactory>().Create("fake key")
+            )
+            .ConfigureOptionsWithValidation<ApiKeysOptions>()
+            .AddAuthorization()
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = JwtAuthOptions.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = JwtAuthOptions.Audience,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = JwtAuthOptions.GetSymmetricSecurityKey(),
+                    ValidateIssuerSigningKey = true,
+                }
+            );
 
         builder.Services
             .AddReverseProxy()
-            .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
-    .AddTransforms<ApiKeyTransformProvider>();
+            .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+            .AddTransforms<ApiKeyTransformProvider>();
 
         builder.Services.AddRateLimiter(options =>
             {
@@ -83,22 +86,12 @@ builder.Services.AddEndpointsApiExplorer()
             app.UseSwaggerUI();
         }
 
-app.UseAuthentication().UseAuthorization();
-app.MapControllers();
-app.MapReverseProxy();
-app.Run();
-
+        app.UseAuthentication().UseAuthorization();
+        app.MapControllers();
+        app.MapReverseProxy();
         app.UseMiddleware<CachingMiddleware>();
         app.UseRateLimiter();
-        }
-public class JwtAuthOptions
-{
-    private const string Key = "secret_key_ca938a35-a54e-480a-9ff7-cb4e7f985afb";
 
-    public const string Audience = "ApiGateway.Server";
-    public const string Issuer = "ApiGateway.Server";
-
-    public static SymmetricSecurityKey GetSymmetricSecurityKey() => new(Encoding.UTF8.GetBytes(Key));
-}
+        app.Run();
     }
 }
