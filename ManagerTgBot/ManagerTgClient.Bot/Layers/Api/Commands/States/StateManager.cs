@@ -24,6 +24,11 @@ public class StateManager(
     public async Task SetStateAsync(long userId, Type stateType)
     {
         var state = stateProvider.Value.GetState(stateType);
+        await SetStateAsync(userId, state);
+    }
+
+    public async Task SetStateAsync(long userId, IState state)
+    {
         states[userId] = state;
         await state.InitializeAsync(userId);
     }

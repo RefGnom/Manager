@@ -2,5 +2,6 @@
 
 public interface IStartTimerRequestBuilder
 {
-    StartTimerRequest Build();
+    IStartTimerRequestBuilder WithName(string name);
+    IStartTimerRequestBuilder WithDescription(string description);
 }

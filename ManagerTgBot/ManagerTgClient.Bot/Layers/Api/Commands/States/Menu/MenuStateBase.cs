@@ -9,7 +9,7 @@ namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Menu;
 public abstract class MenuStateBase(
     ITelegramBotClient botClient,
     IStateManager stateManager
-) : StateBase(botClient)
+) : StateBase(botClient, stateManager)
 {
     protected abstract Dictionary<string, Type> States { get; }
     protected override UpdateType[] SupportedUpdateType => [UpdateType.Message, UpdateType.CallbackQuery];

@@ -1,19 +1,29 @@
 using Manager.ManagerTgClient.Bot.Layers.Api.Commands.Requests.Builders;
+using Manager.ManagerTgClient.Bot.Layers.Api.Exceptions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Commands.StartTimer;
 
 public class EnteringTimerNameForStartState(
     ITelegramBotClient botClient,
+    IStateManager stateManager,
     IStartTimerRequestBuilder builder
-) : IState
+) : StateBase(botClient, stateManager)
 {
-    public Task ProcessUpdateAsync(Update update) => throw new NotImplementedException();
+    protected override InlineKeyboardMarkup InlineKeyboard { get; }
+    protected override string MessageToSend => "Введите название своего таймера";
+    protected override UpdateType[] SupportedUpdateType => [UpdateType.Message];
 
-    public async Task InitializeAsync(long userId)
+    public override async Task ProcessUpdateAsync(Update update)
     {
-        builder = new StartTimerRequestBuilder();
-        await botClient.SendMessage(userId, "Введите название своего таймера");
+        if (!IsSupportedUpdate(update))
+        {
+            throw new NotSupportedUpdateTypeException(update.Type.ToString());
+        }
+        builder.WithName(update.Message!.Text!);
+        await SetNextStateAsync(update.Message!.From!.Id, new EnteringTimerDescriptionState(botClient, stateManager, builder));
     }
 }

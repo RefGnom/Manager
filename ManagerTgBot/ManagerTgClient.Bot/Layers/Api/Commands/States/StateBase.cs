@@ -6,7 +6,8 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States;
 
 public abstract class StateBase(
-    ITelegramBotClient botClient
+    ITelegramBotClient botClient,
+    IStateManager stateManager
 ) : IState
 {
     protected abstract InlineKeyboardMarkup InlineKeyboard { get; }
@@ -20,4 +21,9 @@ public abstract class StateBase(
         MessageToSend,
         replyMarkup: InlineKeyboard
     );
+
+    public async Task SetNextStateAsync(long userId, IState nextState) =>
+        await stateManager.SetStateAsync(userId, nextState);
+
+    protected bool IsSupportedUpdate(Update update) => SupportedUpdateType.Contains(update.Type);
 }

@@ -7,4 +7,5 @@ public class EnteringTimerNameForStopState : IState
     public Task ProcessUpdateAsync(Update update) => throw new NotImplementedException();
 
     public Task InitializeAsync(long userId) => throw new NotImplementedException();
+    public Task SetNextStateAsync(long userId, IState nextState) => throw new NotImplementedException();
 }
