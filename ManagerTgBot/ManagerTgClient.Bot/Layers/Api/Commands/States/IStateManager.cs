@@ -3,6 +3,6 @@
 public interface IStateManager
 {
     Task<IState> GetStateAsync(long userId);
+    Task SetStateAsync(long userId, IState state);
     Task SetStateAsync(long userId, Type stateType);
-    Task SetStateAsync(long userId, IState stateType);
 }

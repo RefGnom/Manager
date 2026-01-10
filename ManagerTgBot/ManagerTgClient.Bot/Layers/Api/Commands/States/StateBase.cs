@@ -10,6 +10,8 @@ public abstract class StateBase(
     IStateManager stateManager
 ) : IState
 {
+    protected IStateManager StateManager => stateManager;
+    protected ITelegramBotClient BotClient => botClient;
     protected abstract InlineKeyboardMarkup InlineKeyboard { get; }
     protected abstract string MessageToSend { get; }
 

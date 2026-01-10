@@ -14,21 +14,25 @@ public abstract class MenuStateBase(
     protected abstract Dictionary<string, Type> States { get; }
     protected override UpdateType[] SupportedUpdateType => [UpdateType.Message, UpdateType.CallbackQuery];
 
-    public override Task ProcessUpdateAsync(Update update)
+    public override async Task ProcessUpdateAsync(Update update)
     {
         if (!SupportedUpdateType.Contains(update.Type))
         {
             throw new NotSupportedUpdateTypeException($"{update.Type} не поддерживается.");
         }
 
+        if (update.Type is UpdateType.CallbackQuery)
+        {
+            await BotClient.AnswerCallbackQuery(update.CallbackQuery!.Id);
+        }
+
         var userData = update.GetUserData()!;
         var userId = update.GetUserId();
         if (!States.TryGetValue(userData, out var state))
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        stateManager.SetStateAsync(userId, state);
-        return Task.CompletedTask;
+        await StateManager.SetStateAsync(userId, state);
     }
 }

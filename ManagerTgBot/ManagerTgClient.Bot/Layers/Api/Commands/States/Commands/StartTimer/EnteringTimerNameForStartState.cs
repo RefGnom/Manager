@@ -13,7 +13,9 @@ public class EnteringTimerNameForStartState(
     IStartTimerRequestBuilder builder
 ) : StateBase(botClient, stateManager)
 {
-    protected override InlineKeyboardMarkup InlineKeyboard { get; }
+    private readonly IStateManager stateManager = stateManager;
+    private readonly ITelegramBotClient botClient = botClient;
+    protected override InlineKeyboardMarkup InlineKeyboard => throw new NotImplementedException();
     protected override string MessageToSend => "Введите название своего таймера";
     protected override UpdateType[] SupportedUpdateType => [UpdateType.Message];
 
@@ -23,7 +25,11 @@ public class EnteringTimerNameForStartState(
         {
             throw new NotSupportedUpdateTypeException(update.Type.ToString());
         }
+
         builder.WithName(update.Message!.Text!);
-        await SetNextStateAsync(update.Message!.From!.Id, new EnteringTimerDescriptionState(botClient, stateManager, builder));
+        await SetNextStateAsync(
+            update.Message!.From!.Id,
+            new EnteringTimerDescriptionState(botClient, stateManager)
+        );
     }
 }

@@ -1,5 +1,4 @@
-﻿using Manager.ManagerTgClient.Bot.Layers.Api.Commands.Requests.Builders;
-using Telegram.Bot;
+﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -8,12 +7,11 @@ namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Commands.StartT
 
 public class EnteringTimerDescriptionState(
     ITelegramBotClient botClient,
-    IStateManager stateManager,
-    IStartTimerRequestBuilder builder
+    IStateManager stateManager
 ) : StateBase(botClient, stateManager)
 {
-    protected override InlineKeyboardMarkup InlineKeyboard { get; }
-    protected override string MessageToSend { get; }
-    protected override UpdateType[] SupportedUpdateType { get; }
+    protected override InlineKeyboardMarkup InlineKeyboard => throw new NotImplementedException();
+    protected override string MessageToSend => throw new NotImplementedException();
+    protected override UpdateType[] SupportedUpdateType => throw new NotImplementedException();
     public override Task ProcessUpdateAsync(Update update) => throw new NotImplementedException();
 }
