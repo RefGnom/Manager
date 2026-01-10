@@ -2,6 +2,8 @@
 
 public interface IStartTimerRequestBuilder
 {
-    IStartTimerRequestBuilder WithName(string name);
-    IStartTimerRequestBuilder WithDescription(string description);
+    IStartTimerRequestBuilder ForUser(long userId);
+    void WithName(string name);
+    void WithDescription(string description);
+    StartTimerRequest Build();
 }

@@ -1,9 +1,21 @@
+using Manager.ManagerTgClient.Bot.Layers.Api.Commands.Requests.Builders.Factories;
+
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.Requests.Builders;
 
-public class StartTimerRequestBuilder : IStartTimerRequestBuilder
+public class StartTimerRequestBuilder(IStartTimerRequestFactory factory) : IStartTimerRequestBuilder
 {
-    public StartTimerRequest Build() => throw new NotImplementedException();
-    public IStartTimerRequestBuilder WithName(string name) => throw new NotImplementedException();
+    private long userId;
+    private string? name;
+    private string? description;
+    public StartTimerRequest Build() => factory.Create(userId, name!, description!);
 
-    public IStartTimerRequestBuilder WithDescription(string description) => throw new NotImplementedException();
+    public IStartTimerRequestBuilder ForUser(long data)
+    {
+        userId = data;
+        return this;
+    }
+
+    public void WithName(string data) => name = data;
+
+    public void WithDescription(string data) => description = data;
 }

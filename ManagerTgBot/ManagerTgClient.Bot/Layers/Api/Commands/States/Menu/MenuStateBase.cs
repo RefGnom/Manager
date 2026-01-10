@@ -12,11 +12,10 @@ public abstract class MenuStateBase(
 ) : StateBase(botClient, stateManager)
 {
     protected abstract Dictionary<string, Type> States { get; }
-    protected override UpdateType[] SupportedUpdateType => [UpdateType.Message, UpdateType.CallbackQuery];
 
     public override async Task ProcessUpdateAsync(Update update)
     {
-        if (!SupportedUpdateType.Contains(update.Type))
+        if (!IsSupportedUpdate(update))
         {
             throw new NotSupportedUpdateTypeException($"{update.Type} не поддерживается.");
         }

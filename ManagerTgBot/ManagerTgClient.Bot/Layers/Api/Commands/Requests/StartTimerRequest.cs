@@ -2,5 +2,6 @@
 
 public record StartTimerRequest(
     long UserId,
-    string TimerName
+    string Name,
+    string Description
 ) : ICommandRequest;

@@ -12,10 +12,10 @@ public abstract class StateBase(
 {
     protected IStateManager StateManager => stateManager;
     protected ITelegramBotClient BotClient => botClient;
-    protected abstract InlineKeyboardMarkup InlineKeyboard { get; }
+    protected virtual InlineKeyboardMarkup? InlineKeyboard => null;
     protected abstract string MessageToSend { get; }
 
-    protected abstract UpdateType[] SupportedUpdateType { get; }
+    private static UpdateType[] SupportedUpdateType => [UpdateType.Message, UpdateType.CallbackQuery];
     public abstract Task ProcessUpdateAsync(Update update);
 
     public async Task InitializeAsync(long userId) => await botClient.SendMessage(
@@ -24,7 +24,7 @@ public abstract class StateBase(
         replyMarkup: InlineKeyboard
     );
 
-    public async Task SetNextStateAsync(long userId, IState nextState) =>
+    protected async Task SetNextStateAsync(long userId, IState nextState) =>
         await stateManager.SetStateAsync(userId, nextState);
 
     protected bool IsSupportedUpdate(Update update) => SupportedUpdateType.Contains(update.Type);
