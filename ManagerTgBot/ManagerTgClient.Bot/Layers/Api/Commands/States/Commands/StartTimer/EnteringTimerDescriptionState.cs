@@ -1,13 +1,13 @@
 ﻿using Manager.ManagerTgClient.Bot.Layers.Api.Commands.Requests.Builders;
 using Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Menu;
 using Manager.ManagerTgClient.Bot.Layers.Api.Exceptions;
-using Telegram.Bot;
+using Manager.ManagerTgClient.Bot.Layers.Services;
 using Telegram.Bot.Types;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Commands.StartTimer;
 
 public class EnteringTimerDescriptionState(
-    ITelegramBotClient botClient,
+    IBotInteractionService botClient,
     IStateManager stateManager,
     IStartTimerRequestBuilder builder
 ) : StateBase(botClient, stateManager)
@@ -24,7 +24,7 @@ public class EnteringTimerDescriptionState(
         builder.WithDescription(update.Message!.Text!);
         await StateManager.SetStateAsync(update.Message!.From!.Id, typeof(MainMenuState));
         var request = builder.Build();
-        await BotClient.SendMessage(
+        await BotInteractionService.SendMessageAsync(
             update.Message.From.Id,
             $"{request.UserId.ToString()} {request.Name} {request.Description}"
         );

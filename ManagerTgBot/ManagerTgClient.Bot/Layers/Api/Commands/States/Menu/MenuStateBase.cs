@@ -1,15 +1,15 @@
 ﻿using Manager.ManagerTgClient.Bot.Layers.Api.Exceptions;
+using Manager.ManagerTgClient.Bot.Layers.Services;
 using Manager.ManagerTgClient.Bot.Layers.Services.Extentions;
-using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Menu;
 
 public abstract class MenuStateBase(
-    ITelegramBotClient botClient,
+    IBotInteractionService botInteractionService,
     IStateManager stateManager
-) : StateBase(botClient, stateManager)
+) : StateBase(botInteractionService, stateManager)
 {
     protected abstract Dictionary<string, Type> States { get; }
 
@@ -22,7 +22,7 @@ public abstract class MenuStateBase(
 
         if (update.Type is UpdateType.CallbackQuery)
         {
-            await BotClient.AnswerCallbackQuery(update.CallbackQuery!.Id);
+            await BotInteractionService.AnswerCallbackQueryAsync(update.CallbackQuery!.Id);
         }
 
         var userData = update.GetUserData()!;

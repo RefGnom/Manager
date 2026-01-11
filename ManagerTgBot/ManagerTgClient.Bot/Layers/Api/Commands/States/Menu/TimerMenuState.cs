@@ -1,14 +1,14 @@
 using Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Commands.StartTimer;
 using Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Commands.StopTimer;
-using Telegram.Bot;
+using Manager.ManagerTgClient.Bot.Layers.Services;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Menu;
 
 public class TimerMenuState(
-    ITelegramBotClient botClient,
+    IBotInteractionService botInteractionService,
     IStateManager stateManager
-) : MenuStateBase(botClient, stateManager)
+) : MenuStateBase(botInteractionService, stateManager)
 {
     private const string StartTimer = "/startTimer";
     private const string StopTimer = "/stopTimer";

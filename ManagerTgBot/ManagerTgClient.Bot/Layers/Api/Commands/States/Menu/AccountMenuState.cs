@@ -1,12 +1,12 @@
-using Telegram.Bot;
+using Manager.ManagerTgClient.Bot.Layers.Services;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Menu;
 
 public class AccountMenuState(
-    ITelegramBotClient botClient,
+    IBotInteractionService botInteractionService,
     IStateManager stateManager
-) : MenuStateBase(botClient, stateManager)
+) : MenuStateBase(botInteractionService, stateManager)
 {
     private const string CreateAccount = "/createAccount";
     private const string GetAccountInfo = "/getAccount";

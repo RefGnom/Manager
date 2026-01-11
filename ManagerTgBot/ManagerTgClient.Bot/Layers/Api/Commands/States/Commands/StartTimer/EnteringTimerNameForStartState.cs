@@ -1,18 +1,16 @@
 using Manager.ManagerTgClient.Bot.Layers.Api.Commands.Requests.Builders;
 using Manager.ManagerTgClient.Bot.Layers.Api.Exceptions;
-using Telegram.Bot;
+using Manager.ManagerTgClient.Bot.Layers.Services;
 using Telegram.Bot.Types;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Commands.StartTimer;
 
 public class EnteringTimerNameForStartState(
-    ITelegramBotClient botClient,
+    IBotInteractionService botInteractionService,
     IStateManager stateManager,
     IStartTimerRequestBuilder builder
-) : StateBase(botClient, stateManager)
+) : StateBase(botInteractionService, stateManager)
 {
-    private readonly IStateManager stateManager = stateManager;
-    private readonly ITelegramBotClient botClient = botClient;
     protected override string MessageToSend => "Введите название своего таймера";
 
     public override async Task ProcessUpdateAsync(Update update)
@@ -26,7 +24,7 @@ public class EnteringTimerNameForStartState(
         builder.ForUser(userId).WithName(update.Message!.Text!);
         await SetNextStateAsync(
             userId,
-            new EnteringTimerDescriptionState(botClient, stateManager, builder)
+            new EnteringTimerDescriptionState(BotInteractionService, StateManager, builder)
         );
     }
 }

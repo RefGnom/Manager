@@ -1,12 +1,12 @@
-﻿using Telegram.Bot;
+﻿using Manager.ManagerTgClient.Bot.Layers.Services;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Commands.States.Menu;
 
 public class MainMenuState(
-    ITelegramBotClient botClient,
+    IBotInteractionService botInteractionService,
     IStateManager stateManager
-) : MenuStateBase(botClient, stateManager)
+) : MenuStateBase(botInteractionService, stateManager)
 {
     private const string TimerMenu = "/timers";
     private const string AccountMenu = "/accounts";
