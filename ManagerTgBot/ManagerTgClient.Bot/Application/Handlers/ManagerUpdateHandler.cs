@@ -1,4 +1,4 @@
-﻿using Manager.ManagerTgClient.Bot.Layers.Api.Commands.States;
+﻿using Manager.ManagerTgClient.Bot.Layers.Api.States;
 using Manager.ManagerTgClient.Bot.Layers.Services.Extentions;
 using Telegram.Bot;
 using Telegram.Bot.Polling;

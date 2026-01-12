@@ -15,17 +15,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Manager.Core.EFCore\Manager.Core.EFCore.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core.EFCore\Manager.Core.EFCore.csproj"/>
         <ProjectReference Include="..\..\Core\Manager.Core.Logging\Manager.Core.Logging.csproj"/>
-        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj" />
-        <ProjectReference Include="..\..\TimerService\TimerService.Client\TimerService.Client.csproj" />
+        <ProjectReference Include="..\..\Core\Manager.Core\Manager.Core.csproj"/>
+        <ProjectReference Include="..\..\TimerService\TimerService.Client\TimerService.Client.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="appsettigns.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="appsettigns.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
-
-
 </Project>
