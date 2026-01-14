@@ -1,26 +1,55 @@
 using Manager.Core.Common.Time;
-using Manager.ManagerTgClient.Bot.Layers.Api.Requests.Builders.Factories;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.Requests.Builders;
 
-public class StartTimerRequestBuilder(IStartTimerRequestFactory factory, IDateTimeProvider dateTimeProvider) : IStartTimerRequestBuilder
+public class StartTimerRequestBuilder(
+    IDateTimeProvider dateTimeProvider
+) : IStartTimerRequestBuilder
 {
     private long userId;
     private string? name;
-    private DateTime startTime;
+    private DateTime? startTime;
     private TimeSpan? pingTimeOut;
-    public StartTimerRequest Build() => factory.Create(userId, name!, startTime, pingTimeOut);
 
-    public IStartTimerRequestBuilder ForUser(long data)
+    public StartTimerRequest Build() => IsValidRequest()
+        ? new StartTimerRequest(userId, name!, startTime!.Value, pingTimeOut)
+        : throw new InvalidOperationException("Invalid request");
+
+    public IStartTimerRequestBuilder ForUser(long value)
     {
-        userId = data;
+        userId = value;
         return this;
     }
 
-    public void WithName(string data) => name = data;
+    public IStartTimerRequestBuilder WithName(string value)
+    {
+        name = value;
+        return this;
+    }
 
-    public void WithCustomStartTime(DateTime data) => startTime = data;
-    public void WithCurrentStartTime() => startTime = dateTimeProvider.UtcNow;
-    public void WithDefaultPingTimeout() => pingTimeOut = TimeSpan.FromMinutes(5);
-    public void WithPingTimeout(TimeSpan data) => pingTimeOut = data;
+    public IStartTimerRequestBuilder WithCustomStartTime(DateTime value)
+    {
+        startTime = value;
+        return this;
+    }
+
+    public IStartTimerRequestBuilder WithCurrentStartTime()
+    {
+        startTime = dateTimeProvider.UtcNow;
+        return this;
+    }
+
+    public IStartTimerRequestBuilder WithDefaultPingTimeout()
+    {
+        pingTimeOut = TimeSpan.FromMinutes(5);
+        return this;
+    }
+
+    public IStartTimerRequestBuilder WithPingTimeout(TimeSpan value)
+    {
+        pingTimeOut = value;
+        return this;
+    }
+
+    private bool IsValidRequest() => userId != 0 && name is not null && startTime is not null;
 }

@@ -1,12 +1,9 @@
 ﻿namespace Manager.ManagerTgClient.Bot.Layers.Api.Requests.Builders;
 
-public interface IStartTimerRequestBuilder
+public interface IStartTimerRequestBuilder : IResourceRequestBuilder<StartTimerRequest, IStartTimerRequestBuilder>
 {
-    IStartTimerRequestBuilder ForUser(long userId);
-    void WithName(string name);
-    void WithCustomStartTime(DateTime startTime);
-    void WithCurrentStartTime();
-    void WithDefaultPingTimeout();
-    void WithPingTimeout(TimeSpan pingTimeout);
-    StartTimerRequest Build();
+    IStartTimerRequestBuilder WithCustomStartTime(DateTime startTime);
+    IStartTimerRequestBuilder WithCurrentStartTime();
+    IStartTimerRequestBuilder WithDefaultPingTimeout();
+    IStartTimerRequestBuilder WithPingTimeout(TimeSpan pingTimeout);
 }

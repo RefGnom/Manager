@@ -26,4 +26,8 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Layers\Api\Requests\Builders\CommonRequestBuilder.cs" />
+    </ItemGroup>
 </Project>
