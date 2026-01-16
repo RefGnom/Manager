@@ -8,9 +8,14 @@ public class BotInteractionService(
 ) : IBotInteractionService
 {
     public async Task SendMessageAsync(long userId, string message, ReplyMarkup? replyMarkup = null) =>
-        await botClient.SendMessage(userId, message, replyMarkup:  replyMarkup);
+        await botClient.SendMessage(userId, message, replyMarkup: replyMarkup);
 
     public Task AnswerCallbackQueryAsync(string callbackQueryId) => botClient.AnswerCallbackQuery(callbackQueryId);
+
+    public async Task EditKeyboardAsync(long userId, int messageId, InlineKeyboardMarkup  keyboard)
+    {
+        await botClient.EditMessageReplyMarkup(chatId: userId, messageId, keyboard);
+    }
 
     public Task SendWarningMessage(long userId, string message, ReplyMarkup? replyMarkup) =>
         throw new NotImplementedException();

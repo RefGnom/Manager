@@ -1,3 +1,4 @@
+using Manager.ManagerTgClient.Bot.Layers.Api.States.Commands.Timers.GetTimers;
 using Manager.ManagerTgClient.Bot.Layers.Api.States.Commands.Timers.Start;
 using Manager.ManagerTgClient.Bot.Layers.Api.States.Commands.Timers.Stop;
 using Manager.ManagerTgClient.Bot.Layers.Api.States.Templates;
@@ -13,6 +14,7 @@ public class TimerMenuState(
 {
     private const string StartTimer = "/startTimer";
     private const string StopTimer = "/stopTimer";
+    private const string GetTimers = "/getTimers";
     private const string Exit = "/exit";
 
 
@@ -20,6 +22,7 @@ public class TimerMenuState(
     {
         { StartTimer, typeof(EnteringTimerNameForStartState) },
         { StopTimer, typeof(EnteringTimerNameForStopState) },
+        { GetTimers, typeof(GetTimerRequestBuildingState)},
         { Exit, typeof(MainMenuState) },
     };
 
@@ -29,5 +32,6 @@ public class TimerMenuState(
         new InlineKeyboardMarkup()
             .AddButton("Запустить таймер", StartTimer)
             .AddButton("Остановить таймер", StopTimer)
+            .AddButton("Получить список таймеров", GetTimers)
             .AddButton("В главное меню", Exit);
 }

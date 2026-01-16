@@ -16,7 +16,7 @@ public abstract class StateBase(
     protected virtual InlineKeyboardMarkup? InlineKeyboard => null;
     protected abstract string MessageToSend { get; }
 
-    private static UpdateType[] SupportedUpdateType => [UpdateType.Message, UpdateType.CallbackQuery];
+    protected virtual UpdateType[] SupportedUpdateType => [UpdateType.Message, UpdateType.CallbackQuery];
 
     public async Task ProcessUpdateAsync(Update update)
     {
@@ -37,5 +37,5 @@ public abstract class StateBase(
     protected async Task SetNextStateAsync(long userId, IState nextState) =>
         await stateManager.SetStateAsync(userId, nextState);
 
-    protected static bool IsSupportedUpdate(Update update) => SupportedUpdateType.Contains(update.Type);
+    protected bool IsSupportedUpdate(Update update) => SupportedUpdateType.Contains(update.Type);
 }

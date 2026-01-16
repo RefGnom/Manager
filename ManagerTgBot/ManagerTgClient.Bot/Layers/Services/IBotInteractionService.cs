@@ -6,6 +6,7 @@ public interface IBotInteractionService
 {
     Task SendMessageAsync(long userId, string message, ReplyMarkup? replyMarkup = null);
     Task AnswerCallbackQueryAsync(string callbackQueryId);
+    Task EditKeyboardAsync(long userId, int messageId, InlineKeyboardMarkup keyboard);
     Task SendWarningMessage(long userId, string message, ReplyMarkup? replyMarkup);
     Task SendErrorMessage(long userId, string message, ReplyMarkup? replyMarkup);
 }

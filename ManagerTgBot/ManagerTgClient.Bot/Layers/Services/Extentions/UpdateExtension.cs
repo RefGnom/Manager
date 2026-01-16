@@ -25,4 +25,7 @@ public static class UpdateExtension
             _ => throw new NotSupportedUpdateTypeException("Unknow update type"),
         };
     }
+
+    public static int GetMessageId(this Update update) => update.CallbackQuery!.Message!.MessageId;
+
 }
