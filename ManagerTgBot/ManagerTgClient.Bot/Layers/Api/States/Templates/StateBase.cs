@@ -1,5 +1,6 @@
 ﻿using Manager.ManagerTgClient.Bot.Layers.Api.Exceptions;
 using Manager.ManagerTgClient.Bot.Layers.Services;
+using Manager.ManagerTgClient.Bot.Layers.Services.Extentions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -11,8 +12,8 @@ public abstract class StateBase(
     IStateManager stateManager
 ) : IState
 {
-    protected IStateManager StateManager => stateManager;
     protected IBotInteractionService BotInteractionService => botInteractionService;
+    protected IStateManager StateManager => stateManager;
     protected virtual InlineKeyboardMarkup? InlineKeyboard => null;
     protected abstract string MessageToSend { get; }
 
@@ -34,8 +35,16 @@ public abstract class StateBase(
         replyMarkup: InlineKeyboard
     );
 
-    protected async Task SetNextStateAsync(long userId, IState nextState) =>
-        await stateManager.SetStateAsync(userId, nextState);
+    protected async Task MoveToNextStateAsync(Update update, IState nextState)
+    {
+        if (update.Type is UpdateType.CallbackQuery)
+        {
+            await BotInteractionService.AnswerCallbackQueryAsync(update.CallbackQuery!.Id);
+        }
+
+        var userId = update.GetUserId();
+        await StateManager.SetStateAsync(userId, nextState);
+    }
 
     protected bool IsSupportedUpdate(Update update) => SupportedUpdateType.Contains(update.Type);
 }

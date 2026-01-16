@@ -25,15 +25,15 @@ public class AskPingTimeoutState(
                 update.GetUserId(),
                 $"Таймер успешно создан {request.Name} {request.StartTime.Date} {request.PingTimeout!.Value.Minutes}"
             );
-            await SetNextStateAsync(
-                update.GetUserId(),
+            await MoveToNextStateAsync(
+                update,
                 new MainMenuState(BotInteractionService, StateManager)
             );
         }
         else
         {
-            await SetNextStateAsync(
-                update.GetUserId(),
+            await MoveToNextStateAsync(
+                update,
                 new EnteringTimerNameForStartState(BotInteractionService, StateManager, builder)
             );
         }

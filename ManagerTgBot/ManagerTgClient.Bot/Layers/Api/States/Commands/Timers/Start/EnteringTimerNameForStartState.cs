@@ -17,8 +17,8 @@ public class EnteringTimerNameForStartState(
     protected override async Task HandleUpdateAsync(Update update)
     {
         builder.ForUser(update.GetUserId()).WithName(update.Message!.Text!);
-        await SetNextStateAsync(
-            update.GetUserId(),
+        await MoveToNextStateAsync(
+            update,
             new AskStartTimeIsNowState(BotInteractionService, StateManager, builder)
         );
     }

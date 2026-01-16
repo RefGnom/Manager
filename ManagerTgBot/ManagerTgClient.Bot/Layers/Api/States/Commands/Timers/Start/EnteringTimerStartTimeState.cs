@@ -7,10 +7,10 @@ using Telegram.Bot.Types;
 namespace Manager.ManagerTgClient.Bot.Layers.Api.States.Commands.Timers.Start;
 
 public class EnteringTimerStartTimeState(
-    IBotInteractionService botClient,
+    IBotInteractionService botInteractionService,
     IStateManager stateManager,
     IStartTimerRequestBuilder builder
-) : StateBase(botClient, stateManager)
+) : StateBase(botInteractionService, stateManager)
 {
     protected override string MessageToSend =>
         "Вы хотите запустить таймер прямо сейчас? Если нет введите через сколько времени таймер должен быть запущен";
@@ -23,6 +23,6 @@ public class EnteringTimerStartTimeState(
             update.GetUserId(),
             $"{request.UserId.ToString()} {request.Name} {request.StartTime}"
         );
-        await StateManager.SetStateAsync(update.GetUserId(), typeof(AskPingTimeoutState));
+        await MoveToNextStateAsync(update, new AskPingTimeoutState(BotInteractionService, StateManager, builder));
     }
 }

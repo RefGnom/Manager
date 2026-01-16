@@ -85,7 +85,7 @@ public class GetTimerRequestBuildingState(
 
                 var tempTimers = "timers:";
                 await BotInteractionService.SendMessageAsync(userId, tempTimers);
-                await SetNextStateAsync(userId, new MainMenuState(BotInteractionService, StateManager));
+                await MoveToNextStateAsync(update, new MainMenuState(BotInteractionService, StateManager));
                 break;
             }
         }

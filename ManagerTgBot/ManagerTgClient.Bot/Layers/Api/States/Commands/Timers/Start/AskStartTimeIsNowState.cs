@@ -1,7 +1,6 @@
 ﻿using Manager.ManagerTgClient.Bot.Layers.Api.Requests.Builders;
 using Manager.ManagerTgClient.Bot.Layers.Api.States.Templates;
 using Manager.ManagerTgClient.Bot.Layers.Services;
-using Manager.ManagerTgClient.Bot.Layers.Services.Extentions;
 using Telegram.Bot.Types;
 
 namespace Manager.ManagerTgClient.Bot.Layers.Api.States.Commands.Timers.Start;
@@ -20,15 +19,15 @@ public class AskStartTimeIsNowState(
         if (IsPositiveAnswer(update))
         {
             builder.WithCurrentStartTime();
-            await SetNextStateAsync(
-                update.GetUserId(),
+            await MoveToNextStateAsync(
+                update,
                 new AskPingTimeoutState(BotInteractionService, StateManager, builder)
             );
         }
         else
         {
-            await SetNextStateAsync(
-                update.GetUserId(),
+            await MoveToNextStateAsync(
+                update,
                 new EnteringTimerStartTimeState(BotInteractionService, StateManager, builder)
             );
         }
